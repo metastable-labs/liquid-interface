@@ -10,7 +10,8 @@
     "web": "expo start --web",
     "test": "jest --watchAll",
     "lint": "expo lint",
-    "install-pod": "cd ios && pod install && cd .."
+    "install-pod": "cd ios && pod install && cd ..",
+    "create-cloud-build": "eas build --platform android --profile development"
   },
   "jest": {
     "preset": "jest-expo"
