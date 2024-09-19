@@ -11,7 +11,8 @@
     "test": "jest --watchAll",
     "lint": "expo lint",
     "install-pod": "cd ios && pod install && cd ..",
-    "create-cloud-build": "eas build --platform android --profile development"
+    "create-cloud-build": "eas build --platform android --profile development",
+    "clean-build-cache": "npx expo start -c"
   },
   "jest": {
     "preset": "jest-expo"
