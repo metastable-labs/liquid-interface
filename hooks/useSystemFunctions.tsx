@@ -6,10 +6,11 @@
  */
 
 import { useAppDispatch, useAppSelector } from "./useRedux";
-import { router } from "expo-router";
+import { router, usePathname } from "expo-router";
 
 const useSystemFunctions = () => {
   const dispatch = useAppDispatch();
+  const pathname = usePathname();
 
   // states
   const userState = useAppSelector((state) => state.user);
@@ -17,6 +18,7 @@ const useSystemFunctions = () => {
   return {
     dispatch,
     router,
+    pathname,
 
     // states
     userState,
