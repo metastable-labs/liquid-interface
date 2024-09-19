@@ -14,17 +14,11 @@ const LQDOnboardingIndicator = ({
   timer,
   totalSteps,
   finished,
-  progressAction,
+  togglePause,
 }: ILQDOnboardingIndicator) => {
   const actions = [
-    {
-      icon: require("../../../assets/images/pause.png"),
-      action: () => progressAction("pause"),
-    },
-    {
-      icon: require("../../../assets/images/play.png"),
-      action: () => progressAction("play"),
-    },
+    require("../../../assets/images/pause.png"),
+    require("../../../assets/images/play.png"),
   ];
 
   const animatedWidthStyle = (index: number) => {
@@ -70,15 +64,9 @@ const LQDOnboardingIndicator = ({
         </View>
 
         <View style={styles.actionContainer}>
-          {actions.map(({ icon, action }, index) => (
-            <LQDPressAnimation
-              key={index}
-              style={styles.action}
-              onPress={action}
-            >
-              <Image source={icon} style={styles.actionIcon} />
-            </LQDPressAnimation>
-          ))}
+          <LQDPressAnimation style={styles.action} onPress={togglePause}>
+            <Image source={actions[+isPaused]} style={styles.actionIcon} />
+          </LQDPressAnimation>
         </View>
       </View>
 

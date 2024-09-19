@@ -43,9 +43,8 @@ export default function OnboardingTabLayout() {
 
   const currentStep = getCurrentStep(pathname);
 
-  const progressAction = (action: "pause" | "play") => {
-    if (action === "pause") setIsPaused(true);
-    if (action === "play") setIsPaused(false);
+  const togglePause = () => {
+    setIsPaused((prev) => !prev);
   };
 
   const navigateToNextScreen = () => {
@@ -64,6 +63,7 @@ export default function OnboardingTabLayout() {
           clearInterval(intervalRef.current);
         }
         setFinished(true);
+        setIsPaused(true);
         break;
     }
   };
@@ -92,6 +92,7 @@ export default function OnboardingTabLayout() {
     setTimer(0);
     if (pathname !== "/step4" && finished) {
       setFinished(false);
+      setIsPaused(false);
     }
   }, [pathname]);
 
@@ -104,7 +105,7 @@ export default function OnboardingTabLayout() {
           isPaused={isPaused}
           currentStep={currentStep}
           totalSteps={4}
-          progressAction={progressAction}
+          togglePause={togglePause}
           finished={finished}
         />
       </View>

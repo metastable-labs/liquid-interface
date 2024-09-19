@@ -3,6 +3,6 @@ interface ILQDOnboardingIndicator {
   isPaused: boolean;
   currentStep: number;
   totalSteps: number;
-  progressAction: (action: "pause" | "play") => void;
+  togglePause: () => void;
   finished: boolean;
 }
