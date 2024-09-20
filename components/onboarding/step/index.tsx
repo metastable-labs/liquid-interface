@@ -1,5 +1,5 @@
-import { Text, View, StyleSheet, Image } from "react-native";
-import { ILQDOnboardingStep } from "./types";
+import { Text, View, StyleSheet, Image } from 'react-native';
+import { ILQDOnboardingStep } from './types';
 
 const LQDOnboardingStep = ({
   ray,
@@ -38,17 +38,17 @@ const styles = StyleSheet.create({
   },
 
   ray: {
-    position: "absolute",
+    position: 'absolute',
     top: 0,
     left: 0,
-    width: "100%",
-    height: "100%",
+    width: '100%',
+    height: '100%',
   },
 
   title: {
-    fontFamily: "Clash-Display",
+    fontFamily: 'Clash-Display',
     fontSize: 48,
-    fontWeight: "700",
+    fontWeight: '700',
     lineHeight: 53,
     letterSpacing: -0.96,
     paddingHorizontal: 16,
@@ -61,6 +61,6 @@ const styles = StyleSheet.create({
   },
 
   image: {
-    position: "absolute",
+    position: 'absolute',
   },
 });

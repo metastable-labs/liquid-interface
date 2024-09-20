@@ -1,4 +1,4 @@
-import { StyleProp, ViewStyle, ImageStyle, TextStyle } from "react-native";
+import { StyleProp, ViewStyle, ImageStyle, TextStyle } from 'react-native';
 
 interface ILQDOnboardingStep {
   ray: any;

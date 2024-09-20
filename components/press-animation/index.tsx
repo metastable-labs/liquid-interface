@@ -1,11 +1,11 @@
-import React from "react";
-import { View, StyleSheet } from "react-native";
+import React from 'react';
+import { View, StyleSheet } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withSpring,
-} from "react-native-reanimated";
-import { ILQDPressAnimation } from "./types";
+} from 'react-native-reanimated';
+import { ILQDPressAnimation } from './types';
 
 const LQDPressAnimation = ({
   children,

@@ -1,4 +1,4 @@
-import LQDOnboardingIndicator from "./indicator";
-import LQDOnboardingStep from "./step";
+import LQDOnboardingIndicator from './indicator';
+import LQDOnboardingStep from './step';
 
 export { LQDOnboardingIndicator, LQDOnboardingStep };

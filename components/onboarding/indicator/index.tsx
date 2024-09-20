@@ -1,12 +1,12 @@
-import React, { useEffect } from "react";
-import { View, Text, Image, StyleSheet } from "react-native";
+import React, { useEffect } from 'react';
+import { View, Text, Image, StyleSheet } from 'react-native';
 import Animated, {
   useSharedValue,
   withTiming,
   useAnimatedStyle,
   Easing,
-} from "react-native-reanimated";
-import LQDPressAnimation from "@/components/press-animation";
+} from 'react-native-reanimated';
+import LQDPressAnimation from '@/components/press-animation';
 
 const LQDOnboardingIndicator = ({
   currentStep,
@@ -17,8 +17,8 @@ const LQDOnboardingIndicator = ({
   togglePause,
 }: ILQDOnboardingIndicator) => {
   const actions = [
-    require("../../../assets/images/pause.png"),
-    require("../../../assets/images/play.png"),
+    require('../../../assets/images/pause.png'),
+    require('../../../assets/images/play.png'),
   ];
 
   const animatedWidthStyle = (index: number) => {
@@ -41,13 +41,13 @@ const LQDOnboardingIndicator = ({
       if (index === 0 && currentStep === 0) {
         return { width: `${progress.value * 100}%` };
       } else if (index === 0 && currentStep > 0) {
-        return { width: "100%" };
+        return { width: '100%' };
       } else if (index === currentStep) {
         return { width: `${progress.value * 100}%` };
       } else if (index < currentStep) {
-        return { width: "100%" };
+        return { width: '100%' };
       } else {
-        return { width: "0%" };
+        return { width: '0%' };
       }
     });
   };
@@ -57,7 +57,7 @@ const LQDOnboardingIndicator = ({
       <View style={styles.subContainer}>
         <View style={styles.logoContainer}>
           <Image
-            source={require("../../../assets/images/logo.png")}
+            source={require('../../../assets/images/logo.png')}
             style={styles.logo}
           />
           <Text style={styles.logoText}>Welcome to Liquid</Text>
@@ -87,22 +87,22 @@ export default LQDOnboardingIndicator;
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: "space-between",
-    alignItems: "stretch",
-    width: "100%",
+    justifyContent: 'space-between',
+    alignItems: 'stretch',
+    width: '100%',
     gap: 20,
   },
   subContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     gap: 10,
-    width: "100%",
+    width: '100%',
   },
   logoContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
     gap: 6,
   },
   logo: {
@@ -111,21 +111,21 @@ const styles = StyleSheet.create({
   },
   logoText: {
     fontSize: 12,
-    fontWeight: "500",
+    fontWeight: '500',
     lineHeight: 15.84,
-    color: "#FFF",
+    color: '#FFF',
   },
   actionContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
     gap: 12,
   },
   action: {
     padding: 6,
-    backgroundColor: "rgba(255, 255, 255, 0.10)",
-    justifyContent: "center",
-    alignItems: "center",
+    backgroundColor: 'rgba(255, 255, 255, 0.10)',
+    justifyContent: 'center',
+    alignItems: 'center',
     borderRadius: 9999,
   },
   actionIcon: {
@@ -136,11 +136,11 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 4,
     borderRadius: 9999,
-    backgroundColor: "#FFFFFF3D",
-    overflow: "hidden",
+    backgroundColor: '#FFFFFF3D',
+    overflow: 'hidden',
   },
   progress: {
-    height: "100%",
-    backgroundColor: "#FFF",
+    height: '100%',
+    backgroundColor: '#FFF',
   },
 });

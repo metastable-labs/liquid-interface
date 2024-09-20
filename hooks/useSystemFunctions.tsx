@@ -5,8 +5,8 @@
  *                so we don't have to import and create same funtions everywhere.
  */
 
-import { useAppDispatch, useAppSelector } from "./useRedux";
-import { router, usePathname } from "expo-router";
+import { useAppDispatch, useAppSelector } from './useRedux';
+import { router, usePathname } from 'expo-router';
 
 const useSystemFunctions = () => {
   const dispatch = useAppDispatch();
