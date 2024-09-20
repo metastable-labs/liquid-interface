@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 16,
     color: '#1A2001',
-    fontFamily: 'Clash-Display',
+    fontFamily: 'ClashDisplaySemibold',
     fontWeight: '600',
   },
   primaryShadow: {
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 16,
     color: '#FFF',
-    fontFamily: 'Clash-Display',
+    fontFamily: 'ClashDisplaySemibold',
     fontWeight: '600',
   },
   secondaryShadow: {

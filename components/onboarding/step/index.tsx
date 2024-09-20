@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    fontFamily: 'Clash-Display',
+    fontFamily: 'ClashDisplayBold',
     fontSize: 48,
     fontWeight: '700',
     lineHeight: 53,
@@ -58,6 +58,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     lineHeight: 22.32,
     paddingHorizontal: 16,
+    fontFamily: 'AeonikRegular',
   },
 
   image: {
