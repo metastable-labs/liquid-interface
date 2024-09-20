@@ -1,6 +1,6 @@
-import useSystemFunctions from "@/hooks/useSystemFunctions";
-import { CallbackProps } from "..";
-import { setLoadingUser, setUser } from ".";
+import useSystemFunctions from '@/hooks/useSystemFunctions';
+import { CallbackProps } from '..';
+import { setLoadingUser, setUser } from '.';
 
 const useUserActions = () => {
   const { dispatch } = useSystemFunctions();
@@ -10,8 +10,8 @@ const useUserActions = () => {
       dispatch(setLoadingUser(true));
 
       const mockUser: User = {
-        id: "1",
-        username: "meister",
+        id: '1',
+        username: 'meister',
       };
 
       dispatch(setUser(mockUser));
