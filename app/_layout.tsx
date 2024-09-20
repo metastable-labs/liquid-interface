@@ -21,7 +21,16 @@ SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+    ClashDisplayBold: require('../assets/fonts/ClashDisplay/ClashDisplay-Bold.otf'),
+    ClashDisplayRegular: require('../assets/fonts/ClashDisplay/ClashDisplay-Regular.otf'),
+    ClashDisplayMedium: require('../assets/fonts/ClashDisplay/ClashDisplay-Medium.otf'),
+    ClashDisplayLight: require('../assets/fonts/ClashDisplay/ClashDisplay-Light.otf'),
+    ClashDisplayExtraLight: require('../assets/fonts/ClashDisplay/ClashDisplay-Extralight.otf'),
+    ClashDisplaySemibold: require('../assets/fonts/ClashDisplay/ClashDisplay-Semibold.otf'),
+    AeonikBold: require('../assets/fonts/Aeonik/Aeonik-Bold.otf'),
+    AeonikRegular: require('../assets/fonts/Aeonik/Aeonik-Regular.otf'),
+    AeonikMedium: require('../assets/fonts/Aeonik/Aeonik-Medium.otf'),
+    AeonikLight: require('../assets/fonts/Aeonik/Aeonik-Light.otf'),
   });
   const [isPersisted, setPersisted] = useState(false);
 

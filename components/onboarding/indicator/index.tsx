@@ -114,6 +114,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     lineHeight: 15.84,
     color: '#FFF',
+    fontFamily: 'AeonikMedium',
   },
   actionContainer: {
     flexDirection: 'row',
