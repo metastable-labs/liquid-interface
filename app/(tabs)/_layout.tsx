@@ -4,6 +4,7 @@ import React from 'react';
 import { TabBarIcon } from '@/components/navigation/TabBarIcon';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
+import { LQDNavigation } from '@/components';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -14,6 +15,7 @@ export default function TabLayout() {
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
       }}
+      tabBar={(props) => <LQDNavigation {...props} />}
     >
       <Tabs.Screen
         name="index"
@@ -27,10 +29,24 @@ export default function TabLayout() {
           ),
         }}
       />
+
       <Tabs.Screen
-        name="explore"
+        name="discover"
         options={{
-          title: 'Explore',
+          title: 'Discover',
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon
+              name={focused ? 'code-slash' : 'code-slash-outline'}
+              color={color}
+            />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="holdings"
+        options={{
+          title: 'Holdings',
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
               name={focused ? 'code-slash' : 'code-slash-outline'}
