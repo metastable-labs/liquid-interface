@@ -1,60 +1,89 @@
 import { Tabs } from 'expo-router';
-import React from 'react';
+import { Platform, StatusBar, StyleSheet, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 import { TabBarIcon } from '@/components/navigation/TabBarIcon';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { LQDNavigation } from '@/components';
+import { LQDNavigation, LQDPressAnimation, LQDSearch } from '@/components';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
 
   return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-      }}
-      tabBar={(props) => <LQDNavigation {...props} />}
-    >
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon
-              name={focused ? 'home' : 'home-outline'}
-              color={color}
-            />
-          ),
-        }}
-      />
+    <>
+      <View style={styles.shortcut}>
+        <LQDPressAnimation>
+          <Ionicons name="time-outline" size={24} color="#333" />
+        </LQDPressAnimation>
 
-      <Tabs.Screen
-        name="discover"
-        options={{
-          title: 'Discover',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon
-              name={focused ? 'code-slash' : 'code-slash-outline'}
-              color={color}
-            />
-          ),
-        }}
-      />
+        <LQDSearch />
 
-      <Tabs.Screen
-        name="holdings"
-        options={{
-          title: 'Holdings',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon
-              name={focused ? 'code-slash' : 'code-slash-outline'}
-              color={color}
-            />
-          ),
+        <LQDPressAnimation>
+          <Ionicons name="settings-outline" size={24} color="#333" />
+        </LQDPressAnimation>
+      </View>
+
+      <Tabs
+        screenOptions={{
+          tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+          headerShown: false,
         }}
-      />
-    </Tabs>
+        tabBar={(props) => <LQDNavigation {...props} />}
+      >
+        <Tabs.Screen
+          name="index"
+          options={{
+            title: 'Home',
+            tabBarIcon: ({ color, focused }) => (
+              <TabBarIcon
+                name={focused ? 'home' : 'home-outline'}
+                color={color}
+              />
+            ),
+          }}
+        />
+
+        <Tabs.Screen
+          name="discover"
+          options={{
+            title: 'Discover',
+            tabBarIcon: ({ color, focused }) => (
+              <TabBarIcon
+                name={focused ? 'code-slash' : 'code-slash-outline'}
+                color={color}
+              />
+            ),
+          }}
+        />
+
+        <Tabs.Screen
+          name="holdings"
+          options={{
+            title: 'Holdings',
+            tabBarIcon: ({ color, focused }) => (
+              <TabBarIcon
+                name={focused ? 'code-slash' : 'code-slash-outline'}
+                color={color}
+              />
+            ),
+          }}
+        />
+      </Tabs>
+    </>
   );
 }
+
+const styles = StyleSheet.create({
+  shortcut: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    gap: 12,
+    paddingHorizontal: 21,
+    paddingBottom: 10,
+    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 54,
+    zIndex: 10,
+    backgroundColor: '#fff',
+  },
+});
