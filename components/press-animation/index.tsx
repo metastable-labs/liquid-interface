@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -35,7 +35,7 @@ const LQDPressAnimation = ({
       onTouchEnd={handlePressOut}
       style={[animatedStyle, style]}
     >
-      <View>{children}</View>
+      {children}
     </Animated.View>
   );
 };
