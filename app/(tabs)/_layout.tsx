@@ -32,7 +32,7 @@ export default function TabLayout() {
         tabBar={(props) => <LQDNavigation {...props} />}
       >
         <Tabs.Screen
-          name="index"
+          name="home"
           options={{
             title: 'Home',
             tabBarIcon: ({ color, focused }) => (

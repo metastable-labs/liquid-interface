@@ -111,7 +111,7 @@ const Setup = () => {
           <Animated.View style={animatedButtonStyle}>
             <LQDButton
               title="Let's go!"
-              onPress={() => router.replace('/(tabs)')}
+              onPress={() => router.replace('/(tabs)/home/')}
               variant="secondary"
             />
           </Animated.View>

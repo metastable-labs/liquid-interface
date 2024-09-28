@@ -1,4 +1,4 @@
-const topGainers: Array<IGainers> = [
+const topGainers: Array<ILQDPoolPairCard> = [
   {
     primaryIconURL:
       'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
@@ -101,7 +101,7 @@ const topGainers: Array<IGainers> = [
   },
 ];
 
-const poolPairs: Array<IPoolPair> = [
+const poolPairs: Array<ILQDPoolPairPaper> = [
   {
     primaryIconURL:
       'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
