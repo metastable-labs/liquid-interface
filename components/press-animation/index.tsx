@@ -1,14 +1,16 @@
 import React from 'react';
-import { View } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withSpring,
 } from 'react-native-reanimated';
+import * as Haptics from 'expo-haptics';
+
 import { ILQDPressAnimation } from './types';
 
 const LQDPressAnimation = ({
   children,
+  disabled,
   onPress,
   style,
 }: ILQDPressAnimation) => {
@@ -22,6 +24,8 @@ const LQDPressAnimation = ({
 
   const handlePressIn = () => {
     scale.value = withSpring(0.9);
+
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
   };
 
   const handlePressOut = () => {
@@ -33,7 +37,11 @@ const LQDPressAnimation = ({
     <Animated.View
       onTouchStart={handlePressIn}
       onTouchEnd={handlePressOut}
-      style={[animatedStyle, style]}
+      style={[
+        animatedStyle,
+        disabled && { opacity: 0.5, pointerEvents: 'none' },
+        style,
+      ]}
     >
       {children}
     </Animated.View>

@@ -1,8 +1,8 @@
 import { StyleSheet, View, Text, Image } from 'react-native';
 
-import { formatNumber } from '@/utils/helpers';
+import { formatNumberWithSuffix } from '@/utils/helpers';
 
-const PoolPair = ({
+const LQDPoolPairPaper = ({
   apr,
   fees,
   capital,
@@ -11,7 +11,7 @@ const PoolPair = ({
   secondaryIconURL,
   secondaryTitle,
   capitalMetric = 'vol',
-}: IPoolPair) => {
+}: ILQDPoolPairPaper) => {
   return (
     <View style={styles.container}>
       <View style={styles.leftContainer}>
@@ -50,13 +50,13 @@ const PoolPair = ({
       </View>
 
       <Text style={styles.volumeText}>
-        ${formatNumber(capital)} {capitalMetric}
+        ${formatNumberWithSuffix(capital)} {capitalMetric}
       </Text>
     </View>
   );
 };
 
-export default PoolPair;
+export default LQDPoolPairPaper;
 
 const styles = StyleSheet.create({
   container: {
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
   },
 
   volumeText: {
-    color: '#1A8860',
+    color: '#156146',
     fontSize: 13,
     lineHeight: 16.12,
     fontWeight: '500',

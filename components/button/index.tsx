@@ -6,14 +6,17 @@ import { ILQDButton } from './types';
 const LQDButton = ({
   onPress,
   title,
-  type = 'button',
   variant = 'primary',
   disabled,
   loading,
   style,
 }: ILQDButton) => {
   return (
-    <LQDPressAnimation onPress={onPress} style={[{ flex: 1 }, style]}>
+    <LQDPressAnimation
+      onPress={onPress}
+      style={style}
+      disabled={disabled || loading}
+    >
       <View
         style={[
           styles.container,
@@ -43,6 +46,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     backgroundColor: '#FFF',
   },
+
   primaryText: {
     fontSize: 16,
     lineHeight: 16,
@@ -50,6 +54,7 @@ const styles = StyleSheet.create({
     fontFamily: 'ClashDisplaySemibold',
     fontWeight: '600',
   },
+
   primaryShadow: {
     shadowColor: 'rgba(62, 62, 62, 0.04)',
     shadowOffset: { width: 0, height: -2.4 },
@@ -63,31 +68,15 @@ const styles = StyleSheet.create({
   secondaryContainer: {
     paddingVertical: 17,
     borderRadius: 50,
-    backgroundColor: '#1A2001',
+    backgroundColor: '#4691FE',
   },
+
   secondaryText: {
     fontSize: 16,
     lineHeight: 16,
     color: '#FFF',
     fontFamily: 'ClashDisplaySemibold',
     fontWeight: '600',
-  },
-  secondaryShadow: {
-    // Shadow properties for iOS
-    shadowColor: '#151906',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.3,
-    shadowRadius: 3,
-
-    // Border to simulate the third shadow layer
-    borderWidth: 1,
-    borderColor: '#556805',
-
-    // Elevation for Android
-    elevation: 3,
   },
 
   tertiaryContainer: {

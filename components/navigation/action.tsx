@@ -1,15 +1,15 @@
 import { useEffect } from 'react';
 import { Pressable, StyleSheet } from 'react-native';
 import Animated, {
-  interpolate,
+  interpolateColor,
   useAnimatedStyle,
   useSharedValue,
-  withSpring,
+  withTiming,
 } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 
 const icon: any = {
-  index: (props: any) => <Ionicons name="home" {...props} />,
+  home: (props: any) => <Ionicons name="home" {...props} />,
   discover: (props: any) => <Ionicons name="diamond-sharp" {...props} />,
   holdings: (props: any) => <Ionicons name="briefcase" {...props} />,
 };
@@ -21,51 +21,39 @@ const LQDNavigationAction = ({
   onPress,
   routeName,
 }: ILQDNavigationAction) => {
-  const scale = useSharedValue(0);
-
-  const animatedIconStyle = useAnimatedStyle(() => {
-    const scaleValue = interpolate(scale.value, [0, 1], [1, 1.2]);
-
-    const top = interpolate(scale.value, [0, 1], [0, 9]);
-
-    return {
-      transform: [{ scale: scaleValue }],
-      top,
-    };
-  });
-
-  const animatedTextStyle = useAnimatedStyle(() => {
-    const opacity = interpolate(scale.value, [0, 1], [1, 0]);
-
-    return {
-      opacity,
-    };
-  });
+  const colorValue = useSharedValue(isFocused ? 1 : 0);
 
   useEffect(() => {
-    scale.value = withSpring(
-      typeof isFocused === 'boolean' ? (isFocused ? 1 : 0) : isFocused,
-      {
-        duration: 350,
-      }
+    colorValue.value = withTiming(isFocused ? 1 : 0, { duration: 300 });
+  }, [isFocused]);
+
+  const animatedTextStyle = useAnimatedStyle(() => {
+    const color = interpolateColor(
+      colorValue.value,
+      [0, 1],
+      ['#64748B', '#fff']
     );
-  }, [isFocused, scale]);
+    return {
+      color,
+    };
+  });
+
   return (
     <Pressable
       onPress={onPress}
       onLongPress={onLongPress}
       style={styles.container}
     >
-      <Animated.View style={animatedIconStyle}>
-        {icon[routeName]({
-          color: isFocused ? '#FFF' : '#222',
-          size: 24,
-        })}
-      </Animated.View>
+      {icon?.[routeName]?.({
+        color: isFocused ? '#fff' : '#64748B',
+        size: 24,
+      })}
+
       <Animated.Text
         style={[
-          { color: isFocused ? '#FFF' : '#222', fontSize: 12 },
           animatedTextStyle,
+          styles.text,
+          isFocused && { fontWeight: '700' },
         ]}
       >
         {label}
@@ -82,5 +70,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     gap: 5,
+  },
+
+  text: {
+    fontSize: 11,
+    lineHeight: 13.64,
   },
 });
