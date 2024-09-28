@@ -143,7 +143,6 @@ const styles = StyleSheet.create({
   balanceDecimalValue: {
     color: '#FFF',
     fontSize: 24,
-    lineHeight: 26.88,
     letterSpacing: -0.6,
     fontWeight: '500',
     fontFamily: 'ClashDisplayBold',
