@@ -7,6 +7,8 @@ interface ILQDButton {
   disabled?: boolean;
   loading?: boolean;
   style?: StyleProp<ViewStyle>;
+  fullWidth?: boolean;
+  icon?: 'money' | 'arrow-up';
 }
 
 export type { ILQDButton };
