@@ -1,21 +1,38 @@
+import { StyleSheet } from 'react-native';
+
 import { LQDOnboardingStep } from '@/components/onboarding';
 
 const Step3 = () => {
-  const ray = require('../../assets/images/light-ray2.png');
   const image = require('../../assets/images/onboarding3.png');
+  const arc = require('../../assets/images/onboardingStep3Arc.png');
+  const arc1 = require('../../assets/images/onboardingStep3Arc1.png');
 
   return (
     <LQDOnboardingStep
-      ray={ray}
       image={image}
       title="All things Liquidity, in one place"
-      subtitle="One app, one account, access multiple protocols and networks"
-      containerStyle={{ backgroundColor: '#536103' }}
-      imageStyle={{ bottom: -50, left: 0, width: 250, height: 650 }}
-      titleStyle={{ color: '#D9D9D9' }}
-      subtitleStyle={{ color: '#FFF' }}
+      subtitle="One app, one account, multiple protocols."
+      containerStyle={{ backgroundColor: '#B14DFF' }}
+      firstArc={arc}
+      firstArcStyle={styles.firstArc}
+      secondArc={arc1}
+      secondArcStyle={styles.secondArc}
     />
   );
 };
 
 export default Step3;
+
+const styles = StyleSheet.create({
+  firstArc: {
+    height: 352,
+    left: -48,
+    top: 218,
+  },
+
+  secondArc: {
+    height: 301,
+    right: -64,
+    bottom: 104,
+  },
+});

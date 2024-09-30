@@ -14,7 +14,6 @@ import { LQDOnboardingIndicator } from '@/components/onboarding';
 import Step1 from '.';
 import Step2 from './step2';
 import Step3 from './step3';
-import Step4 from './step4';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -26,8 +25,6 @@ const getCurrentStep = (pathname: string) => {
       return 1;
     case '/step3':
       return 2;
-    case '/step4':
-      return 3;
     default:
       return 0;
   }
@@ -56,9 +53,6 @@ export default function OnboardingTabLayout() {
         router.push('/(onboarding)/step3');
         break;
       case '/step3':
-        router.push('/(onboarding)/step4');
-        break;
-      case '/step4':
         if (intervalRef.current) {
           clearInterval(intervalRef.current);
         }
@@ -90,7 +84,7 @@ export default function OnboardingTabLayout() {
 
   useEffect(() => {
     setTimer(0);
-    if (pathname !== '/step4' && finished) {
+    if (pathname !== '/step3' && finished) {
       setFinished(false);
       setIsPaused(false);
     }
@@ -104,7 +98,7 @@ export default function OnboardingTabLayout() {
           timer={timer}
           isPaused={isPaused}
           currentStep={currentStep}
-          totalSteps={4}
+          totalSteps={3}
           togglePause={togglePause}
           finished={finished}
         />
@@ -137,13 +131,6 @@ export default function OnboardingTabLayout() {
           component={Step3}
           options={{
             title: 'Step3',
-          }}
-        />
-        <Tab.Screen
-          name="step4"
-          component={Step4}
-          options={{
-            title: 'Step4',
           }}
         />
       </Tab.Navigator>
