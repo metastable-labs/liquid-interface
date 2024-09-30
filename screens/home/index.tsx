@@ -1,99 +1,93 @@
-import { useState } from 'react';
 import { StyleSheet, View, Text, FlatList, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-import { LQDPressAnimation } from '@/components';
-import Section from './section';
-import Gainers from './gainers';
-import PoolPair from './pool-pair';
+import useSystemFunctions from '@/hooks/useSystemFunctions';
+import { formatAmountWithWholeAndDecimal } from '@/utils/helpers';
+import {
+  LQDPoolPairCard,
+  LQDPoolPairPaper,
+  LQDPressAnimation,
+} from '@/components';
 import { topGainers, poolPairs } from './dummy';
+import Section from './section';
 
-type Section = 'topGainers' | 'trending' | 'hot' | null;
+const balance = 36_708.89;
 
 const Home = () => {
-  const balance = 36_708.89;
-  const [activeSection, setActiveSection] = useState<Section>(null);
+  const { router } = useSystemFunctions();
 
-  const handleSeeAll = (section: Section) => setActiveSection(section);
+  const { whole, decimal } = formatAmountWithWholeAndDecimal(balance);
 
   const sections = [
     {
       title: 'Top gainers',
       subtitle: 'by APR',
       icon: <Ionicons name="trending-up" size={18} color="#0C0507" />,
-      action: () => handleSeeAll('topGainers'),
-      isShowingAll: activeSection === 'topGainers',
+      action: () => router.push('/(tabs)/home/top'),
       children: (
         <FlatList
           data={topGainers}
           horizontal
-          renderItem={({ item }) => <Gainers {...item} />}
+          renderItem={({ item }) => <LQDPoolPairCard {...item} />}
           keyExtractor={(item, index) => index.toString()}
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={{ gap: 10 }}
         />
       ),
-      show: activeSection === 'topGainers' || activeSection === null,
     },
 
     {
       title: 'Trending',
       subtitle: 'by Volume',
       icon: <Ionicons name="arrow-up" size={18} color="#0C0507" />,
-      action: () => handleSeeAll('trending'),
-      isShowingAll: activeSection === 'trending',
-      children: poolPairs.map((poolPair, index) => (
-        <PoolPair key={index} {...poolPair} />
-      )),
-      show: activeSection === 'trending' || activeSection === null,
+      action: () => router.push('/(tabs)/home/trending'),
+      children: (
+        <View style={styles.mapContainer}>
+          {poolPairs.map((poolPair, index) => (
+            <LQDPoolPairPaper key={index} {...poolPair} />
+          ))}
+        </View>
+      ),
     },
 
     {
       title: 'Hot',
       subtitle: 'by TVL',
       icon: <Ionicons name="flame" size={18} color="#0C0507" />,
-      action: () => handleSeeAll('hot'),
-      isShowingAll: activeSection === 'hot',
-      children: poolPairs.map((poolPair, index) => (
-        <PoolPair key={index} {...poolPair} capitalMetric="tvl" />
-      )),
-      show: activeSection === 'hot' || activeSection === null,
+      action: () => router.push('/(tabs)/home/hot'),
+      children: (
+        <View style={styles.mapContainer}>
+          {poolPairs.map((poolPair, index) => (
+            <LQDPoolPairPaper key={index} {...poolPair} capitalMetric="tvl" />
+          ))}
+        </View>
+      ),
     },
   ];
 
   return (
     <ScrollView
       style={styles.container}
-      contentContainerStyle={[
-        styles.contentContainer,
-        Boolean(activeSection) && { gap: 36 },
-      ]}
+      contentContainerStyle={styles.contentContainer}
       showsVerticalScrollIndicator={false}
     >
-      {!activeSection ? (
-        <View style={styles.balanceContainer}>
-          <Text style={styles.balanceTitle}>Total Balance</Text>
+      <View style={styles.balanceContainer}>
+        <Text style={styles.balanceTitle}>Total Balance</Text>
 
-          <View style={styles.balanceValueContainer}>
-            <Text style={styles.balanceValue}>${balance.toLocaleString()}</Text>
-            <LQDPressAnimation>
-              <Ionicons name="chevron-forward" size={24} color="#F8FAFC" />
-            </LQDPressAnimation>
-          </View>
+        <View style={styles.balanceValueContainer}>
+          <Text style={styles.balanceWholeValue}>
+            ${whole}.<Text style={styles.balanceDecimalValue}>{decimal}</Text>
+          </Text>
+
+          <LQDPressAnimation>
+            <Ionicons name="chevron-forward" size={24} color="#F8FAFC" />
+          </LQDPressAnimation>
         </View>
-      ) : (
-        <LQDPressAnimation
-          onPress={() => setActiveSection(null)}
-          style={styles.backContainer}
-        >
-          <Ionicons name="chevron-back" size={16} color="#1E293B" />
-          <Text style={styles.backText}>Back</Text>
-        </LQDPressAnimation>
-      )}
+      </View>
 
-      {sections.map(
-        (section, index) => section.show && <Section key={index} {...section} />
-      )}
+      {sections.map((section, index) => (
+        <Section key={index} {...section} />
+      ))}
     </ScrollView>
   );
 };
@@ -110,14 +104,14 @@ const styles = StyleSheet.create({
 
   contentContainer: {
     paddingBottom: 175,
-    gap: 46,
+    gap: 40,
   },
 
   balanceContainer: {
     alignSelf: 'stretch',
     gap: 12,
     padding: 16,
-    backgroundColor: '#3F4C00',
+    backgroundColor: '#4691FE',
     borderRadius: 16,
     shadowColor: 'rgba(2, 6, 23, 0.06)',
     shadowOffset: { width: 0, height: 6 },
@@ -138,7 +132,7 @@ const styles = StyleSheet.create({
     gap: 16,
   },
 
-  balanceValue: {
+  balanceWholeValue: {
     color: '#FFF',
     fontSize: 36,
     lineHeight: 40.32,
@@ -146,17 +140,17 @@ const styles = StyleSheet.create({
     fontFamily: 'ClashDisplayBold',
   },
 
-  backContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 2,
-    alignSelf: 'flex-start',
+  balanceDecimalValue: {
+    color: '#FFF',
+    fontSize: 24,
+    letterSpacing: -0.6,
+    fontWeight: '500',
+    fontFamily: 'ClashDisplayBold',
   },
 
-  backText: {
-    color: '#1E293B',
-    fontSize: 14,
-    lineHeight: 17.64,
-    fontWeight: '500',
+  mapContainer: {
+    flex: 1,
+    gap: 24,
+    alignItems: 'stretch',
   },
 });

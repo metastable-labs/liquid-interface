@@ -24,8 +24,8 @@ const LQDNavigation = ({
 
   const animatedStyle = useAnimatedStyle(() => {
     let offset = 0;
-    if (state.index === 0) offset += 10;
-    if (state.index === state.routes.length - 1) offset -= 10;
+    if (state.index === 0) offset += 6;
+    if (state.index === state.routes.length - 1) offset -= 6;
 
     return {
       transform: [{ translateX: tabPositionX.value + offset }],
@@ -43,7 +43,7 @@ const LQDNavigation = ({
         style={[
           animatedStyle,
           styles.activeIndicator,
-          { height: dimensions.height - 15, width: buttonWidth - 25 },
+          { height: dimensions.height - 30, width: buttonWidth - 25 },
         ]}
       />
 
@@ -100,27 +100,22 @@ export default LQDNavigation;
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
-    bottom: 50,
+    bottom: 0,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     backgroundColor: 'white',
-    marginHorizontal: 60,
-    padding: 15,
-    borderRadius: 35,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 10,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 10,
-    elevation: 4,
+    borderTopWidth: 1,
+    borderTopColor: '#EAEEF4',
+    paddingTop: 12,
+    paddingBottom: 30,
+    paddingHorizontal: 8,
   },
 
   activeIndicator: {
     position: 'absolute',
-    backgroundColor: '#723FEB',
+    top: 6,
+    backgroundColor: '#00000080',
     borderRadius: 30,
     marginHorizontal: 12,
   },

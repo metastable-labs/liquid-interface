@@ -1,17 +1,17 @@
 import { Image, View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-const backgroundColors = ['rgba(255, 9, 9, 0.05)', 'rgba(9, 195, 127, 0.05)'];
-const textColors = ['#D95D5D', '#09C37F'];
+const backgroundColors = ['#FDEAEA', '#EFFAF6'];
+const textColors = ['#A4262C', '#156146'];
 
-const Gainers = ({
+const LQDPoolPairCard = ({
   change,
   increased,
   primaryIconURL,
   primaryTitle,
   secondaryIconURL,
   secondaryTitle,
-}: IGainers) => {
+}: ILQDPoolPairCard) => {
   return (
     <View style={styles.container}>
       <View style={styles.topContainer}>
@@ -39,7 +39,7 @@ const Gainers = ({
           ]}
         >
           <Ionicons
-            name={increased ? 'caret-up' : 'caret-down'}
+            name={increased ? 'arrow-up' : 'arrow-down'}
             size={12}
             color={textColors[+increased]}
           />
@@ -56,7 +56,7 @@ const Gainers = ({
   );
 };
 
-export default Gainers;
+export default LQDPoolPairCard;
 
 const styles = StyleSheet.create({
   container: {
