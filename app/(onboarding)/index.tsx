@@ -1,21 +1,39 @@
+import { StyleSheet } from 'react-native';
+
 import { LQDOnboardingStep } from '@/components/onboarding';
 
 const Step1 = () => {
-  const ray = require('../../assets/images/light-ray.png');
   const image = require('../../assets/images/onboarding1.png');
+  const arc = require('../../assets/images/onboardingStep1Arc.png');
+  const arc1 = require('../../assets/images/onboardingStep1Arc1.png');
 
   return (
     <LQDOnboardingStep
-      ray={ray}
       image={image}
-      title="Start Earning up to 60% APR on your USDC"
-      subtitle="Deposit Liquidity on Aerodrome pools in 3 secs"
-      containerStyle={{ backgroundColor: '#1A2001' }}
-      imageStyle={{ bottom: 0, right: -10, width: 200, height: 620 }}
-      titleStyle={{ color: '#F7FDD8' }}
-      subtitleStyle={{ color: '#DEDADA' }}
+      firstArc={arc}
+      secondArc={arc1}
+      title="DeFi made easy"
+      subtitle="Deposit Liquidity on Aerodrome pools in 3 seconds"
+      containerStyle={{ backgroundColor: '#4691FE' }}
+      imageStyle={{ left: 6 }}
+      firstArcStyle={styles.firstArc}
+      secondArcStyle={styles.secondArc}
     />
   );
 };
 
 export default Step1;
+
+const styles = StyleSheet.create({
+  firstArc: {
+    height: 352,
+    left: -57,
+    top: 82,
+  },
+
+  secondArc: {
+    height: 301,
+    right: -66,
+    bottom: 155,
+  },
+});

@@ -2,26 +2,37 @@ import { Text, View, StyleSheet, Image } from 'react-native';
 import { ILQDOnboardingStep } from './types';
 
 const LQDOnboardingStep = ({
-  ray,
+  firstArc,
   image,
-  title,
+  secondArc,
   subtitle,
+  title,
   containerStyle,
+  firstArcStyle,
   imageStyle,
-  titleStyle,
-  subtitleStyle,
+  secondArcStyle,
 }: ILQDOnboardingStep) => {
   return (
     <View style={[styles.container, containerStyle]}>
-      <Image source={ray} style={styles.ray} />
+      <Text style={styles.title}>{title}</Text>
 
-      <Text style={[styles.title, titleStyle]}>{title}</Text>
-
-      <Text style={[styles.subtitle, subtitleStyle]}>{subtitle}</Text>
+      <Text style={styles.subtitle}>{subtitle}</Text>
 
       <Image
         source={image}
         style={[styles.image, imageStyle]}
+        resizeMode="contain"
+      />
+
+      <Image
+        source={firstArc}
+        style={[{ position: 'absolute', zIndex: -1 }, firstArcStyle]}
+        resizeMode="contain"
+      />
+
+      <Image
+        source={secondArc}
+        style={[{ position: 'absolute', zIndex: -1 }, secondArcStyle]}
         resizeMode="contain"
       />
     </View>
@@ -37,14 +48,6 @@ const styles = StyleSheet.create({
     gap: 22,
   },
 
-  ray: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
-  },
-
   title: {
     fontFamily: 'ClashDisplayBold',
     fontSize: 48,
@@ -52,6 +55,7 @@ const styles = StyleSheet.create({
     lineHeight: 53,
     letterSpacing: -0.96,
     paddingHorizontal: 16,
+    color: '#FFF',
   },
 
   subtitle: {
@@ -59,9 +63,11 @@ const styles = StyleSheet.create({
     lineHeight: 22.32,
     paddingHorizontal: 16,
     fontFamily: 'AeonikRegular',
+    color: '#FFF',
   },
 
   image: {
     position: 'absolute',
+    bottom: 136,
   },
 });

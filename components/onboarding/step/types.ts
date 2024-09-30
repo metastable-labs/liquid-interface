@@ -1,14 +1,15 @@
 import { StyleProp, ViewStyle, ImageStyle, TextStyle } from 'react-native';
 
 interface ILQDOnboardingStep {
-  ray: any;
+  firstArc: any;
   image: any;
-  title: string;
+  secondArc: any;
   subtitle: string;
+  title: string;
   containerStyle?: StyleProp<ViewStyle>;
+  firstArcStyle?: StyleProp<ImageStyle>;
   imageStyle?: StyleProp<ImageStyle>;
-  titleStyle?: StyleProp<TextStyle>;
-  subtitleStyle?: StyleProp<TextStyle>;
+  secondArcStyle?: StyleProp<ImageStyle>;
 }
 
 export type { ILQDOnboardingStep };
