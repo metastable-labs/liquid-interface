@@ -1,15 +1,14 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-import LQDPressAnimation from '../press-animation';
 import { ILQDStackHeader } from './types';
 
 const LQDStackHeader = ({ navigation, style }: ILQDStackHeader) => (
   <View style={[styles.root, style]}>
-    <LQDPressAnimation style={styles.container} onPress={navigation.goBack}>
+    <TouchableOpacity style={styles.container} onPress={navigation.goBack}>
       <Ionicons name="chevron-back" size={20} color="#0F172A" />
       <Text style={styles.title}>Back</Text>
-    </LQDPressAnimation>
+    </TouchableOpacity>
   </View>
 );
 export default LQDStackHeader;

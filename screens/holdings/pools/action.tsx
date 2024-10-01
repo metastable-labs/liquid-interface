@@ -1,5 +1,4 @@
-import { Text, StyleSheet } from 'react-native';
-import { LQDPressAnimation } from '@/components';
+import { Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 const PoolCardAction = ({ disabled, id, type }: IPoolCardAction) => {
   const actions = {
@@ -8,7 +7,7 @@ const PoolCardAction = ({ disabled, id, type }: IPoolCardAction) => {
   };
 
   return (
-    <LQDPressAnimation
+    <TouchableOpacity
       style={[
         styles.container,
         styles[`${type}Active`],
@@ -18,7 +17,7 @@ const PoolCardAction = ({ disabled, id, type }: IPoolCardAction) => {
       onPress={() => actions[type](id)}
     >
       <Text style={[styles.title, styles[`${type}Title`]]}>{type}</Text>
-    </LQDPressAnimation>
+    </TouchableOpacity>
   );
 };
 

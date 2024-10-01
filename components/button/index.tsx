@@ -1,7 +1,6 @@
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-import LQDPressAnimation from '../press-animation';
 import { ILQDButton } from './types';
 
 const icons = {
@@ -20,7 +19,7 @@ const LQDButton = ({
   icon,
 }: ILQDButton) => {
   return (
-    <LQDPressAnimation
+    <TouchableOpacity
       onPress={onPress}
       style={style}
       disabled={disabled || loading}
@@ -38,7 +37,7 @@ const LQDButton = ({
 
         {icon && icons[icon]}
       </View>
-    </LQDPressAnimation>
+    </TouchableOpacity>
   );
 };
 

@@ -1,7 +1,5 @@
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-
-import { LQDPressAnimation } from '@/components';
 
 const icons = {
   wallet: <Ionicons name="wallet-outline" size={24} color="#FFF" />,
@@ -35,10 +33,10 @@ const Empty = ({
       </View>
 
       {action && (
-        <LQDPressAnimation onPress={action.onPress} style={styles.action}>
+        <TouchableOpacity onPress={action.onPress} style={styles.action}>
           <Text style={styles.actionText}>{action.title}</Text>
           {actionIcon && actionIcons[actionIcon]}
-        </LQDPressAnimation>
+        </TouchableOpacity>
       )}
     </View>
   );

@@ -1,12 +1,11 @@
 import React, { useEffect } from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import Animated, {
   useSharedValue,
   withTiming,
   useAnimatedStyle,
   Easing,
 } from 'react-native-reanimated';
-import LQDPressAnimation from '@/components/press-animation';
 
 const LQDOnboardingIndicator = ({
   currentStep,
@@ -64,9 +63,9 @@ const LQDOnboardingIndicator = ({
         </View>
 
         <View style={styles.actionContainer}>
-          <LQDPressAnimation style={styles.action} onPress={togglePause}>
+          <TouchableOpacity style={styles.action} onPress={togglePause}>
             <Image source={actions[+isPaused]} style={styles.actionIcon} />
-          </LQDPressAnimation>
+          </TouchableOpacity>
         </View>
       </View>
 

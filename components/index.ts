@@ -1,4 +1,3 @@
-import LQDPressAnimation from './press-animation';
 import LQDButton from './button';
 import LQDNavigation from './navigation';
 import LQDInput from './input';
@@ -8,7 +7,6 @@ import LQDPoolPairCard from './pool-pair-card';
 import LQDPoolPairPaper from './pool-pair-paper';
 
 export {
-  LQDPressAnimation,
   LQDButton,
   LQDNavigation,
   LQDInput,

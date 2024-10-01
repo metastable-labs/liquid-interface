@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 import useSystemFunctions from '@/hooks/useSystemFunctions';
@@ -50,109 +50,108 @@ const Card = ({ details, subtitle, title, variant }: IItem) => {
   };
 
   return (
-    <View
-      style={{
-        ...styles.container,
-        borderColor: config[variant].primaryColor,
-        backgroundColor: config[variant].primaryColor,
-      }}
-    >
-      <View style={styles.top}>
-        <View style={styles.topLeft}>
-          <View
-            style={{
-              ...styles.iconContainer,
-              backgroundColor: config[variant].secondaryColor,
-            }}
-          >
-            {icons[variant]}
+    <TouchableOpacity onPress={config[variant].action}>
+      <View
+        style={{
+          ...styles.container,
+          borderColor: config[variant].primaryColor,
+          backgroundColor: config[variant].primaryColor,
+        }}
+      >
+        <View style={styles.top}>
+          <View style={styles.topLeft}>
+            <View
+              style={{
+                ...styles.iconContainer,
+                backgroundColor: config[variant].secondaryColor,
+              }}
+            >
+              {icons[variant]}
+            </View>
+
+            <View style={styles.labelAndHeader}>
+              <Text
+                style={{
+                  ...styles.label,
+                  color: config[variant].secondaryColor,
+                }}
+              >
+                {config[variant].label}
+              </Text>
+
+              <View style={styles.titleAndSubtitle}>
+                <Text
+                  style={{
+                    ...styles.title,
+                    color: config[variant].secondaryColor,
+                  }}
+                >
+                  {title}
+                </Text>
+
+                <Text
+                  style={{
+                    ...styles.subtitle,
+                    color: config[variant].secondaryColor,
+                  }}
+                >
+                  {subtitle}
+                </Text>
+              </View>
+            </View>
           </View>
 
-          <View style={styles.labelAndHeader}>
+          <Ionicons
+            name="information-circle-outline"
+            size={20}
+            color={config[variant].secondaryColor}
+          />
+        </View>
+
+        <View style={styles.bottom}>
+          <View style={styles.details}>
+            {details.map((detail, index) => (
+              <View key={index} style={styles.detail}>
+                <Text
+                  style={{
+                    ...styles.detailTitle,
+                    color: config[variant].secondaryColor,
+                  }}
+                >
+                  {detail.title}
+                </Text>
+
+                <Text
+                  style={{
+                    ...styles.detailValue,
+                    color: config[variant].secondaryColor,
+                  }}
+                >
+                  {detail.value}
+                </Text>
+              </View>
+            ))}
+          </View>
+
+          <View style={styles.actionContainer}>
             <Text
               style={{
-                ...styles.label,
+                ...styles.actionText,
                 color: config[variant].secondaryColor,
               }}
             >
-              {config[variant].label}
+              {variant === 'primary' ? 'View assets' : 'See all'}
             </Text>
 
-            <View style={styles.titleAndSubtitle}>
-              <Text
-                style={{
-                  ...styles.title,
-                  color: config[variant].secondaryColor,
-                }}
-              >
-                {title}
-              </Text>
-
-              <Text
-                style={{
-                  ...styles.subtitle,
-                  color: config[variant].secondaryColor,
-                }}
-              >
-                {subtitle}
-              </Text>
-            </View>
+            <Ionicons
+              name="chevron-forward-outline"
+              size={14}
+              color={config[variant].secondaryColor}
+            />
           </View>
         </View>
-
-        <Ionicons
-          name="information-circle-outline"
-          size={20}
-          color={config[variant].secondaryColor}
-        />
       </View>
-
-      <View style={styles.bottom}>
-        <View style={styles.details}>
-          {details.map((detail, index) => (
-            <View key={index} style={styles.detail}>
-              <Text
-                style={{
-                  ...styles.detailTitle,
-                  color: config[variant].secondaryColor,
-                }}
-              >
-                {detail.title}
-              </Text>
-
-              <Text
-                style={{
-                  ...styles.detailValue,
-                  color: config[variant].secondaryColor,
-                }}
-              >
-                {detail.value}
-              </Text>
-            </View>
-          ))}
-        </View>
-
-        <LQDPressAnimation
-          onPress={config[variant].action}
-          style={styles.actionContainer}
-        >
-          <Text
-            style={{
-              ...styles.actionText,
-              color: config[variant].secondaryColor,
-            }}
-          >
-            {variant === 'primary' ? 'View assets' : 'See all'}
-          </Text>
-
-          <Ionicons
-            name="chevron-forward-outline"
-            size={14}
-            color={config[variant].secondaryColor}
-          />
-        </LQDPressAnimation>
-      </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

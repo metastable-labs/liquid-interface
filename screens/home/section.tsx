@@ -1,6 +1,5 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { LQDPressAnimation } from '@/components';
 
 const Section = ({
   children,
@@ -20,10 +19,10 @@ const Section = ({
         </View>
 
         {!isShowingAll && (
-          <LQDPressAnimation onPress={action} style={styles.action}>
+          <TouchableOpacity onPress={action} style={styles.action}>
             <Text style={styles.actionText}>See all</Text>
             <Ionicons name="chevron-forward" size={16} color="#0C0507" />
-          </LQDPressAnimation>
+          </TouchableOpacity>
         )}
       </View>
 

@@ -1,11 +1,17 @@
 import { Tabs } from 'expo-router';
-import { Platform, StatusBar, StyleSheet, View } from 'react-native';
+import {
+  Platform,
+  StatusBar,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 import { TabBarIcon } from '@/components/navigation/TabBarIcon';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { LQDNavigation, LQDPressAnimation, LQDSearch } from '@/components';
+import { LQDNavigation, LQDSearch } from '@/components';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -13,15 +19,15 @@ export default function TabLayout() {
   return (
     <>
       <View style={styles.shortcut}>
-        <LQDPressAnimation>
+        <TouchableOpacity>
           <Ionicons name="time-outline" size={24} color="#333" />
-        </LQDPressAnimation>
+        </TouchableOpacity>
 
         <LQDSearch />
 
-        <LQDPressAnimation>
+        <TouchableOpacity>
           <Ionicons name="settings-outline" size={24} color="#333" />
-        </LQDPressAnimation>
+        </TouchableOpacity>
       </View>
 
       <Tabs

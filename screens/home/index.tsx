@@ -1,13 +1,16 @@
-import { StyleSheet, View, Text, FlatList, ScrollView } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  FlatList,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { formatAmountWithWholeAndDecimal } from '@/utils/helpers';
-import {
-  LQDPoolPairCard,
-  LQDPoolPairPaper,
-  LQDPressAnimation,
-} from '@/components';
+import { LQDPoolPairCard, LQDPoolPairPaper } from '@/components';
 import { topGainers, poolPairs } from './dummy';
 import Section from './section';
 
@@ -74,15 +77,13 @@ const Home = () => {
       <View style={styles.balanceContainer}>
         <Text style={styles.balanceTitle}>Total Balance</Text>
 
-        <View style={styles.balanceValueContainer}>
+        <TouchableOpacity style={styles.balanceValueContainer}>
           <Text style={styles.balanceWholeValue}>
             ${whole}.<Text style={styles.balanceDecimalValue}>{decimal}</Text>
           </Text>
 
-          <LQDPressAnimation>
-            <Ionicons name="chevron-forward" size={24} color="#F8FAFC" />
-          </LQDPressAnimation>
-        </View>
+          <Ionicons name="chevron-forward" size={24} color="#F8FAFC" />
+        </TouchableOpacity>
       </View>
 
       {sections.map((section, index) => (
