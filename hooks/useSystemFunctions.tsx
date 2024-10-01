@@ -6,11 +6,12 @@
  */
 
 import { useAppDispatch, useAppSelector } from './useRedux';
-import { router, usePathname } from 'expo-router';
+import { router, usePathname, useLocalSearchParams } from 'expo-router';
 
 const useSystemFunctions = () => {
   const dispatch = useAppDispatch();
   const pathname = usePathname();
+  const params = useLocalSearchParams();
 
   // states
   const userState = useAppSelector((state) => state.user);
@@ -19,6 +20,7 @@ const useSystemFunctions = () => {
     dispatch,
     router,
     pathname,
+    params,
 
     // states
     userState,

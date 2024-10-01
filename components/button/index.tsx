@@ -1,7 +1,13 @@
 import { View, StyleSheet, Text } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 import LQDPressAnimation from '../press-animation';
 import { ILQDButton } from './types';
+
+const icons = {
+  money: <Ionicons name="cash-outline" size={18} color="#FFF" />,
+  'arrow-up': <Ionicons name="arrow-up-outline" size={18} color="#334155" />,
+};
 
 const LQDButton = ({
   onPress,
@@ -10,6 +16,8 @@ const LQDButton = ({
   disabled,
   loading,
   style,
+  fullWidth = true,
+  icon,
 }: ILQDButton) => {
   return (
     <LQDPressAnimation
@@ -22,9 +30,13 @@ const LQDButton = ({
           styles.container,
           styles[`${variant}Container`],
           (styles as any)[`${variant}Shadow`],
+          fullWidth && { width: '100%' },
+          icon && { gap: 5 },
         ]}
       >
         <Text style={styles[`${variant}Text`]}>{title}</Text>
+
+        {icon && icons[icon]}
       </View>
     </LQDPressAnimation>
   );
@@ -35,7 +47,6 @@ export default LQDButton;
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -83,8 +94,8 @@ const styles = StyleSheet.create({
     height: 40,
     paddingVertical: 5,
     paddingHorizontal: 16,
-    backgroundColor: '#181E00',
-    borderRadius: 6,
+    backgroundColor: '#4691FE',
+    borderRadius: 16,
   },
   tertiaryText: {
     color: '#FFF',
@@ -100,7 +111,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F8FAFC',
     borderWidth: 1,
     borderColor: '#E2E8F0',
-    borderRadius: 6,
+    borderRadius: 16,
   },
   tertiaryOutlineText: {
     color: '#334155',
