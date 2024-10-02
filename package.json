@@ -13,7 +13,8 @@
     "install-pod": "cd ios && pod install && cd ..",
     "create-cloud-build": "eas build --platform android --profile development",
     "clean-build-cache": "npx expo start -c",
-    "prettier": "prettier --write ."
+    "prettier": "prettier --write .",
+    "prebuild": "npx expo prebuild"
   },
   "jest": {
     "preset": "jest-expo"

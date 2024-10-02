@@ -27,6 +27,7 @@
         <data android:scheme="myapp"/>
         <data android:scheme="com.liquid.supermigrate"/>
         <data android:scheme="exp+liquid-interface"/>
+        <data android:scheme="exp+liquid"/>
       </intent-filter>
     </activity>
     <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" android:exported="false"/>
