@@ -54,14 +54,18 @@ export default function RootLayout() {
         <ThemeProvider
           value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
         >
-          <Stack>
+          <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="(onboarding)" />
+            <Stack.Screen name="(tabs)" />
+            <Stack.Screen name="setup" />
             <Stack.Screen
-              name="(onboarding)"
-              options={{ headerShown: false }}
+              name="liquidity-management"
+              options={{
+                presentation: 'modal',
+                animation: 'slide_from_bottom',
+              }}
             />
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen name="setup" options={{ headerShown: false }} />
-            <Stack.Screen name="+not-found" />
+            <Stack.Screen name="+not-found" options={{ headerShown: true }} />
           </Stack>
         </ThemeProvider>
       </PersistGate>
