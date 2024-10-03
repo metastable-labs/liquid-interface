@@ -1,10 +1,32 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
+
+import RewardCard from './card';
+import { aeroRewards, feesRewards } from './dummy';
 
 const Rewards = ({ type }: { type: RewardVariants }) => {
+  const rewards = {
+    fees: feesRewards,
+    aero: aeroRewards,
+  }[type];
+
+  const noOfRewards = rewards.length;
   return (
-    <View style={styles.container}>
-      <Text>Rewards Screen {type}</Text>
-    </View>
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={styles.contentContainer}
+      showsVerticalScrollIndicator={false}
+    >
+      <Text style={styles.header}>
+        Rewards
+        <Text style={styles.subHeader}> ({noOfRewards} pools)</Text>
+      </Text>
+
+      <View style={styles.rewardsContainer}>
+        {rewards.map((reward) => (
+          <RewardCard {...reward} key={reward.id} />
+        ))}
+      </View>
+    </ScrollView>
   );
 };
 
@@ -13,7 +35,30 @@ export default Rewards;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    paddingTop: 32,
+    paddingHorizontal: 16,
+    backgroundColor: '#fff',
+  },
+
+  contentContainer: {
+    paddingBottom: 175,
+    gap: 20,
+  },
+
+  header: {
+    color: '#0F172A',
+    fontSize: 20,
+    lineHeight: 23.2,
+    fontWeight: '500',
+  },
+
+  subHeader: {
+    color: '#94A3B8',
+    fontSize: 16,
+    fontWeight: '500',
+  },
+
+  rewardsContainer: {
+    gap: 24,
   },
 });
