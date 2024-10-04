@@ -46,7 +46,7 @@ const PoolCard = ({
 
           <View style={styles.detailContainer}>
             <Text style={styles.detailHeader}>
-              {variant.charAt(0)} AMM - {primaryTitle} / {secondaryTitle}
+              {variant.charAt(0)}AMM - {primaryTitle} / {secondaryTitle}
             </Text>
 
             <View style={styles.details}>

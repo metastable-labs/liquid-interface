@@ -10,6 +10,8 @@ import Assets from './holdings/assets';
 import Pools from './holdings/pools';
 import Rewards from './holdings/rewards';
 
+import LiquidityManagement from './liquidity-management';
+
 export {
   Home,
   TopGainers,
@@ -20,4 +22,5 @@ export {
   Assets,
   Pools,
   Rewards,
+  LiquidityManagement,
 };

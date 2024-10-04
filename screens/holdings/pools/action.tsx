@@ -1,10 +1,11 @@
+import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 const PoolCardAction = ({ disabled, id, type }: IPoolCardAction) => {
-  const actions = {
-    stake: (id: string) => console.log(`Stake ${id}`),
-    unstake: (id: string) => console.log(`Unstake ${id}`),
-  };
+  const { router } = useSystemFunctions();
+
+  const action = () =>
+    router.push({ pathname: '/liquidity-management', params: { id, type } });
 
   return (
     <TouchableOpacity
@@ -14,7 +15,7 @@ const PoolCardAction = ({ disabled, id, type }: IPoolCardAction) => {
         disabled && styles[`${type}Disabled`],
       ]}
       disabled={disabled}
-      onPress={() => actions[type](id)}
+      onPress={action}
     >
       <Text style={[styles.title, styles[`${type}Title`]]}>{type}</Text>
     </TouchableOpacity>
