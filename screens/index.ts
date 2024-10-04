@@ -10,6 +10,9 @@ import Assets from './holdings/assets';
 import Pools from './holdings/pools';
 import Rewards from './holdings/rewards';
 
+import CryptoDeposit from './cryptodeposit';
+import DebitDeposit from './debitdeposit';
+
 import LiquidityManagement from './liquidity-management';
 
 export {
@@ -23,4 +26,6 @@ export {
   Pools,
   Rewards,
   LiquidityManagement,
+  CryptoDeposit,
+  DebitDeposit,
 };

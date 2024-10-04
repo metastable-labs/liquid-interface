@@ -39,8 +39,21 @@ const formatAmountWithWholeAndDecimal = (
   return { whole: formattedWhole, decimal: decimal || '00' };
 };
 
+function removeCommasFromNumber(text: string): string {
+  return text.replace(/,/g, '');
+}
+
+const formatWithThousandSeparator = (value: string) => {
+  if (!value) return '';
+  const numberValue = parseFloat(value.replace(/,/g, ''));
+  if (isNaN(numberValue)) return value;
+  return numberValue.toLocaleString(undefined, { maximumFractionDigits: 5 });
+};
+
 export {
   formatNumberWithSuffix,
   truncateDecimal,
   formatAmountWithWholeAndDecimal,
+  removeCommasFromNumber,
+  formatWithThousandSeparator,
 };
