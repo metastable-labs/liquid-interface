@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 
+import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { LQDButton } from '@/components';
 import { ILQDButton } from '@/components/button/types';
 import Card from './card';
@@ -9,10 +10,12 @@ import { emptyData } from './dummy';
 const holdings = 1_234_567.89;
 
 const Holdings = () => {
+  const { router } = useSystemFunctions();
+
   const actions: Array<ILQDButton> = [
     {
       title: 'Add money',
-      onPress: () => console.log('Deposit'),
+      onPress: () => router.push('/deposit/debit'),
       variant: 'tertiary',
       fullWidth: false,
       icon: 'money',

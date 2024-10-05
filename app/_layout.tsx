@@ -14,6 +14,7 @@ import 'react-native-reanimated';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { persistor, store } from '@/store';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -45,30 +46,32 @@ export default function RootLayout() {
   }
 
   return (
-    <ReduxProvider store={store}>
-      <PersistGate
-        loading={null}
-        persistor={persistor}
-        onBeforeLift={() => setPersisted(true)}
-      >
-        <ThemeProvider
-          value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
+    <GestureHandlerRootView>
+      <ReduxProvider store={store}>
+        <PersistGate
+          loading={null}
+          persistor={persistor}
+          onBeforeLift={() => setPersisted(true)}
         >
-          <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="(onboarding)" />
-            <Stack.Screen name="(tabs)" />
-            <Stack.Screen name="setup" />
-            <Stack.Screen
-              name="liquidity-management"
-              options={{
-                presentation: 'modal',
-                animation: 'slide_from_bottom',
-              }}
-            />
-            <Stack.Screen name="+not-found" options={{ headerShown: true }} />
-          </Stack>
-        </ThemeProvider>
-      </PersistGate>
-    </ReduxProvider>
+          <ThemeProvider
+            value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
+          >
+            <Stack screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="(onboarding)" />
+              <Stack.Screen name="(tabs)" />
+              <Stack.Screen name="setup" />
+              <Stack.Screen
+                name="liquidity-management"
+                options={{
+                  presentation: 'modal',
+                  animation: 'slide_from_bottom',
+                }}
+              />
+              <Stack.Screen name="+not-found" options={{ headerShown: true }} />
+            </Stack>
+          </ThemeProvider>
+        </PersistGate>
+      </ReduxProvider>
+    </GestureHandlerRootView>
   );
 }
