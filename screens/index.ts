@@ -10,8 +10,8 @@ import Assets from './holdings/assets';
 import Pools from './holdings/pools';
 import Rewards from './holdings/rewards';
 
-import CryptoDeposit from './cryptodeposit';
-import DebitDeposit from './debitdeposit';
+import CryptoDeposit from './deposit/crypto';
+import DebitDeposit from './deposit/debit';
 
 import LiquidityManagement from './liquidity-management';
 

@@ -4,11 +4,12 @@ import { Ionicons } from '@expo/vector-icons';
 import { LQDBottomSheet } from '@/components';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { Href } from 'expo-router';
+import { IMethod, IPaymentMethodSelection } from './types';
 
 const PaymentMethodSelection = ({ close, show }: IPaymentMethodSelection) => {
   const { pathname, router } = useSystemFunctions();
 
-  const methods = [
+  const methods: Array<IMethod> = [
     {
       text: 'Debit card',
       icon: <Ionicons name="card" size={18} color="#FFF" />,
@@ -21,11 +22,12 @@ const PaymentMethodSelection = ({ close, show }: IPaymentMethodSelection) => {
     },
   ];
 
-  const action = (active: boolean, path: string) => {
+  const action = (active: boolean, path: Href<string>) => {
     if (!active) {
       close();
       setTimeout(() => {
-        router.push(path as Href<string>);
+        if (path === '/deposit/debit') router.back();
+        else router.push(path);
       }, 600);
     }
   };
