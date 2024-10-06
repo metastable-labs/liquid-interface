@@ -96,6 +96,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     lineHeight: 18.48,
     fontWeight: '500',
+    fontFamily: 'AeonikMedium',
   },
 
   changeContainer: {
@@ -111,5 +112,6 @@ const styles = StyleSheet.create({
     fontSize: 11,
     lineHeight: 13.64,
     fontWeight: '500',
+    fontFamily: 'AeonikMedium',
   },
 });

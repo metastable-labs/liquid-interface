@@ -101,11 +101,13 @@ const styles = StyleSheet.create({
     fontSize: 18,
     lineHeight: 23.76,
     fontWeight: '500',
+    fontFamily: 'AeonikMedium',
   },
 
   subtitle: {
     color: '#64748B',
     fontSize: 16,
     lineHeight: 19.84,
+    fontFamily: 'AeonikRegular',
   },
 });

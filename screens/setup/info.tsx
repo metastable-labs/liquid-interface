@@ -161,12 +161,13 @@ const styles = StyleSheet.create({
     lineHeight: 27,
     letterSpacing: -0.36,
     fontWeight: '600',
-    fontFamily: 'ClashDisplaySemibold',
+    fontFamily: 'QuantaGroteskProSemiBold',
   },
 
   infoParagraph: {
     fontSize: 14,
     lineHeight: 21,
     fontWeight: '500',
+    fontFamily: 'AeonikMedium',
   },
 });

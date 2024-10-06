@@ -36,6 +36,7 @@ const styles = StyleSheet.create({
     color: '#64748B',
     fontSize: 16,
     lineHeight: 19.84,
+    fontFamily: 'AeonikRegular',
   },
 
   inputContainer: {
@@ -51,7 +52,7 @@ const styles = StyleSheet.create({
     lineHeight: 53,
     letterSpacing: -0.96,
     fontWeight: '700',
-    fontFamily: 'ClashDisplayBold',
+    fontFamily: 'QuantaGroteskProBold',
   },
 
   cursor: {
@@ -67,6 +68,7 @@ const styles = StyleSheet.create({
     lineHeight: 16.12,
     fontWeight: '500',
     textAlign: 'center',
+    fontFamily: 'AeonikMedium',
   },
 
   paymentSelector: {

@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
     lineHeight: 26.88,
     letterSpacing: -0.6,
     fontWeight: '500',
-    fontFamily: 'ClashDisplayMedium',
+    fontFamily: 'AeonikMedium',
   },
 
   setupContainer: { alignSelf: 'stretch', justifyContent: 'center' },

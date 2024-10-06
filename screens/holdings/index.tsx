@@ -12,7 +12,7 @@ const holdings = 1_234_567.89;
 const Holdings = () => {
   const { router } = useSystemFunctions();
 
-  const actions: Array<ILQDButton> = [
+  const actions: Array<ILQDButton & { hide?: boolean }> = [
     {
       title: 'Add money',
       onPress: () => router.push('/deposit/debit'),
@@ -28,8 +28,11 @@ const Holdings = () => {
       fullWidth: false,
       icon: 'arrow-up',
       style: styles.action,
+      hide: holdings <= 0,
     },
   ];
+
+  const visibleActions = actions.filter((action) => !action.hide);
 
   const items: Array<IItem> = [
     {
@@ -100,7 +103,7 @@ const Holdings = () => {
         </View>
 
         <View style={styles.actionsContainer}>
-          {actions.map((action, index) => (
+          {visibleActions.map((action, index) => (
             <LQDButton key={index} {...action} />
           ))}
         </View>
@@ -166,6 +169,7 @@ const styles = StyleSheet.create({
     color: '#64748B',
     fontSize: 13,
     lineHeight: 16.12,
+    fontFamily: 'AeonikRegular',
   },
 
   balanceValue: {
@@ -173,6 +177,7 @@ const styles = StyleSheet.create({
     fontSize: 36,
     lineHeight: 40.32,
     fontWeight: '700',
+    fontFamily: 'QuantaGroteskProBold',
   },
 
   actionsContainer: {

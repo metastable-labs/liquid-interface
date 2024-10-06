@@ -100,6 +100,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 18.48,
     fontWeight: '500',
+    fontFamily: 'AeonikMedium',
   },
 
   details: {
@@ -113,6 +114,7 @@ const styles = StyleSheet.create({
     color: '#64748B',
     fontSize: 11,
     lineHeight: 13.64,
+    fontFamily: 'AeonikRegular',
   },
 
   separator: {
@@ -138,5 +140,6 @@ const styles = StyleSheet.create({
     lineHeight: 16.12,
     fontWeight: '500',
     textTransform: 'uppercase',
+    fontFamily: 'AeonikMedium',
   },
 });

@@ -88,9 +88,11 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#0C0507',
+    color: '#0F172A',
+    fontSize: 20,
+    lineHeight: 23.2,
+    fontWeight: '500',
+    fontFamily: 'AeonikMedium',
   },
 
   content: {

@@ -96,6 +96,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     lineHeight: 23.2,
     fontWeight: '500',
+    fontFamily: 'AeonikMedium',
   },
 
   poolsContainer: {

@@ -105,6 +105,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 19.2,
     fontWeight: '500',
+    fontFamily: 'AeonikMedium',
   },
 
   checkMarkContainer: {

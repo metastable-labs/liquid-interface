@@ -59,12 +59,14 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 18.48,
     fontWeight: '500',
+    fontFamily: 'AeonikMedium',
   },
 
   value: {
     color: '#64748B',
     fontSize: 11,
     lineHeight: 13.64,
+    fontFamily: 'AeonikRegular',
   },
 
   usdValue: {
@@ -72,5 +74,6 @@ const styles = StyleSheet.create({
     fontSize: 13,
     lineHeight: 16.12,
     fontWeight: '500',
+    fontFamily: 'AeonikMedium',
   },
 });

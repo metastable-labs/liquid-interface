@@ -2,7 +2,6 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 import useSystemFunctions from '@/hooks/useSystemFunctions';
-import { LQDPressAnimation } from '@/components';
 
 const icons = {
   primary: <Ionicons name="wallet-outline" size={18} color="#FFF" />,
@@ -197,6 +196,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 14,
     lineHeight: 18.48,
+    fontFamily: 'AeonikRegular',
   },
 
   titleAndSubtitle: {
@@ -217,6 +217,7 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: 12,
     lineHeight: 15.84,
+    fontFamily: 'AeonikRegular',
   },
 
   bottom: {
@@ -240,12 +241,14 @@ const styles = StyleSheet.create({
   detailTitle: {
     fontSize: 11,
     lineHeight: 13.64,
+    fontFamily: 'AeonikRegular',
   },
 
   detailValue: {
     fontSize: 14,
     lineHeight: 18.48,
     fontWeight: '500',
+    fontFamily: 'AeonikMedium',
   },
 
   actionContainer: {
@@ -258,5 +261,6 @@ const styles = StyleSheet.create({
   actionText: {
     fontSize: 13,
     lineHeight: 16.12,
+    fontFamily: 'AeonikRegular',
   },
 });

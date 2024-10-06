@@ -122,6 +122,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     lineHeight: 16.12,
     fontWeight: '500',
+    fontFamily: 'AeonikMedium',
   },
 
   infoContainer: {
@@ -144,5 +145,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 18.48,
     textAlign: 'center',
+    fontFamily: 'AeonikRegular',
   },
 });

@@ -121,6 +121,7 @@ const styles = StyleSheet.create({
     color: '#64748B',
     fontSize: 13,
     lineHeight: 16.12,
+    fontFamily: 'AeonikRegular',
   },
 
   balanceValue: {
@@ -128,6 +129,7 @@ const styles = StyleSheet.create({
     fontSize: 36,
     lineHeight: 40.32,
     fontWeight: '700',
+    fontFamily: 'QuantaGroteskProBold',
   },
 
   actionsContainer: {
@@ -149,6 +151,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     lineHeight: 23.2,
     fontWeight: '500',
+    fontFamily: 'AeonikMedium',
   },
 
   assetMap: {

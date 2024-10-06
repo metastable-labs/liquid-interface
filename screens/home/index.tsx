@@ -10,7 +10,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { formatAmountWithWholeAndDecimal } from '@/utils/helpers';
-import { LQDPoolPairCard, LQDPoolPairPaper } from '@/components';
+import { LQDButton, LQDPoolPairCard, LQDPoolPairPaper } from '@/components';
 import { topGainers, poolPairs } from './dummy';
 import Section from './section';
 
@@ -74,16 +74,27 @@ const Home = () => {
       contentContainerStyle={styles.contentContainer}
       showsVerticalScrollIndicator={false}
     >
-      <View style={styles.balanceContainer}>
-        <Text style={styles.balanceTitle}>Total Balance</Text>
+      <View style={styles.balanceAndActionContainer}>
+        <View style={styles.balanceContainer}>
+          <Text style={styles.balanceTitle}>Total Balance</Text>
 
-        <TouchableOpacity style={styles.balanceValueContainer}>
-          <Text style={styles.balanceWholeValue}>
-            ${whole}.<Text style={styles.balanceDecimalValue}>{decimal}</Text>
-          </Text>
+          <TouchableOpacity style={styles.balanceValueContainer}>
+            <Text style={styles.balanceWholeValue}>
+              ${whole}.<Text style={styles.balanceDecimalValue}>{decimal}</Text>
+            </Text>
 
-          <Ionicons name="chevron-forward" size={24} color="#F8FAFC" />
-        </TouchableOpacity>
+            <Ionicons name="chevron-forward" size={24} color="#F8FAFC" />
+          </TouchableOpacity>
+        </View>
+
+        <LQDButton
+          title="Add money"
+          onPress={() => router.push('/deposit/debit')}
+          variant="tertiaryOutline"
+          icon="money"
+          iconColor="#334155"
+          style={{ alignSelf: 'stretch' }}
+        />
       </View>
 
       {sections.map((section, index) => (
@@ -108,6 +119,11 @@ const styles = StyleSheet.create({
     gap: 40,
   },
 
+  balanceAndActionContainer: {
+    alignSelf: 'stretch',
+    gap: 24,
+  },
+
   balanceContainer: {
     alignSelf: 'stretch',
     gap: 12,
@@ -125,6 +141,7 @@ const styles = StyleSheet.create({
     color: '#F8FAFC',
     fontSize: 13,
     lineHeight: 16.12,
+    fontFamily: 'AeonikRegular',
   },
 
   balanceValueContainer: {
@@ -138,7 +155,7 @@ const styles = StyleSheet.create({
     fontSize: 36,
     lineHeight: 40.32,
     fontWeight: '700',
-    fontFamily: 'ClashDisplayBold',
+    fontFamily: 'QuantaGroteskProBold',
   },
 
   balanceDecimalValue: {
@@ -146,7 +163,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     letterSpacing: -0.6,
     fontWeight: '500',
-    fontFamily: 'ClashDisplayBold',
+    fontFamily: 'QuantaGroteskProMedium',
   },
 
   mapContainer: {
