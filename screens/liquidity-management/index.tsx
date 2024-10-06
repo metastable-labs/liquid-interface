@@ -62,6 +62,7 @@ const LiquidityManagement = ({ id, type }: ILiquidityManagement) => {
 
   const handleAmountChange = (text: string) => {
     const sanitizedText = removeCommasFromNumber(text);
+
     const numberValue = parseFloat(sanitizedText);
 
     if (!isNaN(numberValue)) {
@@ -77,6 +78,7 @@ const LiquidityManagement = ({ id, type }: ILiquidityManagement) => {
 
   const onSubmit = () => {
     const sanitizedAmount = removeCommasFromNumber(amount);
+
     const value = parseFloat(sanitizedAmount);
 
     console.log(`Submitting ${tab} request`, { id, value });
