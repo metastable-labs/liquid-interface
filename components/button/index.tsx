@@ -4,8 +4,12 @@ import { Ionicons } from '@expo/vector-icons';
 import { ILQDButton } from './types';
 
 const icons = {
-  money: <Ionicons name="cash-outline" size={18} color="#FFF" />,
-  'arrow-up': <Ionicons name="arrow-up-outline" size={18} color="#334155" />,
+  money: (color?: string) => (
+    <Ionicons name="cash-outline" size={18} color={color || '#FFF'} />
+  ),
+  'arrow-up': (color?: string) => (
+    <Ionicons name="arrow-up-outline" size={18} color={color || '#334155'} />
+  ),
 };
 
 const LQDButton = ({
@@ -17,6 +21,7 @@ const LQDButton = ({
   style,
   fullWidth = true,
   icon,
+  iconColor,
   onLongPress,
 }: ILQDButton) => {
   return (
@@ -37,7 +42,7 @@ const LQDButton = ({
       >
         <Text style={styles[`${variant}Text`]}>{title}</Text>
 
-        {icon && icons[icon]}
+        {icon && icons[icon](iconColor)}
       </View>
     </TouchableOpacity>
   );
@@ -63,7 +68,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 16,
     color: '#1A2001',
-    fontFamily: 'ClashDisplaySemibold',
+    fontFamily: 'QuantaGroteskProSemiBold',
     fontWeight: '600',
   },
 
@@ -87,7 +92,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 16,
     color: '#FFF',
-    fontFamily: 'ClashDisplaySemibold',
+    fontFamily: 'QuantaGroteskProSemiBold',
     fontWeight: '600',
   },
 
@@ -103,6 +108,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 15.84,
     fontWeight: '500',
+    fontFamily: 'AeonikMedium',
   },
 
   tertiaryOutlineContainer: {
@@ -119,5 +125,6 @@ const styles = StyleSheet.create({
     fontSize: 13,
     lineHeight: 16.12,
     fontWeight: '500',
+    fontFamily: 'AeonikMedium',
   },
 });

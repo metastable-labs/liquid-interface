@@ -56,6 +56,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 17.64,
     fontWeight: '500',
+    fontFamily: 'AeonikMedium',
   },
 
   title: {
@@ -63,5 +64,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     lineHeight: 23.2,
     fontWeight: '500',
+    fontFamily: 'AeonikMedium',
   },
 });

@@ -10,6 +10,7 @@ interface ILQDButton {
   style?: StyleProp<ViewStyle>;
   fullWidth?: boolean;
   icon?: 'money' | 'arrow-up';
+  iconColor?: string;
 }
 
 export type { ILQDButton };

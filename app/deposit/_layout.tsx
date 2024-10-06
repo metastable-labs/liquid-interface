@@ -1,7 +1,7 @@
 import { Stack } from 'expo-router';
 import { LQDStackHeader } from '@/components';
 
-const HomeStack = () => {
+const DepositStack = () => {
   return (
     <Stack
       screenOptions={{
@@ -18,4 +18,4 @@ const HomeStack = () => {
   );
 };
 
-export default HomeStack;
+export default DepositStack;

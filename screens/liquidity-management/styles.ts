@@ -52,11 +52,13 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 18.48,
     textTransform: 'capitalize',
+    fontFamily: 'AeonikRegular',
   },
 
   activeTabText: {
     color: '#020617',
     fontWeight: '500',
+    fontFamily: 'AeonikMedium',
   },
 
   inactiveTabText: {
@@ -74,12 +76,14 @@ const styles = StyleSheet.create({
     letterSpacing: -0.6,
     fontWeight: '500',
     textTransform: 'capitalize',
+    fontFamily: 'AeonikMedium',
   },
 
   detailSubtitle: {
     color: '#64748B',
     fontSize: 14,
     lineHeight: 18.48,
+    fontFamily: 'AeonikRegular',
   },
 
   main: {
@@ -111,6 +115,7 @@ const styles = StyleSheet.create({
     letterSpacing: -0.6,
     fontWeight: '500',
     maxWidth: '35%',
+    fontFamily: 'AeonikMedium',
   },
 
   invalidText: {
@@ -155,6 +160,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 18.48,
     fontWeight: '500',
+    fontFamily: 'AeonikMedium',
   },
 
   balanceInfo: {
@@ -169,6 +175,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 15.84,
     textAlign: 'right',
+    fontFamily: 'AeonikRegular',
   },
 
   balanceValue: {
@@ -176,6 +183,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     lineHeight: 16.12,
     textAlign: 'right',
+    fontFamily: 'AeonikRegular',
   },
 
   partitions: {
@@ -204,6 +212,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     lineHeight: 16.12,
     fontWeight: '500',
+    fontFamily: 'AeonikMedium',
   },
 
   bottomContainer: {

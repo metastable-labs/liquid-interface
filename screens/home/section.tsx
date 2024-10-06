@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     lineHeight: 23.2,
     fontWeight: '500',
-    fontFamily: 'ClashDisplayMedium',
+    fontFamily: 'AeonikMedium',
   },
 
   subtitle: {
@@ -78,5 +78,6 @@ const styles = StyleSheet.create({
     color: '#1E293B',
     fontSize: 13,
     lineHeight: 16.12,
+    fontFamily: 'AeonikRegular',
   },
 });

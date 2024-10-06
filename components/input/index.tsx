@@ -73,5 +73,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 18.48,
     color: '#94A3B8',
+    fontFamily: 'AeonikRegular',
   },
 });

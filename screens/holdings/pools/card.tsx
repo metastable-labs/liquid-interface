@@ -151,6 +151,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 18.48,
     fontWeight: '500',
+    fontFamily: 'AeonikMedium',
   },
 
   details: {
@@ -163,10 +164,12 @@ const styles = StyleSheet.create({
   detailText: {
     fontSize: 11,
     lineHeight: 13.64,
+    fontFamily: 'AeonikRegular',
   },
 
   fee: {
     color: '#64748B',
+    fontFamily: 'AeonikRegular',
   },
 
   separator: {
@@ -196,6 +199,7 @@ const styles = StyleSheet.create({
     color: '#64748B',
     fontSize: 11,
     lineHeight: 13.64,
+    fontFamily: 'AeonikRegular',
   },
 
   balanceValue: {
@@ -203,6 +207,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     lineHeight: 16.12,
     fontWeight: '500',
+    fontFamily: 'AeonikMedium',
   },
 
   bottomContainer: {

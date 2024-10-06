@@ -25,7 +25,9 @@ const LQDNumericKeyboard = ({ onKeyPress }: ILQDNumericKeyboard) => {
               style={styles.key}
               onPress={() => handleKeyPress(key)}
             >
-              <Text style={styles.keyText}>{key}</Text>
+              <Text style={key === '⌫' ? styles.backSpaceText : styles.keyText}>
+                {key}
+              </Text>
             </TouchableOpacity>
           ))}
         </View>
@@ -57,6 +59,12 @@ const styles = StyleSheet.create({
     fontSize: 28,
     lineHeight: 31.36,
     fontWeight: '700',
+    fontFamily: 'QuantaGroteskProBold',
+  },
+  backSpaceText: {
+    fontSize: 29,
+    lineHeight: 32.48,
     fontFamily: 'ClashDisplayBold',
+    transform: [{ scale: 1.3 }],
   },
 });
