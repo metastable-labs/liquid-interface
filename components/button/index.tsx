@@ -17,10 +17,12 @@ const LQDButton = ({
   style,
   fullWidth = true,
   icon,
+  onLongPress,
 }: ILQDButton) => {
   return (
     <TouchableOpacity
       onPress={onPress}
+      onLongPress={onLongPress}
       style={style}
       disabled={disabled || loading}
     >

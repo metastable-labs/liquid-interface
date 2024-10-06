@@ -8,6 +8,8 @@ import {
   Image,
 } from 'react-native';
 
+import { LQDButton } from '@/components';
+import { removeCommasFromNumber } from '@/utils/helpers';
 import styles from './styles';
 
 function truncateToDecimals(num: number) {
@@ -15,10 +17,6 @@ function truncateToDecimals(num: number) {
   return (Math.floor(num * factor) / factor).toLocaleString(undefined, {
     maximumFractionDigits: 5,
   });
-}
-
-function removeCommas(text: string): string {
-  return text.replace(/,/g, '');
 }
 
 const tabs = ['stake', 'unstake'];
@@ -41,8 +39,10 @@ const LiquidityManagement = ({ id, type }: ILiquidityManagement) => {
   };
 
   const invalidAmount =
-    (tab === 'stake' && parseFloat(removeCommas(amount)) > lpBalance) ||
-    (tab === 'unstake' && parseFloat(removeCommas(amount)) > stakedBalance);
+    (tab === 'stake' &&
+      parseFloat(removeCommasFromNumber(amount)) > lpBalance) ||
+    (tab === 'unstake' &&
+      parseFloat(removeCommasFromNumber(amount)) > stakedBalance);
 
   const balancePartitions = [
     {
@@ -61,7 +61,8 @@ const LiquidityManagement = ({ id, type }: ILiquidityManagement) => {
   ];
 
   const handleAmountChange = (text: string) => {
-    const sanitizedText = removeCommas(text);
+    const sanitizedText = removeCommasFromNumber(text);
+
     const numberValue = parseFloat(sanitizedText);
 
     if (!isNaN(numberValue)) {
@@ -76,7 +77,8 @@ const LiquidityManagement = ({ id, type }: ILiquidityManagement) => {
   };
 
   const onSubmit = () => {
-    const sanitizedAmount = removeCommas(amount);
+    const sanitizedAmount = removeCommasFromNumber(amount);
+
     const value = parseFloat(sanitizedAmount);
 
     console.log(`Submitting ${tab} request`, { id, value });
@@ -208,13 +210,12 @@ const LiquidityManagement = ({ id, type }: ILiquidityManagement) => {
       </View>
 
       <View style={styles.bottomContainer}>
-        <TouchableOpacity
-          style={styles.action}
+        <LQDButton
+          title={`${tab.charAt(0).toUpperCase()}${tab.slice(1)}`}
           disabled={!parseFloat(amount) || invalidAmount}
           onPress={onSubmit}
-        >
-          <Text style={styles.actionText}>{tab}</Text>
-        </TouchableOpacity>
+          variant="secondary"
+        />
       </View>
     </ScrollView>
   );
