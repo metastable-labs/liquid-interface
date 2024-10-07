@@ -15,6 +15,8 @@ import DebitDeposit from './deposit/debit';
 
 import LiquidityManagement from './liquidity-management';
 
+import Withdraw from './withdraw';
+
 export {
   Home,
   TopGainers,
@@ -28,4 +30,5 @@ export {
   LiquidityManagement,
   CryptoDeposit,
   DebitDeposit,
+  Withdraw,
 };

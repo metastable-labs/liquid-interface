@@ -11,7 +11,7 @@ const DepositStack = () => {
         headerTitle: 'Deposit',
       }}
     >
-      <Stack.Screen name="debit" options={{}} />
+      <Stack.Screen name="debit" />
 
       <Stack.Screen name="crypto" />
     </Stack>

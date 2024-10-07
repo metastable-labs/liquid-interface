@@ -15,6 +15,7 @@ import 'react-native-reanimated';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { persistor, store } from '@/store';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { LQDStackHeader } from '@/components';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -83,6 +84,20 @@ export default function RootLayout() {
                 options={{
                   presentation: 'modal',
                   animation: 'slide_from_bottom',
+                }}
+              />
+              <Stack.Screen
+                name="withdraw"
+                options={{
+                  header: (props) => (
+                    <LQDStackHeader
+                      {...props}
+                      style={{ paddingTop: 80 }}
+                      hasTitle
+                    />
+                  ),
+                  headerTitle: 'Withdraw',
+                  headerShown: true,
                 }}
               />
               <Stack.Screen name="+not-found" options={{ headerShown: true }} />

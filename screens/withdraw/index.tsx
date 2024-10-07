@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   TextInput,
   Platform,
+  Image,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -13,8 +14,10 @@ import {
   formatWithThousandSeparator,
   removeCommasFromNumber,
 } from '@/utils/helpers';
-import PaymentMethodSelection from '../method-selection';
-import styles from '../styles';
+import AssetSelection from './asset-selection';
+import styles from './styles';
+import { defaultAsset } from './dummy';
+import { IAsset } from './types';
 
 const getMaxWidth = (amount: string) => {
   const baseWidth = 27;
@@ -34,9 +37,9 @@ const getMaxWidth = (amount: string) => {
   return totalWidth;
 };
 
-const DebitDeposit = () => {
+const Withdraw = () => {
   const [amount, setAmount] = useState('');
-  const [balance, setBalance] = useState(999);
+  const [asset, setAsset] = useState<IAsset>();
   const [showCursor, setShowCursor] = useState(true);
   const [showBottomSheet, setShowBottomSheet] = useState(false);
 
@@ -46,6 +49,10 @@ const DebitDeposit = () => {
     { text: '$100', action: () => setAmount('100') },
     { text: '$500', action: () => setAmount('500') },
   ];
+
+  const disableButton =
+    !parseFloat(removeCommasFromNumber(amount)) ||
+    parseFloat(removeCommasFromNumber(amount)) > asset?.balance!;
 
   const handleAmountChange = (key: string) => {
     if (key === '⌫') {
@@ -71,6 +78,8 @@ const DebitDeposit = () => {
     return () => clearInterval(cursorInterval);
   }, []);
 
+  useEffect(() => setAsset(defaultAsset), []);
+
   return (
     <>
       <View style={styles.root}>
@@ -79,20 +88,11 @@ const DebitDeposit = () => {
             <View style={styles.inputAndPayment}>
               <View style={styles.balanceAndInput}>
                 <Text style={styles.balanceText}>
-                  Bal: ${balance.toLocaleString()}
+                  Bal: ${asset?.balance.toLocaleString()} {asset?.symbol}
                 </Text>
 
                 <View style={styles.inputContainer}>
-                  {amount && (
-                    <Text
-                      style={{
-                        ...styles.input,
-                        fontFamily: 'ClashDisplaySemibold',
-                      }}
-                    >
-                      $
-                    </Text>
-                  )}
+                  {amount && <Text style={styles.input}>$</Text>}
                   <TextInput
                     style={[
                       styles.input,
@@ -110,13 +110,17 @@ const DebitDeposit = () => {
               </View>
 
               <TouchableOpacity
-                style={styles.paymentSelector}
+                style={styles.assetSelector}
                 onPress={() => setShowBottomSheet(true)}
               >
-                <Ionicons name="cash-outline" size={18} color="#64748B" />
+                <View style={styles.iconContainer}>
+                  <Image source={{ uri: asset?.iconUrl }} style={styles.icon} />
+                </View>
+
                 <Text style={[styles.selectorText, styles.paymentSelectorText]}>
-                  Debit card
+                  {asset?.symbol}
                 </Text>
+
                 <Ionicons name="chevron-down" size={18} color="#64748B" />
               </TouchableOpacity>
             </View>
@@ -140,19 +144,21 @@ const DebitDeposit = () => {
         <View style={styles.action}>
           <LQDButton
             title="Hold to confirm"
-            disabled={!parseFloat(amount)}
+            disabled={disableButton}
             onLongPress={onSubmit}
             variant="secondary"
           />
         </View>
       </View>
 
-      <PaymentMethodSelection
+      <AssetSelection
         close={() => setShowBottomSheet(false)}
+        asset={asset!}
+        setAsset={setAsset}
         show={showBottomSheet}
       />
     </>
   );
 };
 
-export default DebitDeposit;
+export default Withdraw;

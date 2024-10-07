@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: '#FFF',
     paddingBottom: 4,
-    paddingLeft: 16,
+    paddingHorizontal: 16,
   },
 
   hasTitleContainer: { justifyContent: 'center', alignItems: 'center' },
