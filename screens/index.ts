@@ -15,6 +15,8 @@ import DebitDeposit from './deposit/debit';
 
 import LiquidityManagement from './liquidity-management';
 
+import Tag from './tag';
+
 import Withdraw from './withdraw';
 
 export {
@@ -30,5 +32,6 @@ export {
   LiquidityManagement,
   CryptoDeposit,
   DebitDeposit,
+  Tag,
   Withdraw,
 };
