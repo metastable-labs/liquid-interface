@@ -45,6 +45,7 @@ const LQDBottomSheet: React.FC<ILQDBottomSheet> = ({
         style={{
           ...styles.bottomSheet,
           maxHeight: bottomSheetMaxHeights[variant],
+          height: variant === 'secondary' ? '83%' : 'auto',
         }}
       >
         <View style={styles.header}>

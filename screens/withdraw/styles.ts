@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     fontFamily: 'AeonikMedium',
   },
 
-  paymentSelector: {
+  assetSelector: {
     flexDirection: 'row',
     paddingHorizontal: 8,
     height: 30,
@@ -86,6 +86,22 @@ const styles = StyleSheet.create({
 
   paymentSelectorText: {
     color: '#475569',
+  },
+
+  iconContainer: {
+    width: 18,
+    height: 18,
+    borderWidth: 0.5,
+    borderColor: '#EAEEF4',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 9999,
+  },
+
+  icon: {
+    width: 18,
+    height: 18,
+    objectFit: 'contain',
   },
 
   balanceSelectorContainer: {
