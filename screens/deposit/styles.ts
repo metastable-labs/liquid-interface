@@ -82,6 +82,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#E2E8F0',
     backgroundColor: '#F8FAFC',
+    marginTop: 10,
   },
 
   paymentSelectorText: {
@@ -94,6 +95,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     gap: 11,
+    marginTop: 5,
   },
 
   balanceSelector: {

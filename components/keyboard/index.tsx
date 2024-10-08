@@ -40,9 +40,9 @@ export default LQDNumericKeyboard;
 
 const styles = StyleSheet.create({
   keyboardContainer: {
-    width: 270,
-    height: 228,
+    maxWidth: '80%',
     justifyContent: 'space-between',
+    gap: 40,
   },
   row: {
     flexDirection: 'row',
