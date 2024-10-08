@@ -2,6 +2,8 @@
   "name": "liquid-interface",
   "main": "expo-router/entry",
   "version": "1.0.0",
+  "private": true,
+  "packageManager": "bun@1.1.30",
   "scripts": {
     "start": "expo start",
     "reset-project": "node ./scripts/reset-project.js",
@@ -69,6 +71,5 @@
     "prettier": "^3.3.3",
     "react-test-renderer": "18.2.0",
     "typescript": "~5.3.3"
-  },
-  "private": true
+  }
 }
