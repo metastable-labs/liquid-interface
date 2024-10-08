@@ -1,19 +1,34 @@
 import { Image, View, Text, StyleSheet } from 'react-native';
+import { Href } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+
+import useSystemFunctions from '@/hooks/useSystemFunctions';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const backgroundColors = ['#FDEAEA', '#EFFAF6'];
 const textColors = ['#A4262C', '#156146'];
 
 const LQDPoolPairCard = ({
   change,
+  id,
   increased,
   primaryIconURL,
   primaryTitle,
   secondaryIconURL,
   secondaryTitle,
+  navigationVariant = 'primary',
 }: ILQDPoolPairCard) => {
+  const { router } = useSystemFunctions();
+
+  const paths = {
+    primary: `/(tabs)/home/${id}` as Href<string>,
+    secondary: `/(tabs)/holdings/${id}` as Href<string>,
+  };
+
+  const handlePress = () => router.push(paths[navigationVariant]);
+
   return (
-    <View style={styles.container}>
+    <TouchableOpacity onPress={handlePress} style={styles.container}>
       <View style={styles.topContainer}>
         <View style={styles.iconContainer}>
           {[primaryIconURL, secondaryIconURL].map((iconURL, index) => (
@@ -52,7 +67,7 @@ const LQDPoolPairCard = ({
       <Text style={styles.title}>
         {primaryTitle} / {secondaryTitle}
       </Text>
-    </View>
+    </TouchableOpacity>
   );
 };
 

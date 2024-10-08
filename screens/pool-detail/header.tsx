@@ -1,32 +1,33 @@
-import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native';
-import { Href } from 'expo-router';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
-import { formatNumberWithSuffix } from '@/utils/helpers';
-import useSystemFunctions from '@/hooks/useSystemFunctions';
-
-const LQDPoolPairPaper = ({
-  apr,
-  capital,
-  fees,
+const Header = ({
+  condition,
+  fee,
   id,
   primaryIconURL,
   primaryTitle,
   secondaryIconURL,
   secondaryTitle,
-  capitalMetric = 'vol',
-  navigationVariant = 'primary',
-}: ILQDPoolPairPaper) => {
-  const { router } = useSystemFunctions();
-
-  const paths = {
-    primary: `/(tabs)/home/${id}` as Href<string>,
-    secondary: `/(tabs)/holdings/${id}` as Href<string>,
+}: IPool) => {
+  const flagColors = {
+    stable: '#B47818',
+    volatile: '#AF1D38',
   };
 
-  const handlePress = () => router.push(paths[navigationVariant]);
+  const actions = [
+    {
+      action: () => console.log('search'),
+      icon: <Ionicons name="search" size={24} color="#0F172A" />,
+    },
+    {
+      action: () => console.log('sharing', id),
+      icon: <Ionicons name="share-social" size={24} color="#0F172A" />,
+    },
+  ];
 
   return (
-    <TouchableOpacity onPress={handlePress} style={styles.container}>
+    <View style={styles.container}>
       <View style={styles.leftContainer}>
         <View style={styles.iconContainer}>
           {[primaryIconURL, secondaryIconURL].map((iconURL, index) => (
@@ -39,7 +40,7 @@ const LQDPoolPairPaper = ({
             >
               <Image
                 source={{ uri: iconURL }}
-                style={{ width: 24, height: 24 }}
+                style={{ width: 34.9, height: 34.9 }}
               />
             </View>
           ))}
@@ -47,43 +48,58 @@ const LQDPoolPairPaper = ({
 
         <View style={styles.detailContainer}>
           <Text style={styles.detailHeader}>
-            {primaryTitle} / {secondaryTitle}
+            {condition.charAt(0)}AMM - {primaryTitle} / {secondaryTitle}
           </Text>
 
           <View style={styles.details}>
-            <Text style={styles.detailText}>{apr}% APR</Text>
+            <Text
+              style={[
+                styles.detailText,
+                { color: flagColors[condition], textTransform: 'capitalize' },
+              ]}
+            >
+              Basic {condition}
+            </Text>
 
             <View style={styles.separator}>
               <View style={styles.separatorCircle} />
             </View>
 
-            <Text style={styles.detailText}>{fees}% Fees</Text>
+            <Text style={[styles.detailText, { color: '#64748B' }]}>
+              {fee}% Fee
+            </Text>
           </View>
         </View>
       </View>
 
-      <Text style={styles.volumeText}>
-        ${formatNumberWithSuffix(capital)} {capitalMetric}
-      </Text>
-    </TouchableOpacity>
+      <View style={styles.actions}>
+        {actions.map(({ action, icon }, index) => (
+          <TouchableOpacity style={styles.action} key={index} onPress={action}>
+            {icon}
+          </TouchableOpacity>
+        ))}
+      </View>
+    </View>
   );
 };
 
-export default LQDPoolPairPaper;
+export default Header;
 
 const styles = StyleSheet.create({
   container: {
     paddingVertical: 2,
+    alignSelf: 'stretch',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    borderRadius: 10,
   },
 
   leftContainer: {
     flexDirection: 'row',
     alignSelf: 'stretch',
     alignItems: 'center',
-    gap: 10 + 6,
+    gap: 10 + 5,
   },
 
   iconContainer: {
@@ -93,14 +109,14 @@ const styles = StyleSheet.create({
   },
 
   icon: {
-    width: 24,
-    height: 24,
+    width: 34.9,
+    height: 34.9,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 9999,
     borderWidth: 1,
     borderColor: '#EAEEF4',
-    marginRight: -6,
+    marginRight: -5,
   },
 
   detailContainer: {
@@ -124,9 +140,13 @@ const styles = StyleSheet.create({
   },
 
   detailText: {
-    color: '#64748B',
     fontSize: 11,
     lineHeight: 13.64,
+    fontFamily: 'AeonikRegular',
+  },
+
+  fee: {
+    color: '#64748B',
     fontFamily: 'AeonikRegular',
   },
 
@@ -147,12 +167,19 @@ const styles = StyleSheet.create({
     left: '26%',
   },
 
-  volumeText: {
-    color: '#156146',
-    fontSize: 13,
-    lineHeight: 16.12,
-    fontWeight: '500',
-    textTransform: 'uppercase',
-    fontFamily: 'AeonikMedium',
+  actions: {
+    padding: 2,
+    alignItems: 'center',
+    gap: 24,
+    borderRadius: 90,
+    backgroundColor: 'rgab(255, 255, 255, 0.1)',
+    flexDirection: 'row',
+  },
+
+  action: {
+    width: 24,
+    height: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

@@ -1,6 +1,8 @@
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, Pressable } from 'react-native';
 
 import PoolCardAction from './action';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import useSystemFunctions from '@/hooks/useSystemFunctions';
 
 const PoolCard = ({
   fees,
@@ -13,6 +15,7 @@ const PoolCard = ({
   stakedBalance,
   variant = 'stable',
 }: IPoolCard) => {
+  const { router } = useSystemFunctions();
   const flagColors = {
     stable: '#B47818',
     volatile: '#AF1D38',
@@ -24,7 +27,10 @@ const PoolCard = ({
   ];
 
   return (
-    <View style={styles.container}>
+    <Pressable
+      style={styles.container}
+      onPress={() => router.push(`/holdings/${id}`)}
+    >
       <View style={styles.topContainer}>
         <View style={styles.topLeftContainer}>
           <View style={styles.iconContainer}>
@@ -92,7 +98,7 @@ const PoolCard = ({
           </Text>
         </View>
       </View>
-    </View>
+    </Pressable>
   );
 };
 

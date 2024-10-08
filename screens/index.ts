@@ -18,6 +18,7 @@ import LiquidityManagement from './liquidity-management';
 import Tag from './tag';
 
 import Withdraw from './withdraw';
+import PoolDetail from './pool-detail';
 
 export {
   Home,
@@ -34,4 +35,5 @@ export {
   DebitDeposit,
   Tag,
   Withdraw,
+  PoolDetail,
 };

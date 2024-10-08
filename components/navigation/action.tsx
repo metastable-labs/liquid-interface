@@ -31,7 +31,7 @@ const LQDNavigationAction = ({
     const color = interpolateColor(
       colorValue.value,
       [0, 1],
-      ['#64748B', '#fff']
+      ['#64748B', '#020617']
     );
     return {
       color,
@@ -45,7 +45,7 @@ const LQDNavigationAction = ({
       style={styles.container}
     >
       {icon?.[routeName]?.({
-        color: isFocused ? '#fff' : '#64748B',
+        color: isFocused ? '#020617' : '#64748B',
         size: 24,
       })}
 
