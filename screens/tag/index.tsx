@@ -7,7 +7,6 @@ import {
   StatusBar,
   TextInput,
 } from 'react-native';
-import Animated from 'react-native-reanimated';
 
 import { LQDButton } from '@/components';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
