@@ -1,11 +1,20 @@
+import {
+  Text,
+  StyleSheet,
+  GestureResponderEvent,
+  TouchableOpacity,
+} from 'react-native';
+
 import useSystemFunctions from '@/hooks/useSystemFunctions';
-import { Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 const PoolCardAction = ({ disabled, id, type }: IPoolCardAction) => {
   const { router } = useSystemFunctions();
 
-  const action = () =>
+  const action = (event: GestureResponderEvent) => {
+    event.stopPropagation();
+
     router.push({ pathname: '/liquidity-management', params: { id, type } });
+  };
 
   return (
     <TouchableOpacity

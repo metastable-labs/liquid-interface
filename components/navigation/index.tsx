@@ -14,39 +14,8 @@ const LQDNavigation = ({
   descriptors,
   navigation,
 }: BottomTabBarProps) => {
-  const [dimensions, setDimensions] = useState({
-    height: 20,
-    width: 100,
-  });
-  const tabPositionX = useSharedValue(0);
-
-  const buttonWidth = dimensions.width / state.routes.length;
-
-  const animatedStyle = useAnimatedStyle(() => {
-    let offset = 0;
-    if (state.index === 0) offset += 6;
-    if (state.index === state.routes.length - 1) offset -= 6;
-
-    return {
-      transform: [{ translateX: tabPositionX.value + offset }],
-    };
-  });
-
-  const onTabLayout = (event: LayoutChangeEvent) => {
-    const { height, width } = event.nativeEvent.layout;
-    setDimensions({ height, width });
-  };
-
   return (
-    <View onLayout={onTabLayout} style={styles.container}>
-      <Animated.View
-        style={[
-          animatedStyle,
-          styles.activeIndicator,
-          { height: dimensions.height - 30, width: buttonWidth - 25 },
-        ]}
-      />
-
+    <View style={styles.container}>
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];
         const label =
@@ -59,9 +28,6 @@ const LQDNavigation = ({
         const isFocused = state.index === index;
 
         const onPress = () => {
-          tabPositionX.value = withSpring(buttonWidth * index, {
-            duration: 1500,
-          });
           const event = navigation.emit({
             type: 'tabPress',
             target: route.key,
@@ -110,13 +76,5 @@ const styles = StyleSheet.create({
     paddingTop: 12,
     paddingBottom: 30,
     paddingHorizontal: 8,
-  },
-
-  activeIndicator: {
-    position: 'absolute',
-    top: 6,
-    backgroundColor: '#00000080',
-    borderRadius: 30,
-    marginHorizontal: 12,
   },
 });

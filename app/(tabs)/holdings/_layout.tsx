@@ -6,13 +6,29 @@ const HoldingsStack = () => {
     <Stack
       screenOptions={{
         header: (props) => (
-          <LQDStackHeader {...props} style={{ paddingTop: 34 }} />
+          <LQDStackHeader {...props} style={{ paddingTop: 14 }} />
         ),
         headerShown: true,
       }}
     >
       <Stack.Screen
         name="index"
+        options={{
+          headerShown: false,
+        }}
+      />
+
+      <Stack.Screen
+        name="assets"
+        options={{
+          header: (props) => (
+            <LQDStackHeader {...props} style={{ paddingTop: 34 }} />
+          ),
+        }}
+      />
+
+      <Stack.Screen
+        name="[poolId]"
         options={{
           headerShown: false,
         }}

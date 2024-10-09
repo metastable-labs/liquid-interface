@@ -7,6 +7,7 @@ import LQDPoolPairCard from './pool-pair-card';
 import LQDPoolPairPaper from './pool-pair-paper';
 import LQDNumericKeyboard from './keyboard';
 import LQDBottomSheet from './bottom-sheet';
+import LQDBarChart from './bar-chart';
 
 export {
   LQDButton,
@@ -18,4 +19,5 @@ export {
   LQDPoolPairPaper,
   LQDNumericKeyboard,
   LQDBottomSheet,
+  LQDBarChart,
 };

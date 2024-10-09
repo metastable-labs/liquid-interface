@@ -17,6 +17,13 @@ const HomeStack = () => {
           headerShown: false,
         }}
       />
+
+      <Stack.Screen
+        name="[poolId]"
+        options={{
+          headerShown: false,
+        }}
+      />
     </Stack>
   );
 };

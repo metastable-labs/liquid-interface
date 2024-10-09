@@ -1,4 +1,5 @@
 interface ILQDPoolPairPaper {
+  id: string;
   primaryIconURL: string;
   secondaryIconURL: string;
   primaryTitle: string;
@@ -7,4 +8,5 @@ interface ILQDPoolPairPaper {
   fees: number;
   capitalMetric?: 'vol' | 'tvl';
   capital: number;
+  navigationVariant?: 'primary' | 'secondary';
 }

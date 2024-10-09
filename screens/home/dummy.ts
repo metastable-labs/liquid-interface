@@ -1,5 +1,6 @@
 const topGainers: Array<ILQDPoolPairCard> = [
   {
+    id: '1',
     primaryIconURL:
       'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
     secondaryIconURL:
@@ -10,6 +11,7 @@ const topGainers: Array<ILQDPoolPairCard> = [
     change: 2.3,
   },
   {
+    id: '2',
     primaryIconURL:
       'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
     secondaryIconURL:
@@ -20,6 +22,7 @@ const topGainers: Array<ILQDPoolPairCard> = [
     change: -1.5,
   },
   {
+    id: '3',
     primaryIconURL:
       'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
     secondaryIconURL:
@@ -30,6 +33,7 @@ const topGainers: Array<ILQDPoolPairCard> = [
     change: 3.1,
   },
   {
+    id: '4',
     primaryIconURL:
       'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
     secondaryIconURL:
@@ -40,6 +44,7 @@ const topGainers: Array<ILQDPoolPairCard> = [
     change: 5.7,
   },
   {
+    id: '5',
     primaryIconURL:
       'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
     secondaryIconURL:
@@ -50,6 +55,7 @@ const topGainers: Array<ILQDPoolPairCard> = [
     change: -0.8,
   },
   {
+    id: '6',
     primaryIconURL:
       'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
     secondaryIconURL:
@@ -60,6 +66,7 @@ const topGainers: Array<ILQDPoolPairCard> = [
     change: 4.2,
   },
   {
+    id: '7',
     primaryIconURL:
       'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
     secondaryIconURL:
@@ -70,6 +77,7 @@ const topGainers: Array<ILQDPoolPairCard> = [
     change: 6.5,
   },
   {
+    id: '8',
     primaryIconURL:
       'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
     secondaryIconURL:
@@ -80,6 +88,7 @@ const topGainers: Array<ILQDPoolPairCard> = [
     change: -2.0,
   },
   {
+    id: '9',
     primaryIconURL:
       'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
     secondaryIconURL:
@@ -90,6 +99,7 @@ const topGainers: Array<ILQDPoolPairCard> = [
     change: 7.3,
   },
   {
+    id: '10',
     primaryIconURL:
       'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
     secondaryIconURL:
@@ -103,6 +113,7 @@ const topGainers: Array<ILQDPoolPairCard> = [
 
 const poolPairs: Array<ILQDPoolPairPaper> = [
   {
+    id: '1',
     primaryIconURL:
       'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
     secondaryIconURL:
@@ -114,6 +125,7 @@ const poolPairs: Array<ILQDPoolPairPaper> = [
     capital: 1_000_000_500,
   },
   {
+    id: '2',
     primaryIconURL:
       'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
     secondaryIconURL:
@@ -125,6 +137,7 @@ const poolPairs: Array<ILQDPoolPairPaper> = [
     capital: 7_500_000_000,
   },
   {
+    id: '3',
     primaryIconURL:
       'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
     secondaryIconURL:
@@ -136,6 +149,7 @@ const poolPairs: Array<ILQDPoolPairPaper> = [
     capital: 5_500_000,
   },
   {
+    id: '4',
     primaryIconURL:
       'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
     secondaryIconURL:
@@ -147,6 +161,7 @@ const poolPairs: Array<ILQDPoolPairPaper> = [
     capital: 1_200_000,
   },
   {
+    id: '5',
     primaryIconURL:
       'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
     secondaryIconURL:
@@ -158,6 +173,7 @@ const poolPairs: Array<ILQDPoolPairPaper> = [
     capital: 900000,
   },
   {
+    id: '6',
     primaryIconURL:
       'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
     secondaryIconURL:
@@ -169,6 +185,7 @@ const poolPairs: Array<ILQDPoolPairPaper> = [
     capital: 400000,
   },
   {
+    id: '7',
     primaryIconURL:
       'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
     secondaryIconURL:
@@ -180,6 +197,7 @@ const poolPairs: Array<ILQDPoolPairPaper> = [
     capital: 300000,
   },
   {
+    id: '8',
     primaryIconURL:
       'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
     secondaryIconURL:
@@ -191,6 +209,7 @@ const poolPairs: Array<ILQDPoolPairPaper> = [
     capital: 600000,
   },
   {
+    id: '9',
     primaryIconURL:
       'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
     secondaryIconURL:
