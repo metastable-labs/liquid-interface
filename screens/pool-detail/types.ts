@@ -8,8 +8,15 @@ interface IPool {
   secondaryIconURL: string;
   primaryTitle: string;
   secondaryTitle: string;
+  primaryBalance: number;
+  secondaryBalance: number;
+  primaryUSDValue: number;
+  secondaryUSDValue: number;
   condition: 'stable' | 'volatile';
   fee: number;
+  aero: number;
+  stakedAero: number;
+  availableAero: number;
 }
 
 type Metric = 'tvl' | 'volume' | 'fees';

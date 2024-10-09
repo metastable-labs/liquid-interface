@@ -21,9 +21,7 @@ const HomeStack = () => {
       <Stack.Screen
         name="[poolId]"
         options={{
-          header: (props) => (
-            <LQDStackHeader {...props} style={{ paddingTop: 50 }} />
-          ),
+          headerShown: false,
         }}
       />
     </Stack>
