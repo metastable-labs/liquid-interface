@@ -8,6 +8,8 @@ import LQDPoolPairPaper from './pool-pair-paper';
 import LQDNumericKeyboard from './keyboard';
 import LQDBottomSheet from './bottom-sheet';
 import LQDBarChart from './bar-chart';
+import LQDAssetSelection from './asset-selection';
+import LQDLoadingStep from './loading-step';
 
 export {
   LQDButton,
@@ -20,4 +22,5 @@ export {
   LQDNumericKeyboard,
   LQDBottomSheet,
   LQDBarChart,
+  LQDAssetSelection,
 };

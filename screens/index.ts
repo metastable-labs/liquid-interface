@@ -20,6 +20,8 @@ import Tag from './tag';
 import Withdraw from './withdraw';
 import PoolDetail from './pool-detail';
 
+import AddLiquidty from './liquidity-actions/add';
+
 export {
   Home,
   TopGainers,
@@ -36,4 +38,5 @@ export {
   Tag,
   Withdraw,
   PoolDetail,
+  AddLiquidty,
 };

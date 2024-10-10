@@ -8,7 +8,12 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useEffect } from 'react';
 
-const Step = ({ icon, isCompleted, subtitle, title }: IStep) => {
+const LQDLoadingStep = ({
+  icon,
+  isCompleted,
+  subtitle,
+  title,
+}: ILQDLoadingStep) => {
   const opacityValue = useSharedValue(0);
   const connectorHeight = useSharedValue(0);
 
@@ -51,7 +56,7 @@ const Step = ({ icon, isCompleted, subtitle, title }: IStep) => {
   );
 };
 
-export default Step;
+export default LQDLoadingStep;
 
 const styles = StyleSheet.create({
   container: {

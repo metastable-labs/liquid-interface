@@ -1,3 +1,5 @@
+import { StatusBar } from 'expo-status-bar';
+
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { LiquidityManagement } from '@/screens';
 
@@ -6,7 +8,14 @@ const LiquidityManagementScreen = () => {
   const { id, type } = params;
 
   return (
-    <LiquidityManagement id={id as string} type={type as 'stake' | 'unstake'} />
+    <>
+      <StatusBar style="inverted" />
+
+      <LiquidityManagement
+        id={id as string}
+        type={type as 'stake' | 'unstake'}
+      />
+    </>
   );
 };
 

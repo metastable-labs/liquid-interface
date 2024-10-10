@@ -10,7 +10,7 @@ import Animated, {
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { LQDButton } from '@/components';
 import Info from './info';
-import Step from './step';
+import LQDLoadingStep from '@/components/loading-step';
 
 const setupIcons = [
   'journal-outline',
@@ -28,7 +28,7 @@ const Setup = () => {
     opacity: buttonOpacity.value,
   }));
 
-  const setupSteps: Array<IStep> = [
+  const setupSteps: Array<ILQDLoadingStep> = [
     {
       icon: 'journal-outline',
       isCompleted: completedSteps[0],
@@ -93,7 +93,7 @@ const Setup = () => {
             {setupSteps.map(
               (step, index) =>
                 setupStep >= index && (
-                  <Step
+                  <LQDLoadingStep
                     key={index}
                     icon={setupIcons[index]}
                     isCompleted={step.isCompleted}
