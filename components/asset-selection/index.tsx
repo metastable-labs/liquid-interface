@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useMemo } from 'react';
 import {
   View,
   Text,
@@ -9,12 +9,17 @@ import {
 } from 'react-native';
 import { useForm } from 'react-hook-form';
 import { Ionicons } from '@expo/vector-icons';
+import LQDBottomSheet from '../bottom-sheet';
+import LQDInput from '../input';
 
-import { LQDBottomSheet, LQDInput } from '@/components';
-import { IAsset, IAssetSelection } from './types';
-import { assets } from './dummy';
-
-const AssetSelection = ({ close, setAsset, show, asset }: IAssetSelection) => {
+const LQDAssetSelection = ({
+  assets,
+  close,
+  setAsset,
+  show,
+  title,
+  asset,
+}: IAssetSelection) => {
   const { control, watch } = useForm();
   const searchValue = watch('search', '');
 
@@ -37,7 +42,7 @@ const AssetSelection = ({ close, setAsset, show, asset }: IAssetSelection) => {
   return (
     <LQDBottomSheet
       show={show}
-      title="Select Asset"
+      title={title}
       variant="secondary"
       onClose={close}
     >
@@ -49,7 +54,7 @@ const AssetSelection = ({ close, setAsset, show, asset }: IAssetSelection) => {
           inputProps={{
             keyboardType: 'default',
             autoCapitalize: 'none',
-            placeholder: 'Search...',
+            placeholder: title,
           }}
           variant="search"
         />
@@ -98,7 +103,7 @@ const AssetSelection = ({ close, setAsset, show, asset }: IAssetSelection) => {
   );
 };
 
-export default AssetSelection;
+export default LQDAssetSelection;
 
 const styles = StyleSheet.create({
   root: {

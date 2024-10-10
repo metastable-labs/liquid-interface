@@ -9,14 +9,13 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-import { LQDButton, LQDNumericKeyboard } from '@/components';
+import { LQDAssetSelection, LQDButton, LQDNumericKeyboard } from '@/components';
 import {
   formatWithThousandSeparator,
   removeCommasFromNumber,
 } from '@/utils/helpers';
-import AssetSelection from './asset-selection';
 import styles from './styles';
-import { defaultAsset } from './dummy';
+import { assets, defaultAsset } from './dummy';
 import { IAsset } from './types';
 
 const getMaxWidth = (amount: string) => {
@@ -151,11 +150,13 @@ const Withdraw = () => {
         </View>
       </View>
 
-      <AssetSelection
+      <LQDAssetSelection
+        title="Select Asset"
         close={() => setShowBottomSheet(false)}
-        asset={asset!}
+        assets={assets}
         setAsset={setAsset}
         show={showBottomSheet}
+        asset={asset!}
       />
     </>
   );
