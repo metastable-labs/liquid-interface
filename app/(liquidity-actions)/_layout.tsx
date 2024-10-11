@@ -8,6 +8,7 @@ const LiquidityActionsStack = () => {
 
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="add" />
+        <Stack.Screen name="remove" />
       </Stack>
     </>
   );

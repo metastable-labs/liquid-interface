@@ -21,6 +21,7 @@ import Withdraw from './withdraw';
 import PoolDetail from './pool-detail';
 
 import AddLiquidty from './liquidity-actions/add';
+import RemoveLiquidity from './liquidity-actions/remove';
 
 export {
   Home,
@@ -39,4 +40,5 @@ export {
   Withdraw,
   PoolDetail,
   AddLiquidty,
+  RemoveLiquidity,
 };

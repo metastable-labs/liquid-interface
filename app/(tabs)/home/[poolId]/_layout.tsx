@@ -16,7 +16,7 @@ const PoolDetailLayout = () => {
     },
     {
       title: 'Remove Liquidity',
-      onPress: () => console.log('Remove liquidity'),
+      onPress: () => router.push('/(liquidity-actions)/remove'),
       variant: 'tertiaryOutline',
     },
   ];
