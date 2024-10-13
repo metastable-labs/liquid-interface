@@ -11,7 +11,7 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
 2. Install dependencies:
 
    ```bash
-   bun i
+   yarn i
    ```
 
 3. This project uses [Expo development builds](https://docs.expo.dev/develop/development-builds/introduction). Make sure you have these tools:
@@ -23,15 +23,15 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
 
    ```bash
    # Build native Android project
-   bun run android
+   yarn run android
    # Build native iOS project
-   bun run ios
+   yarn run ios
    ```
 
 4. Start the metro bundler:
 
    ```bash
-   bun start
+   yarn start
    ```
 
 You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
