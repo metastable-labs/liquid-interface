@@ -1,4 +1,4 @@
-interface IStep {
+interface ILQDLoadingStep {
   title: string;
   subtitle: string;
   icon: string;

@@ -3,17 +3,20 @@ import { Stack } from 'expo-router';
 
 import { LQDButton, LQDStackHeader } from '@/components';
 import { ILQDButton } from '@/components/button/types';
+import useSystemFunctions from '@/hooks/useSystemFunctions';
 
 const PoolDetailLayout = () => {
+  const { router } = useSystemFunctions();
+
   const actions: Array<ILQDButton> = [
     {
       title: 'Add Liquidity',
-      onPress: () => console.log('Add liquidity'),
+      onPress: () => router.push('/(liquidity-actions)/add'),
       variant: 'tertiary',
     },
     {
       title: 'Remove Liquidity',
-      onPress: () => console.log('Remove liquidity'),
+      onPress: () => router.push('/(liquidity-actions)/remove'),
       variant: 'tertiaryOutline',
     },
   ];

@@ -26,7 +26,6 @@
         <category android:name="android.intent.category.BROWSABLE"/>
         <data android:scheme="myapp"/>
         <data android:scheme="com.liquid.supermigrate"/>
-        <data android:scheme="exp+liquid-interface"/>
         <data android:scheme="exp+liquid"/>
       </intent-filter>
     </activity>
