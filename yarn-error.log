@@ -28,7 +28,7 @@ Trace:
 
 npm manifest: 
   {
-    "name": "liquid-interface",
+    "name": "Liquid",
     "main": "expo-router/entry",
     "version": "1.0.0",
     "private": true,
