@@ -1,9 +1,8 @@
 {
-  "name": "liquid-interface",
+  "name": "Liquid",
   "main": "expo-router/entry",
   "version": "1.0.0",
   "private": true,
-  "packageManager": "bun@1.1.30",
   "scripts": {
     "start": "expo start",
     "reset-project": "node ./scripts/reset-project.js",
@@ -16,7 +15,8 @@
     "create-cloud-build": "eas build --platform android --profile development",
     "clean-build-cache": "npx expo start -c",
     "prettier": "prettier --write .",
-    "prebuild": "npx expo prebuild"
+    "prebuild": "npx expo prebuild",
+    "upload-to-testflight": "eas build -p ios --auto-submit"
   },
   "jest": {
     "preset": "jest-expo"
