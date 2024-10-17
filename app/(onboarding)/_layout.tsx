@@ -1,11 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import {
-  StyleSheet,
-  Dimensions,
-  Platform,
-  StatusBar,
-  View,
-} from 'react-native';
+import { StyleSheet, Dimensions, Platform, StatusBar, View } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
 import useSystemFunctions from '@/hooks/useSystemFunctions';

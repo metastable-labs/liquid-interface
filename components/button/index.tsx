@@ -4,12 +4,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { ILQDButton } from './types';
 
 const icons = {
-  money: (color?: string) => (
-    <Ionicons name="cash-outline" size={18} color={color || '#FFF'} />
-  ),
-  'arrow-up': (color?: string) => (
-    <Ionicons name="arrow-up-outline" size={18} color={color || '#334155'} />
-  ),
+  money: (color?: string) => <Ionicons name="cash-outline" size={18} color={color || '#FFF'} />,
+  'arrow-up': (color?: string) => <Ionicons name="arrow-up-outline" size={18} color={color || '#334155'} />,
 };
 
 const LQDButton = ({
@@ -25,12 +21,7 @@ const LQDButton = ({
   onLongPress,
 }: ILQDButton) => {
   return (
-    <TouchableOpacity
-      onPress={onPress}
-      onLongPress={onLongPress}
-      style={style}
-      disabled={disabled || loading}
-    >
+    <TouchableOpacity onPress={onPress} onLongPress={onLongPress} style={style} disabled={disabled || loading}>
       <View
         style={[
           styles.container,

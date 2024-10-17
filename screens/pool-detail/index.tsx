@@ -10,13 +10,11 @@ import PoolStats from './stats';
 
 const POOL: IPool = {
   id: '1',
-  primaryIconURL:
-    'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
+  primaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
   primaryTitle: 'USDC',
   primaryBalance: 100,
   primaryUSDValue: 100,
-  secondaryIconURL:
-    'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
+  secondaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
   secondaryTitle: 'cbBTC',
   secondaryBalance: 23,
   secondaryUSDValue: 23 * 40_000,
@@ -29,11 +27,7 @@ const POOL: IPool = {
 
 const PoolDetail = ({ poolId }: IPoolDetail) => {
   return (
-    <ScrollView
-      style={styles.container}
-      contentContainerStyle={styles.containerContent}
-      showsVerticalScrollIndicator={false}
-    >
+    <ScrollView style={styles.container} contentContainerStyle={styles.containerContent} showsVerticalScrollIndicator={false}>
       <View style={styles.topContainer}>
         <Header {...POOL} />
 

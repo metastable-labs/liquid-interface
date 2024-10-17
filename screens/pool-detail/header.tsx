@@ -1,15 +1,7 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-const Header = ({
-  condition,
-  fee,
-  id,
-  primaryIconURL,
-  primaryTitle,
-  secondaryIconURL,
-  secondaryTitle,
-}: IPool) => {
+const Header = ({ condition, fee, id, primaryIconURL, primaryTitle, secondaryIconURL, secondaryTitle }: IPool) => {
   const flagColors = {
     stable: '#B47818',
     volatile: '#AF1D38',
@@ -31,17 +23,8 @@ const Header = ({
       <View style={styles.leftContainer}>
         <View style={styles.iconContainer}>
           {[primaryIconURL, secondaryIconURL].map((iconURL, index) => (
-            <View
-              key={index}
-              style={[
-                styles.icon,
-                index === 0 && { position: 'relative', zIndex: 1 },
-              ]}
-            >
-              <Image
-                source={{ uri: iconURL }}
-                style={{ width: 34.9, height: 34.9 }}
-              />
+            <View key={index} style={[styles.icon, index === 0 && { position: 'relative', zIndex: 1 }]}>
+              <Image source={{ uri: iconURL }} style={{ width: 34.9, height: 34.9 }} />
             </View>
           ))}
         </View>
@@ -52,22 +35,13 @@ const Header = ({
           </Text>
 
           <View style={styles.details}>
-            <Text
-              style={[
-                styles.detailText,
-                { color: flagColors[condition], textTransform: 'capitalize' },
-              ]}
-            >
-              Basic {condition}
-            </Text>
+            <Text style={[styles.detailText, { color: flagColors[condition], textTransform: 'capitalize' }]}>Basic {condition}</Text>
 
             <View style={styles.separator}>
               <View style={styles.separatorCircle} />
             </View>
 
-            <Text style={[styles.detailText, { color: '#64748B' }]}>
-              {fee}% Fee
-            </Text>
+            <Text style={[styles.detailText, { color: '#64748B' }]}>{fee}% Fee</Text>
           </View>
         </View>
       </View>

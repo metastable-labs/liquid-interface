@@ -5,9 +5,7 @@ const HoldingsStack = () => {
   return (
     <Stack
       screenOptions={{
-        header: (props) => (
-          <LQDStackHeader {...props} style={{ paddingTop: 14 }} />
-        ),
+        header: (props) => <LQDStackHeader {...props} style={{ paddingTop: 14 }} />,
         headerShown: true,
       }}
     >
@@ -21,9 +19,7 @@ const HoldingsStack = () => {
       <Stack.Screen
         name="assets"
         options={{
-          header: (props) => (
-            <LQDStackHeader {...props} style={{ paddingTop: 34 }} />
-          ),
+          header: (props) => <LQDStackHeader {...props} style={{ paddingTop: 34 }} />,
         }}
       />
 

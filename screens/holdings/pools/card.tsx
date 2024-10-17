@@ -27,25 +27,13 @@ const PoolCard = ({
   ];
 
   return (
-    <Pressable
-      style={styles.container}
-      onPress={() => router.push(`/holdings/${id}`)}
-    >
+    <Pressable style={styles.container} onPress={() => router.push(`/holdings/${id}`)}>
       <View style={styles.topContainer}>
         <View style={styles.topLeftContainer}>
           <View style={styles.iconContainer}>
             {[primaryIconURL, secondaryIconURL].map((iconURL, index) => (
-              <View
-                key={index}
-                style={[
-                  styles.icon,
-                  index === 0 && { position: 'relative', zIndex: 1 },
-                ]}
-              >
-                <Image
-                  source={{ uri: iconURL }}
-                  style={{ width: 24, height: 24 }}
-                />
+              <View key={index} style={[styles.icon, index === 0 && { position: 'relative', zIndex: 1 }]}>
+                <Image source={{ uri: iconURL }} style={{ width: 24, height: 24 }} />
               </View>
             ))}
           </View>
@@ -56,31 +44,20 @@ const PoolCard = ({
             </Text>
 
             <View style={styles.details}>
-              <Text
-                style={[
-                  styles.detailText,
-                  { color: flagColors[variant], textTransform: 'capitalize' },
-                ]}
-              >
-                Basic {variant}
-              </Text>
+              <Text style={[styles.detailText, { color: flagColors[variant], textTransform: 'capitalize' }]}>Basic {variant}</Text>
 
               <View style={styles.separator}>
                 <View style={styles.separatorCircle} />
               </View>
 
-              <Text style={[styles.detailText, { color: '#64748B' }]}>
-                {fees}% Fee
-              </Text>
+              <Text style={[styles.detailText, { color: '#64748B' }]}>{fees}% Fee</Text>
             </View>
           </View>
         </View>
 
         <View style={styles.balanceContainer}>
           <Text style={styles.balanceLabel}>LP Balance:</Text>
-          <Text style={styles.balanceValue}>
-            {lpBalance.toLocaleString()} AERO-LP
-          </Text>
+          <Text style={styles.balanceValue}>{lpBalance.toLocaleString()} AERO-LP</Text>
         </View>
       </View>
 
@@ -93,9 +70,7 @@ const PoolCard = ({
 
         <View style={styles.balanceContainer}>
           <Text style={styles.balanceLabel}>Staked Balance:</Text>
-          <Text style={styles.balanceValue}>
-            {stakedBalance.toLocaleString()} AERO-LP
-          </Text>
+          <Text style={styles.balanceValue}>{stakedBalance.toLocaleString()} AERO-LP</Text>
         </View>
       </View>
     </Pressable>

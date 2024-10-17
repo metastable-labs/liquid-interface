@@ -3,10 +3,8 @@ const aeroRewards: Array<IRewardCard> = [
     id: '1',
     condition: 'volatile',
     variant: 'aero',
-    primaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
-    secondaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
+    primaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
+    secondaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
     primaryTitle: 'USDT',
     secondaryTitle: 'ETH',
     fee: 0.05,
@@ -16,10 +14,8 @@ const aeroRewards: Array<IRewardCard> = [
     id: '2',
     condition: 'stable',
     variant: 'aero',
-    primaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
-    secondaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
+    primaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
+    secondaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
     primaryTitle: 'USDT',
     secondaryTitle: 'ETH',
     fee: 0.1,
@@ -29,10 +25,8 @@ const aeroRewards: Array<IRewardCard> = [
     id: '3',
     condition: 'stable',
     variant: 'aero',
-    primaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
-    secondaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
+    primaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
+    secondaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
     primaryTitle: 'USDT',
     secondaryTitle: 'ETH',
     fee: 1.34,
@@ -42,10 +36,8 @@ const aeroRewards: Array<IRewardCard> = [
     id: '4',
     condition: 'volatile',
     variant: 'aero',
-    primaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
-    secondaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
+    primaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
+    secondaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
     primaryTitle: 'USDT',
     secondaryTitle: 'ETH',
     fee: 0.05,
@@ -55,10 +47,8 @@ const aeroRewards: Array<IRewardCard> = [
     id: '5',
     condition: 'stable',
     variant: 'aero',
-    primaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
-    secondaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
+    primaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
+    secondaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
     primaryTitle: 'USDT',
     secondaryTitle: 'ETH',
     fee: 0.1,
@@ -68,10 +58,8 @@ const aeroRewards: Array<IRewardCard> = [
     id: '6',
     condition: 'stable',
     variant: 'aero',
-    primaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
-    secondaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
+    primaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
+    secondaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
     primaryTitle: 'USDT',
     secondaryTitle: 'ETH',
     fee: 1.34,
@@ -84,10 +72,8 @@ const feesRewards: Array<IRewardCard> = [
     id: '1',
     condition: 'volatile',
     variant: 'fees',
-    primaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
-    secondaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
+    primaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
+    secondaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
     primaryTitle: 'USDT',
     secondaryTitle: 'ETH',
     fee: 0.05,
@@ -102,10 +88,8 @@ const feesRewards: Array<IRewardCard> = [
     id: '2',
     condition: 'stable',
     variant: 'fees',
-    primaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
-    secondaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
+    primaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
+    secondaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
     primaryTitle: 'USDT',
     secondaryTitle: 'ETH',
     fee: 0.1,
@@ -120,10 +104,8 @@ const feesRewards: Array<IRewardCard> = [
     id: '3',
     condition: 'stable',
     variant: 'fees',
-    primaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
-    secondaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
+    primaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
+    secondaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
     primaryTitle: 'USDT',
     secondaryTitle: 'ETH',
     fee: 1.34,
@@ -138,10 +120,8 @@ const feesRewards: Array<IRewardCard> = [
     id: '4',
     condition: 'volatile',
     variant: 'fees',
-    primaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
-    secondaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
+    primaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
+    secondaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
     primaryTitle: 'USDT',
     secondaryTitle: 'ETH',
     fee: 0.05,
@@ -156,10 +136,8 @@ const feesRewards: Array<IRewardCard> = [
     id: '5',
     condition: 'stable',
     variant: 'fees',
-    primaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
-    secondaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
+    primaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
+    secondaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
     primaryTitle: 'USDT',
     secondaryTitle: 'ETH',
     fee: 0.1,
@@ -174,10 +152,8 @@ const feesRewards: Array<IRewardCard> = [
     id: '6',
     condition: 'stable',
     variant: 'fees',
-    primaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
-    secondaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
+    primaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
+    secondaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
     primaryTitle: 'USDT',
     secondaryTitle: 'ETH',
     fee: 1.34,

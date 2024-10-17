@@ -2,11 +2,7 @@ import LQDLoadingStep from '@/components/loading-step';
 import { useEffect, useState } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 
-const loadingIcons = [
-  'journal-outline',
-  'bar-chart-outline',
-  'checkmark-done-circle-outline',
-];
+const loadingIcons = ['journal-outline', 'bar-chart-outline', 'checkmark-done-circle-outline'];
 
 const Loading = ({ primaryTitle, secondaryTitle }: ILoading) => {
   const [loadingStep, setLoadingStep] = useState(0);
@@ -38,9 +34,7 @@ const Loading = ({ primaryTitle, secondaryTitle }: ILoading) => {
   useEffect(() => {
     if (loadingStep < 2) {
       const timeout = setTimeout(() => {
-        setCompletedSteps((prev) =>
-          prev.map((step, index) => (index === loadingStep ? true : step))
-        );
+        setCompletedSteps((prev) => prev.map((step, index) => (index === loadingStep ? true : step)));
 
         const interval = setTimeout(() => {
           setLoadingStep((prev) => prev + 1);

@@ -1,19 +1,9 @@
 import { useEffect, useState } from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  TextInput,
-  Platform,
-  Image,
-} from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, Platform, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 import { LQDAssetSelection, LQDButton, LQDNumericKeyboard } from '@/components';
-import {
-  formatWithThousandSeparator,
-  removeCommasFromNumber,
-} from '@/utils/helpers';
+import { formatWithThousandSeparator, removeCommasFromNumber } from '@/utils/helpers';
 import styles from './styles';
 import { assets, defaultAsset } from './dummy';
 import { IAsset } from './types';
@@ -49,15 +39,11 @@ const Withdraw = () => {
     { text: '$500', action: () => setAmount('500') },
   ];
 
-  const disableButton =
-    !parseFloat(removeCommasFromNumber(amount)) ||
-    parseFloat(removeCommasFromNumber(amount)) > asset?.balance!;
+  const disableButton = !parseFloat(removeCommasFromNumber(amount)) || parseFloat(removeCommasFromNumber(amount)) > asset?.balance!;
 
   const handleAmountChange = (key: string) => {
     if (key === '⌫') {
-      return setAmount((prev) =>
-        formatWithThousandSeparator(prev.slice(0, -1))
-      );
+      return setAmount((prev) => formatWithThousandSeparator(prev.slice(0, -1)));
     }
     if (key === '.' && amount.includes('.')) {
       return;
@@ -108,17 +94,12 @@ const Withdraw = () => {
                 </View>
               </View>
 
-              <TouchableOpacity
-                style={styles.assetSelector}
-                onPress={() => setShowBottomSheet(true)}
-              >
+              <TouchableOpacity style={styles.assetSelector} onPress={() => setShowBottomSheet(true)}>
                 <View style={styles.iconContainer}>
                   <Image source={{ uri: asset?.iconUrl }} style={styles.icon} />
                 </View>
 
-                <Text style={[styles.selectorText, styles.paymentSelectorText]}>
-                  {asset?.symbol}
-                </Text>
+                <Text style={[styles.selectorText, styles.paymentSelectorText]}>{asset?.symbol}</Text>
 
                 <Ionicons name="chevron-down" size={18} color="#64748B" />
               </TouchableOpacity>
@@ -126,11 +107,7 @@ const Withdraw = () => {
 
             <View style={styles.balanceSelectorContainer}>
               {balancePartitions.map(({ text, action }) => (
-                <TouchableOpacity
-                  key={text}
-                  style={styles.balanceSelector}
-                  onPress={action}
-                >
+                <TouchableOpacity key={text} style={styles.balanceSelector} onPress={action}>
                   <Text style={styles.balanceSelectorText}>{text}</Text>
                 </TouchableOpacity>
               ))}
@@ -141,12 +118,7 @@ const Withdraw = () => {
         </View>
 
         <View style={styles.action}>
-          <LQDButton
-            title="Hold to confirm"
-            disabled={disableButton}
-            onLongPress={onSubmit}
-            variant="secondary"
-          />
+          <LQDButton title="Hold to confirm" disabled={disableButton} onLongPress={onSubmit} variant="secondary" />
         </View>
       </View>
 
