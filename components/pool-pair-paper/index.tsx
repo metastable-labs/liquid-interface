@@ -30,17 +30,8 @@ const LQDPoolPairPaper = ({
       <View style={styles.leftContainer}>
         <View style={styles.iconContainer}>
           {[primaryIconURL, secondaryIconURL].map((iconURL, index) => (
-            <View
-              key={index}
-              style={[
-                styles.icon,
-                index === 0 && { position: 'relative', zIndex: 1 },
-              ]}
-            >
-              <Image
-                source={{ uri: iconURL }}
-                style={{ width: 24, height: 24 }}
-              />
+            <View key={index} style={[styles.icon, index === 0 && { position: 'relative', zIndex: 1 }]}>
+              <Image source={{ uri: iconURL }} style={{ width: 24, height: 24 }} />
             </View>
           ))}
         </View>

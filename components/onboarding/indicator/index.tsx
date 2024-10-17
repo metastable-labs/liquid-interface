@@ -1,24 +1,9 @@
 import React, { useEffect } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
-import Animated, {
-  useSharedValue,
-  withTiming,
-  useAnimatedStyle,
-  Easing,
-} from 'react-native-reanimated';
+import Animated, { useSharedValue, withTiming, useAnimatedStyle, Easing } from 'react-native-reanimated';
 
-const LQDOnboardingIndicator = ({
-  currentStep,
-  isPaused,
-  timer,
-  totalSteps,
-  finished,
-  togglePause,
-}: ILQDOnboardingIndicator) => {
-  const actions = [
-    require('../../../assets/images/pause.png'),
-    require('../../../assets/images/play.png'),
-  ];
+const LQDOnboardingIndicator = ({ currentStep, isPaused, timer, totalSteps, finished, togglePause }: ILQDOnboardingIndicator) => {
+  const actions = [require('../../../assets/images/pause.png'), require('../../../assets/images/play.png')];
 
   const animatedWidthStyle = (index: number) => {
     const progress = useSharedValue(0);
@@ -55,10 +40,7 @@ const LQDOnboardingIndicator = ({
     <View style={styles.container}>
       <View style={styles.subContainer}>
         <View style={styles.logoContainer}>
-          <Image
-            source={require('../../../assets/images/logo.png')}
-            style={styles.logo}
-          />
+          <Image source={require('../../../assets/images/logo.png')} style={styles.logo} />
           <Text style={styles.logoText}>Welcome to Liquid</Text>
         </View>
 
@@ -72,9 +54,7 @@ const LQDOnboardingIndicator = ({
       <View style={styles.subContainer}>
         {Array.from({ length: totalSteps }).map((_, index) => (
           <View key={index} style={styles.indicator}>
-            <Animated.View
-              style={[styles.progress, animatedWidthStyle(index)]}
-            />
+            <Animated.View style={[styles.progress, animatedWidthStyle(index)]} />
           </View>
         ))}
       </View>

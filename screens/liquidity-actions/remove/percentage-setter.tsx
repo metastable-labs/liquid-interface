@@ -52,10 +52,7 @@ const PercentageSetter = ({ setPercentage }: IPercentageSetter) => {
         {percentages.map(({ label, value }) => (
           <TouchableOpacity
             key={value}
-            style={[
-              styles.partition,
-              percentage === value && styles.activePartition,
-            ]}
+            style={[styles.partition, percentage === value && styles.activePartition]}
             onPress={() => setPredefinedPercentage(value)}
           >
             <Text style={styles.partitionText}>{label}</Text>

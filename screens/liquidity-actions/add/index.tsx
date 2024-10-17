@@ -1,10 +1,7 @@
 import { useEffect, useState } from 'react';
 import { View, Text, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import Animated, {
-  useAnimatedStyle,
-  withTiming,
-} from 'react-native-reanimated';
+import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated';
 
 import { LQDButton } from '@/components';
 import { removeCommasFromNumber } from '@/utils/helpers';
@@ -35,16 +32,9 @@ const AddLiquidity = () => {
       title: `Swap ${primary.asset?.symbol} to ${secondary.asset?.symbol}?`,
       description: (
         <Text style={styles.errorText}>
-          You don’t have enough cbBTC. We’d balance the pool by swapping half of
-          the{' '}
-          <Text style={[styles.errorText, { fontFamily: 'AeonikMedium' }]}>
-            {primary?.asset?.symbol}
-          </Text>{' '}
-          value to{' '}
-          <Text style={[styles.errorText, { fontFamily: 'AeonikMedium' }]}>
-            {secondary?.asset?.symbol}
-          </Text>
-          .
+          You don’t have enough cbBTC. We’d balance the pool by swapping half of the{' '}
+          <Text style={[styles.errorText, { fontFamily: 'AeonikMedium' }]}>{primary?.asset?.symbol}</Text> value to{' '}
+          <Text style={[styles.errorText, { fontFamily: 'AeonikMedium' }]}>{secondary?.asset?.symbol}</Text>.
         </Text>
       ),
       swap: {
@@ -55,8 +45,7 @@ const AddLiquidity = () => {
 
     secondary: {
       title: 'Proceed with debit card?',
-      description:
-        'You don’t have enough balances in your Liquid account, you can proceed to pay with your debit card',
+      description: 'You don’t have enough balances in your Liquid account, you can proceed to pay with your debit card',
     },
   };
 
@@ -83,9 +72,7 @@ const AddLiquidity = () => {
     },
   ];
 
-  const disableButton =
-    !parseFloat(removeCommasFromNumber(primary.value)) ||
-    !parseFloat(removeCommasFromNumber(secondary.value));
+  const disableButton = !parseFloat(removeCommasFromNumber(primary.value)) || !parseFloat(removeCommasFromNumber(secondary.value));
 
   const loadingViewStyle = useAnimatedStyle(() => ({
     opacity: withTiming(loading ? 1 : 0, { duration: 500 }),
@@ -121,36 +108,22 @@ const AddLiquidity = () => {
   };
 
   useEffect(() => {
-    const primaryIsInvalid =
-      parseFloat(removeCommasFromNumber(primary.value)) >
-      primary.asset?.balance!;
-    const secondaryIsInvalid =
-      parseFloat(removeCommasFromNumber(secondary.value)) >
-      secondary.asset?.balance!;
+    const primaryIsInvalid = parseFloat(removeCommasFromNumber(primary.value)) > primary.asset?.balance!;
+    const secondaryIsInvalid = parseFloat(removeCommasFromNumber(secondary.value)) > secondary.asset?.balance!;
 
     if (primaryIsInvalid && secondaryIsInvalid) return setError('secondary');
 
     if (secondaryIsInvalid) return setError('primary');
-  }, [
-    primary.value,
-    secondary.value,
-    primary.asset?.balance,
-    secondary.asset?.balance,
-  ]);
+  }, [primary.value, secondary.value, primary.asset?.balance, secondary.asset?.balance]);
 
   return (
     <>
       {!loading && (
-        <ScrollView
-          style={styles.root}
-          contentContainerStyle={styles.contentStyle}
-        >
+        <ScrollView style={styles.root} contentContainerStyle={styles.contentStyle}>
           <View style={styles.container}>
             <View style={styles.header}>
               <Text style={styles.title}>Add Liquidity</Text>
-              <Text style={styles.subtitle}>
-                Deposit liquidity to Earn trading fees{' '}
-              </Text>
+              <Text style={styles.subtitle}>Deposit liquidity to Earn trading fees </Text>
             </View>
 
             <PaymentMethodSelection method={method} setMethod={setMethod} />
@@ -175,34 +148,20 @@ const AddLiquidity = () => {
               />
             </View>
 
-            {error && (
-              <ErrorMessage
-                title={errors[error].title}
-                description={errors[error].description}
-                swap={errors[error].swap}
-              />
-            )}
+            {error && <ErrorMessage title={errors[error].title} description={errors[error].description} swap={errors[error].swap} />}
 
             {showInfo && <Info infos={infos} />}
           </View>
 
           <View style={styles.bottomContainer}>
-            <LQDButton
-              title="Proceed"
-              disabled={disableButton}
-              onPress={onSubmit}
-              variant="secondary"
-            />
+            <LQDButton title="Proceed" disabled={disableButton} onPress={onSubmit} variant="secondary" />
           </View>
         </ScrollView>
       )}
 
       {loading && (
         <Animated.View style={[loadingViewStyle, styles.root, { flex: 1 }]}>
-          <Loading
-            primaryTitle={primary.asset?.symbol!}
-            secondaryTitle={secondary.asset?.symbol!}
-          />
+          <Loading primaryTitle={primary.asset?.symbol!} secondaryTitle={secondary.asset?.symbol!} />
         </Animated.View>
       )}
     </>

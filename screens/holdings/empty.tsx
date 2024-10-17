@@ -10,19 +10,10 @@ const icons = {
 
 const actionIcons = {
   plus: <Ionicons name="add-outline" size={14} color="#FFF" />,
-  'right-caret': (
-    <Ionicons name="chevron-forward-outline" size={14} color="#FFF" />
-  ),
+  'right-caret': <Ionicons name="chevron-forward-outline" size={14} color="#FFF" />,
 };
 
-const Empty = ({
-  icon,
-  subtitle,
-  title,
-  action,
-  actionIcon,
-  isLast,
-}: IEmpty) => {
+const Empty = ({ icon, subtitle, title, action, actionIcon, isLast }: IEmpty) => {
   return (
     <View style={[styles.container, !isLast && styles.notLastStyle]}>
       <View style={styles.iconContainer}>{icons[icon]}</View>

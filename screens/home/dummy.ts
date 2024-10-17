@@ -1,10 +1,8 @@
 const topGainers: Array<ILQDPoolPairCard> = [
   {
     id: '1',
-    primaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
-    secondaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
+    primaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
+    secondaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
     primaryTitle: 'USDC',
     secondaryTitle: 'ETH',
     increased: true,
@@ -12,10 +10,8 @@ const topGainers: Array<ILQDPoolPairCard> = [
   },
   {
     id: '2',
-    primaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
-    secondaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
+    primaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
+    secondaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
     primaryTitle: 'DAI',
     secondaryTitle: 'WBTC',
     increased: false,
@@ -23,10 +19,8 @@ const topGainers: Array<ILQDPoolPairCard> = [
   },
   {
     id: '3',
-    primaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
-    secondaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
+    primaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
+    secondaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
     primaryTitle: 'USDT',
     secondaryTitle: 'BNB',
     increased: true,
@@ -34,10 +28,8 @@ const topGainers: Array<ILQDPoolPairCard> = [
   },
   {
     id: '4',
-    primaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
-    secondaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
+    primaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
+    secondaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
     primaryTitle: 'Tether',
     secondaryTitle: 'LINK',
     increased: true,
@@ -45,10 +37,8 @@ const topGainers: Array<ILQDPoolPairCard> = [
   },
   {
     id: '5',
-    primaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
-    secondaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
+    primaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
+    secondaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
     primaryTitle: 'PAX',
     secondaryTitle: 'SOL',
     increased: false,
@@ -56,10 +46,8 @@ const topGainers: Array<ILQDPoolPairCard> = [
   },
   {
     id: '6',
-    primaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
-    secondaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
+    primaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
+    secondaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
     primaryTitle: 'BUSD',
     secondaryTitle: 'MATIC',
     increased: true,
@@ -67,10 +55,8 @@ const topGainers: Array<ILQDPoolPairCard> = [
   },
   {
     id: '7',
-    primaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
-    secondaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
+    primaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
+    secondaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
     primaryTitle: 'NEO',
     secondaryTitle: 'DOT',
     increased: true,
@@ -78,10 +64,8 @@ const topGainers: Array<ILQDPoolPairCard> = [
   },
   {
     id: '8',
-    primaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
-    secondaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
+    primaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
+    secondaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
     primaryTitle: 'AVAX',
     secondaryTitle: 'XRP',
     increased: false,
@@ -89,10 +73,8 @@ const topGainers: Array<ILQDPoolPairCard> = [
   },
   {
     id: '9',
-    primaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
-    secondaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
+    primaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
+    secondaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
     primaryTitle: 'FTM',
     secondaryTitle: 'LTC',
     increased: true,
@@ -100,10 +82,8 @@ const topGainers: Array<ILQDPoolPairCard> = [
   },
   {
     id: '10',
-    primaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
-    secondaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
+    primaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
+    secondaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
     primaryTitle: 'HBAR',
     secondaryTitle: 'DOGE',
     increased: true,
@@ -114,10 +94,8 @@ const topGainers: Array<ILQDPoolPairCard> = [
 const poolPairs: Array<ILQDPoolPairPaper> = [
   {
     id: '1',
-    primaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
-    secondaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
+    primaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
+    secondaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
     primaryTitle: 'USDC',
     secondaryTitle: 'ETH',
     apr: 2.3,
@@ -126,10 +104,8 @@ const poolPairs: Array<ILQDPoolPairPaper> = [
   },
   {
     id: '2',
-    primaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
-    secondaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
+    primaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
+    secondaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
     primaryTitle: 'DAI',
     secondaryTitle: 'WBTC',
     apr: 3.1,
@@ -138,10 +114,8 @@ const poolPairs: Array<ILQDPoolPairPaper> = [
   },
   {
     id: '3',
-    primaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
-    secondaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
+    primaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
+    secondaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
     primaryTitle: 'USDT',
     secondaryTitle: 'BNB',
     apr: 2.9,
@@ -150,10 +124,8 @@ const poolPairs: Array<ILQDPoolPairPaper> = [
   },
   {
     id: '4',
-    primaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
-    secondaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
+    primaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
+    secondaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
     primaryTitle: 'Tether',
     secondaryTitle: 'LINK',
     apr: 4.0,
@@ -162,10 +134,8 @@ const poolPairs: Array<ILQDPoolPairPaper> = [
   },
   {
     id: '5',
-    primaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
-    secondaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
+    primaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
+    secondaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
     primaryTitle: 'BUSD',
     secondaryTitle: 'MATIC',
     apr: 3.5,
@@ -174,10 +144,8 @@ const poolPairs: Array<ILQDPoolPairPaper> = [
   },
   {
     id: '6',
-    primaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
-    secondaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
+    primaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
+    secondaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
     primaryTitle: 'NEO',
     secondaryTitle: 'DOT',
     apr: 5.2,
@@ -186,10 +154,8 @@ const poolPairs: Array<ILQDPoolPairPaper> = [
   },
   {
     id: '7',
-    primaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
-    secondaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
+    primaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
+    secondaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
     primaryTitle: 'AVAX',
     secondaryTitle: 'XRP',
     apr: 4.7,
@@ -198,10 +164,8 @@ const poolPairs: Array<ILQDPoolPairPaper> = [
   },
   {
     id: '8',
-    primaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
-    secondaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
+    primaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
+    secondaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
     primaryTitle: 'FTM',
     secondaryTitle: 'LTC',
     apr: 5.5,
@@ -210,10 +174,8 @@ const poolPairs: Array<ILQDPoolPairPaper> = [
   },
   {
     id: '9',
-    primaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
-    secondaryIconURL:
-      'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
+    primaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
+    secondaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
     primaryTitle: 'HBAR',
     secondaryTitle: 'DOGE',
     apr: 3.8,

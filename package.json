@@ -3,6 +3,7 @@
   "main": "expo-router/entry",
   "version": "1.0.0",
   "private": true,
+  "packageManager": "yarn@1.22.x",
   "scripts": {
     "start": "expo start",
     "reset-project": "node ./scripts/reset-project.js",
@@ -61,6 +62,7 @@
     "react-redux": "^9.1.2",
     "redux-persist": "^6.0.0",
     "victory-native": "^37.0.3-next.0",
+    "viem": "^2.21.28",
     "yup": "^1.4.0"
   },
   "devDependencies": {

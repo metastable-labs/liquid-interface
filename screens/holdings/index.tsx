@@ -86,16 +86,10 @@ const Holdings = () => {
 
   const nonEmptyItems = items.filter((item) => !item.isEmpty);
 
-  const emptyItems = items
-    .filter((item) => item.isEmpty && item.empty)
-    .map((item) => item.empty);
+  const emptyItems = items.filter((item) => item.isEmpty && item.empty).map((item) => item.empty);
 
   return (
-    <ScrollView
-      style={styles.container}
-      contentContainerStyle={styles.contentContainer}
-      showsVerticalScrollIndicator={false}
-    >
+    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer} showsVerticalScrollIndicator={false}>
       <View style={styles.balanceAndActionsContainer}>
         <View style={styles.balanceContainer}>
           <Text style={styles.balanceText}>Total Holdings</Text>
@@ -120,11 +114,7 @@ const Holdings = () => {
       {Boolean(emptyItems.length) && (
         <View style={styles.emptyContainer}>
           {emptyItems.map((item, index) => (
-            <Empty
-              key={index}
-              {...item!}
-              isLast={index === emptyItems.length - 1}
-            />
+            <Empty key={index} {...item!} isLast={index === emptyItems.length - 1} />
           ))}
         </View>
       )}

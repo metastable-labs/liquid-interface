@@ -9,9 +9,7 @@ import PaymentMethodSelection from '../method-selection';
 import sharedStyles from '../styles';
 
 const CryptoDeposit = () => {
-  const [address, setAddress] = useState(
-    '0x4b3a9d4f3e5f2e3c4e6f3a9d4f3e5f2e3c4e6f3a'
-  );
+  const [address, setAddress] = useState('0x4b3a9d4f3e5f2e3c4e6f3a9d4f3e5f2e3c4e6f3a');
   const [showBottomSheet, setShowBottomSheet] = useState(false);
   const { handleCopy, hasCopied } = useCopy();
 
@@ -26,50 +24,27 @@ const CryptoDeposit = () => {
 
           <View style={styles.addressContainer}>
             <View style={styles.addressWrapper}>
-              <Text style={[styles.text, { fontWeight: '500' }]}>
-                {truncatedAddress}
-              </Text>
+              <Text style={[styles.text, { fontWeight: '500' }]}>{truncatedAddress}</Text>
             </View>
-            <TouchableOpacity
-              style={styles.copyContainer}
-              onPress={() => handleCopy(address)}
-            >
+            <TouchableOpacity style={styles.copyContainer} onPress={() => handleCopy(address)}>
               <Ionicons name="copy-outline" size={18} color="#FFF" />
-              <Text style={styles.copyText}>
-                {hasCopied ? 'Copied' : 'Copy'}
-              </Text>
+              <Text style={styles.copyText}>{hasCopied ? 'Copied' : 'Copy'}</Text>
             </TouchableOpacity>
           </View>
 
-          <TouchableOpacity
-            style={sharedStyles.paymentSelector}
-            onPress={() => setShowBottomSheet(true)}
-          >
+          <TouchableOpacity style={sharedStyles.paymentSelector} onPress={() => setShowBottomSheet(true)}>
             <Ionicons name="wallet-outline" size={18} color="#64748B" />
-            <Text
-              style={[
-                sharedStyles.selectorText,
-                sharedStyles.paymentSelectorText,
-              ]}
-            >
-              Crypto
-            </Text>
+            <Text style={[sharedStyles.selectorText, sharedStyles.paymentSelectorText]}>Crypto</Text>
             <Ionicons name="chevron-down" size={18} color="#64748B" />
           </TouchableOpacity>
         </View>
         <View style={styles.infoContainer}>
           <Image source={tokensImage} style={styles.infoImage} />
-          <Text style={styles.text}>
-            You can receive any tokens on, ETH, Base, Optimism, Mode, Polygon,
-            and Arbitrum chain.
-          </Text>
+          <Text style={styles.text}>You can receive any tokens on, ETH, Base, Optimism, Mode, Polygon, and Arbitrum chain.</Text>
         </View>
       </View>
 
-      <PaymentMethodSelection
-        close={() => setShowBottomSheet(false)}
-        show={showBottomSheet}
-      />
+      <PaymentMethodSelection close={() => setShowBottomSheet(false)} show={showBottomSheet} />
     </>
   );
 };

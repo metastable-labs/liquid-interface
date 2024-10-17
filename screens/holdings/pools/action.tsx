@@ -1,9 +1,4 @@
-import {
-  Text,
-  StyleSheet,
-  GestureResponderEvent,
-  TouchableOpacity,
-} from 'react-native';
+import { Text, StyleSheet, GestureResponderEvent, TouchableOpacity } from 'react-native';
 
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 
@@ -18,11 +13,7 @@ const PoolCardAction = ({ disabled, id, type }: IPoolCardAction) => {
 
   return (
     <TouchableOpacity
-      style={[
-        styles.container,
-        styles[`${type}Active`],
-        disabled && styles[`${type}Disabled`],
-      ]}
+      style={[styles.container, styles[`${type}Active`], disabled && styles[`${type}Disabled`]]}
       disabled={disabled}
       onPress={action}
     >

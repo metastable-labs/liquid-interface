@@ -31,29 +31,25 @@ const Assets = () => {
 
   const assets: Array<IAssetPaper> = [
     {
-      iconUrl:
-        'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
+      iconUrl: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
       name: 'USDC',
       value: 4_506.78,
       usdValue: 4_506.78,
     },
     {
-      iconUrl:
-        'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
+      iconUrl: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
       name: 'ETH',
       value: 300,
       usdValue: 1_234_567.89,
     },
     {
-      iconUrl:
-        'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
+      iconUrl: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
       name: 'USDC',
       value: 4_506.78,
       usdValue: 4_506.78,
     },
     {
-      iconUrl:
-        'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
+      iconUrl: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
       name: 'ETH',
       value: 300,
       usdValue: 1_234_567.89,
@@ -61,11 +57,7 @@ const Assets = () => {
   ];
 
   return (
-    <ScrollView
-      style={styles.container}
-      contentContainerStyle={styles.contentContainer}
-      showsVerticalScrollIndicator={false}
-    >
+    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer} showsVerticalScrollIndicator={false}>
       <View style={styles.balanceAndActionsContainer}>
         <View style={styles.balanceContainer}>
           <Text style={styles.balanceText}>Total Holdings</Text>

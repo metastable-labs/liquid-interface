@@ -25,9 +25,7 @@ const PoolDetailLayout = () => {
     <>
       <Stack
         screenOptions={{
-          header: (props) => (
-            <LQDStackHeader {...props} style={{ paddingTop: 50 }} />
-          ),
+          header: (props) => <LQDStackHeader {...props} style={{ paddingTop: 50 }} />,
           headerShown: true,
         }}
       >
@@ -36,12 +34,7 @@ const PoolDetailLayout = () => {
 
       <View style={styles.actionsContainer}>
         {actions.map((action) => (
-          <LQDButton
-            key={action.title}
-            {...action}
-            fullWidth={false}
-            style={styles.action}
-          />
+          <LQDButton key={action.title} {...action} fullWidth={false} style={styles.action} />
         ))}
       </View>
     </>

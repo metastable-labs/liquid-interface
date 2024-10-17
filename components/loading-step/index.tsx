@@ -1,19 +1,9 @@
 import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withSpring,
-  withTiming,
-} from 'react-native-reanimated';
+import Animated, { useSharedValue, useAnimatedStyle, withSpring, withTiming } from 'react-native-reanimated';
 import { useEffect } from 'react';
 
-const LQDLoadingStep = ({
-  icon,
-  isCompleted,
-  subtitle,
-  title,
-}: ILQDLoadingStep) => {
+const LQDLoadingStep = ({ icon, isCompleted, subtitle, title }: ILQDLoadingStep) => {
   const opacityValue = useSharedValue(0);
   const connectorHeight = useSharedValue(0);
 

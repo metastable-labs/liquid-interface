@@ -5,22 +5,12 @@ import { Ionicons } from '@expo/vector-icons';
 
 import { ILQDInput } from './types';
 
-const LQDInput = <T extends FieldValues>({
-  control,
-  name,
-  inputProps,
-  label,
-  placeholder,
-  rules,
-  variant = 'primary',
-}: ILQDInput<T>) => {
+const LQDInput = <T extends FieldValues>({ control, name, inputProps, label, placeholder, rules, variant = 'primary' }: ILQDInput<T>) => {
   return (
     <View style={styles.container}>
       {label && <Text style={styles.label}>{label}</Text>}
       <View style={styles.inputContainer}>
-        {variant === 'search' && (
-          <Ionicons name="search" size={20} color="#94A3B8" />
-        )}
+        {variant === 'search' && <Ionicons name="search" size={20} color="#94A3B8" />}
 
         <Controller
           control={control}

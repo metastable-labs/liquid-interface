@@ -1,25 +1,11 @@
 import { useMemo } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Image,
-  ScrollView,
-} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { useForm } from 'react-hook-form';
 import { Ionicons } from '@expo/vector-icons';
 import LQDBottomSheet from '../bottom-sheet';
 import LQDInput from '../input';
 
-const LQDAssetSelection = ({
-  assets,
-  close,
-  setAsset,
-  show,
-  title,
-  asset,
-}: IAssetSelection) => {
+const LQDAssetSelection = ({ assets, close, setAsset, show, title, asset }: IAssetSelection) => {
   const { control, watch } = useForm();
   const searchValue = watch('search', '');
 
@@ -27,8 +13,7 @@ const LQDAssetSelection = ({
     if (!searchValue) return assets;
     return assets.filter(
       (asset) =>
-        asset.name.toLowerCase().includes(searchValue.toLowerCase()) ||
-        asset.symbol.toLowerCase().includes(searchValue.toLowerCase())
+        asset.name.toLowerCase().includes(searchValue.toLowerCase()) || asset.symbol.toLowerCase().includes(searchValue.toLowerCase())
     );
   }, [searchValue]);
 
@@ -40,12 +25,7 @@ const LQDAssetSelection = ({
   };
 
   return (
-    <LQDBottomSheet
-      show={show}
-      title={title}
-      variant="secondary"
-      onClose={close}
-    >
+    <LQDBottomSheet show={show} title={title} variant="secondary" onClose={close}>
       <View style={styles.root}>
         <LQDInput
           control={control}
@@ -59,26 +39,15 @@ const LQDAssetSelection = ({
           variant="search"
         />
 
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.scrollContent}
-        >
+        <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
           {searchedAssets.map((asset_, index) => {
             const active = asset?.id === asset_?.id;
 
             return (
-              <TouchableOpacity
-                key={index}
-                style={styles.selector}
-                onPress={() => action(active, asset_)}
-                disabled={active}
-              >
+              <TouchableOpacity key={index} style={styles.selector} onPress={() => action(active, asset_)} disabled={active}>
                 <View style={styles.selectorContainer}>
                   <View style={styles.iconContainer}>
-                    <Image
-                      source={{ uri: asset_?.iconUrl }}
-                      style={styles.icon}
-                    />
+                    <Image source={{ uri: asset_?.iconUrl }} style={styles.icon} />
                   </View>
 
                   <View style={styles.textContainer}>

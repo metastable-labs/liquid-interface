@@ -33,23 +33,13 @@ const PaymentMethodSelection = ({ close, show }: IPaymentMethodSelection) => {
   };
 
   return (
-    <LQDBottomSheet
-      show={show}
-      title="Select method"
-      variant="primary"
-      onClose={close}
-    >
+    <LQDBottomSheet show={show} title="Select method" variant="primary" onClose={close}>
       <View style={styles.container}>
         {methods.map(({ text, icon, path }, index) => {
           const active = pathname === path;
 
           return (
-            <TouchableOpacity
-              key={index}
-              style={styles.selectorCard}
-              onPress={() => action(active, path)}
-              disabled={active}
-            >
+            <TouchableOpacity key={index} style={styles.selectorCard} onPress={() => action(active, path)} disabled={active}>
               <View style={styles.iconContainer}>{icon}</View>
 
               <View style={styles.textContainer}>
