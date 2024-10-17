@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { Address, PublicClient } from 'viem';
+import { Address, formatUnits, PublicClient } from 'viem';
 import { useContract } from './useContract';
 import { formatPool, formatPoolFee, formatPosition } from '@/utils/helpers';
 import { RawPool, FormattedPool, RawPosition, FormattedPosition, Token, EnhancedFormattedPool } from './types';
@@ -16,6 +16,12 @@ export function usePool(publicClient: PublicClient, account: Address, refreshInt
 
   const contract = useContract(LP_SUGAR_ADDRESS, LPSugarABI, publicClient);
   const { getTokenByAddress, tokens, loading: tokensLoading } = useToken(publicClient, account);
+
+  const calculateTVL = (reserve0: bigint, reserve1: bigint, token0: Token, token1: Token): string => {
+    const value0 = Number(formatUnits(reserve0, token0.decimals)) * Number(token0.usd_price);
+    const value1 = Number(formatUnits(reserve1, token1.decimals)) * Number(token1.usd_price);
+    return (value0 + value1).toFixed(2);
+  };
 
   const fetchPoolStability = useCallback(
     async (poolAddress: Address): Promise<boolean> => {
@@ -62,12 +68,14 @@ export function usePool(publicClient: PublicClient, account: Address, refreshInt
                 console.error(`Token not found for pool ${formattedPool.lp}`);
                 return null;
               }
+              const tvl = calculateTVL(pool.reserve0, pool.reserve1, token0, token1);
 
               return {
                 ...formattedPool,
                 token0,
                 token1,
                 pool_fee: formatPoolFee(pool.pool_fee),
+                TVL: tvl,
               } as EnhancedFormattedPool;
             })
           );

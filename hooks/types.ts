@@ -94,4 +94,5 @@ export type Token = {
 export type EnhancedFormattedPool = Omit<FormattedPool, 'token0' | 'token1'> & {
   token0: Token;
   token1: Token;
+  TVL: string;
 };
