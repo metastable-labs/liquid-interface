@@ -1,19 +1,17 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { Address, PublicClient } from 'viem';
 import { useContract } from './useContract';
 import { formatPool, formatPosition } from '@/utils/helpers';
 import { RawPool, FormattedPool, RawPosition, FormattedPosition } from './types';
-
 import { AerodromePoolABI, LPSugarABI } from '@/constants/abis';
 import { LP_SUGAR_ADDRESS } from '@/constants/addresses';
 
-export function usePool(publicClient: PublicClient) {
-  // State for storing all pools
+export function usePool(publicClient: PublicClient, refreshInterval: number = 60000) {
   const [allPools, setAllPools] = useState<FormattedPool[]>([]);
-  // State for storing the paginated v2 pools
   const [paginatedV2Pools, setPaginatedV2Pools] = useState<FormattedPool[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [lastUpdated, setLastUpdated] = useState<number>(0);
 
   const contract = useContract(LP_SUGAR_ADDRESS, LPSugarABI, publicClient);
 
@@ -21,30 +19,34 @@ export function usePool(publicClient: PublicClient) {
     async (poolAddress: Address): Promise<boolean> => {
       const poolContract = useContract(poolAddress, AerodromePoolABI, publicClient);
       try {
-        const isStable = await poolContract.read.stable();
-        return isStable as boolean;
+        return (await poolContract.read.stable()) as boolean;
       } catch (error) {
         console.error(`Error fetching stability for pool ${poolAddress}:`, error);
-        return false; // Default to false if there's an error
+        return false;
       }
     },
     [publicClient]
   );
 
   const fetchAllPools = useCallback(
-    async (batchSize: number = 1000) => {
-      try {
-        setLoading(true);
-        setError(null);
+    async (forceRefresh: boolean = false) => {
+      const now = Date.now();
+      if (!forceRefresh && allPools.length > 0 && now - lastUpdated < refreshInterval) {
+        return; // Only fetch if forced, empty, or refresh interval has passed
+      }
 
+      setLoading(true);
+      setError(null);
+
+      try {
         let offset = 0;
         let allPoolsData: FormattedPool[] = [];
         let hasMore = true;
+        const batchSize = 1000;
 
         while (hasMore) {
           const poolsBatch = (await contract.read.all([BigInt(batchSize), BigInt(offset)])) as RawPool[];
 
-          // Fetch stability information for each pool
           const poolsWithStability = await Promise.all(
             poolsBatch.map(async (pool) => {
               const isStable = await fetchPoolStability(pool.lp as Address);
@@ -58,6 +60,7 @@ export function usePool(publicClient: PublicClient) {
         }
 
         setAllPools(allPoolsData);
+        setLastUpdated(now);
       } catch (err) {
         console.error('Error fetching all pools:', err);
         setError('Failed to fetch pools');
@@ -65,36 +68,17 @@ export function usePool(publicClient: PublicClient) {
         setLoading(false);
       }
     },
-    [contract]
+    [contract, fetchPoolStability, refreshInterval, lastUpdated, allPools.length]
   );
 
-  /**
-   * Fetches and paginates v2 pools from the stored all pools data
-   * @param limit The maximum number of pools to return (default: 10)
-   * @param offset The starting index for fetching pools (default: 0)
-   */
   const fetchV2Pools = useCallback(
     async (limit: number = 10, offset: number = 0) => {
-      try {
-        setLoading(true);
-        setError(null);
+      await fetchAllPools(); // This will refresh if necessary
 
-        // If allPools is empty, fetch all pools first
-        if (allPools.length === 0) {
-          await fetchAllPools();
-        }
+      const v2Pools = allPools.filter((pool) => pool.type === 'V2');
+      const paginatedPools = v2Pools.slice(offset, offset + limit);
 
-        // Filter v2 pools and apply pagination
-        const v2Pools = allPools.filter((pool) => pool.type === 'V2');
-        const paginatedPools = v2Pools.slice(offset, offset + limit);
-
-        setPaginatedV2Pools(paginatedPools);
-      } catch (err) {
-        console.error('Error fetching v2 pools:', err);
-        setError('Failed to fetch v2 pools');
-      } finally {
-        setLoading(false);
-      }
+      setPaginatedV2Pools(paginatedPools);
     },
     [allPools, fetchAllPools]
   );
@@ -102,9 +86,7 @@ export function usePool(publicClient: PublicClient) {
   const fetchPositions = useCallback(
     async (account: Address, limit: number = 1000, offset: number = 0): Promise<FormattedPosition[]> => {
       try {
-        // Fetch positions from the contract
         const positions = (await contract.read.positions([BigInt(limit), BigInt(offset), account])) as RawPosition[];
-        // Format the position data
         return positions.map(formatPosition);
       } catch (err) {
         console.error('Error fetching positions:', err);
@@ -113,15 +95,38 @@ export function usePool(publicClient: PublicClient) {
     },
     [contract]
   );
-  useEffect(() => {
-    fetchV2Pools();
-  }, [fetchV2Pools]);
 
-  return {
-    paginatedV2Pools,
-    loading,
-    error,
-    fetchV2Pools,
-    fetchPositions,
-  };
+  // Function to manually trigger a refresh
+  const refreshPools = useCallback(() => {
+    fetchAllPools(true);
+  }, [fetchAllPools]);
+
+  // Set up automatic refresh
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      fetchAllPools();
+    }, refreshInterval);
+
+    return () => clearInterval(intervalId);
+  }, [fetchAllPools, refreshInterval]);
+
+  // Initial fetch
+  useEffect(() => {
+    fetchAllPools();
+  }, [fetchAllPools]);
+
+  const memoizedReturnValue = useMemo(
+    () => ({
+      paginatedV2Pools,
+      loading,
+      error,
+      fetchV2Pools,
+      fetchPositions,
+      refreshPools,
+      lastUpdated,
+    }),
+    [paginatedV2Pools, loading, error, fetchV2Pools, fetchPositions, refreshPools, lastUpdated]
+  );
+
+  return memoizedReturnValue;
 }
