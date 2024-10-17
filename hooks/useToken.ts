@@ -5,7 +5,7 @@ import { PublicClient, Address, formatUnits } from 'viem';
 import { Token } from './types';
 import { useContract } from './useContract';
 
-export function useToken(publicClient: PublicClient, account: Address, oracle: Address, refreshInterval: number = 60000) {
+export function useToken(publicClient: PublicClient, account: Address, refreshInterval: number = 60000) {
   const [tokens, setTokens] = useState<Token[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -47,10 +47,13 @@ export function useToken(publicClient: PublicClient, account: Address, oracle: A
       setError(null);
 
       try {
-        const fetchedTokens = (await lpSugarContract.read.tokens([BigInt(1000), BigInt(0), account, oracle, CONNECTORS_BASE])) as Omit<
-          Token,
-          'usd_price'
-        >[];
+        const fetchedTokens = (await lpSugarContract.read.tokens([
+          BigInt(1000),
+          BigInt(0),
+          account,
+          OFFCHAIN_ORACLE_ADDRESS,
+          CONNECTORS_BASE,
+        ])) as Omit<Token, 'usd_price'>[];
 
         const tokensWithPrices = await Promise.all(
           fetchedTokens.map(async (token) => {
@@ -72,7 +75,7 @@ export function useToken(publicClient: PublicClient, account: Address, oracle: A
         setLoading(false);
       }
     },
-    [lpSugarContract, account, oracle, refreshInterval, lastUpdated, tokens.length, formatBalance, getUsdPrice]
+    [lpSugarContract, account, OFFCHAIN_ORACLE_ADDRESS, refreshInterval, lastUpdated, tokens.length, formatBalance, getUsdPrice]
   );
 
   useEffect(() => {

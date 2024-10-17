@@ -89,3 +89,8 @@ export type Token = {
   listed: boolean;
   usd_price: string;
 };
+
+export type EnhancedFormattedPool = Omit<FormattedPool, 'token0' | 'token1'> & {
+  token0: Token;
+  token1: Token;
+};

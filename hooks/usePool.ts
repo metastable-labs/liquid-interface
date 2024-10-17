@@ -2,18 +2,20 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import { Address, PublicClient } from 'viem';
 import { useContract } from './useContract';
 import { formatPool, formatPosition } from '@/utils/helpers';
-import { RawPool, FormattedPool, RawPosition, FormattedPosition } from './types';
+import { RawPool, FormattedPool, RawPosition, FormattedPosition, Token, EnhancedFormattedPool } from './types';
 import { AerodromePoolABI, LPSugarABI } from '@/constants/abis';
-import { LP_SUGAR_ADDRESS } from '@/constants/addresses';
+import { LP_SUGAR_ADDRESS, OFFCHAIN_ORACLE_ADDRESS } from '@/constants/addresses';
+import { useToken } from './useToken';
 
-export function usePool(publicClient: PublicClient, refreshInterval: number = 60000) {
-  const [allPools, setAllPools] = useState<FormattedPool[]>([]);
-  const [paginatedV2Pools, setPaginatedV2Pools] = useState<FormattedPool[]>([]);
+export function usePool(publicClient: PublicClient, account: Address, refreshInterval: number = 60000) {
+  const [allPools, setAllPools] = useState<EnhancedFormattedPool[]>([]);
+  const [paginatedV2Pools, setPaginatedV2Pools] = useState<EnhancedFormattedPool[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<number>(0);
 
   const contract = useContract(LP_SUGAR_ADDRESS, LPSugarABI, publicClient);
+  const { getTokenByAddress, tokens, loading: tokensLoading } = useToken(publicClient, account);
 
   const fetchPoolStability = useCallback(
     async (poolAddress: Address): Promise<boolean> => {
@@ -40,7 +42,7 @@ export function usePool(publicClient: PublicClient, refreshInterval: number = 60
 
       try {
         let offset = 0;
-        let allPoolsData: FormattedPool[] = [];
+        let allPoolsData: EnhancedFormattedPool[] = [];
         let hasMore = true;
         const batchSize = 1000;
 
@@ -50,11 +52,26 @@ export function usePool(publicClient: PublicClient, refreshInterval: number = 60
           const poolsWithStability = await Promise.all(
             poolsBatch.map(async (pool) => {
               const isStable = await fetchPoolStability(pool.lp as Address);
-              return formatPool(pool, isStable);
+              const formattedPool = formatPool(pool, isStable);
+
+              // Enhance the pool with Token objects
+              const token0 = getTokenByAddress(formattedPool.token0 as Address);
+              const token1 = getTokenByAddress(formattedPool.token1 as Address);
+
+              if (!token0 || !token1) {
+                console.error(`Token not found for pool ${formattedPool.lp}`);
+                return null;
+              }
+
+              return {
+                ...formattedPool,
+                token0,
+                token1,
+              } as EnhancedFormattedPool;
             })
           );
 
-          allPoolsData = [...allPoolsData, ...poolsWithStability];
+          allPoolsData = [...allPoolsData, ...(poolsWithStability.filter(Boolean) as EnhancedFormattedPool[])];
           offset += batchSize;
           hasMore = poolsBatch.length === batchSize;
         }
@@ -68,7 +85,7 @@ export function usePool(publicClient: PublicClient, refreshInterval: number = 60
         setLoading(false);
       }
     },
-    [contract, fetchPoolStability, refreshInterval, lastUpdated, allPools.length]
+    [contract, fetchPoolStability, getTokenByAddress, tokensLoading]
   );
 
   const fetchV2Pools = useCallback(
@@ -114,6 +131,12 @@ export function usePool(publicClient: PublicClient, refreshInterval: number = 60
   useEffect(() => {
     fetchAllPools();
   }, [fetchAllPools]);
+
+  useEffect(() => {
+    if (tokens.length > 0 && !tokensLoading) {
+      fetchAllPools();
+    }
+  }, [tokens, tokensLoading, fetchAllPools]);
 
   const memoizedReturnValue = useMemo(
     () => ({
