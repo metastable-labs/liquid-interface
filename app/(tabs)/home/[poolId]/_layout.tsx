@@ -31,7 +31,7 @@ const PoolDetailLayout = () => {
           headerShown: true,
         }}
       >
-        <Stack.Screen name="index" />
+        <Stack.Screen name="index" options={{animation: 'slide_from_bottom'}} />
       </Stack>
 
       <View style={styles.actionsContainer}>

@@ -51,20 +51,26 @@ const LQDPoolPairPaper = ({
           </Text>
 
           <View style={styles.details}>
-            <Text style={styles.detailText}>{apr}% APR</Text>
+            <Text style={apr > 3 ? styles.basicTextStable : styles.basicTextVolatile}>{apr > 3 ? "Basic Stable" : "Basic Volatile" }</Text>
 
             <View style={styles.separator}>
               <View style={styles.separatorCircle} />
             </View>
 
-            <Text style={styles.detailText}>{fees}% Fees</Text>
+            <Text style={styles.detailText}>{fees}% Fee</Text>
           </View>
         </View>
       </View>
 
-      <Text style={styles.volumeText}>
-        ${formatNumberWithSuffix(capital)} {capitalMetric}
-      </Text>
+      <View style={styles.volumeWrapper}>
+        <Text style={styles.aprText}>
+          APR: {apr}%
+        </Text>
+
+        <Text style={styles.volumeText}>
+          VOL: ${formatNumberWithSuffix(capital)}
+        </Text>
+      </View>
     </TouchableOpacity>
   );
 };
@@ -130,6 +136,20 @@ const styles = StyleSheet.create({
     fontFamily: 'AeonikRegular',
   },
 
+  basicTextVolatile: {
+    color: '#AF1D38',
+    fontSize: 11,
+    lineHeight: 13.64,
+    fontFamily: 'AeonikRegular',
+  },
+
+  basicTextStable: {
+    color: '#B47818',
+    fontSize: 11,
+    lineHeight: 13.64,
+    fontFamily: 'AeonikRegular',
+  },
+
   separator: {
     position: 'relative',
     width: 7,
@@ -147,12 +167,24 @@ const styles = StyleSheet.create({
     left: '26%',
   },
 
-  volumeText: {
+  volumeWrapper: {
+    alignItems: 'flex-end',
+    gap: 8,
+  },
+
+  aprText: {
     color: '#156146',
     fontSize: 13,
     lineHeight: 16.12,
     fontWeight: '500',
     textTransform: 'uppercase',
     fontFamily: 'AeonikMedium',
+  },
+
+  volumeText: {
+    color: '#64748B',
+    fontSize: 11,
+    textTransform: 'uppercase',
+    fontFamily: 'AeonikRegular',
   },
 });
