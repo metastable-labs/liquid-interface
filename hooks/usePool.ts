@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { Address, PublicClient } from 'viem';
 import { useContract } from './useContract';
-import { formatPool, formatPosition } from '@/utils/helpers';
+import { formatPool, formatPoolFee, formatPosition } from '@/utils/helpers';
 import { RawPool, FormattedPool, RawPosition, FormattedPosition, Token, EnhancedFormattedPool } from './types';
 import { AerodromePoolABI, LPSugarABI } from '@/constants/abis';
 import { LP_SUGAR_ADDRESS, OFFCHAIN_ORACLE_ADDRESS } from '@/constants/addresses';
@@ -67,6 +67,7 @@ export function usePool(publicClient: PublicClient, account: Address, refreshInt
                 ...formattedPool,
                 token0,
                 token1,
+                pool_fee: formatPoolFee(pool.pool_fee),
               } as EnhancedFormattedPool;
             })
           );
