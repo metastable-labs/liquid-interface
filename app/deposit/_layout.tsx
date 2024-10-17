@@ -5,9 +5,7 @@ const DepositStack = () => {
   return (
     <Stack
       screenOptions={{
-        header: (props) => (
-          <LQDStackHeader {...props} style={{ paddingTop: 80 }} hasTitle />
-        ),
+        header: (props) => <LQDStackHeader {...props} style={{ paddingTop: 80 }} hasTitle />,
         headerTitle: 'Deposit',
       }}
     >

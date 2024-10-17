@@ -3,27 +3,15 @@ import { Ionicons } from '@expo/vector-icons';
 
 import { ILQDStackHeader } from './types';
 
-const LQDStackHeader = ({
-  navigation,
-  options,
-  hasTitle,
-  style,
-}: ILQDStackHeader) => {
+const LQDStackHeader = ({ navigation, options, hasTitle, style }: ILQDStackHeader) => {
   return (
-    <View
-      style={[styles.container, hasTitle && styles.hasTitleContainer, style]}
-    >
-      <TouchableOpacity
-        style={[styles.back, hasTitle && styles.hasTitleBack]}
-        onPress={navigation.goBack}
-      >
+    <View style={[styles.container, hasTitle && styles.hasTitleContainer, style]}>
+      <TouchableOpacity style={[styles.back, hasTitle && styles.hasTitleBack]} onPress={navigation.goBack}>
         <Ionicons name="chevron-back" size={20} color="#0F172A" />
         <Text style={styles.backText}>Back</Text>
       </TouchableOpacity>
 
-      {hasTitle && (
-        <Text style={styles.title}>{`${options?.headerTitle!}`}</Text>
-      )}
+      {hasTitle && <Text style={styles.title}>{`${options?.headerTitle!}`}</Text>}
     </View>
   );
 };

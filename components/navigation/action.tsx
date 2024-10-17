@@ -1,11 +1,6 @@
 import { useEffect } from 'react';
 import { Pressable, StyleSheet } from 'react-native';
-import Animated, {
-  interpolateColor,
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from 'react-native-reanimated';
+import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 
 const icon: any = {
@@ -14,13 +9,7 @@ const icon: any = {
   holdings: (props: any) => <Ionicons name="briefcase" {...props} />,
 };
 
-const LQDNavigationAction = ({
-  isFocused,
-  label,
-  onLongPress,
-  onPress,
-  routeName,
-}: ILQDNavigationAction) => {
+const LQDNavigationAction = ({ isFocused, label, onLongPress, onPress, routeName }: ILQDNavigationAction) => {
   const colorValue = useSharedValue(isFocused ? 1 : 0);
 
   useEffect(() => {
@@ -28,36 +17,20 @@ const LQDNavigationAction = ({
   }, [isFocused]);
 
   const animatedTextStyle = useAnimatedStyle(() => {
-    const color = interpolateColor(
-      colorValue.value,
-      [0, 1],
-      ['#64748B', '#020617']
-    );
+    const color = interpolateColor(colorValue.value, [0, 1], ['#64748B', '#020617']);
     return {
       color,
     };
   });
 
   return (
-    <Pressable
-      onPress={onPress}
-      onLongPress={onLongPress}
-      style={styles.container}
-    >
+    <Pressable onPress={onPress} onLongPress={onLongPress} style={styles.container}>
       {icon?.[routeName]?.({
         color: isFocused ? '#020617' : '#64748B',
         size: 24,
       })}
 
-      <Animated.Text
-        style={[
-          animatedTextStyle,
-          styles.text,
-          isFocused && { fontWeight: '700' },
-        ]}
-      >
-        {label}
-      </Animated.Text>
+      <Animated.Text style={[animatedTextStyle, styles.text, isFocused && { fontWeight: '700' }]}>{label}</Animated.Text>
     </Pressable>
   );
 };

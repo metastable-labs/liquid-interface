@@ -32,35 +32,15 @@ const LQDPoolPairCard = ({
       <View style={styles.topContainer}>
         <View style={styles.iconContainer}>
           {[primaryIconURL, secondaryIconURL].map((iconURL, index) => (
-            <View
-              key={index}
-              style={[
-                styles.icon,
-                index === 0 && { position: 'relative', zIndex: 1 },
-              ]}
-            >
-              <Image
-                source={{ uri: iconURL }}
-                style={{ width: 24, height: 24 }}
-              />
+            <View key={index} style={[styles.icon, index === 0 && { position: 'relative', zIndex: 1 }]}>
+              <Image source={{ uri: iconURL }} style={{ width: 24, height: 24 }} />
             </View>
           ))}
         </View>
 
-        <View
-          style={[
-            styles.changeContainer,
-            { backgroundColor: backgroundColors[+increased] },
-          ]}
-        >
-          <Ionicons
-            name={increased ? 'arrow-up' : 'arrow-down'}
-            size={12}
-            color={textColors[+increased]}
-          />
-          <Text style={[styles.change, { color: textColors[+increased] }]}>
-            {change}%
-          </Text>
+        <View style={[styles.changeContainer, { backgroundColor: backgroundColors[+increased] }]}>
+          <Ionicons name={increased ? 'arrow-up' : 'arrow-down'} size={12} color={textColors[+increased]} />
+          <Text style={[styles.change, { color: textColors[+increased] }]}>{change}%</Text>
         </View>
       </View>
 

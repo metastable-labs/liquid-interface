@@ -5,15 +5,12 @@ import { LQDButton } from '@/components';
 import { styles } from './styles';
 import PercentageSetter from './percentage-setter';
 
-const ICON_PLACEHOLDER =
-  'https://res.cloudinary.com/dxnd4k222/image/upload/v1717871583/Avatar_1.0_npmw4c.png';
+const ICON_PLACEHOLDER = 'https://res.cloudinary.com/dxnd4k222/image/upload/v1717871583/Avatar_1.0_npmw4c.png';
 
 const dummy = {
-  primaryIconURL:
-    'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
+  primaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
   primaryTitle: 'USDC',
-  secondaryIconURL:
-    'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
+  secondaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
   secondaryTitle: 'ETH',
   condition: 'stable',
 };
@@ -62,27 +59,15 @@ const RemoveLiquidity = () => {
 
         <View style={styles.pairContainer}>
           <View style={styles.iconContainer}>
-            {[dummy?.primaryIconURL, dummy?.secondaryIconURL]?.map(
-              (iconURL, index) => (
-                <View
-                  key={index}
-                  style={[
-                    styles.icon,
-                    index === 0 && { position: 'relative', zIndex: 1 },
-                  ]}
-                >
-                  <Image
-                    source={{ uri: iconURL || ICON_PLACEHOLDER }}
-                    style={{ width: 29.5, height: 29.5 }}
-                  />
-                </View>
-              )
-            )}
+            {[dummy?.primaryIconURL, dummy?.secondaryIconURL]?.map((iconURL, index) => (
+              <View key={index} style={[styles.icon, index === 0 && { position: 'relative', zIndex: 1 }]}>
+                <Image source={{ uri: iconURL || ICON_PLACEHOLDER }} style={{ width: 29.5, height: 29.5 }} />
+              </View>
+            ))}
           </View>
 
           <Text style={styles.pairText}>
-            {dummy?.condition.charAt(0)}AMM - {dummy?.primaryTitle} /{' '}
-            {dummy?.secondaryTitle}
+            {dummy?.condition.charAt(0)}AMM - {dummy?.primaryTitle} / {dummy?.secondaryTitle}
           </Text>
         </View>
 
@@ -94,10 +79,7 @@ const RemoveLiquidity = () => {
               <View style={styles.spacedContainer} key={index}>
                 <View style={styles.depositionLeft}>
                   <View style={styles.secondaryIcon}>
-                    <Image
-                      source={{ uri: iconURL || ICON_PLACEHOLDER }}
-                      style={{ width: 18, height: 18 }}
-                    />
+                    <Image source={{ uri: iconURL || ICON_PLACEHOLDER }} style={{ width: 18, height: 18 }} />
                   </View>
 
                   <Text style={styles.coinTitle}>{title}</Text>
@@ -117,45 +99,26 @@ const RemoveLiquidity = () => {
         <View style={styles.receiveContainer}>
           <Text style={styles.receiveTitle}>You’ll receive at least:</Text>
 
-          {receive.map(
-            ({ iconURL, primaryValue, secondaryValue, title }, index) => (
-              <View style={styles.spacedContainer} key={index}>
-                <View style={styles.depositionLeft}>
-                  <View style={styles.secondaryIcon}>
-                    <Image
-                      source={{ uri: iconURL || ICON_PLACEHOLDER }}
-                      style={{ width: 18, height: 18 }}
-                    />
-                  </View>
-
-                  <Text
-                    style={[
-                      styles.coinTitle,
-                      { fontSize: 16, lineHeight: 19.2 },
-                    ]}
-                  >
-                    {title}
-                  </Text>
+          {receive.map(({ iconURL, primaryValue, secondaryValue, title }, index) => (
+            <View style={styles.spacedContainer} key={index}>
+              <View style={styles.depositionLeft}>
+                <View style={styles.secondaryIcon}>
+                  <Image source={{ uri: iconURL || ICON_PLACEHOLDER }} style={{ width: 18, height: 18 }} />
                 </View>
 
-                <Text style={styles.receivePrimaryValue}>
-                  {primaryValue.toLocaleString()} {title}{' '}
-                  <Text style={styles.receiveSecondaryValue}>
-                    ${secondaryValue.toLocaleString()}
-                  </Text>
-                </Text>
+                <Text style={[styles.coinTitle, { fontSize: 16, lineHeight: 19.2 }]}>{title}</Text>
               </View>
-            )
-          )}
+
+              <Text style={styles.receivePrimaryValue}>
+                {primaryValue.toLocaleString()} {title} <Text style={styles.receiveSecondaryValue}>${secondaryValue.toLocaleString()}</Text>
+              </Text>
+            </View>
+          ))}
         </View>
       </View>
 
       <View style={styles.bottomContainer}>
-        <LQDButton
-          title="Hold to confirm"
-          onPress={onSubmit}
-          variant="secondary"
-        />
+        <LQDButton title="Hold to confirm" onPress={onSubmit} variant="secondary" />
       </View>
     </ScrollView>
   );

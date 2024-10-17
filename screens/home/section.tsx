@@ -1,14 +1,7 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-const Section = ({
-  children,
-  icon,
-  subtitle,
-  title,
-  action,
-  isShowingAll,
-}: ISection) => {
+const Section = ({ children, icon, subtitle, title, action, isShowingAll }: ISection) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>

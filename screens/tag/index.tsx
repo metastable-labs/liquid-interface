@@ -1,12 +1,5 @@
 import { useState, useEffect } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Platform,
-  StatusBar,
-  TextInput,
-} from 'react-native';
+import { View, Text, StyleSheet, Platform, StatusBar, TextInput } from 'react-native';
 import Animated from 'react-native-reanimated';
 
 import { LQDButton } from '@/components';
@@ -53,24 +46,16 @@ const Tag = () => {
         <View style={styles.topContainer}>
           <View style={styles.description}>
             <Text style={styles.title}>Set up a Liquid tag</Text>
-            <Text style={styles.subtitle}>
-              Create a unique identifier for your Liquid account
-            </Text>
+            <Text style={styles.subtitle}>Create a unique identifier for your Liquid account</Text>
           </View>
 
           <View style={styles.inputContainer}>
             <View style={styles.labelContainer}>
-              <Text style={[styles.labelText, styles.primaryLabel]}>
-                Username
-              </Text>
-              <Text style={[styles.labelText, styles.secondaryLabel]}>
-                (Liquid tag)
-              </Text>
+              <Text style={[styles.labelText, styles.primaryLabel]}>Username</Text>
+              <Text style={[styles.labelText, styles.secondaryLabel]}>(Liquid tag)</Text>
             </View>
 
-            <View
-              style={[styles.inputWrapper, styles[`${formState}InputWrapper`]]}
-            >
+            <View style={[styles.inputWrapper, styles[`${formState}InputWrapper`]]}>
               <TextInput
                 style={[styles.input, styles[`${formState}Input`]]}
                 value={tag}
@@ -81,21 +66,12 @@ const Tag = () => {
               />
             </View>
 
-            <Text
-              style={[styles.stateMessage, styles[`${formState}StateMessage`]]}
-            >
-              {stateMessage[formState]}
-            </Text>
+            <Text style={[styles.stateMessage, styles[`${formState}StateMessage`]]}>{stateMessage[formState]}</Text>
           </View>
         </View>
 
         <View style={styles.buttonContainer}>
-          <LQDButton
-            title="Continue"
-            onPress={onSubmit}
-            variant="secondary"
-            disabled={disableButton}
-          />
+          <LQDButton title="Continue" onPress={onSubmit} variant="secondary" disabled={disableButton} />
         </View>
       </View>
     </View>

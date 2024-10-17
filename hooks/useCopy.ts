@@ -9,8 +9,7 @@ const useCopy = () => {
     Clipboard.setString(text);
     setHasCopied(true);
 
-    Platform.OS === 'android' &&
-      ToastAndroid.show('Copied to clipboard', ToastAndroid.SHORT);
+    Platform.OS === 'android' && ToastAndroid.show('Copied to clipboard', ToastAndroid.SHORT);
 
     setTimeout(() => {
       setHasCopied(false);

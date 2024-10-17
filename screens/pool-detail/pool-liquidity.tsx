@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
-import Animated, {
-  useAnimatedStyle,
-  withTiming,
-} from 'react-native-reanimated';
+import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import ImageColors from 'react-native-image-colors';
 
 const PoolLiquidity = ({
@@ -50,15 +47,11 @@ const PoolLiquidity = ({
         fallback: '#F2AE40',
       });
 
-      if (primaryColors.platform === 'android')
-        setPrimaryColor(primaryColors.vibrant || '#375DFB');
-      if (primaryColors.platform === 'ios')
-        setPrimaryColor(primaryColors.background || '#375DFB');
+      if (primaryColors.platform === 'android') setPrimaryColor(primaryColors.vibrant || '#375DFB');
+      if (primaryColors.platform === 'ios') setPrimaryColor(primaryColors.background || '#375DFB');
 
-      if (secondaryColors.platform === 'android')
-        setSecondaryColor(secondaryColors.vibrant || '#F2AE40');
-      if (secondaryColors.platform === 'ios')
-        setSecondaryColor(secondaryColors.background || '#F2AE40');
+      if (secondaryColors.platform === 'android') setSecondaryColor(secondaryColors.vibrant || '#F2AE40');
+      if (secondaryColors.platform === 'ios') setSecondaryColor(secondaryColors.background || '#F2AE40');
     };
 
     extractColors();
@@ -73,46 +66,25 @@ const PoolLiquidity = ({
 
       <View style={styles.container}>
         <View style={styles.valueDistribution}>
-          {values.map(
-            ({ iconURL, primaryText, secondaryText, title }, index) => (
-              <View key={index} style={styles.value}>
-                <View style={styles.icon}>
-                  <Image
-                    source={{ uri: iconURL }}
-                    style={{ width: 18, height: 18 }}
-                  />
-                </View>
-
-                <View style={styles.textContainer}>
-                  <Text style={styles.primaryText}>
-                    {primaryText}
-                    <Text style={[styles.primaryText, styles.titleText]}>
-                      {' '}
-                      {title}
-                    </Text>
-                  </Text>
-                  <Text
-                    style={styles.secondaryText}
-                  >{`($${secondaryText})`}</Text>
-                </View>
+          {values.map(({ iconURL, primaryText, secondaryText, title }, index) => (
+            <View key={index} style={styles.value}>
+              <View style={styles.icon}>
+                <Image source={{ uri: iconURL }} style={{ width: 18, height: 18 }} />
               </View>
-            )
-          )}
+
+              <View style={styles.textContainer}>
+                <Text style={styles.primaryText}>
+                  {primaryText}
+                  <Text style={[styles.primaryText, styles.titleText]}> {title}</Text>
+                </Text>
+                <Text style={styles.secondaryText}>{`($${secondaryText})`}</Text>
+              </View>
+            </View>
+          ))}
         </View>
 
-        <View
-          style={[
-            styles.progressBackground,
-            { backgroundColor: secondaryColor },
-          ]}
-        >
-          <Animated.View
-            style={[
-              styles.progress,
-              progressStyle,
-              { backgroundColor: primaryColor },
-            ]}
-          />
+        <View style={[styles.progressBackground, { backgroundColor: secondaryColor }]}>
+          <Animated.View style={[styles.progress, progressStyle, { backgroundColor: primaryColor }]} />
         </View>
       </View>
     </View>

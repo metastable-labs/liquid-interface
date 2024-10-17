@@ -1,8 +1,6 @@
 const formatNumberWithSuffix = (num: number): string => {
   const formatWithPrecision = (value: number) => {
-    return value % 1 === 0
-      ? value.toFixed(0)
-      : value.toFixed(2).replace(/\.?0+$/, '');
+    return value % 1 === 0 ? value.toFixed(0) : value.toFixed(2).replace(/\.?0+$/, '');
   };
 
   if (num >= 1e9) {
@@ -25,15 +23,10 @@ const truncateDecimal = (amount?: number | string, decimals = 4): number => {
   return truncatedValue;
 };
 
-const formatAmountWithWholeAndDecimal = (
-  amount?: number | string,
-  decimals = 4
-) => {
+const formatAmountWithWholeAndDecimal = (amount?: number | string, decimals = 4) => {
   if (!amount) return { whole: '0', decimal: '00' };
 
-  const [whole, decimal] = truncateDecimal(amount, decimals)
-    .toString()
-    .split('.');
+  const [whole, decimal] = truncateDecimal(amount, decimals).toString().split('.');
 
   const formattedWhole = Number(whole).toLocaleString();
   return { whole: formattedWhole, decimal: decimal || '00' };
@@ -50,10 +43,4 @@ const formatWithThousandSeparator = (value: string) => {
   return numberValue.toLocaleString(undefined, { maximumFractionDigits: 5 });
 };
 
-export {
-  formatNumberWithSuffix,
-  truncateDecimal,
-  formatAmountWithWholeAndDecimal,
-  removeCommasFromNumber,
-  formatWithThousandSeparator,
-};
+export { formatNumberWithSuffix, truncateDecimal, formatAmountWithWholeAndDecimal, removeCommasFromNumber, formatWithThousandSeparator };

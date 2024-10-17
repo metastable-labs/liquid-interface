@@ -2,11 +2,7 @@ import { useState, useEffect } from 'react';
 import { StyleSheet, View, FlatList, Text } from 'react-native';
 import { useForm } from 'react-hook-form';
 import { debounce } from 'lodash';
-import Animated, {
-  useSharedValue,
-  withTiming,
-  useAnimatedStyle,
-} from 'react-native-reanimated';
+import Animated, { useSharedValue, withTiming, useAnimatedStyle } from 'react-native-reanimated';
 
 import LQDInput from '../input';
 
@@ -59,9 +55,7 @@ const LQDSearch = () => {
           <FlatList
             data={results}
             keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item }) => (
-              <Text style={styles.resultText}>{item}</Text>
-            )}
+            renderItem={({ item }) => <Text style={styles.resultText}>{item}</Text>}
           />
         ) : (
           <Text style={styles.noResultText}>No results found</Text>

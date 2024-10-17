@@ -1,14 +1,6 @@
 import { View, StyleSheet, Text, Image } from 'react-native';
 
-const Balance = ({
-  primaryBalance,
-  primaryIconURL,
-  primaryTitle,
-  secondaryBalance,
-  secondaryIconURL,
-  secondaryTitle,
-  aero,
-}: IPool) => {
+const Balance = ({ primaryBalance, primaryIconURL, primaryTitle, secondaryBalance, secondaryIconURL, secondaryTitle, aero }: IPool) => {
   const values = [
     {
       iconURL: primaryIconURL,
@@ -28,10 +20,7 @@ const Balance = ({
           {values.map(({ iconURL, title }, index) => (
             <View key={index} style={styles.valueDetail}>
               <View style={styles.icon}>
-                <Image
-                  source={{ uri: iconURL }}
-                  style={{ width: 18, height: 18 }}
-                />
+                <Image source={{ uri: iconURL }} style={{ width: 18, height: 18 }} />
               </View>
 
               <Text style={styles.title}>{title}</Text>
@@ -43,9 +32,7 @@ const Balance = ({
 
     {
       title: 'Quantity',
-      children: (
-        <Text style={styles.title}>{aero.toLocaleString()} AERO-LP</Text>
-      ),
+      children: <Text style={styles.title}>{aero.toLocaleString()} AERO-LP</Text>,
     },
   ];
 

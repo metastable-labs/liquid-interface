@@ -1,9 +1,5 @@
 import { useEffect, useState } from 'react';
-import {
-  DarkTheme,
-  DefaultTheme,
-  ThemeProvider,
-} from '@react-navigation/native';
+import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
@@ -67,14 +63,8 @@ export default function RootLayout() {
   return (
     <GestureHandlerRootView>
       <ReduxProvider store={store}>
-        <PersistGate
-          loading={null}
-          persistor={persistor}
-          onBeforeLift={() => setPersisted(true)}
-        >
-          <ThemeProvider
-            value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
-          >
+        <PersistGate loading={null} persistor={persistor} onBeforeLift={() => setPersisted(true)}>
+          <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
             <Stack screenOptions={{ headerShown: false }}>
               <Stack.Screen name="(onboarding)" />
               <Stack.Screen name="(tabs)" />
@@ -96,13 +86,7 @@ export default function RootLayout() {
               <Stack.Screen
                 name="withdraw"
                 options={{
-                  header: (props) => (
-                    <LQDStackHeader
-                      {...props}
-                      style={{ paddingTop: 80 }}
-                      hasTitle
-                    />
-                  ),
+                  header: (props) => <LQDStackHeader {...props} style={{ paddingTop: 80 }} hasTitle />,
                   headerTitle: 'Withdraw',
                   headerShown: true,
                 }}

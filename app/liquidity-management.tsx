@@ -11,10 +11,7 @@ const LiquidityManagementScreen = () => {
     <>
       <StatusBar style="inverted" />
 
-      <LiquidityManagement
-        id={id as string}
-        type={type as 'stake' | 'unstake'}
-      />
+      <LiquidityManagement id={id as string} type={type as 'stake' | 'unstake'} />
     </>
   );
 };
