@@ -80,3 +80,19 @@ export type FormattedPosition = {
   unstaked_earned1: string;
   emissions_earned: string;
 };
+
+export type Token = {
+  token_address: Address;
+  symbol: string;
+  decimals: number;
+  account_balance: string;
+  listed: boolean;
+  usd_price: string;
+  logo_url: string;
+};
+
+export type EnhancedFormattedPool = Omit<FormattedPool, 'token0' | 'token1' | 'TVL'> & {
+  token0: Token;
+  token1: Token;
+  TVL: string;
+};
