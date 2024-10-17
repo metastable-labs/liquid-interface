@@ -1,3 +1,4 @@
+import { formatUnits } from 'viem';
 const formatNumberWithSuffix = (num: number): string => {
   const formatWithPrecision = (value: number) => {
     return value % 1 === 0 ? value.toFixed(0) : value.toFixed(2).replace(/\.?0+$/, '');
@@ -43,4 +44,25 @@ const formatWithThousandSeparator = (value: string) => {
   return numberValue.toLocaleString(undefined, { maximumFractionDigits: 5 });
 };
 
-export { formatNumberWithSuffix, truncateDecimal, formatAmountWithWholeAndDecimal, removeCommasFromNumber, formatWithThousandSeparator };
+function formatBigInt(value: bigint, decimals: number): string {
+  return formatUnits(value, decimals);
+}
+
+function formatPercentage(value: bigint): string {
+  return (Number(value) / 10000).toFixed(2) + '%';
+}
+
+function formatAddress(address: string): string {
+  return `${address.slice(0, 6)}...${address.slice(-4)}`;
+}
+
+export {
+  formatNumberWithSuffix,
+  truncateDecimal,
+  formatAmountWithWholeAndDecimal,
+  removeCommasFromNumber,
+  formatWithThousandSeparator,
+  formatBigInt,
+  formatPercentage,
+  formatAddress,
+};
