@@ -10,6 +10,7 @@ export function useToken(publicClient: PublicClient, account: Address, refreshIn
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<number>(0);
+  const [chainId, setChainId] = useState<string | null>(null);
 
   const lpSugarContract = useContract(LP_SUGAR_ADDRESS, LPSugarABI, publicClient);
   const offchainOracleContract = useContract(OFFCHAIN_ORACLE_ADDRESS, OffchainOracleABI, publicClient);
@@ -36,11 +37,36 @@ export function useToken(publicClient: PublicClient, account: Address, refreshIn
     [offchainOracleContract]
   );
 
+  const getLogoUrl = useCallback(
+    (tokenAddress: Address): string => {
+      if (!chainId) {
+        console.warn('ChainId not available, unable to construct logo URL');
+        return '';
+      }
+      return `https://assets.smold.app/api/token/${chainId}/${tokenAddress}/logo-32.png`;
+    },
+    [chainId]
+  );
+
+  const fetchChainId = useCallback(async () => {
+    try {
+      const id = await publicClient.getChainId();
+      setChainId(id.toString());
+    } catch (error) {
+      console.error('Error fetching chainId:', error);
+      setError('Failed to fetch chainId');
+    }
+  }, [publicClient]);
+
   const fetchTokens = useCallback(
     async (forceRefresh: boolean = false) => {
       const now = Date.now();
       if (!forceRefresh && tokens.length > 0 && now - lastUpdated < refreshInterval) {
         return;
+      }
+
+      if (!chainId) {
+        await fetchChainId();
       }
 
       setLoading(true);
@@ -53,20 +79,22 @@ export function useToken(publicClient: PublicClient, account: Address, refreshIn
           account,
           OFFCHAIN_ORACLE_ADDRESS,
           CONNECTORS_BASE,
-        ])) as Omit<Token, 'usd_price'>[];
+        ])) as Omit<Token, 'usd_price' | 'logo_url'>[];
 
-        const tokensWithPrices = await Promise.all(
+        const tokensWithPricesAndLogos = await Promise.all(
           fetchedTokens.map(async (token) => {
             const usd_price = await getUsdPrice(token.token_address);
+            const logo_url = getLogoUrl(token.token_address);
             return {
               ...token,
               account_balance: formatBalance(token.account_balance as unknown as bigint, token.decimals),
               usd_price,
+              logo_url,
             };
           })
         );
 
-        setTokens(tokensWithPrices);
+        setTokens(tokensWithPricesAndLogos);
         setLastUpdated(now);
       } catch (err) {
         console.error('Error fetching tokens:', err);
