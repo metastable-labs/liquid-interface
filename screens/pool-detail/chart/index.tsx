@@ -27,31 +27,16 @@ const Chart = () => {
       <View style={styles.container}>
         <View style={styles.header}>
           <View style={styles.adjustmentContainer}>
-            <Text style={styles.adjustmentValue}>
-              ${formatNumberWithSuffix(value)}
-            </Text>
+            <Text style={styles.adjustmentValue}>${formatNumberWithSuffix(value)}</Text>
 
             <View style={styles.adjustmentAndPeriod}>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Ionicons
-                  name={increased ? 'arrow-up' : 'arrow-down'}
-                  size={12}
-                  color={adjustmentColors[+increased]}
-                />
+                <Ionicons name={increased ? 'arrow-up' : 'arrow-down'} size={12} color={adjustmentColors[+increased]} />
 
-                <Text
-                  style={[
-                    styles.adjustmentTexts,
-                    { color: adjustmentColors[+increased] },
-                  ]}
-                >
-                  {change.toFixed(2)}%
-                </Text>
+                <Text style={[styles.adjustmentTexts, { color: adjustmentColors[+increased] }]}>{change.toFixed(2)}%</Text>
               </View>
 
-              <Text style={[styles.adjustmentTexts, styles.periodText]}>
-                {period.text}
-              </Text>
+              <Text style={[styles.adjustmentTexts, styles.periodText]}>{period.text}</Text>
             </View>
           </View>
           <View style={styles.metrics}>
@@ -59,18 +44,8 @@ const Chart = () => {
               const active = metric === m;
 
               return (
-                <TouchableOpacity
-                  key={index}
-                  style={[styles.metric, active && styles.activeMetric]}
-                  onPress={() => setMetric(m)}
-                >
-                  <Text
-                    style={[
-                      styles.metricText,
-                      active && styles.activeMetricText,
-                      m === 'tvl' && { textTransform: 'uppercase' },
-                    ]}
-                  >
+                <TouchableOpacity key={index} style={[styles.metric, active && styles.activeMetric]} onPress={() => setMetric(m)}>
+                  <Text style={[styles.metricText, active && styles.activeMetricText, m === 'tvl' && { textTransform: 'uppercase' }]}>
                     {m}
                   </Text>
                 </TouchableOpacity>
@@ -87,16 +62,8 @@ const Chart = () => {
           const active = period.value === value;
 
           return (
-            <TouchableOpacity
-              key={index}
-              style={[styles.period, active && styles.activePeriod]}
-              onPress={() => setPeriod({ text, value })}
-            >
-              <Text
-                style={[styles.periodValue, active && styles.activePeriodValue]}
-              >
-                {value}
-              </Text>
+            <TouchableOpacity key={index} style={[styles.period, active && styles.activePeriod]} onPress={() => setPeriod({ text, value })}>
+              <Text style={[styles.periodValue, active && styles.activePeriodValue]}>{value}</Text>
             </TouchableOpacity>
           );
         })}

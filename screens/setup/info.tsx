@@ -1,18 +1,9 @@
 import { useState, useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming,
-  Easing,
-} from 'react-native-reanimated';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 
-const INFO_ICONS = [
-  'earth-outline',
-  'cloud-upload-outline',
-  'download-outline',
-];
+const INFO_ICONS = ['earth-outline', 'cloud-upload-outline', 'download-outline'];
 
 const INFO_TEXTS = [
   'You can manage your positions across multiple protocols on Liquid',
@@ -94,9 +85,7 @@ const Info = () => {
 
   return (
     <Animated.View style={[styles.infoContainer, animatedContainerStyle]}>
-      <Animated.View
-        style={[styles.infoIconContainer, animatedIconContainerStyle]}
-      >
+      <Animated.View style={[styles.infoIconContainer, animatedIconContainerStyle]}>
         {INFO_ICONS.map(
           (icon, index) =>
             index === infoSteps && (
@@ -108,20 +97,11 @@ const Info = () => {
       </Animated.View>
 
       <View style={styles.infoDetailContainer}>
-        <Animated.Text style={[styles.infoHeader, animatedHeaderStyle]}>
-          Did you know?
-        </Animated.Text>
+        <Animated.Text style={[styles.infoHeader, animatedHeaderStyle]}>Did you know?</Animated.Text>
         {INFO_TEXTS.map(
           (text, index) =>
             index === infoSteps && (
-              <Animated.Text
-                key={index}
-                style={[
-                  styles.infoParagraph,
-                  animatedParagraphStyle,
-                  animatedOpacityStyle(),
-                ]}
-              >
+              <Animated.Text key={index} style={[styles.infoParagraph, animatedParagraphStyle, animatedOpacityStyle()]}>
                 {text}
               </Animated.Text>
             )

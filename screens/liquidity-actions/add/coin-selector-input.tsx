@@ -1,12 +1,5 @@
 import { useEffect, useState } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  TextInput,
-  TouchableOpacity,
-} from 'react-native';
+import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 import { assets as tokens } from '@/screens/withdraw/dummy';
@@ -14,20 +7,11 @@ import { removeCommasFromNumber } from '@/utils/helpers';
 import { LQDAssetSelection } from '@/components';
 import { coinSelectorInputStyles as styles } from './styles';
 
-const CoinSelectorInput = ({
-  onChange,
-  setTokenId,
-  value,
-  disabled,
-  tokenId,
-}: ICoinSelectorInput) => {
-  const [token, setToken] = useState(
-    tokens.find((t) => t.id === tokenId) || tokens[0]
-  );
+const CoinSelectorInput = ({ onChange, setTokenId, value, disabled, tokenId }: ICoinSelectorInput) => {
+  const [token, setToken] = useState(tokens.find((t) => t.id === tokenId) || tokens[0]);
   const [showBottomSheet, setShowBottomSheet] = useState(false);
 
-  const invalidAmount =
-    parseFloat(removeCommasFromNumber(value)) > token?.balance!;
+  const invalidAmount = parseFloat(removeCommasFromNumber(value)) > token?.balance!;
 
   const setAsset = (asset: IAsset) => {
     setToken(asset);
@@ -46,15 +30,9 @@ const CoinSelectorInput = ({
         />
 
         <View style={styles.tokenContainer}>
-          <TouchableOpacity
-            style={styles.tokenSelector}
-            onPress={() => setShowBottomSheet(true)}
-          >
+          <TouchableOpacity style={styles.tokenSelector} onPress={() => setShowBottomSheet(true)}>
             <View style={styles.icon}>
-              <Image
-                source={{ uri: token?.iconUrl }}
-                style={{ width: 20, height: 20 }}
-              />
+              <Image source={{ uri: token?.iconUrl }} style={{ width: 20, height: 20 }} />
             </View>
 
             <Text style={styles.tokenText}>{token?.symbol}</Text>
@@ -63,14 +41,10 @@ const CoinSelectorInput = ({
           </TouchableOpacity>
 
           <View style={styles.balanceInfo}>
-            <Text
-              style={[styles.balanceTitle, invalidAmount && styles.invalidText]}
-            >
+            <Text style={[styles.balanceTitle, invalidAmount && styles.invalidText]}>
               {invalidAmount ? 'Not enough balance:' : 'Available:'}
             </Text>
-            <Text
-              style={[styles.balanceValue, invalidAmount && styles.invalidText]}
-            >
+            <Text style={[styles.balanceValue, invalidAmount && styles.invalidText]}>
               {token?.balance.toLocaleString()} {token?.symbol}
             </Text>
           </View>

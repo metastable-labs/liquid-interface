@@ -20,14 +20,8 @@ const LQDNumericKeyboard = ({ onKeyPress }: ILQDNumericKeyboard) => {
       {keys.map((row, rowIndex) => (
         <View key={rowIndex} style={styles.row}>
           {row.map((key) => (
-            <TouchableOpacity
-              key={key}
-              style={styles.key}
-              onPress={() => handleKeyPress(key)}
-            >
-              <Text style={key === '⌫' ? styles.backSpaceText : styles.keyText}>
-                {key}
-              </Text>
+            <TouchableOpacity key={key} style={styles.key} onPress={() => handleKeyPress(key)}>
+              <Text style={key === '⌫' ? styles.backSpaceText : styles.keyText}>{key}</Text>
             </TouchableOpacity>
           ))}
         </View>

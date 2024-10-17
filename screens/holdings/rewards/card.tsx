@@ -36,9 +36,7 @@ const RewardCard = ({
     },
     aero: {
       label: 'AERO rewards:',
-      render: (
-        <Text style={styles.rewardValue}>{aero?.toLocaleString()} AERO</Text>
-      ),
+      render: <Text style={styles.rewardValue}>{aero?.toLocaleString()} AERO</Text>,
     },
   };
 
@@ -47,17 +45,8 @@ const RewardCard = ({
       <View style={styles.topContainer}>
         <View style={styles.iconContainer}>
           {[primaryIconURL, secondaryIconURL].map((iconURL, index) => (
-            <View
-              key={index}
-              style={[
-                styles.icon,
-                index === 0 && { position: 'relative', zIndex: 1 },
-              ]}
-            >
-              <Image
-                source={{ uri: iconURL }}
-                style={{ width: 24, height: 24 }}
-              />
+            <View key={index} style={[styles.icon, index === 0 && { position: 'relative', zIndex: 1 }]}>
+              <Image source={{ uri: iconURL }} style={{ width: 24, height: 24 }} />
             </View>
           ))}
         </View>
@@ -84,9 +73,7 @@ const RewardCard = ({
               <View style={styles.separatorCircle} />
             </View>
 
-            <Text style={[styles.detailText, { color: '#64748B' }]}>
-              {fee}% Fee
-            </Text>
+            <Text style={[styles.detailText, { color: '#64748B' }]}>{fee}% Fee</Text>
           </View>
         </View>
       </View>

@@ -1,11 +1,5 @@
 import { Tabs } from 'expo-router';
-import {
-  Platform,
-  StatusBar,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Platform, StatusBar, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 import { TabBarIcon } from '@/components/navigation/TabBarIcon';
@@ -41,12 +35,7 @@ export default function TabLayout() {
           name="home"
           options={{
             title: 'Home',
-            tabBarIcon: ({ color, focused }) => (
-              <TabBarIcon
-                name={focused ? 'home' : 'home-outline'}
-                color={color}
-              />
-            ),
+            tabBarIcon: ({ color, focused }) => <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color} />,
           }}
         />
 
@@ -54,12 +43,7 @@ export default function TabLayout() {
           name="holdings"
           options={{
             title: 'Holdings',
-            tabBarIcon: ({ color, focused }) => (
-              <TabBarIcon
-                name={focused ? 'code-slash' : 'code-slash-outline'}
-                color={color}
-              />
-            ),
+            tabBarIcon: ({ color, focused }) => <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />,
           }}
         />
       </Tabs>

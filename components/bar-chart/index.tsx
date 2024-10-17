@@ -1,10 +1,5 @@
 import { View, StyleSheet } from 'react-native';
-import {
-  VictoryBar,
-  VictoryChart,
-  VictoryAxis,
-  VictoryTheme,
-} from 'victory-native';
+import { VictoryBar, VictoryChart, VictoryAxis, VictoryTheme } from 'victory-native';
 import { formatNumberWithSuffix } from '@/utils/helpers';
 import moment from 'moment';
 

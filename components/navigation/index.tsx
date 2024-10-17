@@ -1,29 +1,16 @@
 import { useState } from 'react';
 import { View, StyleSheet, LayoutChangeEvent } from 'react-native';
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withSpring,
-} from 'react-native-reanimated';
+import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 
 import LQDNavigationAction from './action';
 
-const LQDNavigation = ({
-  state,
-  descriptors,
-  navigation,
-}: BottomTabBarProps) => {
+const LQDNavigation = ({ state, descriptors, navigation }: BottomTabBarProps) => {
   return (
     <View style={styles.container}>
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];
-        const label =
-          options.tabBarLabel !== undefined
-            ? options.tabBarLabel
-            : options.title !== undefined
-              ? options.title
-              : route.name;
+        const label = options.tabBarLabel !== undefined ? options.tabBarLabel : options.title !== undefined ? options.title : route.name;
 
         const isFocused = state.index === index;
 

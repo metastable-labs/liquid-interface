@@ -1,12 +1,4 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Dimensions,
-  Modal,
-  Pressable,
-} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Modal, Pressable } from 'react-native';
 
 import { Ionicons } from '@expo/vector-icons';
 
@@ -20,25 +12,14 @@ interface ILQDBottomSheet {
   children?: React.ReactNode;
 }
 
-const LQDBottomSheet: React.FC<ILQDBottomSheet> = ({
-  title,
-  variant = 'primary',
-  show,
-  onClose,
-  children,
-}) => {
+const LQDBottomSheet: React.FC<ILQDBottomSheet> = ({ title, variant = 'primary', show, onClose, children }) => {
   const bottomSheetMaxHeights = {
     primary: height * 0.6,
     secondary: height * 0.83,
   };
 
   return (
-    <Modal
-      statusBarTranslucent
-      transparent
-      visible={show}
-      animationType="slide"
-    >
+    <Modal statusBarTranslucent transparent visible={show} animationType="slide">
       <Pressable style={styles.overlay} onPress={onClose} />
 
       <View

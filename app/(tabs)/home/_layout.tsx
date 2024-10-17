@@ -5,9 +5,7 @@ const HomeStack = () => {
   return (
     <Stack
       screenOptions={{
-        header: (props) => (
-          <LQDStackHeader {...props} style={{ paddingTop: 34 }} />
-        ),
+        header: (props) => <LQDStackHeader {...props} style={{ paddingTop: 34 }} />,
         headerShown: true,
       }}
     >

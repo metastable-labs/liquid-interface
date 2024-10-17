@@ -1,18 +1,9 @@
 import { useEffect, useState } from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  TextInput,
-  Platform,
-} from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 import { LQDButton, LQDNumericKeyboard } from '@/components';
-import {
-  formatWithThousandSeparator,
-  removeCommasFromNumber,
-} from '@/utils/helpers';
+import { formatWithThousandSeparator, removeCommasFromNumber } from '@/utils/helpers';
 import PaymentMethodSelection from '../method-selection';
 import styles from '../styles';
 
@@ -49,9 +40,7 @@ const DebitDeposit = () => {
 
   const handleAmountChange = (key: string) => {
     if (key === '⌫') {
-      return setAmount((prev) =>
-        formatWithThousandSeparator(prev.slice(0, -1))
-      );
+      return setAmount((prev) => formatWithThousandSeparator(prev.slice(0, -1)));
     }
     if (key === '.' && amount.includes('.')) {
       return;
@@ -78,9 +67,7 @@ const DebitDeposit = () => {
           <View style={styles.container}>
             <View style={styles.inputAndPayment}>
               <View style={styles.balanceAndInput}>
-                <Text style={styles.balanceText}>
-                  Bal: ${balance.toLocaleString()}
-                </Text>
+                <Text style={styles.balanceText}>Bal: ${balance.toLocaleString()}</Text>
 
                 <View style={styles.inputContainer}>
                   {amount && (
@@ -109,25 +96,16 @@ const DebitDeposit = () => {
                 </View>
               </View>
 
-              <TouchableOpacity
-                style={styles.paymentSelector}
-                onPress={() => setShowBottomSheet(true)}
-              >
+              <TouchableOpacity style={styles.paymentSelector} onPress={() => setShowBottomSheet(true)}>
                 <Ionicons name="cash-outline" size={18} color="#64748B" />
-                <Text style={[styles.selectorText, styles.paymentSelectorText]}>
-                  Debit card
-                </Text>
+                <Text style={[styles.selectorText, styles.paymentSelectorText]}>Debit card</Text>
                 <Ionicons name="chevron-down" size={18} color="#64748B" />
               </TouchableOpacity>
             </View>
 
             <View style={styles.balanceSelectorContainer}>
               {balancePartitions.map(({ text, action }) => (
-                <TouchableOpacity
-                  key={text}
-                  style={styles.balanceSelector}
-                  onPress={action}
-                >
+                <TouchableOpacity key={text} style={styles.balanceSelector} onPress={action}>
                   <Text style={styles.balanceSelectorText}>{text}</Text>
                 </TouchableOpacity>
               ))}
@@ -138,19 +116,11 @@ const DebitDeposit = () => {
         </View>
 
         <View style={styles.action}>
-          <LQDButton
-            title="Hold to confirm"
-            disabled={!parseFloat(amount)}
-            onLongPress={onSubmit}
-            variant="secondary"
-          />
+          <LQDButton title="Hold to confirm" disabled={!parseFloat(amount)} onLongPress={onSubmit} variant="secondary" />
         </View>
       </View>
 
-      <PaymentMethodSelection
-        close={() => setShowBottomSheet(false)}
-        show={showBottomSheet}
-      />
+      <PaymentMethodSelection close={() => setShowBottomSheet(false)} show={showBottomSheet} />
     </>
   );
 };

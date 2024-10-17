@@ -11,11 +11,7 @@ const Rewards = ({ type }: { type: RewardVariants }) => {
 
   const noOfRewards = rewards.length;
   return (
-    <ScrollView
-      style={styles.container}
-      contentContainerStyle={styles.contentContainer}
-      showsVerticalScrollIndicator={false}
-    >
+    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer} showsVerticalScrollIndicator={false}>
       <Text style={styles.header}>
         Rewards
         <Text style={styles.subHeader}> ({noOfRewards} pools)</Text>

@@ -1,22 +1,13 @@
 import { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Platform, StatusBar } from 'react-native';
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming,
-  Easing,
-} from 'react-native-reanimated';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing } from 'react-native-reanimated';
 
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { LQDButton } from '@/components';
 import Info from './info';
 import LQDLoadingStep from '@/components/loading-step';
 
-const setupIcons = [
-  'journal-outline',
-  'bar-chart-outline',
-  'checkmark-done-circle-outline',
-];
+const setupIcons = ['journal-outline', 'bar-chart-outline', 'checkmark-done-circle-outline'];
 
 const Setup = () => {
   const { router } = useSystemFunctions();
@@ -54,9 +45,7 @@ const Setup = () => {
   useEffect(() => {
     if (setupStep < 2) {
       const timeout = setTimeout(() => {
-        setCompletedSteps((prev) =>
-          prev.map((step, index) => (index === setupStep ? true : step))
-        );
+        setCompletedSteps((prev) => prev.map((step, index) => (index === setupStep ? true : step)));
 
         const interval = setTimeout(() => {
           setSetupStep((prev) => prev + 1);
@@ -109,11 +98,7 @@ const Setup = () => {
           <Info />
 
           <Animated.View style={animatedButtonStyle}>
-            <LQDButton
-              title="Let's go!"
-              onPress={() => router.replace('/(tabs)/home/')}
-              variant="secondary"
-            />
+            <LQDButton title="Let's go!" onPress={() => router.replace('/(tabs)/home/')} variant="secondary" />
           </Animated.View>
         </View>
       </View>

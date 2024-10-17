@@ -100,11 +100,7 @@ const Card = ({ details, subtitle, title, variant }: IItem) => {
             </View>
           </View>
 
-          <Ionicons
-            name="information-circle-outline"
-            size={20}
-            color={config[variant].secondaryColor}
-          />
+          <Ionicons name="information-circle-outline" size={20} color={config[variant].secondaryColor} />
         </View>
 
         <View style={styles.bottom}>
@@ -142,11 +138,7 @@ const Card = ({ details, subtitle, title, variant }: IItem) => {
               {variant === 'primary' ? 'View assets' : 'See all'}
             </Text>
 
-            <Ionicons
-              name="chevron-forward-outline"
-              size={14}
-              color={config[variant].secondaryColor}
-            />
+            <Ionicons name="chevron-forward-outline" size={14} color={config[variant].secondaryColor} />
           </View>
         </View>
       </View>

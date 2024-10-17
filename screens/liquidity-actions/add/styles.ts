@@ -304,10 +304,4 @@ const paymentMethodSelectionStyles = StyleSheet.create({
   },
 });
 
-export {
-  styles,
-  coinSelectorInputStyles,
-  errorStyles,
-  infoStyles,
-  paymentMethodSelectionStyles,
-};
+export { styles, coinSelectorInputStyles, errorStyles, infoStyles, paymentMethodSelectionStyles };
