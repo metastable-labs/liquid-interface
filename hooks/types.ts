@@ -87,4 +87,5 @@ export type Token = {
   decimals: number;
   account_balance: string;
   listed: boolean;
+  usd_price: string;
 };
