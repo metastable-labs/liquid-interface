@@ -91,7 +91,7 @@ export type Token = {
   logo_url: string;
 };
 
-export type EnhancedFormattedPool = Omit<FormattedPool, 'token0' | 'token1'> & {
+export type EnhancedFormattedPool = Omit<FormattedPool, 'token0' | 'token1' | 'TVL'> & {
   token0: Token;
   token1: Token;
   TVL: string;

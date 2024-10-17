@@ -101,7 +101,7 @@ function formatPosition(position: RawPosition, decimals: number): FormattedPosit
 
 const formatPoolFee = (fee: bigint): string => {
   const feeNumber = Number(fee);
-  return (feeNumber / 100).toFixed(2) + '%';
+  return (feeNumber / 100).toFixed(2);
 };
 
 export {
