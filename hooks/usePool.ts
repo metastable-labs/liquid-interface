@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Address, getContract, PublicClient } from 'viem';
+import { Address, PublicClient } from 'viem';
 import { useContract } from './useContract';
 import { formatBigInt, formatPercentage, formatAddress } from '@/utils/helpers';
 import { RawPool, FormattedPool, RawPosition, FormattedPosition } from './types';
