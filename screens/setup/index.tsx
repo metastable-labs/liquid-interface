@@ -11,6 +11,7 @@ import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { LQDButton } from '@/components';
 import Info from './info';
 import LQDLoadingStep from '@/components/loading-step';
+import { createSmartAccount } from '@/store/smartAccount/createSmartAccount';
 
 const setupIcons = [
   'journal-outline',
@@ -51,23 +52,30 @@ const Setup = () => {
     },
   ];
 
-  useEffect(() => {
-    if (setupStep < 2) {
-      const timeout = setTimeout(() => {
-        setCompletedSteps((prev) =>
-          prev.map((step, index) => (index === setupStep ? true : step))
-        );
+  useEffect(function createPasskey() {
+    createSmartAccount('mock-username');
+  }, []);
 
-        const interval = setTimeout(() => {
-          setSetupStep((prev) => prev + 1);
-        }, 500);
+  useEffect(
+    function progressInitialSteps() {
+      if (setupStep < 0) {
+        const timeout = setTimeout(() => {
+          setCompletedSteps((prev) =>
+            prev.map((step, index) => (index === setupStep ? true : step))
+          );
 
-        return () => clearTimeout(interval);
-      }, 4000);
+          const interval = setTimeout(() => {
+            setSetupStep((prev) => prev + 1);
+          }, 500);
 
-      return () => clearTimeout(timeout);
-    }
-  }, [setupStep]);
+          return () => clearTimeout(interval);
+        }, 4000);
+
+        return () => clearTimeout(timeout);
+      }
+    },
+    [setupStep]
+  );
 
   useEffect(() => {
     if (setupStep === 2) {
