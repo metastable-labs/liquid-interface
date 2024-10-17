@@ -88,6 +88,7 @@ export type Token = {
   account_balance: string;
   listed: boolean;
   usd_price: string;
+  logo_url: string;
 };
 
 export type EnhancedFormattedPool = Omit<FormattedPool, 'token0' | 'token1'> & {
