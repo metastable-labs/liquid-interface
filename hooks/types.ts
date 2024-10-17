@@ -80,3 +80,11 @@ export type FormattedPosition = {
   unstaked_earned1: string;
   emissions_earned: string;
 };
+
+export type Token = {
+  token_address: Address;
+  symbol: string;
+  decimals: number;
+  account_balance: string;
+  listed: boolean;
+};
