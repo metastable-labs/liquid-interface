@@ -91,11 +91,11 @@ export type Token = {
   logo_url: string;
 };
 
-export type EnhancedFormattedPool = Omit<FormattedPool, 'token0' | 'token1' | 'TVL' | 'volume0' | 'volume1' | 'cummulativeVolume'> & {
+export type EnhancedFormattedPool = Omit<FormattedPool, 'token0' | 'token1' | 'TVL' | 'volume0' | 'volume1' | 'cumulativeVolumeUSD'> & {
   token0: Token;
   token1: Token;
   TVL: string;
-  voume0: string;
+  volume0: string;
   volume1: string;
-  cummulativeVolume: string;
+  cumulativeVolumeUSD: string;
 };

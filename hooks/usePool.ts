@@ -23,6 +23,30 @@ export function usePool(publicClient: PublicClient, account: Address, refreshInt
     return (value0 + value1).toFixed(2);
   };
 
+  const calculateVolume = (
+    token0_fees: bigint,
+    token1_fees: bigint,
+    pool_fee: bigint,
+    token0: Token,
+    token1: Token
+  ): { volume0: string; volume1: string; cumulativeVolumeUSD: string } => {
+    const feePercentage = Number(pool_fee);
+
+    const volume0 = Number(formatUnits(token0_fees, token0.decimals)) / feePercentage;
+    const volume1 = Number(formatUnits(token1_fees, token1.decimals)) / feePercentage;
+
+    const volumeUSD0 = volume0 * Number(token0.usd_price);
+    const volumeUSD1 = volume1 * Number(token1.usd_price);
+
+    const cumulativeVolumeUSD = volumeUSD0 + volumeUSD1;
+
+    return {
+      volume0: volume0.toFixed(2),
+      volume1: volume1.toFixed(2),
+      cumulativeVolumeUSD: cumulativeVolumeUSD.toFixed(2),
+    };
+  };
+
   const fetchPoolStability = useCallback(
     async (poolAddress: Address): Promise<boolean> => {
       const poolContract = useContract(poolAddress, AerodromePoolABI, publicClient);
@@ -69,6 +93,13 @@ export function usePool(publicClient: PublicClient, account: Address, refreshInt
                 return null;
               }
               const tvl = calculateTVL(pool.reserve0, pool.reserve1, token0, token1);
+              const { volume0, volume1, cumulativeVolumeUSD } = calculateVolume(
+                pool.token0_fees,
+                pool.token1_fees,
+                pool.pool_fee,
+                token0,
+                token1
+              );
 
               return {
                 ...formattedPool,
@@ -76,6 +107,9 @@ export function usePool(publicClient: PublicClient, account: Address, refreshInt
                 token1,
                 pool_fee: formatPoolFee(pool.pool_fee),
                 TVL: tvl,
+                volume0,
+                volume1,
+                cumulativeVolumeUSD,
               } as EnhancedFormattedPool;
             })
           );
