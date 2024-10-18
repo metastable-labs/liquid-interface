@@ -67,7 +67,7 @@ const Home = () => {
         <View style={styles.balanceContainer}>
           <Text style={styles.balanceTitle}>Total Balance</Text>
 
-          <TouchableOpacity style={styles.balanceValueContainer}>
+          <TouchableOpacity onPress={() => router.push('/(tabs)/holdings')} style={styles.balanceValueContainer}>
             <Text style={styles.balanceWholeValue}>
               ${whole}.<Text style={styles.balanceDecimalValue}>{decimal}</Text>
             </Text>
