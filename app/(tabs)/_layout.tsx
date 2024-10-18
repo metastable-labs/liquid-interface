@@ -6,15 +6,19 @@ import { TabBarIcon } from '@/components/navigation/TabBarIcon';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { LQDNavigation, LQDSearch } from '@/components';
+import useSystemFunctions from '@/hooks/useSystemFunctions';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  const { appState } = useSystemFunctions();
 
   return (
     <>
-      <View style={styles.shortcut}>
-        <LQDSearch />
-      </View>
+      {!appState.hideSearch && (
+        <View style={styles.shortcut}>
+          <LQDSearch />
+        </View>
+      )}
 
       <Tabs
         screenOptions={{
