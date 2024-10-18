@@ -13,15 +13,7 @@ export default function TabLayout() {
   return (
     <>
       <View style={styles.shortcut}>
-        <TouchableOpacity>
-          <Ionicons name="time-outline" size={24} color="#333" />
-        </TouchableOpacity>
-
         <LQDSearch />
-
-        <TouchableOpacity>
-          <Ionicons name="settings-outline" size={24} color="#333" />
-        </TouchableOpacity>
       </View>
 
       <Tabs
