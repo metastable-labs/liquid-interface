@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Modal, Pressable } from 'react-native';
-
 import { Ionicons } from '@expo/vector-icons';
+
+import { adjustFontSizeForIOS } from '@/utils/helpers';
 
 const { height } = Dimensions.get('window');
 
@@ -71,7 +72,7 @@ const styles = StyleSheet.create({
 
   title: {
     color: '#0F172A',
-    fontSize: 20,
+    fontSize: adjustFontSizeForIOS(20, 3),
     lineHeight: 23.2,
     fontWeight: '500',
     fontFamily: 'AeonikMedium',

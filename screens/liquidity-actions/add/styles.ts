@@ -1,5 +1,7 @@
 import { StyleSheet } from 'react-native';
 
+import { adjustFontSizeForIOS } from '@/utils/helpers';
+
 const styles = StyleSheet.create({
   root: {
     paddingHorizontal: 16,
@@ -25,7 +27,7 @@ const styles = StyleSheet.create({
 
   title: {
     color: '#0F172A',
-    fontSize: 24,
+    fontSize: adjustFontSizeForIOS(24, 3),
     lineHeight: 26.88,
     letterSpacing: -0.6,
     fontWeight: '500',
@@ -35,7 +37,7 @@ const styles = StyleSheet.create({
 
   subtitle: {
     color: '#64748B',
-    fontSize: 14,
+    fontSize: adjustFontSizeForIOS(14, 2),
     lineHeight: 18.48,
     fontFamily: 'AeonikRegular',
   },
@@ -62,7 +64,7 @@ const styles = StyleSheet.create({
 
   errorText: {
     color: '#693D11',
-    fontSize: 12,
+    fontSize: adjustFontSizeForIOS(12, 2),
     lineHeight: 15.84,
     fontFamily: 'AeonikRegular',
   },
@@ -85,7 +87,7 @@ const coinSelectorInputStyles = StyleSheet.create({
 
   input: {
     color: '#1E293B',
-    fontSize: 24,
+    fontSize: adjustFontSizeForIOS(24, 3),
     lineHeight: 26.88,
     letterSpacing: -0.6,
     fontWeight: '500',
@@ -126,7 +128,7 @@ const coinSelectorInputStyles = StyleSheet.create({
 
   tokenText: {
     color: '#1E293B',
-    fontSize: 14,
+    fontSize: adjustFontSizeForIOS(14, 2),
     lineHeight: 18.48,
     fontWeight: '500',
     fontFamily: 'AeonikMedium',
@@ -142,7 +144,7 @@ const coinSelectorInputStyles = StyleSheet.create({
 
   balanceTitle: {
     color: '#64748B',
-    fontSize: 12,
+    fontSize: adjustFontSizeForIOS(12, 2),
     lineHeight: 15.84,
     textAlign: 'right',
     fontFamily: 'AeonikRegular',
@@ -150,7 +152,7 @@ const coinSelectorInputStyles = StyleSheet.create({
 
   balanceValue: {
     color: '#334155',
-    fontSize: 13,
+    fontSize: adjustFontSizeForIOS(13, 2),
     lineHeight: 16.12,
     textAlign: 'right',
     fontFamily: 'AeonikRegular',
@@ -173,7 +175,7 @@ const errorStyles = StyleSheet.create({
 
   title: {
     color: '#693D11',
-    fontSize: 16,
+    fontSize: adjustFontSizeForIOS(16, 2),
     lineHeight: 19.84,
     letterSpacing: -0.6,
     fontWeight: '500',
@@ -182,7 +184,7 @@ const errorStyles = StyleSheet.create({
 
   text: {
     color: '#693D11',
-    fontSize: 12,
+    fontSize: adjustFontSizeForIOS(12, 2),
     lineHeight: 15.84,
     fontFamily: 'AeonikRegular',
   },
@@ -217,14 +219,14 @@ const infoStyles = StyleSheet.create({
 
   title: {
     color: '#64748B',
-    fontSize: 15,
+    fontSize: adjustFontSizeForIOS(15, 2),
     lineHeight: 19.8,
     fontFamily: 'AeonikRegular',
   },
 
   value: {
     color: '#475569',
-    fontSize: 16,
+    fontSize: adjustFontSizeForIOS(16, 2),
     lineHeight: 19.2,
     fontWeight: '500',
     fontFamily: 'AeonikMedium',
@@ -262,7 +264,7 @@ const paymentMethodSelectionStyles = StyleSheet.create({
 
   text: {
     color: '#0F172A',
-    fontSize: 16,
+    fontSize: adjustFontSizeForIOS(16, 2),
     lineHeight: 19.2,
     fontWeight: '500',
     fontFamily: 'AeonikMedium',
@@ -295,7 +297,7 @@ const paymentMethodSelectionStyles = StyleSheet.create({
   },
 
   selectorText: {
-    fontSize: 13,
+    fontSize: adjustFontSizeForIOS(13, 2),
     lineHeight: 16.12,
     fontWeight: '500',
     textAlign: 'center',

@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { LQDButton } from '@/components';
 import { ILQDButton } from '@/components/button/types';
+import { adjustFontSizeForIOS } from '@/utils/helpers';
 import Card from './card';
 import Empty from './empty';
 import { emptyData } from './dummy';
@@ -157,14 +158,14 @@ const styles = StyleSheet.create({
 
   balanceText: {
     color: '#64748B',
-    fontSize: 13,
+    fontSize: adjustFontSizeForIOS(13, 2),
     lineHeight: 16.12,
     fontFamily: 'AeonikRegular',
   },
 
   balanceValue: {
     color: '#0F172A',
-    fontSize: 36,
+    fontSize: adjustFontSizeForIOS(36, 4),
     lineHeight: 40.32,
     fontWeight: '700',
     fontFamily: 'QuantaGroteskProBold',

@@ -4,7 +4,7 @@
     "slug": "liquid",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/liquid-icon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {
@@ -18,7 +18,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/liquid-adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.liquid.supermigrate"

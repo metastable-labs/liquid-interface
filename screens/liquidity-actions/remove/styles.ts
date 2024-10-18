@@ -1,5 +1,7 @@
 import { StyleSheet } from 'react-native';
 
+import { adjustFontSizeForIOS } from '@/utils/helpers';
+
 const styles = StyleSheet.create({
   root: {
     paddingHorizontal: 16,
@@ -24,7 +26,7 @@ const styles = StyleSheet.create({
 
   title: {
     color: '#0F172A',
-    fontSize: 24,
+    fontSize: adjustFontSizeForIOS(24, 3),
     lineHeight: 26.88,
     letterSpacing: -0.6,
     fontWeight: '500',
@@ -34,7 +36,7 @@ const styles = StyleSheet.create({
 
   subtitle: {
     color: '#64748B',
-    fontSize: 14,
+    fontSize: adjustFontSizeForIOS(14, 2),
     lineHeight: 18.48,
     fontFamily: 'AeonikRegular',
   },
@@ -64,7 +66,7 @@ const styles = StyleSheet.create({
 
   pairText: {
     color: '#1E293B',
-    fontSize: 14,
+    fontSize: adjustFontSizeForIOS(14, 2),
     lineHeight: 18.48,
     fontWeight: '500',
     fontFamily: 'AeonikMedium',
@@ -111,7 +113,7 @@ const styles = StyleSheet.create({
 
   coinTitle: {
     color: '#1A2001',
-    fontSize: 14,
+    fontSize: adjustFontSizeForIOS(14, 2),
     lineHeight: 18.48,
     fontWeight: '500',
     fontFamily: 'AeonikMedium',
@@ -125,7 +127,7 @@ const styles = StyleSheet.create({
 
   depositionBase: {
     color: '#64748B',
-    fontSize: 12,
+    fontSize: adjustFontSizeForIOS(12, 2),
     lineHeight: 15.84,
     fontFamily: 'AeonikRegular',
     textAlign: 'right',
@@ -133,7 +135,7 @@ const styles = StyleSheet.create({
 
   depositionValue: {
     color: '#334155',
-    fontSize: 13,
+    fontSize: adjustFontSizeForIOS(13, 2),
     lineHeight: 16.12,
     fontFamily: 'AeonikRegular',
     textAlign: 'right',
@@ -146,14 +148,14 @@ const styles = StyleSheet.create({
 
   receiveTitle: {
     color: '#475569',
-    fontSize: 14,
+    fontSize: adjustFontSizeForIOS(14, 2),
     lineHeight: 18.48,
     fontFamily: 'AeonikRegular',
   },
 
   receivePrimaryValue: {
     color: '#475569',
-    fontSize: 14,
+    fontSize: adjustFontSizeForIOS(14, 2),
     lineHeight: 18.48,
     fontWeight: '500',
     fontFamily: 'AeonikMedium',
@@ -161,7 +163,7 @@ const styles = StyleSheet.create({
 
   receiveSecondaryValue: {
     color: '#94A3B8',
-    fontSize: 11,
+    fontSize: adjustFontSizeForIOS(11, 2),
     fontWeight: '500',
     fontFamily: 'AeonikMedium',
   },

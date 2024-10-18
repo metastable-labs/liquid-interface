@@ -5,6 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 import useTruncateText from '@/hooks/useTruncateText';
 import useCopy from '@/hooks/useCopy';
+import { adjustFontSizeForIOS } from '@/utils/helpers';
 import PaymentMethodSelection from '../method-selection';
 import sharedStyles from '../styles';
 
@@ -94,7 +95,7 @@ const styles = StyleSheet.create({
 
   copyText: {
     color: '#FFF',
-    fontSize: 13,
+    fontSize: adjustFontSizeForIOS(13, 2),
     lineHeight: 16.12,
     fontWeight: '500',
     fontFamily: 'AeonikMedium',
@@ -117,7 +118,7 @@ const styles = StyleSheet.create({
 
   text: {
     color: '#162664',
-    fontSize: 14,
+    fontSize: adjustFontSizeForIOS(14, 2),
     lineHeight: 18.48,
     textAlign: 'center',
     fontFamily: 'AeonikRegular',

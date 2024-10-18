@@ -1,4 +1,6 @@
 import { Text, View, StyleSheet, Image } from 'react-native';
+
+import { adjustFontSizeForIOS } from '@/utils/helpers';
 import { ILQDOnboardingStep } from './types';
 
 const LQDOnboardingStep = ({
@@ -38,7 +40,7 @@ const styles = StyleSheet.create({
 
   title: {
     fontFamily: 'QuantaGroteskProBold',
-    fontSize: 48,
+    fontSize: adjustFontSizeForIOS(48, 5),
     fontWeight: '700',
     lineHeight: 53,
     letterSpacing: -0.96,
@@ -47,7 +49,7 @@ const styles = StyleSheet.create({
   },
 
   subtitle: {
-    fontSize: 18,
+    fontSize: adjustFontSizeForIOS(18, 2),
     lineHeight: 22.32,
     paddingHorizontal: 16,
     fontFamily: 'AeonikRegular',

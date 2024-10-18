@@ -6,23 +6,19 @@ import { TabBarIcon } from '@/components/navigation/TabBarIcon';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { LQDNavigation, LQDSearch } from '@/components';
+import useSystemFunctions from '@/hooks/useSystemFunctions';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  const { appState } = useSystemFunctions();
 
   return (
     <>
-      <View style={styles.shortcut}>
-        <TouchableOpacity>
-          <Ionicons name="time-outline" size={24} color="#333" />
-        </TouchableOpacity>
-
-        <LQDSearch />
-
-        <TouchableOpacity>
-          <Ionicons name="settings-outline" size={24} color="#333" />
-        </TouchableOpacity>
-      </View>
+      {!appState.hideSearch && (
+        <View style={styles.shortcut}>
+          <LQDSearch />
+        </View>
+      )}
 
       <Tabs
         screenOptions={{

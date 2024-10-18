@@ -3,6 +3,8 @@ import { View, Text, StyleSheet, Image } from 'react-native';
 import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import ImageColors from 'react-native-image-colors';
 
+import { adjustFontSizeForIOS } from '@/utils/helpers';
+
 const PoolLiquidity = ({
   primaryIconURL,
   primaryBalance,
@@ -101,7 +103,7 @@ const styles = StyleSheet.create({
 
   title: {
     color: '#1A2001',
-    fontSize: 16,
+    fontSize: adjustFontSizeForIOS(16, 2),
     lineHeight: 19.2,
     fontWeight: '500',
     fontFamily: 'AeonikMedium',
@@ -143,7 +145,7 @@ const styles = StyleSheet.create({
 
   primaryText: {
     color: '#0A0D14',
-    fontSize: 16,
+    fontSize: adjustFontSizeForIOS(16, 2),
     lineHeight: 19.84,
     fontWeight: '500',
     fontFamily: 'AeonikMedium',
@@ -156,7 +158,7 @@ const styles = StyleSheet.create({
 
   secondaryText: {
     color: '#525866',
-    fontSize: 14,
+    fontSize: adjustFontSizeForIOS(14, 2),
     lineHeight: 18.48,
     textAlign: 'center',
   },

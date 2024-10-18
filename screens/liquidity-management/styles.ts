@@ -1,5 +1,7 @@
 import { StyleSheet } from 'react-native';
 
+import { adjustFontSizeForIOS } from '@/utils/helpers';
+
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 16,
@@ -49,7 +51,7 @@ const styles = StyleSheet.create({
   },
 
   tabText: {
-    fontSize: 14,
+    fontSize: adjustFontSizeForIOS(14, 2),
     lineHeight: 18.48,
     textTransform: 'capitalize',
     fontFamily: 'AeonikRegular',
@@ -71,7 +73,7 @@ const styles = StyleSheet.create({
 
   detailTitle: {
     color: '#0F172A',
-    fontSize: 24,
+    fontSize: adjustFontSizeForIOS(24, 3),
     lineHeight: 26.88,
     letterSpacing: -0.6,
     fontWeight: '500',
@@ -81,7 +83,7 @@ const styles = StyleSheet.create({
 
   detailSubtitle: {
     color: '#64748B',
-    fontSize: 14,
+    fontSize: adjustFontSizeForIOS(14, 2),
     lineHeight: 18.48,
     fontFamily: 'AeonikRegular',
   },
@@ -110,7 +112,7 @@ const styles = StyleSheet.create({
 
   input: {
     color: '#1E293B',
-    fontSize: 24,
+    fontSize: adjustFontSizeForIOS(24, 3),
     lineHeight: 26.88,
     letterSpacing: -0.6,
     fontWeight: '500',
@@ -157,7 +159,7 @@ const styles = StyleSheet.create({
 
   pairText: {
     color: '#1E293B',
-    fontSize: 14,
+    fontSize: adjustFontSizeForIOS(14, 2),
     lineHeight: 18.48,
     fontWeight: '500',
     fontFamily: 'AeonikMedium',
@@ -172,7 +174,7 @@ const styles = StyleSheet.create({
 
   balanceTitle: {
     color: '#64748B',
-    fontSize: 12,
+    fontSize: adjustFontSizeForIOS(12, 2),
     lineHeight: 15.84,
     textAlign: 'right',
     fontFamily: 'AeonikRegular',
@@ -180,7 +182,7 @@ const styles = StyleSheet.create({
 
   balanceValue: {
     color: '#334155',
-    fontSize: 13,
+    fontSize: adjustFontSizeForIOS(13, 2),
     lineHeight: 16.12,
     textAlign: 'right',
     fontFamily: 'AeonikRegular',
@@ -209,7 +211,7 @@ const styles = StyleSheet.create({
 
   partitionText: {
     color: '#334155',
-    fontSize: 13,
+    fontSize: adjustFontSizeForIOS(13, 2),
     lineHeight: 16.12,
     fontWeight: '500',
     fontFamily: 'AeonikMedium',
@@ -234,7 +236,7 @@ const styles = StyleSheet.create({
 
   actionText: {
     color: '#fff',
-    fontSize: 16,
+    fontSize: adjustFontSizeForIOS(16, 2),
     lineHeight: 16,
     fontWeight: '600',
     fontFamily: 'ClashDisplaySemibold',

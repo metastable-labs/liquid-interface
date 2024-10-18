@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-import { formatNumberWithSuffix } from '@/utils/helpers';
+import { adjustFontSizeForIOS, formatNumberWithSuffix } from '@/utils/helpers';
 
 const PoolStats = () => {
   const stats = [
@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
 
   title: {
     color: '#1A2001',
-    fontSize: 16,
+    fontSize: adjustFontSizeForIOS(16, 2),
     lineHeight: 19.2,
     fontWeight: '500',
     fontFamily: 'AeonikMedium',
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
 
   metric: {
     color: '#64748B',
-    fontSize: 15,
+    fontSize: adjustFontSizeForIOS(15, 2),
     lineHeight: 19.8,
   },
 });

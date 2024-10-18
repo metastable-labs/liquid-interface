@@ -2,6 +2,8 @@ import React, { useEffect } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import Animated, { useSharedValue, withTiming, useAnimatedStyle, Easing } from 'react-native-reanimated';
 
+import { adjustFontSizeForIOS } from '@/utils/helpers';
+
 const LQDOnboardingIndicator = ({ currentStep, isPaused, timer, totalSteps, finished, togglePause }: ILQDOnboardingIndicator) => {
   const actions = [require('../../../assets/images/pause.png'), require('../../../assets/images/play.png')];
 
@@ -89,7 +91,7 @@ const styles = StyleSheet.create({
     height: 30,
   },
   logoText: {
-    fontSize: 12,
+    fontSize: adjustFontSizeForIOS(12, 2),
     fontWeight: '500',
     lineHeight: 15.84,
     color: '#FFF',

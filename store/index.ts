@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist';
 
 import userReducer from './user';
+import appReducer from './app';
 
 export interface CallbackProps {
   onSuccess?: Function;
@@ -12,6 +13,7 @@ export interface CallbackProps {
 
 const rootReducer = combineReducers({
   user: userReducer,
+  app: appReducer,
 });
 
 const persistConfig = {

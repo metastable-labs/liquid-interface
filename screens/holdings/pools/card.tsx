@@ -1,8 +1,8 @@
 import { View, Text, StyleSheet, Image, Pressable } from 'react-native';
 
-import PoolCardAction from './action';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
+import { adjustFontSizeForIOS } from '@/utils/helpers';
+import PoolCardAction from './action';
 
 const PoolCard = ({
   fees,
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
 
   detailHeader: {
     color: '#1E293B',
-    fontSize: 14,
+    fontSize: adjustFontSizeForIOS(14, 2),
     lineHeight: 18.48,
     fontWeight: '500',
     fontFamily: 'AeonikMedium',
@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
   },
 
   detailText: {
-    fontSize: 11,
+    fontSize: adjustFontSizeForIOS(11, 2),
     lineHeight: 13.64,
     fontFamily: 'AeonikRegular',
   },
@@ -178,14 +178,14 @@ const styles = StyleSheet.create({
 
   balanceLabel: {
     color: '#64748B',
-    fontSize: 11,
+    fontSize: adjustFontSizeForIOS(11, 2),
     lineHeight: 13.64,
     fontFamily: 'AeonikRegular',
   },
 
   balanceValue: {
     color: '#334155',
-    fontSize: 13,
+    fontSize: adjustFontSizeForIOS(13, 2),
     lineHeight: 16.12,
     fontWeight: '500',
     fontFamily: 'AeonikMedium',

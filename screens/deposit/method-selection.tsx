@@ -1,9 +1,10 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { Href } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 
 import { LQDBottomSheet } from '@/components';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
-import { Href } from 'expo-router';
+import { adjustFontSizeForIOS } from '@/utils/helpers';
 import { IMethod, IPaymentMethodSelection } from './types';
 
 const PaymentMethodSelection = ({ close, show }: IPaymentMethodSelection) => {
@@ -92,7 +93,7 @@ const styles = StyleSheet.create({
 
   text: {
     color: '#0F172A',
-    fontSize: 16,
+    fontSize: adjustFontSizeForIOS(16, 2),
     lineHeight: 19.2,
     fontWeight: '500',
     fontFamily: 'AeonikMedium',

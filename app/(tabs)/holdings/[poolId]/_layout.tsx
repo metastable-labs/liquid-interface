@@ -4,9 +4,12 @@ import { Stack } from 'expo-router';
 import { LQDButton, LQDStackHeader } from '@/components';
 import { ILQDButton } from '@/components/button/types';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
+import { useEffect } from 'react';
+import useAppActions from '@/store/app/actions';
 
 const PoolDetailLayout = () => {
   const { router } = useSystemFunctions();
+  const { hideSearch } = useAppActions();
 
   const actions: Array<ILQDButton> = [
     {
@@ -20,6 +23,12 @@ const PoolDetailLayout = () => {
       variant: 'tertiaryOutline',
     },
   ];
+
+  useEffect(() => {
+    hideSearch(true);
+
+    return () => hideSearch(false);
+  }, []);
 
   return (
     <>

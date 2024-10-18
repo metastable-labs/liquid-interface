@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { debounce } from 'lodash';
 import Animated, { useSharedValue, withTiming, useAnimatedStyle } from 'react-native-reanimated';
 
+import { adjustFontSizeForIOS } from '@/utils/helpers';
 import LQDInput from '../input';
 
 const LQDSearch = () => {
@@ -93,13 +94,13 @@ const styles = StyleSheet.create({
   },
   resultText: {
     padding: 10,
-    fontSize: 16,
+    fontSize: adjustFontSizeForIOS(16, 2),
     borderBottomWidth: 1,
     borderBottomColor: '#eee',
   },
   noResultText: {
     padding: 10,
-    fontSize: 16,
+    fontSize: adjustFontSizeForIOS(16, 2),
     textAlign: 'center',
     color: '#999',
   },

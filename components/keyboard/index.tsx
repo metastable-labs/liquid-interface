@@ -2,6 +2,8 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import * as Haptics from 'expo-haptics';
 
+import { adjustFontSizeForIOS } from '@/utils/helpers';
+
 const LQDNumericKeyboard = ({ onKeyPress }: ILQDNumericKeyboard) => {
   const keys = [
     ['1', '2', '3'],
@@ -50,13 +52,13 @@ const styles = StyleSheet.create({
   },
   keyText: {
     color: '#020617',
-    fontSize: 28,
+    fontSize: adjustFontSizeForIOS(28, 4),
     lineHeight: 31.36,
     fontWeight: '700',
     fontFamily: 'QuantaGroteskProBold',
   },
   backSpaceText: {
-    fontSize: 29,
+    fontSize: adjustFontSizeForIOS(29, 4),
     lineHeight: 32.48,
     fontFamily: 'ClashDisplayBold',
     transform: [{ scale: 1.3 }],

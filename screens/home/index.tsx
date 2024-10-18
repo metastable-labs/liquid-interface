@@ -2,7 +2,7 @@ import { StyleSheet, View, Text, FlatList, ScrollView, TouchableOpacity } from '
 import { Ionicons } from '@expo/vector-icons';
 
 import useSystemFunctions from '@/hooks/useSystemFunctions';
-import { formatAmountWithWholeAndDecimal } from '@/utils/helpers';
+import { adjustFontSizeForIOS, formatAmountWithWholeAndDecimal } from '@/utils/helpers';
 import { LQDButton, LQDPoolPairCard, LQDPoolPairPaper } from '@/components';
 import { topGainers, poolPairs } from './dummy';
 import Section from './section';
@@ -67,7 +67,7 @@ const Home = () => {
         <View style={styles.balanceContainer}>
           <Text style={styles.balanceTitle}>Total Balance</Text>
 
-          <TouchableOpacity style={styles.balanceValueContainer}>
+          <TouchableOpacity onPress={() => router.push('/(tabs)/holdings')} style={styles.balanceValueContainer}>
             <Text style={styles.balanceWholeValue}>
               ${whole}.<Text style={styles.balanceDecimalValue}>{decimal}</Text>
             </Text>
@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
 
   balanceTitle: {
     color: '#F8FAFC',
-    fontSize: 13,
+    fontSize: adjustFontSizeForIOS(13, 2),
     lineHeight: 16.12,
     fontFamily: 'AeonikRegular',
   },
@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
 
   balanceWholeValue: {
     color: '#FFF',
-    fontSize: 36,
+    fontSize: adjustFontSizeForIOS(36, 4),
     lineHeight: 40.32,
     fontWeight: '700',
     fontFamily: 'QuantaGroteskProBold',
@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
 
   balanceDecimalValue: {
     color: '#FFF',
-    fontSize: 24,
+    fontSize: adjustFontSizeForIOS(24, 3),
     letterSpacing: -0.6,
     fontWeight: '500',
     fontFamily: 'QuantaGroteskProMedium',

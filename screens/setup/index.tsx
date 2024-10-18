@@ -4,8 +4,9 @@ import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing } from '
 
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { LQDButton } from '@/components';
-import Info from './info';
+import { adjustFontSizeForIOS } from '@/utils/helpers';
 import LQDLoadingStep from '@/components/loading-step';
+import Info from './info';
 
 const setupIcons = ['journal-outline', 'bar-chart-outline', 'checkmark-done-circle-outline'];
 
@@ -134,7 +135,7 @@ const styles = StyleSheet.create({
 
   header: {
     color: '#181E00',
-    fontSize: 24,
+    fontSize: adjustFontSizeForIOS(24, 3),
     lineHeight: 26.88,
     letterSpacing: -0.6,
     fontWeight: '500',

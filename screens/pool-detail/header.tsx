@@ -1,6 +1,8 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
+import { adjustFontSizeForIOS } from '@/utils/helpers';
+
 const Header = ({ condition, fee, id, primaryIconURL, primaryTitle, secondaryIconURL, secondaryTitle }: IPool) => {
   const flagColors = {
     stable: '#B47818',
@@ -100,7 +102,7 @@ const styles = StyleSheet.create({
 
   detailHeader: {
     color: '#1E293B',
-    fontSize: 14,
+    fontSize: adjustFontSizeForIOS(14, 2),
     lineHeight: 18.48,
     fontWeight: '500',
     fontFamily: 'AeonikMedium',
@@ -114,7 +116,7 @@ const styles = StyleSheet.create({
   },
 
   detailText: {
-    fontSize: 11,
+    fontSize: adjustFontSizeForIOS(11, 2),
     lineHeight: 13.64,
     fontFamily: 'AeonikRegular',
   },

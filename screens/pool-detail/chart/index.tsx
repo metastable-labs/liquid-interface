@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-import { formatNumberWithSuffix } from '@/utils/helpers';
+import { adjustFontSizeForIOS, formatNumberWithSuffix } from '@/utils/helpers';
 import { LQDBarChart } from '@/components';
 import { generateData, metrics, periods } from './dummy';
 
@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
 
   adjustmentValue: {
     color: '#1A2001',
-    fontSize: 36,
+    fontSize: adjustFontSizeForIOS(36, 4),
     lineHeight: 40.32,
     fontWeight: '500',
     fontFamily: 'AeonikMedium',
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
   },
 
   adjustmentTexts: {
-    fontSize: 13,
+    fontSize: adjustFontSizeForIOS(13, 2),
     lineHeight: 16.12,
     fontFamily: 'AeonikRegular',
   },
@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
 
   metricText: {
     color: '#64748B',
-    fontSize: 14,
+    fontSize: adjustFontSizeForIOS(14, 2),
     lineHeight: 18.48,
     fontFamily: 'AeonikRegular',
     textTransform: 'capitalize',
@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
 
   periodValue: {
     color: '#64748B',
-    fontSize: 16,
+    fontSize: adjustFontSizeForIOS(16, 2),
     lineHeight: 19.84,
     fontFamily: 'AeonikRegular',
     textTransform: 'uppercase',

@@ -3,6 +3,8 @@ import { View, StyleSheet } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 
+import { adjustFontSizeForIOS } from '@/utils/helpers';
+
 const INFO_ICONS = ['earth-outline', 'cloud-upload-outline', 'download-outline'];
 
 const INFO_TEXTS = [
@@ -137,7 +139,7 @@ const styles = StyleSheet.create({
   },
 
   infoHeader: {
-    fontSize: 18,
+    fontSize: adjustFontSizeForIOS(18, 2),
     lineHeight: 27,
     letterSpacing: -0.36,
     fontWeight: '600',
@@ -145,7 +147,7 @@ const styles = StyleSheet.create({
   },
 
   infoParagraph: {
-    fontSize: 14,
+    fontSize: adjustFontSizeForIOS(14, 2),
     lineHeight: 21,
     fontWeight: '500',
     fontFamily: 'AeonikMedium',

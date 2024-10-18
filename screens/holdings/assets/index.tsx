@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { LQDButton } from '@/components';
 import { ILQDButton } from '@/components/button/types';
+import { adjustFontSizeForIOS } from '@/utils/helpers';
 import AssetPaper from './paper';
 
 const holdings = 1_234_567.89;
@@ -21,7 +22,7 @@ const Assets = () => {
     },
     {
       title: 'Withdraw',
-      onPress: () => console.log('Withdraw'),
+      onPress: () => router.push('/withdraw'),
       variant: 'tertiaryOutline',
       fullWidth: false,
       icon: 'arrow-up',
@@ -111,14 +112,14 @@ const styles = StyleSheet.create({
 
   balanceText: {
     color: '#64748B',
-    fontSize: 13,
+    fontSize: adjustFontSizeForIOS(13, 2),
     lineHeight: 16.12,
     fontFamily: 'AeonikRegular',
   },
 
   balanceValue: {
     color: '#0F172A',
-    fontSize: 36,
+    fontSize: adjustFontSizeForIOS(36, 4),
     lineHeight: 40.32,
     fontWeight: '700',
     fontFamily: 'QuantaGroteskProBold',
@@ -140,7 +141,7 @@ const styles = StyleSheet.create({
 
   assetLabel: {
     color: '#0F172A',
-    fontSize: 20,
+    fontSize: adjustFontSizeForIOS(20, 3),
     lineHeight: 23.2,
     fontWeight: '500',
     fontFamily: 'AeonikMedium',
