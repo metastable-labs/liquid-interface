@@ -30,10 +30,8 @@ export function usePool(publicClient: PublicClient, account: Address, refreshInt
     token0: Token,
     token1: Token
   ): { volume0: string; volume1: string; cumulativeVolumeUSD: string } => {
-    const feePercentage = Number(pool_fee);
-
-    const volume0 = Number(formatUnits(token0_fees, token0.decimals)) / feePercentage;
-    const volume1 = Number(formatUnits(token1_fees, token1.decimals)) / feePercentage;
+    const volume0 = Number(formatUnits(token0_fees, token0.decimals)) * Number(pool_fee);
+    const volume1 = Number(formatUnits(token1_fees, token1.decimals)) * Number(pool_fee);
 
     const volumeUSD0 = volume0 * Number(token0.usd_price);
     const volumeUSD1 = volume1 * Number(token1.usd_price);
