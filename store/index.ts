@@ -5,6 +5,7 @@ import { FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist
 
 import userReducer from './user';
 import appReducer from './app';
+import smartAccountReducer from './smartAccount';
 
 export interface CallbackProps {
   onSuccess?: Function;
@@ -14,6 +15,7 @@ export interface CallbackProps {
 const rootReducer = combineReducers({
   user: userReducer,
   app: appReducer,
+  smartAccount: smartAccountReducer,
 });
 
 const persistConfig = {

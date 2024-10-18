@@ -4,6 +4,7 @@ import { View, Text, StyleSheet, Platform, StatusBar, TextInput } from 'react-na
 import { LQDButton } from '@/components';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
+import { useUserActions } from '@/store/user/actions';
 
 const dummyUsernames = ['bambam', 'meister', 'njoku', 'static', 'choco'];
 
@@ -24,9 +25,12 @@ const Tag = () => {
     setTag(value);
   };
 
+  const { setUser } = useUserActions();
+
   const onSubmit = () => {
     console.log('tag', tag);
     if (tag.length < 3) return;
+    setUser({ id: '1', username: tag });
     router.replace('/setup');
   };
 
@@ -63,6 +67,10 @@ const Tag = () => {
                 placeholder="@yourtag"
                 placeholderTextColor="#94A3B8"
                 autoCapitalize="none"
+                autoComplete="off"
+                autoCorrect={false}
+                spellCheck={false}
+                autoFocus={true}
               />
             </View>
 
