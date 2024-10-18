@@ -22,7 +22,7 @@ const Assets = () => {
     },
     {
       title: 'Withdraw',
-      onPress: () => console.log('Withdraw'),
+      onPress: () => router.push('/withdraw'),
       variant: 'tertiaryOutline',
       fullWidth: false,
       icon: 'arrow-up',
