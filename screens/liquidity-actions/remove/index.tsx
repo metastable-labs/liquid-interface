@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { View, Text, ScrollView, Image } from 'react-native';
 
 import { LQDButton } from '@/components';
+import { adjustFontSizeForIOS } from '@/utils/helpers';
 import { styles } from './styles';
 import PercentageSetter from './percentage-setter';
 
@@ -106,7 +107,7 @@ const RemoveLiquidity = () => {
                   <Image source={{ uri: iconURL || ICON_PLACEHOLDER }} style={{ width: 18, height: 18 }} />
                 </View>
 
-                <Text style={[styles.coinTitle, { fontSize: 16, lineHeight: 19.2 }]}>{title}</Text>
+                <Text style={[styles.coinTitle, { fontSize: adjustFontSizeForIOS(16, 2), lineHeight: 19.2 }]}>{title}</Text>
               </View>
 
               <Text style={styles.receivePrimaryValue}>

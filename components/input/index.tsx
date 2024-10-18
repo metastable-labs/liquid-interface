@@ -3,6 +3,7 @@ import { Controller, FieldValues } from 'react-hook-form';
 import { TextInput, Text, View, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
+import { adjustFontSizeForIOS } from '@/utils/helpers';
 import { ILQDInput } from './types';
 
 const LQDInput = <T extends FieldValues>({ control, name, inputProps, label, placeholder, rules, variant = 'primary' }: ILQDInput<T>) => {
@@ -55,12 +56,12 @@ const styles = StyleSheet.create({
   },
   label: {
     marginBottom: 8,
-    fontSize: 16,
+    fontSize: adjustFontSizeForIOS(16, 2),
     fontWeight: 'bold',
   },
   input: {
     flex: 1,
-    fontSize: 14,
+    fontSize: adjustFontSizeForIOS(14, 2),
     lineHeight: 18.48,
     color: '#94A3B8',
     fontFamily: 'AeonikRegular',

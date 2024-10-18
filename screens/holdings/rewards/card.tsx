@@ -1,3 +1,4 @@
+import { adjustFontSizeForIOS } from '@/utils/helpers';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 
 const RewardCard = ({
@@ -138,7 +139,7 @@ const styles = StyleSheet.create({
 
   detailHeader: {
     color: '#1E293B',
-    fontSize: 14,
+    fontSize: adjustFontSizeForIOS(14, 2),
     lineHeight: 18.48,
     fontWeight: '500',
   },
@@ -151,7 +152,7 @@ const styles = StyleSheet.create({
   },
 
   detailText: {
-    fontSize: 11,
+    fontSize: adjustFontSizeForIOS(11, 2),
     lineHeight: 13.64,
   },
 
@@ -207,13 +208,13 @@ const styles = StyleSheet.create({
 
   rewardLabel: {
     color: '#64748B',
-    fontSize: 11,
+    fontSize: adjustFontSizeForIOS(11, 2),
     lineHeight: 13.64,
   },
 
   rewardValue: {
     color: '#334155',
-    fontSize: 13,
+    fontSize: adjustFontSizeForIOS(13, 2),
     lineHeight: 16.12,
     fontWeight: '500',
   },
@@ -230,7 +231,7 @@ const styles = StyleSheet.create({
 
   actionText: {
     color: '#FFF',
-    fontSize: 11,
+    fontSize: adjustFontSizeForIOS(11, 2),
     lineHeight: 13.64,
     textTransform: 'capitalize',
   },

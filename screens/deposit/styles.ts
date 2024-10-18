@@ -1,5 +1,7 @@
 import { StyleSheet } from 'react-native';
 
+import { adjustFontSizeForIOS } from '@/utils/helpers';
+
 const styles = StyleSheet.create({
   root: {
     paddingTop: 47,
@@ -34,7 +36,7 @@ const styles = StyleSheet.create({
 
   balanceText: {
     color: '#64748B',
-    fontSize: 16,
+    fontSize: adjustFontSizeForIOS(16, 2),
     lineHeight: 19.84,
     fontFamily: 'AeonikRegular',
   },
@@ -48,7 +50,7 @@ const styles = StyleSheet.create({
 
   input: {
     color: '#020617',
-    fontSize: 48,
+    fontSize: adjustFontSizeForIOS(48, 5),
     lineHeight: 53,
     letterSpacing: -0.96,
     fontWeight: '700',
@@ -64,7 +66,7 @@ const styles = StyleSheet.create({
   },
 
   selectorText: {
-    fontSize: 13,
+    fontSize: adjustFontSizeForIOS(13, 2),
     lineHeight: 16.12,
     fontWeight: '500',
     textAlign: 'center',

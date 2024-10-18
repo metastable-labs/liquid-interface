@@ -1,9 +1,9 @@
-import { Image, View, Text, StyleSheet } from 'react-native';
+import { Image, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Href } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 
 import useSystemFunctions from '@/hooks/useSystemFunctions';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { adjustFontSizeForIOS } from '@/utils/helpers';
 
 const backgroundColors = ['#FDEAEA', '#EFFAF6'];
 const textColors = ['#A4262C', '#156146'];
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
 
   title: {
     color: '#1E293B',
-    fontSize: 15,
+    fontSize: adjustFontSizeForIOS(15, 2),
     lineHeight: 18.48,
     fontWeight: '500',
     fontFamily: 'AeonikMedium',
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
   },
 
   change: {
-    fontSize: 11,
+    fontSize: adjustFontSizeForIOS(11, 2),
     lineHeight: 13.64,
     fontWeight: '500',
     fontFamily: 'AeonikMedium',

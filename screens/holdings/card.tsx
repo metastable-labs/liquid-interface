@@ -2,6 +2,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 import useSystemFunctions from '@/hooks/useSystemFunctions';
+import { adjustFontSizeForIOS } from '@/utils/helpers';
 
 const icons = {
   primary: <Ionicons name="wallet-outline" size={18} color="#FFF" />,
@@ -186,7 +187,7 @@ const styles = StyleSheet.create({
   },
 
   label: {
-    fontSize: 14,
+    fontSize: adjustFontSizeForIOS(14, 2),
     lineHeight: 18.48,
     fontFamily: 'AeonikRegular',
   },
@@ -199,7 +200,7 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    fontSize: 18,
+    fontSize: adjustFontSizeForIOS(18, 2),
     lineHeight: 27,
     letterSpacing: -0.36,
     fontFamily: 'ClashDisplaySemibold',
@@ -207,7 +208,7 @@ const styles = StyleSheet.create({
   },
 
   subtitle: {
-    fontSize: 12,
+    fontSize: adjustFontSizeForIOS(12, 2),
     lineHeight: 15.84,
     fontFamily: 'AeonikRegular',
   },
@@ -231,13 +232,13 @@ const styles = StyleSheet.create({
   },
 
   detailTitle: {
-    fontSize: 11,
+    fontSize: adjustFontSizeForIOS(11, 2),
     lineHeight: 13.64,
     fontFamily: 'AeonikRegular',
   },
 
   detailValue: {
-    fontSize: 14,
+    fontSize: adjustFontSizeForIOS(14, 2),
     lineHeight: 18.48,
     fontWeight: '500',
     fontFamily: 'AeonikMedium',
@@ -251,7 +252,7 @@ const styles = StyleSheet.create({
   },
 
   actionText: {
-    fontSize: 13,
+    fontSize: adjustFontSizeForIOS(13, 2),
     lineHeight: 16.12,
     fontFamily: 'AeonikRegular',
   },

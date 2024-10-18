@@ -1,5 +1,7 @@
 import { View, StyleSheet, Text, Image } from 'react-native';
 
+import { adjustFontSizeForIOS } from '@/utils/helpers';
+
 const Balance = ({ primaryBalance, primaryIconURL, primaryTitle, secondaryBalance, secondaryIconURL, secondaryTitle, aero }: IPool) => {
   const values = [
     {
@@ -66,7 +68,7 @@ const styles = StyleSheet.create({
 
   title: {
     color: '#1A2001',
-    fontSize: 16,
+    fontSize: adjustFontSizeForIOS(16, 2),
     lineHeight: 19.2,
     fontWeight: '500',
     fontFamily: 'AeonikMedium',
@@ -94,7 +96,7 @@ const styles = StyleSheet.create({
 
   sectionTitle: {
     color: '#64748B',
-    fontSize: 15,
+    fontSize: adjustFontSizeForIOS(15, 2),
     lineHeight: 19.8,
     fontFamily: 'AeonikRegular',
   },

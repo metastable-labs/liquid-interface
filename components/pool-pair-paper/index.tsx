@@ -1,7 +1,7 @@
 import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native';
 import { Href } from 'expo-router';
 
-import { formatNumberWithSuffix } from '@/utils/helpers';
+import { adjustFontSizeForIOS, formatNumberWithSuffix } from '@/utils/helpers';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 
 const LQDPoolPairPaper = ({
@@ -42,7 +42,7 @@ const LQDPoolPairPaper = ({
           </Text>
 
           <View style={styles.details}>
-            <Text style={apr > 3 ? styles.basicTextStable : styles.basicTextVolatile}>{apr > 3 ? "Basic Stable" : "Basic Volatile" }</Text>
+            <Text style={apr > 3 ? styles.basicTextStable : styles.basicTextVolatile}>{apr > 3 ? 'Basic Stable' : 'Basic Volatile'}</Text>
 
             <View style={styles.separator}>
               <View style={styles.separatorCircle} />
@@ -54,13 +54,9 @@ const LQDPoolPairPaper = ({
       </View>
 
       <View style={styles.volumeWrapper}>
-        <Text style={styles.aprText}>
-          APR: {apr}%
-        </Text>
+        <Text style={styles.aprText}>APR: {apr}%</Text>
 
-        <Text style={styles.volumeText}>
-          VOL: ${formatNumberWithSuffix(capital)}
-        </Text>
+        <Text style={styles.volumeText}>VOL: ${formatNumberWithSuffix(capital)}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -107,7 +103,7 @@ const styles = StyleSheet.create({
 
   detailHeader: {
     color: '#1E293B',
-    fontSize: 14,
+    fontSize: adjustFontSizeForIOS(14, 2),
     lineHeight: 18.48,
     fontWeight: '500',
     fontFamily: 'AeonikMedium',
@@ -122,21 +118,21 @@ const styles = StyleSheet.create({
 
   detailText: {
     color: '#64748B',
-    fontSize: 11,
+    fontSize: adjustFontSizeForIOS(11, 2),
     lineHeight: 13.64,
     fontFamily: 'AeonikRegular',
   },
 
   basicTextVolatile: {
     color: '#AF1D38',
-    fontSize: 11,
+    fontSize: adjustFontSizeForIOS(11, 2),
     lineHeight: 13.64,
     fontFamily: 'AeonikRegular',
   },
 
   basicTextStable: {
     color: '#B47818',
-    fontSize: 11,
+    fontSize: adjustFontSizeForIOS(11, 2),
     lineHeight: 13.64,
     fontFamily: 'AeonikRegular',
   },
@@ -165,7 +161,7 @@ const styles = StyleSheet.create({
 
   aprText: {
     color: '#156146',
-    fontSize: 13,
+    fontSize: adjustFontSizeForIOS(13, 2),
     lineHeight: 16.12,
     fontWeight: '500',
     textTransform: 'uppercase',
@@ -174,7 +170,7 @@ const styles = StyleSheet.create({
 
   volumeText: {
     color: '#64748B',
-    fontSize: 11,
+    fontSize: adjustFontSizeForIOS(11, 2),
     textTransform: 'uppercase',
     fontFamily: 'AeonikRegular',
   },

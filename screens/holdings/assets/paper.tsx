@@ -1,5 +1,7 @@
 import { View, Text, StyleSheet, Image } from 'react-native';
 
+import { adjustFontSizeForIOS } from '@/utils/helpers';
+
 const AssetPaper = ({ iconUrl, name, usdValue, value }: IAssetPaper) => {
   return (
     <View style={styles.container}>
@@ -56,7 +58,7 @@ const styles = StyleSheet.create({
 
   name: {
     color: '#1E293B',
-    fontSize: 14,
+    fontSize: adjustFontSizeForIOS(14, 2),
     lineHeight: 18.48,
     fontWeight: '500',
     fontFamily: 'AeonikMedium',
@@ -64,14 +66,14 @@ const styles = StyleSheet.create({
 
   value: {
     color: '#64748B',
-    fontSize: 11,
+    fontSize: adjustFontSizeForIOS(11, 2),
     lineHeight: 13.64,
     fontFamily: 'AeonikRegular',
   },
 
   usdValue: {
     color: '#475569',
-    fontSize: 13,
+    fontSize: adjustFontSizeForIOS(13, 2),
     lineHeight: 16.12,
     fontWeight: '500',
     fontFamily: 'AeonikMedium',

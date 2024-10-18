@@ -1,7 +1,9 @@
-import { View, Text, StyleSheet } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import Animated, { useSharedValue, useAnimatedStyle, withSpring, withTiming } from 'react-native-reanimated';
 import { useEffect } from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withSpring, withTiming } from 'react-native-reanimated';
+import { Ionicons } from '@expo/vector-icons';
+
+import { adjustFontSizeForIOS } from '@/utils/helpers';
 
 const LQDLoadingStep = ({ icon, isCompleted, subtitle, title }: ILQDLoadingStep) => {
   const opacityValue = useSharedValue(0);
@@ -93,7 +95,7 @@ const styles = StyleSheet.create({
 
   title: {
     color: '#0F172A',
-    fontSize: 18,
+    fontSize: adjustFontSizeForIOS(18, 2),
     lineHeight: 23.76,
     fontWeight: '500',
     fontFamily: 'AeonikMedium',
@@ -101,7 +103,7 @@ const styles = StyleSheet.create({
 
   subtitle: {
     color: '#64748B',
-    fontSize: 16,
+    fontSize: adjustFontSizeForIOS(16, 2),
     lineHeight: 19.84,
     fontFamily: 'AeonikRegular',
   },

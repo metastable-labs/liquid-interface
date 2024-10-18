@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Platform, StatusBar, TextInput } from 'react-native';
-import Animated from 'react-native-reanimated';
 
 import { LQDButton } from '@/components';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
+import { adjustFontSizeForIOS } from '@/utils/helpers';
 
 const dummyUsernames = ['bambam', 'meister', 'njoku', 'static', 'choco'];
 
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
 
   title: {
     color: '#181E00',
-    fontSize: 24,
+    fontSize: adjustFontSizeForIOS(24, 3),
     lineHeight: 26.88,
     letterSpacing: -0.6,
     fontWeight: '500',
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
 
   subtitle: {
     color: '#475467',
-    fontSize: 16,
+    fontSize: adjustFontSizeForIOS(16, 2),
     lineHeight: 19.84,
     fontWeight: '400',
     fontFamily: 'AeonikRegular',
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
   },
 
   labelText: {
-    fontSize: 13,
+    fontSize: adjustFontSizeForIOS(13, 2),
     lineHeight: 16.12,
   },
 
@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     borderWidth: 1,
     color: '#020617',
-    fontSize: 14,
+    fontSize: adjustFontSizeForIOS(14, 2),
     lineHeight: 18.48,
     fontFamily: 'AeonikRegular',
   },
@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
   },
 
   stateMessage: {
-    fontSize: 12,
+    fontSize: adjustFontSizeForIOS(12, 2),
     lineHeight: 15.84,
     fontFamily: 'AeonikRegular',
   },

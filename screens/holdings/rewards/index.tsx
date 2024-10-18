@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 
+import { adjustFontSizeForIOS } from '@/utils/helpers';
 import RewardCard from './card';
 import { aeroRewards, feesRewards } from './dummy';
 
@@ -43,14 +44,14 @@ const styles = StyleSheet.create({
 
   header: {
     color: '#0F172A',
-    fontSize: 20,
+    fontSize: adjustFontSizeForIOS(20, 3),
     lineHeight: 23.2,
     fontWeight: '500',
   },
 
   subHeader: {
     color: '#94A3B8',
-    fontSize: 16,
+    fontSize: adjustFontSizeForIOS(16, 2),
     fontWeight: '500',
   },
 

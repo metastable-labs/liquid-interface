@@ -1,6 +1,8 @@
-import LQDLoadingStep from '@/components/loading-step';
 import { useEffect, useState } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
+
+import LQDLoadingStep from '@/components/loading-step';
+import { adjustFontSizeForIOS } from '@/utils/helpers';
 
 const loadingIcons = ['journal-outline', 'bar-chart-outline', 'checkmark-done-circle-outline'];
 
@@ -79,7 +81,7 @@ const styles = StyleSheet.create({
 
   header: {
     color: '#0F172A',
-    fontSize: 24,
+    fontSize: adjustFontSizeForIOS(24, 3),
     lineHeight: 26.88,
     letterSpacing: -0.6,
     fontWeight: '500',

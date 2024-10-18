@@ -2,6 +2,8 @@ import { useMemo } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { useForm } from 'react-hook-form';
 import { Ionicons } from '@expo/vector-icons';
+
+import { adjustFontSizeForIOS } from '@/utils/helpers';
 import LQDBottomSheet from '../bottom-sheet';
 import LQDInput from '../input';
 
@@ -123,7 +125,7 @@ const styles = StyleSheet.create({
 
   primaryText: {
     color: '#1E293B',
-    fontSize: 14,
+    fontSize: adjustFontSizeForIOS(14, 2),
     lineHeight: 18.48,
     fontWeight: '500',
     fontFamily: 'AeonikMedium',
@@ -131,7 +133,7 @@ const styles = StyleSheet.create({
 
   secondaryText: {
     color: '#64748B',
-    fontSize: 11,
+    fontSize: adjustFontSizeForIOS(11, 2),
     lineHeight: 13.64,
     fontFamily: 'AeonikRegular',
   },

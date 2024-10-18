@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { Pressable, StyleSheet } from 'react-native';
 import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
+import { adjustFontSizeForIOS } from '@/utils/helpers';
 
 const icon: any = {
   home: (props: any) => <Ionicons name="home" {...props} />,
@@ -46,7 +47,7 @@ const styles = StyleSheet.create({
   },
 
   text: {
-    fontSize: 11,
+    fontSize: adjustFontSizeForIOS(11, 2),
     lineHeight: 13.64,
   },
 });

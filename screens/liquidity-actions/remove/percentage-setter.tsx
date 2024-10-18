@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Slider from '@react-native-community/slider';
 
+import { adjustFontSizeForIOS } from '@/utils/helpers';
+
 const PercentageSetter = ({ setPercentage }: IPercentageSetter) => {
   const [percentage, setInternalPercentage] = useState(25);
 
@@ -78,7 +80,7 @@ const styles = StyleSheet.create({
   },
   label: {
     color: '#475569',
-    fontSize: 18,
+    fontSize: adjustFontSizeForIOS(18, 2),
     lineHeight: 23.76,
     fontWeight: '500',
     fontFamily: 'AeonikMedium',
@@ -113,7 +115,7 @@ const styles = StyleSheet.create({
 
   partitionText: {
     color: '#334155',
-    fontSize: 13,
+    fontSize: adjustFontSizeForIOS(13, 2),
     lineHeight: 16.12,
     fontWeight: '500',
     fontFamily: 'AeonikMedium',

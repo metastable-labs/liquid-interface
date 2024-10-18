@@ -1,6 +1,8 @@
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
+import { adjustFontSizeForIOS } from '@/utils/helpers';
+
 const icons = {
   wallet: <Ionicons name="wallet-outline" size={24} color="#FFF" />,
   radio: <Ionicons name="radio-outline" size={24} color="#FFF" />,
@@ -63,14 +65,14 @@ const styles = StyleSheet.create({
 
   title: {
     color: '#334155',
-    fontSize: 16,
+    fontSize: adjustFontSizeForIOS(16, 2),
     lineHeight: 19.2,
     fontWeight: '500',
   },
 
   subtile: {
     color: '#64748B',
-    fontSize: 14,
+    fontSize: adjustFontSizeForIOS(14, 2),
     lineHeight: 18.48,
     textAlign: 'center',
   },
@@ -89,7 +91,7 @@ const styles = StyleSheet.create({
 
   actionText: {
     color: '#FFF',
-    fontSize: 11,
+    fontSize: adjustFontSizeForIOS(11, 2),
     lineHeight: 13.64,
     fontWeight: '500',
     textAlign: 'center',

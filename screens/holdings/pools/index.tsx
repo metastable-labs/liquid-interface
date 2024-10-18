@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 
+import { adjustFontSizeForIOS } from '@/utils/helpers';
 import PoolCard from './card';
 
 const Pools = () => {
@@ -81,7 +82,7 @@ const styles = StyleSheet.create({
 
   header: {
     color: '#0F172A',
-    fontSize: 20,
+    fontSize: adjustFontSizeForIOS(20, 3),
     lineHeight: 23.2,
     fontWeight: '500',
     fontFamily: 'AeonikMedium',

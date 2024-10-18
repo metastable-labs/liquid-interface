@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
+import { adjustFontSizeForIOS } from '@/utils/helpers';
 import { ILQDStackHeader } from './types';
 
 const LQDStackHeader = ({ navigation, options, hasTitle, style }: ILQDStackHeader) => {
@@ -41,7 +42,7 @@ const styles = StyleSheet.create({
 
   backText: {
     color: '#1E293B',
-    fontSize: 14,
+    fontSize: adjustFontSizeForIOS(14, 2),
     lineHeight: 17.64,
     fontWeight: '500',
     fontFamily: 'AeonikMedium',
@@ -49,7 +50,7 @@ const styles = StyleSheet.create({
 
   title: {
     color: '#181E00',
-    fontSize: 20,
+    fontSize: adjustFontSizeForIOS(20, 3),
     lineHeight: 23.2,
     fontWeight: '500',
     fontFamily: 'AeonikMedium',

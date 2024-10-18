@@ -1,6 +1,7 @@
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
+import { adjustFontSizeForIOS } from '@/utils/helpers';
 import { ILQDButton } from './types';
 
 const icons = {
@@ -56,7 +57,7 @@ const styles = StyleSheet.create({
   },
 
   primaryText: {
-    fontSize: 16,
+    fontSize: adjustFontSizeForIOS(16, 2),
     lineHeight: 16,
     color: '#1A2001',
     fontFamily: 'QuantaGroteskProSemiBold',
@@ -80,7 +81,7 @@ const styles = StyleSheet.create({
   },
 
   secondaryText: {
-    fontSize: 16,
+    fontSize: adjustFontSizeForIOS(16, 2),
     lineHeight: 16,
     color: '#FFF',
     fontFamily: 'QuantaGroteskProSemiBold',
@@ -96,7 +97,7 @@ const styles = StyleSheet.create({
   },
   tertiaryText: {
     color: '#FFF',
-    fontSize: 12,
+    fontSize: adjustFontSizeForIOS(12, 2),
     lineHeight: 15.84,
     fontWeight: '500',
     fontFamily: 'AeonikMedium',
@@ -113,7 +114,7 @@ const styles = StyleSheet.create({
   },
   tertiaryOutlineText: {
     color: '#334155',
-    fontSize: 13,
+    fontSize: adjustFontSizeForIOS(13, 2),
     lineHeight: 16.12,
     fontWeight: '500',
     fontFamily: 'AeonikMedium',

@@ -1,7 +1,8 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming, withRepeat, withSequence } from 'react-native-reanimated';
 
 import { ThemedText } from '@/components/ThemedText';
+import { adjustFontSizeForIOS } from '@/utils/helpers';
 
 export function HelloWave() {
   const rotationAnimation = useSharedValue(0);
@@ -24,7 +25,7 @@ export function HelloWave() {
 
 const styles = StyleSheet.create({
   text: {
-    fontSize: 28,
+    fontSize: adjustFontSizeForIOS(28, 4),
     lineHeight: 32,
     marginTop: -6,
   },

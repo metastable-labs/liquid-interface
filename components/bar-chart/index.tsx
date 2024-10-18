@@ -1,7 +1,8 @@
 import { View, StyleSheet } from 'react-native';
 import { VictoryBar, VictoryChart, VictoryAxis, VictoryTheme } from 'victory-native';
-import { formatNumberWithSuffix } from '@/utils/helpers';
 import moment from 'moment';
+
+import { adjustFontSizeForIOS, formatNumberWithSuffix } from '@/utils/helpers';
 
 const LQDBarChart = ({ data, period }: ILQDBarChart) => {
   const getXAxisLabels = () => {
@@ -39,7 +40,7 @@ const LQDBarChart = ({ data, period }: ILQDBarChart) => {
               strokeDasharray: 'none',
             },
             tickLabels: {
-              fontSize: 12,
+              fontSize: adjustFontSizeForIOS(12, 2),
               lineHeight: 15.84,
               fontFamily: 'AeonikRegular',
               fill: '#475569',
@@ -61,7 +62,7 @@ const LQDBarChart = ({ data, period }: ILQDBarChart) => {
               strokeDasharray: 'none',
             },
             tickLabels: {
-              fontSize: 12,
+              fontSize: adjustFontSizeForIOS(12, 2),
               lineHeight: 15.84,
               fontFamily: 'AeonikRegular',
               fill: '#475569',

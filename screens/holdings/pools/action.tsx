@@ -1,6 +1,7 @@
 import { Text, StyleSheet, GestureResponderEvent, TouchableOpacity } from 'react-native';
 
 import useSystemFunctions from '@/hooks/useSystemFunctions';
+import { adjustFontSizeForIOS } from '@/utils/helpers';
 
 const PoolCardAction = ({ disabled, id, type }: IPoolCardAction) => {
   const { router } = useSystemFunctions();
@@ -53,7 +54,7 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    fontSize: 11,
+    fontSize: adjustFontSizeForIOS(11, 2),
     lineHeight: 13.64,
     textTransform: 'capitalize',
   },

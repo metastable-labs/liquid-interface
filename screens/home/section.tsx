@@ -1,6 +1,8 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
+import { adjustFontSizeForIOS } from '@/utils/helpers';
+
 const Section = ({ children, icon, subtitle, title, action, isShowingAll }: ISection) => {
   return (
     <View style={styles.container}>
@@ -47,7 +49,7 @@ const styles = StyleSheet.create({
 
   title: {
     color: '#0F172A',
-    fontSize: 20,
+    fontSize: adjustFontSizeForIOS(20, 3),
     lineHeight: 23.2,
     fontWeight: '500',
     fontFamily: 'AeonikMedium',
@@ -55,7 +57,7 @@ const styles = StyleSheet.create({
 
   subtitle: {
     color: '#94A3B8',
-    fontSize: 12,
+    fontSize: adjustFontSizeForIOS(12, 2),
     lineHeight: 14.4,
     fontWeight: '500',
     fontFamily: 'ClashDisplayMedium',
@@ -69,7 +71,7 @@ const styles = StyleSheet.create({
 
   actionText: {
     color: '#1E293B',
-    fontSize: 13,
+    fontSize: adjustFontSizeForIOS(13, 2),
     lineHeight: 16.12,
     fontFamily: 'AeonikRegular',
   },
