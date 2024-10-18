@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { View, Text, StyleSheet, Platform, StatusBar } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing } from 'react-native-reanimated';
 
@@ -6,19 +6,31 @@ import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { LQDButton } from '@/components';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import LQDLoadingStep from '@/components/loading-step';
+import { useUserActions } from '@/store/user/actions';
+import { useSmartAccountActions } from '@/store/smartAccount/actions';
 import Info from './info';
 
 const setupIcons = ['journal-outline', 'bar-chart-outline', 'checkmark-done-circle-outline'];
 
 const Setup = () => {
   const { router } = useSystemFunctions();
-  const [setupStep, setSetupStep] = useState(0);
+  const [setupStep, setSetupStep] = useState(1);
   const [completedSteps, setCompletedSteps] = useState([false, false, false]);
   const buttonOpacity = useSharedValue(0);
 
   const animatedButtonStyle = useAnimatedStyle(() => ({
     opacity: buttonOpacity.value,
   }));
+
+  const progressToNextStep = useCallback(() => {
+    setCompletedSteps((prev) => prev.map((step, index) => (index + 1 === setupStep ? true : step)));
+
+    const interval = setTimeout(() => {
+      setSetupStep((prev) => prev + 1);
+    }, 500);
+
+    return () => clearTimeout(interval);
+  }, [setCompletedSteps, setSetupStep, setupStep]);
 
   const setupSteps: Array<ILQDLoadingStep> = [
     {
@@ -43,35 +55,41 @@ const Setup = () => {
     },
   ];
 
-  useEffect(() => {
-    if (setupStep < 2) {
-      const timeout = setTimeout(() => {
-        setCompletedSteps((prev) => prev.map((step, index) => (index === setupStep ? true : step)));
+  const { getUser } = useUserActions();
+  const { create: createSmartAccount } = useSmartAccountActions();
 
-        const interval = setTimeout(() => {
-          setSetupStep((prev) => prev + 1);
-        }, 500);
+  useEffect(
+    function progressSteps() {
+      if (setupStep === 1) {
+        const firstStepDelayInMs = 1000 * 1; // 1s
+        const timeout = setTimeout(() => {
+          const user = getUser();
+          if (!user) throw new Error('User not found');
+          createSmartAccount(user.username).then(progressToNextStep);
+        }, firstStepDelayInMs);
 
-        return () => clearTimeout(interval);
-      }, 4000);
+        return () => clearTimeout(timeout);
+      } else if (setupStep < 3) {
+        const subsequentStepsDelayInMs = 1000 * 3; // 3s
+        const timeout = setTimeout(progressToNextStep, subsequentStepsDelayInMs);
 
-      return () => clearTimeout(timeout);
-    }
-  }, [setupStep]);
+        return () => clearTimeout(timeout);
+      }
+    },
+    [setupStep]
+  );
 
-  useEffect(() => {
-    if (setupStep === 2) {
-      buttonOpacity.value = withTiming(1, {
-        duration: 500,
-        easing: Easing.inOut(Easing.ease),
-      });
-    } else {
-      buttonOpacity.value = withTiming(0, {
-        duration: 500,
-        easing: Easing.inOut(Easing.ease),
-      });
-    }
-  }, [setupStep]);
+  useEffect(
+    function revealBottomButton() {
+      if (setupStep === 3) {
+        buttonOpacity.value = withTiming(1, {
+          duration: 500,
+          easing: Easing.inOut(Easing.ease),
+        });
+      }
+    },
+    [setupStep]
+  );
 
   return (
     <View style={styles.root}>
@@ -82,7 +100,7 @@ const Setup = () => {
           <View style={styles.setupContainer}>
             {setupSteps.map(
               (step, index) =>
-                setupStep >= index && (
+                setupStep >= index + 1 && (
                   <LQDLoadingStep
                     key={index}
                     icon={setupIcons[index]}
