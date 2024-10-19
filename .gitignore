@@ -25,3 +25,7 @@ eas.json
 # expo-dev-client
 android/
 ios/
+
+# env
+.env*
+!.env.example

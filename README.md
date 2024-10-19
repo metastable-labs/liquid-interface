@@ -6,7 +6,7 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
 
 ## Get started
 
-1. We're using [Bun](https://bun.sh) as package manager, make sure you have it installed on your machine.
+1. We're using [Yarn classic](https://classic.yarnpkg.com) as package manager, make sure you have it installed on your machine.
 
 2. Install dependencies:
 
@@ -14,7 +14,9 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
    yarn i
    ```
 
-3. This project uses [Expo development builds](https://docs.expo.dev/develop/development-builds/introduction). Make sure you have these tools:
+3. Setup your `.env` file based on `.env.example`.
+
+4. This project uses [Expo development builds](https://docs.expo.dev/develop/development-builds/introduction). Make sure you have these tools:
 
    - [Android Studio](https://docs.expo.dev/get-started/set-up-your-environment/?platform=android&device=physical&mode=development-build&buildEnv=local#set-up-an-android-device-with-a-development-build)
    - [Xcode](https://docs.expo.dev/get-started/set-up-your-environment/?platform=ios&device=physical&mode=development-build&buildEnv=local#set-up-an-ios-device-with-a-development-build)
@@ -28,7 +30,7 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
    yarn run ios
    ```
 
-4. Start the metro bundler:
+5. Start the metro bundler:
 
    ```bash
    yarn start
