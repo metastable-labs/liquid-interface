@@ -1,37 +1,16 @@
 import { Alert } from 'react-native';
 import * as Passkeys from 'react-native-passkeys';
-import { utf8StringToBuffer, bufferToBase64URLString } from '@/utils/base64';
-import { ToCoinbaseSmartAccountReturnType, WebAuthnAccount, createBundlerClient, toCoinbaseSmartAccount } from 'viem/account-abstraction';
-import { Address, createPublicClient, hashMessage, hashTypedData, Hex, http, SignableMessage } from 'viem';
-import { base } from 'viem/chains';
+import { Address, hashMessage, hashTypedData, Hex, SignableMessage } from 'viem';
+import { ToCoinbaseSmartAccountReturnType, WebAuthnAccount, toCoinbaseSmartAccount } from 'viem/account-abstraction';
 import type { SignReturnType } from 'webauthn-p256';
-
-export function setupViem() {
-  const rpcUrl = 'https://mainnet.base.org';
-  const bundlerUrl = 'https://public.pimlico.io/v2/1/rpc';
-
-  const publicClient = createPublicClient({
-    chain: base,
-    transport: http(rpcUrl),
-  });
-
-  const bundlerClient = createBundlerClient({
-    client: publicClient,
-    transport: http(bundlerUrl),
-    paymaster: true,
-  });
-
-  return { publicClient, bundlerClient };
-}
+import { utf8StringToBuffer, bufferToBase64URLString } from '@/utils/base64';
+import { publicClient } from '@/init/viem';
 
 export async function createSmartAccount(username: string): Promise<{
   smartAccount: ToCoinbaseSmartAccountReturnType;
   address: Address;
 }> {
   try {
-    // TODO: ideally this should not be done here
-    const { publicClient, bundlerClient } = setupViem();
-
     const isPasskeyAvailable = Passkeys.isSupported();
     if (!isPasskeyAvailable) {
       throw new Error('Passkeys are not available on this device');
