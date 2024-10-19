@@ -2,8 +2,7 @@ import { createPublicClient, http } from 'viem';
 import { createBundlerClient } from 'viem/account-abstraction';
 import { base } from 'viem/chains';
 
-const rpcUrl = 'https://mainnet.base.org';
-const bundlerUrl = 'https://public.pimlico.io/v2/1/rpc';
+import { rpcUrl, bundlerUrl } from '@/constants/env';
 
 export const publicClient = createPublicClient({
   chain: base,
