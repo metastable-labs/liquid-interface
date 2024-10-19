@@ -91,7 +91,7 @@ export type Token = {
   logo_url: string;
 };
 
-export type EnhancedFormattedPool = Omit<FormattedPool, 'token0' | 'token1' | 'TVL' | 'volume0' | 'volume1' | 'cumulativeVolumeUSD'> & {
+export type EnhancedFormattedPool = Omit<FormattedPool, EnhancedFormattedPoolType> & {
   token0: Token;
   token1: Token;
   TVL: string;
@@ -99,3 +99,7 @@ export type EnhancedFormattedPool = Omit<FormattedPool, 'token0' | 'token1' | 'T
   volume1: string;
   cumulativeVolumeUSD: string;
 };
+
+type EnhancedFormattedPoolType = 'token0' | 'token1' | 'TVL' | 'volume0' | 'volume1' | 'cumulativeVolumeUSD';
+
+export type VolumeReturn = { volume0: string; volume1: string; cumulativeVolumeUSD: string };

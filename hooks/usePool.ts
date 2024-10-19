@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import { Address, formatUnits, PublicClient } from 'viem';
 import { useContract } from './useContract';
 import { formatPool, formatPoolFee, formatPosition } from '@/utils/helpers';
-import { RawPool, FormattedPool, RawPosition, FormattedPosition, Token, EnhancedFormattedPool } from './types';
+import { RawPool, FormattedPool, RawPosition, FormattedPosition, Token, EnhancedFormattedPool, VolumeReturn } from './types';
 import { AerodromePoolABI, LPSugarABI } from '@/constants/abis';
 import { LP_SUGAR_ADDRESS, OFFCHAIN_ORACLE_ADDRESS } from '@/constants/addresses';
 import { useToken } from './useToken';
@@ -23,13 +23,7 @@ export function usePool(publicClient: PublicClient, account: Address, refreshInt
     return (value0 + value1).toFixed(2);
   };
 
-  const calculateVolume = (
-    token0_fees: bigint,
-    token1_fees: bigint,
-    pool_fee: bigint,
-    token0: Token,
-    token1: Token
-  ): { volume0: string; volume1: string; cumulativeVolumeUSD: string } => {
+  const calculateVolume = (token0_fees: bigint, token1_fees: bigint, pool_fee: bigint, token0: Token, token1: Token): VolumeReturn => {
     const volume0 = Number(formatUnits(token0_fees, token0.decimals)) * Number(pool_fee);
     const volume1 = Number(formatUnits(token1_fees, token1.decimals)) * Number(pool_fee);
 
