@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import { Address, formatUnits, PublicClient } from 'viem';
 import { useContract } from './useContract';
 import { formatPool, formatPoolFee, formatPosition } from '@/utils/helpers';
-import { RawPool, FormattedPool, RawPosition, FormattedPosition, Token, EnhancedFormattedPool } from './types';
+import { RawPool, FormattedPool, RawPosition, FormattedPosition, Token, EnhancedFormattedPool, VolumeReturn } from './types';
 import { AerodromePoolABI, LPSugarABI } from '@/constants/abis';
 import { LP_SUGAR_ADDRESS, OFFCHAIN_ORACLE_ADDRESS } from '@/constants/addresses';
 import { useToken } from './useToken';
@@ -21,6 +21,22 @@ export function usePool(publicClient: PublicClient, account: Address, refreshInt
     const value0 = Number(formatUnits(reserve0, token0.decimals)) * Number(token0.usd_price);
     const value1 = Number(formatUnits(reserve1, token1.decimals)) * Number(token1.usd_price);
     return (value0 + value1).toFixed(2);
+  };
+
+  const calculateVolume = (token0_fees: bigint, token1_fees: bigint, pool_fee: bigint, token0: Token, token1: Token): VolumeReturn => {
+    const volume0 = Number(formatUnits(token0_fees, token0.decimals)) * Number(pool_fee);
+    const volume1 = Number(formatUnits(token1_fees, token1.decimals)) * Number(pool_fee);
+
+    const volumeUSD0 = volume0 * Number(token0.usd_price);
+    const volumeUSD1 = volume1 * Number(token1.usd_price);
+
+    const cumulativeVolumeUSD = volumeUSD0 + volumeUSD1;
+
+    return {
+      volume0: volume0.toFixed(2),
+      volume1: volume1.toFixed(2),
+      cumulativeVolumeUSD: cumulativeVolumeUSD.toFixed(2),
+    };
   };
 
   const fetchPoolStability = useCallback(
@@ -69,6 +85,13 @@ export function usePool(publicClient: PublicClient, account: Address, refreshInt
                 return null;
               }
               const tvl = calculateTVL(pool.reserve0, pool.reserve1, token0, token1);
+              const { volume0, volume1, cumulativeVolumeUSD } = calculateVolume(
+                pool.token0_fees,
+                pool.token1_fees,
+                pool.pool_fee,
+                token0,
+                token1
+              );
 
               return {
                 ...formattedPool,
@@ -76,6 +99,9 @@ export function usePool(publicClient: PublicClient, account: Address, refreshInt
                 token1,
                 pool_fee: formatPoolFee(pool.pool_fee),
                 TVL: tvl,
+                volume0,
+                volume1,
+                cumulativeVolumeUSD,
               } as EnhancedFormattedPool;
             })
           );
