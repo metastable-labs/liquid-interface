@@ -8,6 +8,9 @@ import { PersistGate } from 'redux-persist/integration/react';
 
 import 'react-native-reanimated';
 
+// setup viem on app start
+import '@/init/viem';
+
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { persistor, store } from '@/store';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';

@@ -5,6 +5,21 @@ import { PublicClient, Address, formatUnits } from 'viem';
 import { Token } from './types';
 import { useContract } from './useContract';
 
+export const getUsdPrice = async (tokenAddress: Address, offchainOracleContract: ReturnType<typeof useContract>): Promise<string> => {
+  try {
+    const rate: any = await offchainOracleContract.read.getRate([
+      tokenAddress,
+      USDC_ADDRESS,
+      true, // useWrappers
+    ]);
+
+    return formatUnits(rate, 6);
+  } catch (error) {
+    console.error(`Error fetching USD price for token ${tokenAddress}:`, error);
+    return '0';
+  }
+};
+
 export function useToken(publicClient: PublicClient, account: Address, refreshInterval: number = 60000) {
   const [tokens, setTokens] = useState<Token[]>([]);
   const [loading, setLoading] = useState(false);
@@ -19,24 +34,7 @@ export function useToken(publicClient: PublicClient, account: Address, refreshIn
     return formatUnits(balance, decimals);
   }, []);
 
-  const getUsdPrice = useCallback(
-    async (tokenAddress: Address): Promise<string> => {
-      try {
-        const rate: any = await offchainOracleContract.read.getRate([
-          tokenAddress,
-          USDC_ADDRESS,
-          true, // useWrappers
-        ]);
-
-        return formatUnits(rate, 6);
-      } catch (error) {
-        console.error(`Error fetching USD price for token ${tokenAddress}:`, error);
-        return '0';
-      }
-    },
-    [offchainOracleContract]
-  );
-
+  const fetchUsdPrice = useCallback((tokenAddress: Address) => getUsdPrice(tokenAddress, offchainOracleContract), [offchainOracleContract]);
   const getLogoUrl = useCallback(
     (tokenAddress: Address): string => {
       if (!chainId) {
@@ -83,7 +81,7 @@ export function useToken(publicClient: PublicClient, account: Address, refreshIn
 
         const tokensWithPricesAndLogos = await Promise.all(
           fetchedTokens.map(async (token) => {
-            const usd_price = await getUsdPrice(token.token_address);
+            const usd_price = await fetchUsdPrice(token.token_address);
             const logo_url = getLogoUrl(token.token_address);
             return {
               ...token,
@@ -137,6 +135,7 @@ export function useToken(publicClient: PublicClient, account: Address, refreshIn
       refreshTokens,
       lastUpdated,
       getTokenByAddress,
+      getUsdPrice: fetchUsdPrice,
     }),
     [tokens, loading, error, refreshTokens, lastUpdated, getTokenByAddress]
   );
