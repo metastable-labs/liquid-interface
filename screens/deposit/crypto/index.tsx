@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
-import { Ionicons } from '@expo/vector-icons';
 
 import useTruncateText from '@/hooks/useTruncateText';
 import useCopy from '@/hooks/useCopy';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
+import { CaretDownIcon, CoinsIcon, CopyIcon } from '@/assets/icons';
 import PaymentMethodSelection from '../method-selection';
 import sharedStyles from '../styles';
 
@@ -28,20 +28,20 @@ const CryptoDeposit = () => {
               <Text style={[styles.text, { fontWeight: '500' }]}>{truncatedAddress}</Text>
             </View>
             <TouchableOpacity style={styles.copyContainer} onPress={() => handleCopy(address)}>
-              <Ionicons name="copy-outline" size={18} color="#FFF" />
+              <CopyIcon />
               <Text style={styles.copyText}>{hasCopied ? 'Copied' : 'Copy'}</Text>
             </TouchableOpacity>
           </View>
 
           <TouchableOpacity style={sharedStyles.paymentSelector} onPress={() => setShowBottomSheet(true)}>
-            <Ionicons name="wallet-outline" size={18} color="#64748B" />
+            <CoinsIcon />
             <Text style={[sharedStyles.selectorText, sharedStyles.paymentSelectorText]}>Crypto</Text>
-            <Ionicons name="chevron-down" size={18} color="#64748B" />
+            <CaretDownIcon />
           </TouchableOpacity>
         </View>
         <View style={styles.infoContainer}>
           <Image source={tokensImage} style={styles.infoImage} />
-          <Text style={styles.text}>You can receive any tokens on, ETH, Base, Optimism, Mode, Polygon, and Arbitrum chain.</Text>
+          <Text style={styles.text}>For now you can only receive USDC on Base</Text>
         </View>
       </View>
 
@@ -102,25 +102,26 @@ const styles = StyleSheet.create({
   },
 
   infoContainer: {
-    padding: 24,
+    flexDirection: 'row',
+    padding: 16,
     alignSelf: 'stretch',
-    alignItems: 'center',
-    justifyContent: 'center',
     gap: 16,
+    alignItems: 'center',
     borderRadius: 20,
     backgroundColor: '#EBF1FF',
   },
 
   infoImage: {
-    width: 120,
-    height: 18.42,
+    width: 31,
+    height: 18,
   },
 
   text: {
+    flex: 1,
     color: '#162664',
     fontSize: adjustFontSizeForIOS(14, 2),
     lineHeight: 18.48,
-    textAlign: 'center',
+    textAlign: 'left',
     fontFamily: 'AeonikRegular',
   },
 });

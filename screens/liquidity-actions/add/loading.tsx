@@ -3,8 +3,7 @@ import { View, StyleSheet, Text } from 'react-native';
 
 import LQDLoadingStep from '@/components/loading-step';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
-
-const loadingIcons = ['journal-outline', 'bar-chart-outline', 'checkmark-done-circle-outline'];
+import { BitcoinConvertAltIcon, DollarCoinAltIcon, MoneyAddIcon } from '@/assets/icons';
 
 const Loading = ({ primaryTitle, secondaryTitle }: ILoading) => {
   const [loadingStep, setLoadingStep] = useState(0);
@@ -12,29 +11,30 @@ const Loading = ({ primaryTitle, secondaryTitle }: ILoading) => {
 
   const loadingSteps: Array<ILQDLoadingStep> = [
     {
-      icon: 'journal-outline',
+      icon: <BitcoinConvertAltIcon />,
       isCompleted: completedSteps[0],
       subtitle: `Swapping ${primaryTitle} to ${secondaryTitle}`,
       title: 'Swapping',
     },
 
     {
-      icon: 'bar-chart-outline',
+      icon: <DollarCoinAltIcon />,
       isCompleted: completedSteps[1],
       subtitle: `Approving ${primaryTitle} and ${secondaryTitle}`,
       title: 'Approving tokens',
     },
 
     {
-      icon: 'checkmark-done-circle-outline',
+      icon: <MoneyAddIcon />,
       isCompleted: completedSteps[2],
       subtitle: 'Depositing liquidity into pool',
       title: 'Depositing',
+      isLast: true,
     },
   ];
 
   useEffect(() => {
-    if (loadingStep < 2) {
+    if (loadingStep < 3) {
       const timeout = setTimeout(() => {
         setCompletedSteps((prev) => prev.map((step, index) => (index === loadingStep ? true : step)));
 
@@ -59,10 +59,11 @@ const Loading = ({ primaryTitle, secondaryTitle }: ILoading) => {
             loadingStep >= index && (
               <LQDLoadingStep
                 key={index}
-                icon={loadingIcons[index]}
+                icon={step.icon}
                 isCompleted={step.isCompleted}
                 subtitle={step.subtitle}
                 title={step.title}
+                isLast={step.isLast}
               />
             )
         )}

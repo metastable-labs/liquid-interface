@@ -246,6 +246,7 @@ const paymentMethodSelectionStyles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: '#F8FAFC',
     flexDirection: 'row',
+    alignItems: 'center',
   },
 
   iconContainer: {

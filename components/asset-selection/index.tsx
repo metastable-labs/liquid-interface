@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { useForm } from 'react-hook-form';
-import { Ionicons } from '@expo/vector-icons';
 
+import { CheckIcon } from '@/assets/icons';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import LQDBottomSheet from '../bottom-sheet';
 import LQDInput from '../input';
@@ -62,7 +62,7 @@ const LQDAssetSelection = ({ assets, close, setAsset, show, title, asset }: IAss
 
                 {active && (
                   <View style={styles.checkMarkContainer}>
-                    <Ionicons name="checkmark" size={10} color="#FFFFFF" />
+                    <CheckIcon />
                   </View>
                 )}
               </TouchableOpacity>

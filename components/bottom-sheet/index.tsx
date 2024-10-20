@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Modal, Pressable } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 
 import { adjustFontSizeForIOS } from '@/utils/helpers';
+import { CloseIcon } from '@/assets/icons';
 
 const { height } = Dimensions.get('window');
 
@@ -33,7 +33,7 @@ const LQDBottomSheet: React.FC<ILQDBottomSheet> = ({ title, variant = 'primary',
         <View style={styles.header}>
           <Text style={styles.title}>{title}</Text>
           <TouchableOpacity onPress={onClose}>
-            <Ionicons name="close" size={24} color="#0C0507" />
+            <CloseIcon />
           </TouchableOpacity>
         </View>
 

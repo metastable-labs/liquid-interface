@@ -1,7 +1,7 @@
 import { StyleSheet, ScrollView, View } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 
 import { LQDPoolPairPaper } from '@/components';
+import { DirectUpIcon } from '@/assets/icons';
 import { poolPairs as originalPoolPairs } from '../dummy';
 import Section from '../section';
 
@@ -10,7 +10,7 @@ const Trending = () => {
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer} showsVerticalScrollIndicator={false}>
-      <Section title="Trending" subtitle="by Volume" icon={<Ionicons name="arrow-up" size={18} color="#0C0507" />} isShowingAll>
+      <Section title="Trending" subtitle="by Volume" icon={<DirectUpIcon />} isShowingAll>
         <View style={styles.mapContainer}>
           {poolPairs.map((poolPair, index) => (
             <LQDPoolPairPaper key={index} {...poolPair} />

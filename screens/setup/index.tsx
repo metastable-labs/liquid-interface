@@ -7,8 +7,7 @@ import { LQDButton } from '@/components';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import LQDLoadingStep from '@/components/loading-step';
 import Info from './info';
-
-const setupIcons = ['journal-outline', 'bar-chart-outline', 'checkmark-done-circle-outline'];
+import { ChartIcon, ShieldTickIcon, SwatchIcon } from '@/assets/icons';
 
 const Setup = () => {
   const { router } = useSystemFunctions();
@@ -22,29 +21,30 @@ const Setup = () => {
 
   const setupSteps: Array<ILQDLoadingStep> = [
     {
-      icon: 'journal-outline',
+      icon: <SwatchIcon />,
       isCompleted: completedSteps[0],
       subtitle: 'Powered by Coinbase smart wallets',
       title: 'Setting up your Liquid account... ',
     },
 
     {
-      icon: 'bar-chart-outline',
+      icon: <ChartIcon />,
       isCompleted: completedSteps[1],
       subtitle: 'Maximize returns on your asset deposits',
       title: 'Recommending High yield pools...',
     },
 
     {
-      icon: 'checkmark-done-circle-outline',
+      icon: <ShieldTickIcon />,
       isCompleted: completedSteps[2],
       subtitle: 'Protect your account and assets with your biometrics',
       title: 'Securing your Liquid account...',
+      isLast: true,
     },
   ];
 
   useEffect(() => {
-    if (setupStep < 2) {
+    if (setupStep < 3) {
       const timeout = setTimeout(() => {
         setCompletedSteps((prev) => prev.map((step, index) => (index === setupStep ? true : step)));
 
@@ -60,7 +60,7 @@ const Setup = () => {
   }, [setupStep]);
 
   useEffect(() => {
-    if (setupStep === 2) {
+    if (setupStep <= 3) {
       buttonOpacity.value = withTiming(1, {
         duration: 500,
         easing: Easing.inOut(Easing.ease),
@@ -85,10 +85,11 @@ const Setup = () => {
                 setupStep >= index && (
                   <LQDLoadingStep
                     key={index}
-                    icon={setupIcons[index]}
+                    icon={step.icon}
                     isCompleted={step.isCompleted}
                     subtitle={step.subtitle}
                     title={step.title}
+                    isLast={step.isLast}
                   />
                 )
             )}

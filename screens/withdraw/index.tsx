@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, TextInput, Platform, Image } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 
 import { LQDAssetSelection, LQDButton, LQDNumericKeyboard } from '@/components';
 import { formatWithThousandSeparator, removeCommasFromNumber } from '@/utils/helpers';
+import { CaretDownIcon } from '@/assets/icons';
 import styles from './styles';
 import { assets, defaultAsset } from './dummy';
 import { IAsset } from './types';
@@ -101,7 +101,7 @@ const Withdraw = () => {
 
                 <Text style={[styles.selectorText, styles.paymentSelectorText]}>{asset?.symbol}</Text>
 
-                <Ionicons name="chevron-down" size={18} color="#64748B" />
+                <CaretDownIcon />
               </TouchableOpacity>
             </View>
 

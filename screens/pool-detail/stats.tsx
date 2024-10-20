@@ -1,29 +1,29 @@
 import { View, Text, StyleSheet } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 
 import { adjustFontSizeForIOS, formatNumberWithSuffix } from '@/utils/helpers';
+import { Chart2AltIcon, CoinsLGIcon, MoneyTickIcon, SwapHorizontalIcon } from '@/assets/icons';
 
 const PoolStats = () => {
   const stats = [
     {
       title: 'Volume',
       value: `$${formatNumberWithSuffix(607_000)}`,
-      icon: <Ionicons name="cash" size={20} color="#64748B" />,
+      icon: <Chart2AltIcon />,
     },
     {
       title: 'TVL',
       value: `$${formatNumberWithSuffix(1_300_000)}`,
-      icon: <Ionicons name="cloud-outline" size={20} color="#64748B" />,
+      icon: <MoneyTickIcon />,
     },
     {
       title: 'Fees',
       value: `$${formatNumberWithSuffix(24_400)}`,
-      icon: <Ionicons name="stats-chart" size={20} color="#64748B" />,
+      icon: <CoinsLGIcon width={20} height={20} />,
     },
     {
       title: 'Transactions',
       value: `${(194).toLocaleString()} TX`,
-      icon: <Ionicons name="swap-horizontal" size={20} color="#64748B" />,
+      icon: <SwapHorizontalIcon />,
     },
   ];
 

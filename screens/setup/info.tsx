@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing } from 'react-native-reanimated';
-import { Ionicons } from '@expo/vector-icons';
 
 import { adjustFontSizeForIOS } from '@/utils/helpers';
+import { Chart2Icon, CircleArrowDownIcon, MoneysIcon } from '@/assets/icons';
 
-const INFO_ICONS = ['earth-outline', 'cloud-upload-outline', 'download-outline'];
+const INFO_ICONS = [<MoneysIcon />, <Chart2Icon />, <CircleArrowDownIcon />];
 
 const INFO_TEXTS = [
   'You can manage your positions across multiple protocols on Liquid',
@@ -61,18 +61,6 @@ const Info = () => {
     }),
   }));
 
-  const animatedOpacityStyle = () => {
-    const opacityValue = useSharedValue(0);
-
-    useEffect(() => {
-      opacityValue.value = 1;
-    }, []);
-
-    return useAnimatedStyle(() => ({
-      opacity: withTiming(opacityValue.value, { duration: 500 }),
-    }));
-  };
-
   useEffect(() => {
     const interval = setInterval(() => {
       setInfoSteps((prevStep) => {
@@ -87,27 +75,11 @@ const Info = () => {
 
   return (
     <Animated.View style={[styles.infoContainer, animatedContainerStyle]}>
-      <Animated.View style={[styles.infoIconContainer, animatedIconContainerStyle]}>
-        {INFO_ICONS.map(
-          (icon, index) =>
-            index === infoSteps && (
-              <Animated.View key={index} style={animatedOpacityStyle()}>
-                <Ionicons name={icon as any} size={24} color="#FFF" />
-              </Animated.View>
-            )
-        )}
-      </Animated.View>
+      <Animated.View style={[styles.infoIconContainer, animatedIconContainerStyle]}>{INFO_ICONS[infoSteps]}</Animated.View>
 
       <View style={styles.infoDetailContainer}>
         <Animated.Text style={[styles.infoHeader, animatedHeaderStyle]}>Did you know?</Animated.Text>
-        {INFO_TEXTS.map(
-          (text, index) =>
-            index === infoSteps && (
-              <Animated.Text key={index} style={[styles.infoParagraph, animatedParagraphStyle, animatedOpacityStyle()]}>
-                {text}
-              </Animated.Text>
-            )
-        )}
+        <Animated.Text style={[styles.infoParagraph, animatedParagraphStyle]}>{INFO_TEXTS[infoSteps]}</Animated.Text>
       </View>
     </Animated.View>
   );

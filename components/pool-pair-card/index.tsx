@@ -1,9 +1,9 @@
 import { Image, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Href } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
 
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
+import { ArrowDownIcon, ArrowUpAltIcon } from '@/assets/icons';
 
 const backgroundColors = ['#FDEAEA', '#EFFAF6'];
 const textColors = ['#A4262C', '#156146'];
@@ -39,7 +39,11 @@ const LQDPoolPairCard = ({
         </View>
 
         <View style={[styles.changeContainer, { backgroundColor: backgroundColors[+increased] }]}>
-          <Ionicons name={increased ? 'arrow-up' : 'arrow-down'} size={12} color={textColors[+increased]} />
+          {increased ? (
+            <ArrowUpAltIcon width={12} height={12} fill={textColors[+increased]} />
+          ) : (
+            <ArrowDownIcon width={12} height={12} fill={textColors[+increased]} />
+          )}
           <Text style={[styles.change, { color: textColors[+increased] }]}>{change}%</Text>
         </View>
       </View>
