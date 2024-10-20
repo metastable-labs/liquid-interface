@@ -1,11 +1,8 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring, withTiming } from 'react-native-reanimated';
-import { Ionicons } from '@expo/vector-icons';
 
-import { adjustFontSizeForIOS } from '@/utils/helpers';
-
-const LQDLoadingStep = ({ icon, isCompleted, subtitle, title }: ILQDLoadingStep) => {
+const LQDLoadingStep = ({ icon, isCompleted, subtitle, title, isLast }: ILQDLoadingStep) => {
   const opacityValue = useSharedValue(0);
   const connectorHeight = useSharedValue(0);
 
@@ -33,11 +30,9 @@ const LQDLoadingStep = ({ icon, isCompleted, subtitle, title }: ILQDLoadingStep)
   return (
     <Animated.View style={[styles.container, animatedOpacityStyle]}>
       <View style={styles.connectorWrap}>
-        <View style={styles.iconContainer}>
-          <Ionicons name={icon as any} size={24} color="#4691FE" />
-        </View>
+        <View style={styles.iconContainer}>{React.cloneElement(icon, { fill: isCompleted ? '#09C37F' : '#4691FE' })}</View>
 
-        <Animated.View style={[styles.connector, animatedConnectorStyle]} />
+        {!isLast && <Animated.View style={[styles.connector, animatedConnectorStyle]} />}
       </View>
 
       <View style={styles.details}>
@@ -84,7 +79,7 @@ const styles = StyleSheet.create({
   connector: {
     width: 2,
     borderRadius: 2,
-    backgroundColor: '#4691FE',
+    backgroundColor: '#09C37F',
   },
 
   details: {
@@ -95,7 +90,7 @@ const styles = StyleSheet.create({
 
   title: {
     color: '#0F172A',
-    fontSize: adjustFontSizeForIOS(18, 2),
+    fontSize: 18,
     lineHeight: 23.76,
     fontWeight: '500',
     fontFamily: 'AeonikMedium',
@@ -103,7 +98,7 @@ const styles = StyleSheet.create({
 
   subtitle: {
     color: '#64748B',
-    fontSize: adjustFontSizeForIOS(16, 2),
+    fontSize: 16,
     lineHeight: 19.84,
     fontFamily: 'AeonikRegular',
   },

@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 
 import { adjustFontSizeForIOS } from '@/utils/helpers';
+import { CaretRightAltIcon } from '@/assets/icons';
 
 const Section = ({ children, icon, subtitle, title, action, isShowingAll }: ISection) => {
   return (
@@ -16,7 +16,7 @@ const Section = ({ children, icon, subtitle, title, action, isShowingAll }: ISec
         {!isShowingAll && (
           <TouchableOpacity onPress={action} style={styles.action}>
             <Text style={styles.actionText}>See all</Text>
-            <Ionicons name="chevron-forward" size={16} color="#0C0507" />
+            <CaretRightAltIcon />
           </TouchableOpacity>
         )}
       </View>

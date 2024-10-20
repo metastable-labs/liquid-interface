@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 
 import { adjustFontSizeForIOS } from '@/utils/helpers';
+import { BoxSearchIcon, SendIcon } from '@/assets/icons';
 
 const Header = ({ condition, fee, id, primaryIconURL, primaryTitle, secondaryIconURL, secondaryTitle }: IPool) => {
   const flagColors = {
@@ -12,11 +12,11 @@ const Header = ({ condition, fee, id, primaryIconURL, primaryTitle, secondaryIco
   const actions = [
     {
       action: () => console.log('search'),
-      icon: <Ionicons name="search" size={24} color="#0F172A" />,
+      icon: <BoxSearchIcon />,
     },
     {
       action: () => console.log('sharing', id),
-      icon: <Ionicons name="share-social" size={24} color="#0F172A" />,
+      icon: <SendIcon />,
     },
   ];
 

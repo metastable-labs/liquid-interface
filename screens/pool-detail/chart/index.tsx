@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 
 import { adjustFontSizeForIOS, formatNumberWithSuffix } from '@/utils/helpers';
 import { LQDBarChart } from '@/components';
 import { generateData, metrics, periods } from './dummy';
+import { ArrowDownIcon } from '@/assets/icons';
 
 const adjustmentColors = ['#FF8896', '#88FF9C'];
 
@@ -31,7 +31,9 @@ const Chart = () => {
 
             <View style={styles.adjustmentAndPeriod}>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Ionicons name={increased ? 'arrow-up' : 'arrow-down'} size={12} color={adjustmentColors[+increased]} />
+                <View style={{ transform: [{ rotate: increased ? '180deg' : '0deg' }] }}>
+                  <ArrowDownIcon fill={adjustmentColors[+increased]} />
+                </View>
 
                 <Text style={[styles.adjustmentTexts, { color: adjustmentColors[+increased] }]}>{change.toFixed(2)}%</Text>
               </View>

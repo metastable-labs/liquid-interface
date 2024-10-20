@@ -1,18 +1,18 @@
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 
 import { adjustFontSizeForIOS } from '@/utils/helpers';
+import { AddIcon, CaretRightAltIcon, CoinsAltIcon, DollarSquareIcon, MoneysIcon, WalletMoneyIcon } from '@/assets/icons';
 
 const icons = {
-  wallet: <Ionicons name="wallet-outline" size={24} color="#FFF" />,
-  radio: <Ionicons name="radio-outline" size={24} color="#FFF" />,
-  coins: <Ionicons name="contract-outline" size={24} color="#FFF" />,
-  dollar: <Ionicons name="logo-usd" size={24} color="#FFF" />,
+  wallet: <WalletMoneyIcon fill="#FFFFFF" />,
+  radio: <MoneysIcon />,
+  coins: <CoinsAltIcon fill="#FFF" />,
+  dollar: <DollarSquareIcon fill="#FFFFFF" />,
 };
 
 const actionIcons = {
-  plus: <Ionicons name="add-outline" size={14} color="#FFF" />,
-  'right-caret': <Ionicons name="chevron-forward-outline" size={14} color="#FFF" />,
+  plus: <AddIcon />,
+  'right-caret': <CaretRightAltIcon fill="#fff" />,
 };
 
 const Empty = ({ icon, subtitle, title, action, actionIcon, isLast }: IEmpty) => {
@@ -79,9 +79,9 @@ const styles = StyleSheet.create({
 
   action: {
     flexDirection: 'row',
-    width: 105,
     height: 32,
     paddingVertical: 4,
+    paddingHorizontal: 12,
     alignItems: 'center',
     justifyContent: 'center',
     gap: 5,

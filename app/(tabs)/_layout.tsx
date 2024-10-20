@@ -1,6 +1,5 @@
 import { Tabs } from 'expo-router';
-import { Platform, StatusBar, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 
 import { TabBarIcon } from '@/components/navigation/TabBarIcon';
 import { Colors } from '@/constants/Colors';

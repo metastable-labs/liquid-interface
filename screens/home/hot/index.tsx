@@ -1,6 +1,6 @@
 import { StyleSheet, ScrollView, View } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 
+import { DollarSquareIcon } from '@/assets/icons';
 import { LQDPoolPairPaper } from '@/components';
 import { poolPairs as originalPoolPairs } from '../dummy';
 import Section from '../section';
@@ -10,7 +10,7 @@ const Hot = () => {
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer} showsVerticalScrollIndicator={false}>
-      <Section title="Hot" subtitle="by TVL" icon={<Ionicons name="flame" size={18} color="#0C0507" />} isShowingAll>
+      <Section title="Hot" subtitle="by TVL" icon={<DollarSquareIcon />} isShowingAll>
         <View style={styles.mapContainer}>
           {poolPairs.map((poolPair, index) => (
             <LQDPoolPairPaper key={index} {...poolPair} capitalMetric="tvl" />

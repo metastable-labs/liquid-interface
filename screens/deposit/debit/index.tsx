@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, TextInput, Platform } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 
 import { LQDButton, LQDNumericKeyboard } from '@/components';
 import { formatWithThousandSeparator, removeCommasFromNumber } from '@/utils/helpers';
+import { CardIcon, CaretDownIcon } from '@/assets/icons';
 import PaymentMethodSelection from '../method-selection';
 import styles from '../styles';
 
@@ -97,9 +97,9 @@ const DebitDeposit = () => {
               </View>
 
               <TouchableOpacity style={styles.paymentSelector} onPress={() => setShowBottomSheet(true)}>
-                <Ionicons name="cash-outline" size={18} color="#64748B" />
+                <CardIcon />
                 <Text style={[styles.selectorText, styles.paymentSelectorText]}>Debit card</Text>
-                <Ionicons name="chevron-down" size={18} color="#64748B" />
+                <CaretDownIcon />
               </TouchableOpacity>
             </View>
 

@@ -1,12 +1,12 @@
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 
+import { ArrowUpIcon, DollarCoinIcon } from '@/assets/icons';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import { ILQDButton } from './types';
 
 const icons = {
-  money: (color?: string) => <Ionicons name="cash-outline" size={18} color={color || '#FFF'} />,
-  'arrow-up': (color?: string) => <Ionicons name="arrow-up-outline" size={18} color={color || '#334155'} />,
+  money: (color?: string) => <DollarCoinIcon width={18} height={18} fill={color || '#FFF'} />,
+  'arrow-up': (color?: string) => <ArrowUpIcon width={18} height={18} fill={color || '#334155'} />,
 };
 
 const LQDButton = ({

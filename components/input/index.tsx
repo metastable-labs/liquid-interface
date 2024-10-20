@@ -1,8 +1,8 @@
 import React from 'react';
 import { Controller, FieldValues } from 'react-hook-form';
 import { TextInput, Text, View, StyleSheet } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 
+import { SearchIcon } from '@/assets/icons';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import { ILQDInput } from './types';
 
@@ -11,7 +11,7 @@ const LQDInput = <T extends FieldValues>({ control, name, inputProps, label, pla
     <View style={styles.container}>
       {label && <Text style={styles.label}>{label}</Text>}
       <View style={styles.inputContainer}>
-        {variant === 'search' && <Ionicons name="search" size={20} color="#94A3B8" />}
+        {variant === 'search' && <SearchIcon />}
 
         <Controller
           control={control}

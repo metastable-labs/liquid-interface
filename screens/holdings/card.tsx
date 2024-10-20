@@ -1,14 +1,14 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
+import { CaretRightAltIcon, CoinsAltIcon, DollarSquareIcon, InformationIcon, MoneysAltIcon } from '@/assets/icons';
 
 const icons = {
-  primary: <Ionicons name="wallet-outline" size={18} color="#FFF" />,
-  secondary: <Ionicons name="radio-outline" size={18} color="#FFF" />,
-  tertiary: <Ionicons name="contract-outline" size={18} color="#FFF" />,
-  quaternary: <Ionicons name="logo-usd" size={18} color="#FFF" />,
+  primary: <DollarSquareIcon fill="#FFFFFF" />,
+  secondary: <MoneysAltIcon />,
+  tertiary: <CoinsAltIcon fill="#FFF" />,
+  quaternary: <DollarSquareIcon fill="#FFFFFF" />,
 };
 
 const Card = ({ details, subtitle, title, variant }: IItem) => {
@@ -101,7 +101,7 @@ const Card = ({ details, subtitle, title, variant }: IItem) => {
             </View>
           </View>
 
-          <Ionicons name="information-circle-outline" size={20} color={config[variant].secondaryColor} />
+          <InformationIcon />
         </View>
 
         <View style={styles.bottom}>
@@ -139,7 +139,7 @@ const Card = ({ details, subtitle, title, variant }: IItem) => {
               {variant === 'primary' ? 'View assets' : 'See all'}
             </Text>
 
-            <Ionicons name="chevron-forward-outline" size={14} color={config[variant].secondaryColor} />
+            <CaretRightAltIcon fill={config[variant].secondaryColor} />
           </View>
         </View>
       </View>

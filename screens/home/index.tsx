@@ -1,9 +1,9 @@
 import { StyleSheet, View, Text, FlatList, ScrollView, TouchableOpacity } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { adjustFontSizeForIOS, formatAmountWithWholeAndDecimal } from '@/utils/helpers';
 import { LQDButton, LQDPoolPairCard, LQDPoolPairPaper } from '@/components';
+import { CaretRightIcon, DirectUpIcon, DollarSquareIcon, TrendUpIcon } from '@/assets/icons';
 import { topGainers, poolPairs } from './dummy';
 import Section from './section';
 
@@ -18,7 +18,7 @@ const Home = () => {
     {
       title: 'Top gainers',
       subtitle: 'by APR',
-      icon: <Ionicons name="trending-up" size={18} color="#0C0507" />,
+      icon: <TrendUpIcon />,
       action: () => router.push('/(tabs)/home/top'),
       children: (
         <FlatList
@@ -35,7 +35,7 @@ const Home = () => {
     {
       title: 'Trending',
       subtitle: 'by Volume',
-      icon: <Ionicons name="arrow-up" size={18} color="#0C0507" />,
+      icon: <DirectUpIcon />,
       action: () => router.push('/(tabs)/home/trending'),
       children: (
         <View style={styles.mapContainer}>
@@ -49,7 +49,7 @@ const Home = () => {
     {
       title: 'Hot',
       subtitle: 'by TVL',
-      icon: <Ionicons name="flame" size={18} color="#0C0507" />,
+      icon: <DollarSquareIcon />,
       action: () => router.push('/(tabs)/home/hot'),
       children: (
         <View style={styles.mapContainer}>
@@ -72,7 +72,7 @@ const Home = () => {
               ${whole}.<Text style={styles.balanceDecimalValue}>{decimal}</Text>
             </Text>
 
-            <Ionicons name="chevron-forward" size={24} color="#F8FAFC" />
+            <CaretRightIcon width={20} height={20} fill="#F8FAFC" />
           </TouchableOpacity>
         </View>
 
