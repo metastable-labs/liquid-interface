@@ -6,7 +6,7 @@ interface ILQDPoolPairPaper {
   secondaryTitle: string;
   apr: number;
   fees: number;
-  capitalMetric?: 'vol' | 'tvl';
+  capitalMetric?: 'vol' | 'tvl' | 'fees';
   capital: number;
   navigationVariant?: 'primary' | 'secondary';
 }

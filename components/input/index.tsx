@@ -1,4 +1,4 @@
-import React from 'react';
+import { forwardRef, useImperativeHandle, useRef } from 'react';
 import { Controller, FieldValues } from 'react-hook-form';
 import { TextInput, Text, View, StyleSheet } from 'react-native';
 
@@ -6,7 +6,20 @@ import { SearchIcon } from '@/assets/icons';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import { ILQDInput } from './types';
 
-const LQDInput = <T extends FieldValues>({ control, name, inputProps, label, placeholder, rules, variant = 'primary' }: ILQDInput<T>) => {
+const LQDInput = <T extends FieldValues>(
+  { control, name, inputProps, label, placeholder, rules, variant = 'primary' }: ILQDInput<T>,
+  ref: React.Ref<any>
+) => {
+  const inputRef = useRef<TextInput>(null);
+
+  useImperativeHandle(ref, () => ({
+    blur: () => {
+      if (inputRef.current) {
+        inputRef.current.blur();
+      }
+    },
+  }));
+
   return (
     <View style={styles.container}>
       {label && <Text style={styles.label}>{label}</Text>}
@@ -19,6 +32,7 @@ const LQDInput = <T extends FieldValues>({ control, name, inputProps, label, pla
           rules={rules}
           render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
+              ref={inputRef}
               style={styles.input}
               placeholder={variant === 'search' ? 'Search' : placeholder}
               onBlur={onBlur}
@@ -33,7 +47,8 @@ const LQDInput = <T extends FieldValues>({ control, name, inputProps, label, pla
   );
 };
 
-export default LQDInput;
+// Use forwardRef to pass down the ref to LQDInput
+export default forwardRef(LQDInput);
 
 const styles = StyleSheet.create({
   container: {},

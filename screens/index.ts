@@ -23,6 +23,8 @@ import PoolDetail from './pool-detail';
 import AddLiquidty from './liquidity-actions/add';
 import RemoveLiquidity from './liquidity-actions/remove';
 
+import Search from './search';
+
 export {
   Home,
   TopGainers,
@@ -41,4 +43,5 @@ export {
   PoolDetail,
   AddLiquidty,
   RemoveLiquidity,
+  Search,
 };

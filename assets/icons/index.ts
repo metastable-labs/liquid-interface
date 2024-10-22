@@ -41,6 +41,9 @@ import SwapHorizontalIcon from './swap-horizontal-icon';
 import TrendUpIcon from './trend-up-icon';
 import WalletIcon from './wallet-icon';
 import WalletMoneyIcon from './wallet-money-icon';
+import DollarCoinSMIcon from './dollar-coin-sm-icon';
+import FavoriteChartIcon from './favorite-chart-icon';
+import ChartSquareIcon from './chart-square-icon';
 
 export {
   SwatchIcon,
@@ -86,4 +89,7 @@ export {
   TrendUpIcon,
   WalletIcon,
   WalletMoneyIcon,
+  DollarCoinSMIcon,
+  FavoriteChartIcon,
+  ChartSquareIcon,
 };

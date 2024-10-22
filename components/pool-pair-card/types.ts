@@ -6,5 +6,4 @@ interface ILQDPoolPairCard {
   secondaryTitle: string;
   increased: boolean;
   change: number;
-  navigationVariant?: 'primary' | 'secondary';
 }

@@ -27,7 +27,7 @@ const PoolCard = ({
   ];
 
   return (
-    <Pressable style={styles.container} onPress={() => router.push(`/holdings/${id}`)}>
+    <Pressable style={styles.container} onPress={() => router.push(`/(tabs)/${id}`)}>
       <View style={styles.topContainer}>
         <View style={styles.topLeftContainer}>
           <View style={styles.iconContainer}>

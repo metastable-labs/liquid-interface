@@ -1,10 +1,10 @@
+import { useCallback } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Stack } from 'expo-router';
+import { Stack, useFocusEffect } from 'expo-router';
 
 import { LQDButton, LQDStackHeader } from '@/components';
 import { ILQDButton } from '@/components/button/types';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
-import { useEffect } from 'react';
 import useAppActions from '@/store/app/actions';
 
 const PoolDetailLayout = () => {
@@ -24,11 +24,13 @@ const PoolDetailLayout = () => {
     },
   ];
 
-  useEffect(() => {
-    hideSearch(true);
+  useFocusEffect(
+    useCallback(() => {
+      hideSearch(true);
 
-    return () => hideSearch(false);
-  }, []);
+      return () => hideSearch(false);
+    }, [])
+  );
 
   return (
     <>
@@ -38,7 +40,7 @@ const PoolDetailLayout = () => {
           headerShown: true,
         }}
       >
-        <Stack.Screen name="index" />
+        <Stack.Screen name="index" options={{ animation: 'slide_from_bottom' }} />
       </Stack>
 
       <View style={styles.actionsContainer}>
@@ -63,7 +65,6 @@ const styles = StyleSheet.create({
     gap: 11,
     backgroundColor: '#FFF',
   },
-
   action: {
     flex: 1,
   },

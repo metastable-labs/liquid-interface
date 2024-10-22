@@ -1,5 +1,4 @@
 import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native';
-import { Href } from 'expo-router';
 
 import { adjustFontSizeForIOS, formatNumberWithSuffix } from '@/utils/helpers';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
@@ -14,16 +13,10 @@ const LQDPoolPairPaper = ({
   secondaryIconURL,
   secondaryTitle,
   capitalMetric = 'vol',
-  navigationVariant = 'primary',
 }: ILQDPoolPairPaper) => {
   const { router } = useSystemFunctions();
 
-  const paths = {
-    primary: `/(tabs)/home/${id}` as Href<string>,
-    secondary: `/(tabs)/holdings/${id}` as Href<string>,
-  };
-
-  const handlePress = () => router.push(paths[navigationVariant]);
+  const handlePress = () => router.push(`/(tabs)/${id}`);
 
   return (
     <TouchableOpacity onPress={handlePress} style={styles.container}>
@@ -56,7 +49,9 @@ const LQDPoolPairPaper = ({
       <View style={styles.volumeWrapper}>
         <Text style={styles.aprText}>APR: {apr}%</Text>
 
-        <Text style={styles.volumeText}>VOL: ${formatNumberWithSuffix(capital)}</Text>
+        <Text style={[styles.volumeText, capitalMetric === 'fees' && { textTransform: 'capitalize' }]}>
+          {capitalMetric}: <Text style={{ textTransform: 'uppercase' }}>${formatNumberWithSuffix(capital)}</Text>
+        </Text>
       </View>
     </TouchableOpacity>
   );
@@ -171,7 +166,7 @@ const styles = StyleSheet.create({
   volumeText: {
     color: '#64748B',
     fontSize: adjustFontSizeForIOS(11, 2),
-    textTransform: 'uppercase',
     fontFamily: 'AeonikRegular',
+    textTransform: 'uppercase',
   },
 });

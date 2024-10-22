@@ -1,14 +1,32 @@
-import { useState } from 'react';
-import { View, StyleSheet, LayoutChangeEvent } from 'react-native';
+import { useEffect } from 'react';
+import { StyleSheet } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
-import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 
 import LQDNavigationAction from './action';
+import { ILQDNavigation } from './types';
 
-const LQDNavigation = ({ state, descriptors, navigation }: BottomTabBarProps) => {
+const LQDNavigation = ({ descriptors, navigation, state, hide }: ILQDNavigation) => {
+  const opacity = useSharedValue(1);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    opacity: opacity.value,
+  }));
+
+  useEffect(() => {
+    opacity.value = withSpring(hide ? 0 : 1, {
+      damping: 20,
+      stiffness: 90,
+    });
+  }, [hide]);
+
+  const filteredRoutes = state.routes.filter((route) => {
+    const isPoolRoute = route.name.startsWith('pool') || route.name.includes('[poolId]');
+    return route.name !== 'search' && !isPoolRoute;
+  });
+
   return (
-    <View style={styles.container}>
-      {state.routes.map((route, index) => {
+    <Animated.View style={[styles.container, animatedStyle, hide && { pointerEvents: 'none' }]}>
+      {filteredRoutes.map((route, index) => {
         const { options } = descriptors[route.key];
         const label = options.tabBarLabel !== undefined ? options.tabBarLabel : options.title !== undefined ? options.title : route.name;
 
@@ -44,7 +62,7 @@ const LQDNavigation = ({ state, descriptors, navigation }: BottomTabBarProps) =>
           />
         );
       })}
-    </View>
+    </Animated.View>
   );
 };
 

@@ -1,8 +1,10 @@
 import { useEffect } from 'react';
 import { Pressable, StyleSheet } from 'react-native';
 import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import { HomeIcon, WalletIcon } from '@/assets/icons';
+import { ILQDNavigationAction } from './types';
 
 const icon: any = {
   home: (props: any) => <HomeIcon {...props} />,

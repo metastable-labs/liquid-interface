@@ -24,7 +24,7 @@ export default function TabLayout() {
           tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
           headerShown: false,
         }}
-        tabBar={(props) => <LQDNavigation {...props} />}
+        tabBar={(props) => <LQDNavigation {...props} hide={appState.searchIsFocused} />}
       >
         <Tabs.Screen
           name="home"

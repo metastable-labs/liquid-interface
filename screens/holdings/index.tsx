@@ -48,7 +48,7 @@ const Holdings = () => {
           onPress: () => console.log('Deposit'),
         },
       },
-      isEmpty: true,
+      isEmpty: false,
     },
     {
       variant: 'secondary',
@@ -65,7 +65,7 @@ const Holdings = () => {
           onPress: () => console.log('explore'),
         },
       },
-      isEmpty: true,
+      isEmpty: false,
     },
     {
       variant: 'tertiary',
@@ -73,7 +73,7 @@ const Holdings = () => {
       subtitle: `${(3104).toLocaleString()} AERO`,
       title: `$${(5_643.44).toLocaleString()}`,
       empty: emptyData.tertiary,
-      isEmpty: true,
+      isEmpty: false,
     },
     {
       variant: 'quaternary',
@@ -81,7 +81,7 @@ const Holdings = () => {
       subtitle: `$${(12_506).toLocaleString()}`,
       title: `$${(12_506).toLocaleString()}`,
       empty: emptyData.quaternary,
-      isEmpty: true,
+      isEmpty: false,
     },
   ];
 

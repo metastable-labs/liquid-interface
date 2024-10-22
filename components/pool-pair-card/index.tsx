@@ -1,5 +1,4 @@
 import { Image, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { Href } from 'expo-router';
 
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
@@ -8,24 +7,10 @@ import { ArrowDownIcon, ArrowUpAltIcon } from '@/assets/icons';
 const backgroundColors = ['#FDEAEA', '#EFFAF6'];
 const textColors = ['#A4262C', '#156146'];
 
-const LQDPoolPairCard = ({
-  change,
-  id,
-  increased,
-  primaryIconURL,
-  primaryTitle,
-  secondaryIconURL,
-  secondaryTitle,
-  navigationVariant = 'primary',
-}: ILQDPoolPairCard) => {
+const LQDPoolPairCard = ({ change, id, increased, primaryIconURL, primaryTitle, secondaryIconURL, secondaryTitle }: ILQDPoolPairCard) => {
   const { router } = useSystemFunctions();
 
-  const paths = {
-    primary: `/(tabs)/home/${id}` as Href<string>,
-    secondary: `/(tabs)/holdings/${id}` as Href<string>,
-  };
-
-  const handlePress = () => router.push(paths[navigationVariant]);
+  const handlePress = () => router.push(`/(tabs)/${id}`);
 
   return (
     <TouchableOpacity onPress={handlePress} style={styles.container}>
