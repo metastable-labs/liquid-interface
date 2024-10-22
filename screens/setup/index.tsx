@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { View, Text, StyleSheet, Platform, StatusBar } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing } from 'react-native-reanimated';
+import { RESULTS } from 'react-native-permissions';
 
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { LQDButton } from '@/components';
@@ -13,7 +14,7 @@ import useBiometrics from '@/hooks/useBiometrics';
 
 const Setup = () => {
   const { router, userState } = useSystemFunctions();
-  const { authenticateBiometrics } = useBiometrics();
+  const { requestBiometricPermission } = useBiometrics();
   const { create: createSmartAccount } = useSmartAccountActions();
   const buttonOpacity = useSharedValue(0);
   const animatedButtonStyle = useAnimatedStyle(() => ({
@@ -61,9 +62,9 @@ const Setup = () => {
 
   const createAccount = async () => {
     if (!user) throw new Error('User not found');
-    const biometricsGranted = await authenticateBiometrics();
+    const status = await requestBiometricPermission();
 
-    if (!biometricsGranted) return;
+    // if (status != RESULTS.GRANTED) return;
 
     createSmartAccount(user.username).then(progressToNextStep);
   };

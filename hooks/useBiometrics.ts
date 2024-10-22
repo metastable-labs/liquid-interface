@@ -1,37 +1,41 @@
-import * as LocalAuthentication from 'expo-local-authentication';
+import { PERMISSIONS, RESULTS, PermissionStatus, request } from 'react-native-permissions';
+
 import { Alert } from 'react-native';
 
 const useBiometrics = () => {
-  const isBiometricsAvailable = async () => {
-    const hasHardware = await LocalAuthentication.hasHardwareAsync();
-    const hasEnrolled = await LocalAuthentication.isEnrolledAsync();
-
-    return hasHardware && hasEnrolled;
-  };
-
-  const authenticateBiometrics = async () => {
+  const requestBiometricPermission = async (): Promise<PermissionStatus | undefined> => {
     try {
-      const biometricsAlreadyGranted = await isBiometricsAvailable();
+      const status = await request(PERMISSIONS.IOS.FACE_ID);
 
-      if (biometricsAlreadyGranted) {
-        return true;
+      switch (status) {
+        case RESULTS.UNAVAILABLE:
+          console.log('This feature is not available (on this device / in this context)');
+          break;
+        case RESULTS.DENIED:
+          console.log('The permission has been denied but can be requested again');
+          Alert.alert('Biometric permission not granted!', 'Please grant FaceId permission to continue.');
+          break;
+        case RESULTS.BLOCKED:
+          console.log('The permission is denied and not requestable anymore');
+          Alert.alert('Biometric permission blocked!', 'Please grant FaceId permission to continue.');
+          break;
+        case RESULTS.GRANTED:
+          console.log('The permission is granted');
+          break;
+        case RESULTS.LIMITED:
+          console.log('The permission is granted but with limitations');
+          break;
+        default:
+          console.log('Unknown permission result');
       }
 
-      const result = await LocalAuthentication.authenticateAsync();
-
-      if (result.success) {
-        return true;
-      } else {
-        Alert.alert('Biometric permission not granted!', 'Please grant FaceId permission to continue.');
-
-        return false;
-      }
+      return status;
     } catch (error) {
-      return false;
+      console.error('Permission request failed:', error);
     }
   };
 
-  return { isBiometricsAvailable, authenticateBiometrics };
+  return { requestBiometricPermission };
 };
 
 export default useBiometrics;
