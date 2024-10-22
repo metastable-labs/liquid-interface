@@ -1,7 +1,5 @@
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, StyleSheet, ScrollView } from 'react-native';
 
-import { ILQDButton } from '@/components/button/types';
-import { LQDButton } from '@/components';
 import Header from './header';
 import Chart from './chart';
 import Balance from './balance';

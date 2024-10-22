@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { useState } from 'react';
+import { View, Text, Image, TextInput, TouchableOpacity } from 'react-native';
 
 import { assets as tokens } from '@/screens/withdraw/dummy';
 import { removeCommasFromNumber } from '@/utils/helpers';
 import { LQDAssetSelection } from '@/components';
+import { CaretDownIcon } from '@/assets/icons';
 import { coinSelectorInputStyles as styles } from './styles';
 
 const CoinSelectorInput = ({ onChange, setTokenId, value, disabled, tokenId }: ICoinSelectorInput) => {
@@ -37,7 +37,7 @@ const CoinSelectorInput = ({ onChange, setTokenId, value, disabled, tokenId }: I
 
             <Text style={styles.tokenText}>{token?.symbol}</Text>
 
-            <Ionicons name="chevron-down" size={18} color="#94A3B8" />
+            <CaretDownIcon />
           </TouchableOpacity>
 
           <View style={styles.balanceInfo}>

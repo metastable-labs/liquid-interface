@@ -1,12 +1,12 @@
-import { View, Text, StyleSheet } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { View, Text } from 'react-native';
 
 import { infoStyles as styles } from './styles';
+import { BitcoinConvertIcon, CoinsLGIcon, MoneyTickIcon } from '@/assets/icons';
 
 const icons = {
-  primary: <Ionicons name="swap-horizontal" color="#64748B" size={20} />,
-  secondary: <Ionicons name="save-outline" color="#64748B" size={20} />,
-  tertiary: <Ionicons name="airplane-outline" color="#64748B" size={20} />,
+  primary: <BitcoinConvertIcon />,
+  secondary: <MoneyTickIcon />,
+  tertiary: <CoinsLGIcon />,
 };
 
 const Info = ({ infos }: IInfo) => {

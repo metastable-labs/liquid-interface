@@ -1,6 +1,6 @@
-import { View, Text, StyleSheet } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { View, Text } from 'react-native';
 
+import { SwapHorizontalIcon } from '@/assets/icons';
 import { errorStyles as styles } from './styles';
 
 const ErrorMessage = ({ description, swap, title }: IErrorMessage) => {
@@ -15,7 +15,7 @@ const ErrorMessage = ({ description, swap, title }: IErrorMessage) => {
         <View style={styles.bottom}>
           <Text style={[styles.title, { fontFamily: 'AeonikMedium' }]}>Swap {swap.from}</Text>
 
-          <Ionicons name="swap-horizontal" color="#693D11" size={16} />
+          <SwapHorizontalIcon fill="#693D11" />
 
           <Text style={[styles.title, { fontFamily: 'AeonikMedium' }]}>For {swap.from}?</Text>
         </View>

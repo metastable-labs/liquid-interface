@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { View, Text, TouchableOpacity } from 'react-native';
 
+import { CardIcon, CaretDownIcon, CheckIcon, CoinsIcon } from '@/assets/icons';
 import { LQDBottomSheet } from '@/components';
 import { paymentMethodSelectionStyles as styles } from './styles';
 
@@ -10,17 +10,17 @@ const PaymentMethodSelection = ({ method, setMethod }: IPaymentMethodSelection) 
 
   const methods: Array<Methods> = [
     {
-      icon: (color?: string) => <Ionicons name="card" size={16} color={color || '#FFF'} />,
+      icon: (color?: string) => <CardIcon fill={color || '#FFF'} />,
       method: 'debit',
       title: 'Debit card',
     },
     {
-      icon: (color?: string) => <Ionicons name="logo-bitcoin" size={16} color={color || '#FFF'} />,
+      icon: (color?: string) => <CoinsIcon fill={color || '#FFF'} />,
       method: 'liquid',
       title: 'Liquid balance',
     },
     {
-      icon: (color?: string) => <Ionicons name="shield-outline" size={16} color={color || '#FFF'} />,
+      icon: (color?: string) => <CardIcon fill={color || '#FFF'} />,
       method: 'coinbase',
       title: 'Coinbase Wallet',
     },
@@ -39,7 +39,7 @@ const PaymentMethodSelection = ({ method, setMethod }: IPaymentMethodSelection) 
         {methods.find(({ method: m }) => m === method)?.icon('#64748B')}
 
         <Text style={styles.selectorText}>{methods.find(({ method: m }) => m === method)?.title}</Text>
-        <Ionicons name="chevron-down" size={18} color="#64748B" />
+        <CaretDownIcon />
       </TouchableOpacity>
 
       <LQDBottomSheet show={show} title="Select method" variant="primary" onClose={() => setShow(false)}>
@@ -57,7 +57,7 @@ const PaymentMethodSelection = ({ method, setMethod }: IPaymentMethodSelection) 
 
                 {active && (
                   <View style={styles.checkMarkContainer}>
-                    <Ionicons name="checkmark" size={10} color="#FFFFFF" />
+                    <CheckIcon />
                   </View>
                 )}
               </TouchableOpacity>

@@ -1,10 +1,10 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Href } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
 
 import { LQDBottomSheet } from '@/components';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
+import { CardAltIcon, CheckIcon, CoinsAltIcon } from '@/assets/icons';
 import { IMethod, IPaymentMethodSelection } from './types';
 
 const PaymentMethodSelection = ({ close, show }: IPaymentMethodSelection) => {
@@ -13,12 +13,12 @@ const PaymentMethodSelection = ({ close, show }: IPaymentMethodSelection) => {
   const methods: Array<IMethod> = [
     {
       text: 'Debit card',
-      icon: <Ionicons name="card" size={18} color="#FFF" />,
+      icon: <CardAltIcon width={18} height={18} fill="#FFF" />,
       path: '/deposit/debit',
     },
     {
       text: 'Crypto',
-      icon: <Ionicons name="logo-bitcoin" size={18} color="#FFF" />,
+      icon: <CoinsAltIcon width={18} height={18} fill="#FFF" />,
       path: '/deposit/crypto',
     },
   ];
@@ -49,7 +49,7 @@ const PaymentMethodSelection = ({ close, show }: IPaymentMethodSelection) => {
 
               {active && (
                 <View style={styles.checkMarkContainer}>
-                  <Ionicons name="checkmark" size={10} color="#FFFFFF" />
+                  <CheckIcon />
                 </View>
               )}
             </TouchableOpacity>
@@ -75,6 +75,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: '#F8FAFC',
     flexDirection: 'row',
+    alignItems: 'center',
   },
 
   iconContainer: {

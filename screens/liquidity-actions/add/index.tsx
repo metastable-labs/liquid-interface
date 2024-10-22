@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { View, Text, ScrollView } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated';
 
 import { LQDButton } from '@/components';
@@ -12,6 +11,7 @@ import ErrorMessage from './error';
 import Info from './info';
 import { styles } from './styles';
 import Loading from './loading';
+import { CircleAddIcon } from '@/assets/icons';
 
 const AddLiquidity = () => {
   const [method, setMethod] = useState<Method>('liquid');
@@ -137,7 +137,7 @@ const AddLiquidity = () => {
               />
 
               <View style={styles.inputDivider}>
-                <Ionicons name="add-circle-outline" size={24} color="#94A3B8" />
+                <CircleAddIcon />
               </View>
 
               <CoinSelectorInput

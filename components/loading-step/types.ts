@@ -1,6 +1,7 @@
 interface ILQDLoadingStep {
   title: string;
   subtitle: string;
-  icon: string;
+  icon: React.ReactElement;
   isCompleted: boolean;
+  isLast?: boolean;
 }

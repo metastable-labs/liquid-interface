@@ -1,14 +1,14 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 
 import { adjustFontSizeForIOS } from '@/utils/helpers';
+import { CaretLeftIcon } from '@/assets/icons';
 import { ILQDStackHeader } from './types';
 
 const LQDStackHeader = ({ navigation, options, hasTitle, style }: ILQDStackHeader) => {
   return (
     <View style={[styles.container, hasTitle && styles.hasTitleContainer, style]}>
       <TouchableOpacity style={[styles.back, hasTitle && styles.hasTitleBack]} onPress={navigation.goBack}>
-        <Ionicons name="chevron-back" size={20} color="#0F172A" />
+        <CaretLeftIcon />
         <Text style={styles.backText}>Back</Text>
       </TouchableOpacity>
 
