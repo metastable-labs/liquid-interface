@@ -1,10 +1,10 @@
-import { Alert } from 'react-native';
 import * as Passkeys from 'react-native-passkeys';
 import { Address, hashMessage, hashTypedData, Hex, SignableMessage } from 'viem';
 import { ToCoinbaseSmartAccountReturnType, WebAuthnAccount, toCoinbaseSmartAccount } from 'viem/account-abstraction';
 import type { SignReturnType } from 'webauthn-p256';
 import { utf8StringToBuffer, bufferToBase64URLString } from '@/utils/base64';
 import { publicClient } from '@/init/viem';
+import api from '@/init/api';
 
 export async function createSmartAccount(username: string): Promise<{
   smartAccount: ToCoinbaseSmartAccountReturnType;
@@ -16,7 +16,9 @@ export async function createSmartAccount(username: string): Promise<{
       throw new Error('Passkeys are not available on this device');
     }
 
-    // const options = await this.api.getRegistrationOptions(username);
+    const options = await api.getRegistrationOptions(username);
+
+    console.log('options', options);
 
     // const registrationResponse = await this.passKeyImpl.createPassKeyCredential(options);
 
@@ -44,16 +46,8 @@ export async function createSmartAccount(username: string): Promise<{
       throw new Error('Failed to create passkey credential');
     }
 
-    // Alert.alert('Created passkey successfully', JSON.stringify(credential));
-    console.log('Created passkey successfully', JSON.stringify(credential));
-
     const credentialId = credential.id;
     const { attestationObject, clientDataJSON, publicKey } = credential.response;
-
-    console.log('credentialId', credentialId);
-    console.log('attestationObject', attestationObject);
-    console.log('clientDataJSON', clientDataJSON);
-    console.log('publicKey', publicKey);
 
     const registrationResponse = {
       credentialId,
@@ -124,18 +118,12 @@ export async function createSmartAccount(username: string): Promise<{
       owners: [webAuthnAccount],
     });
 
-    // console.log('smartAccount', JSON.stringify(smartAccount));
-
     const address = await smartAccount.getAddress();
 
     console.log('address', address);
 
-    // Alert.alert('Smart account address', address);
-
     return { smartAccount, address };
   } catch (error: any) {
-    // TODO: error handling
-    // Alert.alert('Error creating smart wallet', error.message);
     console.error(error);
     throw error;
   }
