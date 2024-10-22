@@ -1,4 +1,5 @@
 import * as LocalAuthentication from 'expo-local-authentication';
+import { Alert } from 'react-native';
 
 const useBiometrics = () => {
   const isBiometricsAvailable = async () => {
@@ -21,6 +22,8 @@ const useBiometrics = () => {
       if (result.success) {
         return true;
       } else {
+        Alert.alert('Biometric permission not granted!', 'Please grant FaceId permission to continue.');
+
         return false;
       }
     } catch (error) {
