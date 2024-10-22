@@ -9,7 +9,7 @@ class LiquidAPI {
     const apiKey = process.env.EXPO_PUBLIC_API_KEY;
 
     if (!apiUrl || !apiKey) {
-      throw new Error('API URL or API key is not set');
+      throw new Error('EXPO_PUBLIC_API_URL or EXPO_PUBLIC_API_KEY is not set');
     }
 
     this.apiBaseUrl = apiUrl;
@@ -17,10 +17,12 @@ class LiquidAPI {
   }
 
   private async fetchWithErrorHandling(url: string, options: RequestInit) {
+    console.log('fetchWithErrorHandling', url);
     const response = await fetch(url, options);
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+    if (!response.ok || response.status !== 200) {
+      const errorData = await response.text();
+      const errorMessage = `HTTP error - status: ${response.status} - ${errorData}`;
+      throw new Error(errorMessage);
     }
     return response.json();
   }
