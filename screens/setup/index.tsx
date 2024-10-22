@@ -6,20 +6,24 @@ import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { LQDButton } from '@/components';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import LQDLoadingStep from '@/components/loading-step';
-import { useUserActions } from '@/store/user/actions';
 import { useSmartAccountActions } from '@/store/smartAccount/actions';
 import Info from './info';
 import { ChartIcon, ShieldTickIcon, SwatchIcon } from '@/assets/icons';
+import useBiometrics from '@/hooks/useBiometrics';
 
 const Setup = () => {
-  const { router } = useSystemFunctions();
-  const [setupStep, setSetupStep] = useState(1);
-  const [completedSteps, setCompletedSteps] = useState([false, false, false]);
+  const { router, userState } = useSystemFunctions();
+  const { authenticateBiometrics } = useBiometrics();
+  const { create: createSmartAccount } = useSmartAccountActions();
   const buttonOpacity = useSharedValue(0);
-
   const animatedButtonStyle = useAnimatedStyle(() => ({
     opacity: buttonOpacity.value,
   }));
+
+  const [setupStep, setSetupStep] = useState(1);
+  const [completedSteps, setCompletedSteps] = useState([false, false, false]);
+
+  const { user } = userState;
 
   const progressToNextStep = useCallback(() => {
     setCompletedSteps((prev) => prev.map((step, index) => (index + 1 === setupStep ? true : step)));
@@ -54,18 +58,22 @@ const Setup = () => {
       isLast: true,
     },
   ];
-  
-  const { getUser } = useUserActions();
-  const { create: createSmartAccount } = useSmartAccountActions();
+
+  const createAccount = async () => {
+    if (!user) throw new Error('User not found');
+    const biometricsGranted = await authenticateBiometrics();
+
+    if (!biometricsGranted) return;
+
+    createSmartAccount(user.username).then(progressToNextStep);
+  };
 
   useEffect(
     function progressSteps() {
       if (setupStep === 1) {
         const firstStepDelayInMs = 1000 * 1; // 1s
         const timeout = setTimeout(() => {
-          const user = getUser();
-          if (!user) throw new Error('User not found');
-          createSmartAccount(user.username).then(progressToNextStep);
+          createAccount();
         }, firstStepDelayInMs);
 
         return () => clearTimeout(timeout);
@@ -90,7 +98,6 @@ const Setup = () => {
     },
     [setupStep]
   );
-
 
   return (
     <View style={styles.root}>
