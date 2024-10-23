@@ -5,9 +5,12 @@ import { ToCoinbaseSmartAccountReturnType, WebAuthnAccount, toCoinbaseSmartAccou
 import type { SignReturnType } from 'webauthn-p256';
 import { utf8StringToBuffer, bufferToBase64URLString } from '@/utils/base64';
 import { publicClient } from '@/init/viem';
-import api from '@/init/api';
+import { CreatePassKeyCredentialOptions } from '@/init/types';
 
-export async function createSmartAccount(username: string): Promise<{
+export async function createSmartAccount(
+  username: string,
+  registrationOptions: CreatePassKeyCredentialOptions
+): Promise<{
   smartAccount: ToCoinbaseSmartAccountReturnType;
   address: Address;
 }> {
@@ -16,13 +19,6 @@ export async function createSmartAccount(username: string): Promise<{
     if (!isPasskeyAvailable) {
       throw new Error('Passkeys are not available on this device');
     }
-
-    // looks like this API claims the username, it returns username already taken
-    // TODO: move it to tag screen and pass options to this function, maybe via navigation params?
-    const options = await api.getRegistrationOptions(username);
-
-    // attestation and extensions are not supported by react-native-passkeys
-    const { attestation, extensions, ...registrationOptions } = options;
 
     const credential = await Passkeys.create(registrationOptions);
 
@@ -116,7 +112,7 @@ export async function createSmartAccount(username: string): Promise<{
           {
             text: 'Try again',
             onPress: () => {
-              createSmartAccount(username);
+              createSmartAccount(username, registrationOptions);
             },
           },
         ]

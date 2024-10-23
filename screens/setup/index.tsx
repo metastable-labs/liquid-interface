@@ -6,10 +6,9 @@ import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { LQDButton } from '@/components';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import LQDLoadingStep from '@/components/loading-step';
-import { useUserActions } from '@/store/user/actions';
 import { useSmartAccountActions } from '@/store/smartAccount/actions';
-import Info from './info';
 import { ChartIcon, ShieldTickIcon, SwatchIcon } from '@/assets/icons';
+import Info from './info';
 
 const Setup = () => {
   const { router } = useSystemFunctions();
@@ -54,18 +53,15 @@ const Setup = () => {
       isLast: true,
     },
   ];
-  
-  const { getUser } = useUserActions();
-  const { create: createSmartAccount } = useSmartAccountActions();
+
+  const { setSmartAccount } = useSmartAccountActions();
 
   useEffect(
     function progressSteps() {
       if (setupStep === 1) {
         const firstStepDelayInMs = 1000 * 1; // 1s
         const timeout = setTimeout(() => {
-          const user = getUser();
-          if (!user) throw new Error('User not found');
-          createSmartAccount(user.username).then(progressToNextStep);
+          setSmartAccount().then(progressToNextStep);
         }, firstStepDelayInMs);
 
         return () => clearTimeout(timeout);
@@ -90,7 +86,6 @@ const Setup = () => {
     },
     [setupStep]
   );
-
 
   return (
     <View style={styles.root}>
