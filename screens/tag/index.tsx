@@ -37,6 +37,7 @@ const Tag = () => {
   const onSubmit = () => {
     if (formState !== 'success') return;
 
+    console.log('tag', tag);
     router.replace('/setup');
   };
 
@@ -52,6 +53,7 @@ const Tag = () => {
 
         try {
           const options = await api.getRegistrationOptions(tag);
+          console.log('registrationOptions', options);
 
           if (isCancelled) return;
 

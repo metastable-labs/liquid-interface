@@ -42,8 +42,6 @@ export async function createSmartAccount(
       .map((byte) => byte.toString(16).padStart(2, '0'))
       .join('')}` as Hex;
 
-    console.log('publicKeyHex', publicKeyHex);
-
     const webAuthnAccount: WebAuthnAccount = {
       type: 'webAuthn',
       publicKey: publicKeyHex,
