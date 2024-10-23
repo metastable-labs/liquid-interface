@@ -16,31 +16,14 @@ export async function createSmartAccount(username: string): Promise<{
       throw new Error('Passkeys are not available on this device');
     }
 
+    // looks like this API claims the username, it returns username already taken
+    // TODO: move it to tag screen and pass options to this function, maybe via navigation params?
     const options = await api.getRegistrationOptions(username);
 
-    console.log('options', options);
+    // attestation and extensions are not supported by react-native-passkeys
+    const { attestation, extensions, ...registrationOptions } = options;
 
-    // const registrationResponse = await this.passKeyImpl.createPassKeyCredential(options);
-
-    const credential = await Passkeys.create({
-      challenge: bufferToBase64URLString(utf8StringToBuffer('mock-challenge')),
-      rp: {
-        name: 'Liquid Smart Account',
-        id: 'api.useliquid.xyz',
-      },
-      user: {
-        id: bufferToBase64URLString(utf8StringToBuffer(username)),
-        name: username,
-        displayName: username,
-      },
-      pubKeyCredParams: [{ type: 'public-key', alg: -7 }],
-      authenticatorSelection: {
-        authenticatorAttachment: 'platform',
-        userVerification: 'required',
-        residentKey: 'required',
-        requireResidentKey: true,
-      },
-    });
+    const credential = await Passkeys.create(registrationOptions);
 
     if (!credential) {
       throw new Error('Failed to create passkey credential');
