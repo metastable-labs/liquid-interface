@@ -63,11 +63,14 @@ const Setup = () => {
   const createAccount = async () => {
     if (!user) throw new Error('User not found');
     const status = await requestBiometricPermission();
-    console.log('status', status);
 
     if (status != RESULTS.GRANTED) return;
 
     createSmartAccount(user.username).then(progressToNextStep);
+  };
+
+  const handleButtonPress = () => {
+    return buttonOpacity.value > 0 ? router.replace('/(tabs)/home/') : null;
   };
 
   useEffect(
@@ -128,7 +131,7 @@ const Setup = () => {
           <Info />
 
           <Animated.View style={animatedButtonStyle}>
-            <LQDButton title="Let's go!" onPress={() => router.replace('/(tabs)/home/')} variant="secondary" />
+            <LQDButton title="Let's go!" onPress={handleButtonPress} variant="secondary" />
           </Animated.View>
         </View>
       </View>
