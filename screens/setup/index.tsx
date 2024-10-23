@@ -63,8 +63,9 @@ const Setup = () => {
   const createAccount = async () => {
     if (!user) throw new Error('User not found');
     const status = await requestBiometricPermission();
+    console.log('status', status);
 
-    // if (status != RESULTS.GRANTED) return;
+    if (status != RESULTS.GRANTED) return;
 
     createSmartAccount(user.username).then(progressToNextStep);
   };

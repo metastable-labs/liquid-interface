@@ -30,7 +30,7 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.liquid.supermigrate",
-      "permissions": ["android.permissions.USE_BIOMETRIC", "android.permissions.USE_FINGERPRINT"]
+      "permissions": ["android.permissions.USE_BIOMETRIC"]
     },
     "web": {
       "bundler": "metro",

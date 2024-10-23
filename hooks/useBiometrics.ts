@@ -1,35 +1,49 @@
-import { PERMISSIONS, RESULTS, PermissionStatus, request } from 'react-native-permissions';
+import { PERMISSIONS, RESULTS, PermissionStatus, request, check, openSettings } from 'react-native-permissions';
+import { Alert, Platform } from 'react-native';
 
-import { Alert } from 'react-native';
+const showBlockedAlert = () => {
+  if (Platform.OS === 'ios') {
+    return Alert.alert('Biometric permission blocked!', 'Please unblock FaceId permission to continue.', [
+      {
+        text: 'Settings',
+        onPress: () => openSettings(),
+      },
+    ]);
+  }
+
+  Alert.alert('Biometric permission blocked!', 'Please unblock FaceId permission to continue.');
+};
 
 const useBiometrics = () => {
   const requestBiometricPermission = async (): Promise<PermissionStatus | undefined> => {
     try {
-      const status = await request(PERMISSIONS.IOS.FACE_ID);
+      let currentStatus = await check(PERMISSIONS.IOS.FACE_ID);
 
-      switch (status) {
+      switch (currentStatus) {
         case RESULTS.UNAVAILABLE:
-          console.log('This feature is not available (on this device / in this context)');
+          Alert.alert(`Biometric permission ${currentStatus}!`, 'Biometric permission is not available on this device.');
           break;
+
         case RESULTS.DENIED:
-          console.log('The permission has been denied but can be requested again');
-          Alert.alert('Biometric permission not granted!', 'Please grant FaceId permission to continue.');
+          currentStatus = await request(PERMISSIONS.IOS.FACE_ID);
+
+          if (currentStatus == RESULTS.BLOCKED) {
+            showBlockedAlert();
+          }
           break;
+
         case RESULTS.BLOCKED:
-          console.log('The permission is denied and not requestable anymore');
-          Alert.alert('Biometric permission blocked!', 'Please grant FaceId permission to continue.');
+          showBlockedAlert();
           break;
+
         case RESULTS.GRANTED:
-          console.log('The permission is granted');
           break;
+
         case RESULTS.LIMITED:
-          console.log('The permission is granted but with limitations');
           break;
-        default:
-          console.log('Unknown permission result');
       }
 
-      return status;
+      return currentStatus;
     } catch (error) {
       console.error('Permission request failed:', error);
     }
