@@ -1,3 +1,4 @@
+import { Alert } from 'react-native';
 import * as Passkeys from 'react-native-passkeys';
 import { Address, hashMessage, hashTypedData, Hex, SignableMessage } from 'viem';
 import { ToCoinbaseSmartAccountReturnType, WebAuthnAccount, toCoinbaseSmartAccount } from 'viem/account-abstraction';
@@ -107,6 +108,20 @@ export async function createSmartAccount(username: string): Promise<{
 
     return { smartAccount, address };
   } catch (error: any) {
+    if (error.message && error.message.includes('Biometrics must be enabled')) {
+      Alert.alert(
+        'Your device is not enrolled to FaceID',
+        'If you are using a simulator, on the top menu bar, click on Features > Face ID > Enrolled',
+        [
+          {
+            text: 'Try again',
+            onPress: () => {
+              createSmartAccount(username);
+            },
+          },
+        ]
+      );
+    }
     console.error(error);
     throw error;
   }
