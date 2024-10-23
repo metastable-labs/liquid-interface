@@ -30,6 +30,7 @@ const LQDButton = ({
           (styles as any)[`${variant}Shadow`],
           fullWidth && { width: '100%' },
           icon && { gap: 5 },
+          disabled || loading ? styles.disabledStyle : null,
         ]}
       >
         <Text style={styles[`${variant}Text`]}>{title}</Text>
@@ -118,5 +119,9 @@ const styles = StyleSheet.create({
     lineHeight: 16.12,
     fontWeight: '500',
     fontFamily: 'AeonikMedium',
+  },
+
+  disabledStyle: {
+    opacity: 0.5,
   },
 });

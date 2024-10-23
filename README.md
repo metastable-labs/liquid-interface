@@ -14,7 +14,7 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
    yarn i
    ```
 
-3. Setup your `.env` file based on `.env.example`.
+3. Setup your `.env` file based on `.env.example`. Make sure you have a valid Liquid API key.
 
 4. This project uses [Expo development builds](https://docs.expo.dev/develop/development-builds/introduction). Make sure you have these tools:
 

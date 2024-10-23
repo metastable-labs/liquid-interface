@@ -8,8 +8,9 @@ import { PersistGate } from 'redux-persist/integration/react';
 
 import 'react-native-reanimated';
 
-// setup viem on app start
+// setup viem and api on app start
 import '@/init/viem';
+import '@/init/api';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { persistor, store } from '@/store';
