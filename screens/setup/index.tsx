@@ -8,14 +8,14 @@ import { LQDButton } from '@/components';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import LQDLoadingStep from '@/components/loading-step';
 import { useSmartAccountActions } from '@/store/smartAccount/actions';
-import Info from './info';
 import { ChartIcon, ShieldTickIcon, SwatchIcon } from '@/assets/icons';
 import useBiometrics from '@/hooks/useBiometrics';
+import Info from './info';
 
 const Setup = () => {
-  const { router, userState } = useSystemFunctions();
+  const { router } = useSystemFunctions();
   const { requestBiometricPermission } = useBiometrics();
-  const { create: createSmartAccount } = useSmartAccountActions();
+  const { setSmartAccount } = useSmartAccountActions();
   const buttonOpacity = useSharedValue(0);
   const animatedButtonStyle = useAnimatedStyle(() => ({
     opacity: buttonOpacity.value,
@@ -23,8 +23,6 @@ const Setup = () => {
 
   const [setupStep, setSetupStep] = useState(1);
   const [completedSteps, setCompletedSteps] = useState([false, false, false]);
-
-  const { user } = userState;
 
   const progressToNextStep = useCallback(() => {
     setCompletedSteps((prev) => prev.map((step, index) => (index + 1 === setupStep ? true : step)));
@@ -61,16 +59,17 @@ const Setup = () => {
   ];
 
   const createAccount = async () => {
-    if (!user) throw new Error('User not found');
     const status = await requestBiometricPermission();
 
     if (status != RESULTS.GRANTED) return;
 
-    createSmartAccount(user.username).then(progressToNextStep);
+    setSmartAccount().then(progressToNextStep);
   };
 
-  const handleButtonPress = () => {
-    return buttonOpacity.value > 0 ? router.replace('/(tabs)/home/') : null;
+  const handleSubmit = () => {
+    if (buttonOpacity.value < 1) return;
+
+    router.replace('/(tabs)/home/');
   };
 
   useEffect(
@@ -131,7 +130,7 @@ const Setup = () => {
           <Info />
 
           <Animated.View style={animatedButtonStyle}>
-            <LQDButton title="Let's go!" onPress={handleButtonPress} variant="secondary" />
+            <LQDButton title="Let's go!" onPress={handleSubmit} variant="secondary" />
           </Animated.View>
         </View>
       </View>

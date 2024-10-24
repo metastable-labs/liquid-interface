@@ -1,1 +1,1 @@
-type TagFormState = 'base' | 'error' | 'success';
+type TagFormState = 'base' | 'loading' | 'error' | 'success';

@@ -5,8 +5,11 @@ import { ToCoinbaseSmartAccountReturnType, WebAuthnAccount, toCoinbaseSmartAccou
 import type { SignReturnType } from 'webauthn-p256';
 import { utf8StringToBuffer, bufferToBase64URLString } from '@/utils/base64';
 import { publicClient } from '@/init/viem';
+import { CreatePassKeyCredentialOptions } from '@/init/types';
+import { isDev } from '@/constants/env';
+import api from '@/init/api';
 
-export async function createSmartAccount(username: string): Promise<{
+export async function createSmartAccount(registrationOptions: CreatePassKeyCredentialOptions): Promise<{
   smartAccount: ToCoinbaseSmartAccountReturnType;
   address: Address;
 }> {
@@ -16,44 +19,14 @@ export async function createSmartAccount(username: string): Promise<{
       throw new Error('Passkeys are not available on this device');
     }
 
-    // const options = await this.api.getRegistrationOptions(username);
-
-    // const registrationResponse = await this.passKeyImpl.createPassKeyCredential(options);
-
-    const credential = await Passkeys.create({
-      challenge: bufferToBase64URLString(utf8StringToBuffer('mock-challenge')),
-      rp: {
-        name: 'Liquid Smart Account',
-        id: 'api.useliquid.xyz',
-      },
-      user: {
-        id: bufferToBase64URLString(utf8StringToBuffer(username)),
-        name: username,
-        displayName: username,
-      },
-      pubKeyCredParams: [{ type: 'public-key', alg: -7 }],
-      authenticatorSelection: {
-        authenticatorAttachment: 'platform',
-        userVerification: 'required',
-        residentKey: 'required',
-        requireResidentKey: true,
-      },
-    });
+    const credential = await Passkeys.create(registrationOptions);
 
     if (!credential) {
       throw new Error('Failed to create passkey credential');
     }
 
-    // Alert.alert('Created passkey successfully', JSON.stringify(credential));
-    console.log('Created passkey successfully', JSON.stringify(credential));
-
     const credentialId = credential.id;
     const { attestationObject, clientDataJSON, publicKey } = credential.response;
-
-    console.log('credentialId', credentialId);
-    console.log('attestationObject', attestationObject);
-    console.log('clientDataJSON', clientDataJSON);
-    console.log('publicKey', publicKey);
 
     const registrationResponse = {
       credentialId,
@@ -68,8 +41,6 @@ export async function createSmartAccount(username: string): Promise<{
       .map((byte) => byte.toString(16).padStart(2, '0'))
       .join('')}` as Hex;
 
-    console.log('publicKeyHex', publicKeyHex);
-
     const webAuthnAccount: WebAuthnAccount = {
       type: 'webAuthn',
       publicKey: publicKeyHex,
@@ -81,8 +52,6 @@ export async function createSmartAccount(username: string): Promise<{
             challenge: hash,
             allowCredentials: [{ id: credentialId, type: 'public-key' }],
           });
-
-          console.log('signResult', signResult);
 
           if (!signResult) {
             throw new Error('Failed to sign with passkey');
@@ -124,18 +93,37 @@ export async function createSmartAccount(username: string): Promise<{
       owners: [webAuthnAccount],
     });
 
-    // console.log('smartAccount', JSON.stringify(smartAccount));
-
     const address = await smartAccount.getAddress();
-
     console.log('address', address);
 
-    // Alert.alert('Smart account address', address);
+    const updateUserAddressResponse = await api.updateUserAddress(registrationOptions.user.name, address);
+    console.log('updateUserAddressResponse', updateUserAddressResponse);
+
+    if (!updateUserAddressResponse.success) {
+      throw new Error('Failed to update user address');
+    }
 
     return { smartAccount, address };
   } catch (error: any) {
-    // TODO: error handling
-    // Alert.alert('Error creating smart wallet', error.message);
+    if (error.message && error.message.includes('Biometrics must be enabled')) {
+      const alertTitle = 'Device not enrolled to FaceID';
+      const alertMessage = isDev
+        ? 'On the top menu bar, click on \nFeatures > Face ID > Enrolled'
+        : 'Please enroll your device to FaceID on settings';
+
+      return new Promise((resolve) => {
+        Alert.alert(alertTitle, alertMessage, [
+          {
+            text: 'Try again',
+            onPress: async () => {
+              const result = await createSmartAccount(registrationOptions);
+              resolve(result);
+            },
+          },
+        ]);
+      });
+    }
+
     console.error(error);
     throw error;
   }
