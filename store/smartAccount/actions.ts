@@ -6,19 +6,14 @@ import { CreatePassKeyCredentialOptions } from '@/init/types';
 export function useSmartAccountActions() {
   const dispatch = useAppDispatch();
 
-  const userState = useAppSelector((state) => state.user);
   const smartAccountState = useAppSelector((state) => state.smartAccount);
 
   const setSmartAccountAction = async () => {
-    if (!userState.user) {
-      throw new Error('User is not available');
-    }
-
     if (!smartAccountState.registrationOptions) {
       throw new Error('Registration options are not available');
     }
 
-    const { smartAccount, address } = await createSmartAccount(userState.user.username, smartAccountState.registrationOptions);
+    const { smartAccount, address } = await createSmartAccount(smartAccountState.registrationOptions);
 
     // TODO: fix serialization error of smartAccount into redux store, how are we going to save it?
     // dispatch(setSmartAccount(smartAccount));

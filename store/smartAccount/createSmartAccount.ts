@@ -6,11 +6,10 @@ import type { SignReturnType } from 'webauthn-p256';
 import { utf8StringToBuffer, bufferToBase64URLString } from '@/utils/base64';
 import { publicClient } from '@/init/viem';
 import { CreatePassKeyCredentialOptions } from '@/init/types';
+import { isDev } from '@/constants/env';
+import api from '@/init/api';
 
-export async function createSmartAccount(
-  username: string,
-  registrationOptions: CreatePassKeyCredentialOptions
-): Promise<{
+export async function createSmartAccount(registrationOptions: CreatePassKeyCredentialOptions): Promise<{
   smartAccount: ToCoinbaseSmartAccountReturnType;
   address: Address;
 }> {
@@ -54,8 +53,6 @@ export async function createSmartAccount(
             allowCredentials: [{ id: credentialId, type: 'public-key' }],
           });
 
-          console.log('signResult', signResult);
-
           if (!signResult) {
             throw new Error('Failed to sign with passkey');
           }
@@ -97,25 +94,36 @@ export async function createSmartAccount(
     });
 
     const address = await smartAccount.getAddress();
-
     console.log('address', address);
+
+    const updateUserAddressResponse = await api.updateUserAddress(registrationOptions.user.name, address);
+    console.log('updateUserAddressResponse', updateUserAddressResponse);
+
+    if (!updateUserAddressResponse.success) {
+      throw new Error('Failed to update user address');
+    }
 
     return { smartAccount, address };
   } catch (error: any) {
     if (error.message && error.message.includes('Biometrics must be enabled')) {
-      Alert.alert(
-        'Your device is not enrolled to FaceID',
-        'If you are using a simulator, on the top menu bar, click on Features > Face ID > Enrolled',
-        [
+      const alertTitle = 'Device not enrolled to FaceID';
+      const alertMessage = isDev
+        ? 'On the top menu bar, click on \nFeatures > Face ID > Enrolled'
+        : 'Please enroll your device to FaceID on settings';
+
+      return new Promise((resolve) => {
+        Alert.alert(alertTitle, alertMessage, [
           {
             text: 'Try again',
-            onPress: () => {
-              createSmartAccount(username, registrationOptions);
+            onPress: async () => {
+              const result = await createSmartAccount(registrationOptions);
+              resolve(result);
             },
           },
-        ]
-      );
+        ]);
+      });
     }
+
     console.error(error);
     throw error;
   }
