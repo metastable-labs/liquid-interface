@@ -14,15 +14,13 @@ import Info from './info';
 
 const Setup = () => {
   const { router } = useSystemFunctions();
-  const { requestBiometricPermission } = useBiometrics();
-  const { setSmartAccount } = useSmartAccountActions();
+
+  const [setupStep, setSetupStep] = useState(1);
+  const [completedSteps, setCompletedSteps] = useState([false, false, false]);
   const buttonOpacity = useSharedValue(0);
   const animatedButtonStyle = useAnimatedStyle(() => ({
     opacity: buttonOpacity.value,
   }));
-
-  const [setupStep, setSetupStep] = useState(1);
-  const [completedSteps, setCompletedSteps] = useState([false, false, false]);
 
   const progressToNextStep = useCallback(() => {
     setCompletedSteps((prev) => prev.map((step, index) => (index + 1 === setupStep ? true : step)));
@@ -57,6 +55,9 @@ const Setup = () => {
       isLast: true,
     },
   ];
+
+  const { requestBiometricPermission } = useBiometrics();
+  const { setSmartAccount } = useSmartAccountActions();
 
   const createAccount = async () => {
     const status = await requestBiometricPermission();
