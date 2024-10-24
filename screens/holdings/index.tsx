@@ -48,7 +48,7 @@ const Holdings = () => {
           onPress: () => console.log('Deposit'),
         },
       },
-      isEmpty: true,
+      isEmpty: false,
     },
     {
       variant: 'secondary',
@@ -65,7 +65,7 @@ const Holdings = () => {
           onPress: () => console.log('explore'),
         },
       },
-      isEmpty: true,
+      isEmpty: false,
     },
     {
       variant: 'tertiary',

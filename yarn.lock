@@ -7581,6 +7581,11 @@ react-native-passkeys@^0.3.0:
   resolved "https://registry.yarnpkg.com/react-native-passkeys/-/react-native-passkeys-0.3.0.tgz#83bf8aacacfb7d2dc8577f5091cd176957b42333"
   integrity sha512-xjdoZVRInwFXXD92jpUvSM1OGiEmJgPWm6xc4WFSHb7LnypJ4LjSbfofi59WwA/n7Z/25mcnqZNh5Xq4Viuk+Q==
 
+react-native-permissions@^5.0.1:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/react-native-permissions/-/react-native-permissions-5.0.1.tgz#131fa11e10e54a82ef2a7ebac2ba91afede65c11"
+  integrity sha512-bNeLSlfyHoAh1SHAvg8U88Dz96hkZ/vHXkhkGuHluTrvITTZ1EQ2gULZqU2R3YAfF7CudkL9LdbHf7HjHPAMsg==
+
 react-native-qrcode-svg@^6.3.2:
   version "6.3.2"
   resolved "https://registry.yarnpkg.com/react-native-qrcode-svg/-/react-native-qrcode-svg-6.3.2.tgz#84b2bb37201589cff1ab58e7f7c884c5133fe47f"

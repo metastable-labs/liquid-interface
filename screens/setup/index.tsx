@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { View, Text, StyleSheet, Platform, StatusBar } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing } from 'react-native-reanimated';
+import { RESULTS } from 'react-native-permissions';
 
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { LQDButton } from '@/components';
@@ -8,14 +9,15 @@ import { adjustFontSizeForIOS } from '@/utils/helpers';
 import LQDLoadingStep from '@/components/loading-step';
 import { useSmartAccountActions } from '@/store/smartAccount/actions';
 import { ChartIcon, ShieldTickIcon, SwatchIcon } from '@/assets/icons';
+import useBiometrics from '@/hooks/useBiometrics';
 import Info from './info';
 
 const Setup = () => {
   const { router } = useSystemFunctions();
+
   const [setupStep, setSetupStep] = useState(1);
   const [completedSteps, setCompletedSteps] = useState([false, false, false]);
   const buttonOpacity = useSharedValue(0);
-
   const animatedButtonStyle = useAnimatedStyle(() => ({
     opacity: buttonOpacity.value,
   }));
@@ -54,14 +56,29 @@ const Setup = () => {
     },
   ];
 
+  const { requestBiometricPermission } = useBiometrics();
   const { setSmartAccount } = useSmartAccountActions();
+
+  const createAccount = async () => {
+    const status = await requestBiometricPermission();
+
+    if (status != RESULTS.GRANTED) return;
+
+    setSmartAccount().then(progressToNextStep);
+  };
+
+  const handleSubmit = () => {
+    if (buttonOpacity.value < 1) return;
+
+    router.replace('/(tabs)/home/');
+  };
 
   useEffect(
     function progressSteps() {
       if (setupStep === 1) {
         const firstStepDelayInMs = 1000 * 1; // 1s
         const timeout = setTimeout(() => {
-          setSmartAccount().then(progressToNextStep);
+          createAccount();
         }, firstStepDelayInMs);
 
         return () => clearTimeout(timeout);
@@ -114,7 +131,7 @@ const Setup = () => {
           <Info />
 
           <Animated.View style={animatedButtonStyle}>
-            <LQDButton title="Let's go!" onPress={() => router.replace('/(tabs)/home/')} variant="secondary" />
+            <LQDButton title="Let's go!" onPress={handleSubmit} variant="secondary" />
           </Animated.View>
         </View>
       </View>
