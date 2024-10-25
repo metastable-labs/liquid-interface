@@ -1,43 +1,67 @@
-import { useMemo } from 'react';
-import { PublicClient, Abi } from 'viem';
+import { Address, PublicClient } from 'viem';
+import { LPSugarABI, AerodromePoolABI, OffchainOracleABI } from '@/constants/abis';
 
-// Helper types
-type ExtractAbiFunctionNames<TAbi extends Abi | readonly unknown[]> = TAbi extends Abi
-  ? Extract<TAbi[number], { type: 'function' }>['name']
-  : string;
+export function useLpSugarContract(address: Address, publicClient: PublicClient) {
+  if (!LPSugarABI || !address || !publicClient) {
+    throw new Error('Required parameters not provided to useLpSugarContract');
+  }
 
-type ExtractAbiFunctionArgs<TAbi extends Abi | readonly unknown[], TFunctionName extends string> = TAbi extends Abi
-  ? Extract<TAbi[number], { type: 'function'; name: TFunctionName }>['inputs']
-  : unknown[];
-
-type ReadContractResult<TAbi extends Abi | readonly unknown[], TFunctionName extends string> = TAbi extends Abi
-  ? Extract<TAbi[number], { type: 'function'; name: TFunctionName }>['outputs'][number]
-  : unknown;
-
-type ContractMethods<TAbi extends Abi | readonly unknown[]> = {
-  read: <TFunctionName extends ExtractAbiFunctionNames<TAbi>>(
-    functionName: TFunctionName,
-    args: ExtractAbiFunctionArgs<TAbi, TFunctionName>
-  ) => Promise<ReadContractResult<TAbi, TFunctionName>>;
-};
-
-export function useContract<TAbi extends Abi | readonly unknown[]>(
-  address: any,
-  abi: any,
-  publicClient: PublicClient
-): ContractMethods<TAbi> {
-  return useMemo(() => {
-    const read: ContractMethods<TAbi>['read'] = async (functionName, args) => {
+  return {
+    async getAll(limit: number, offset: number) {
       return publicClient.readContract({
         address,
-        abi,
-        functionName,
-        args,
-      }) as Promise<ReadContractResult<TAbi, typeof functionName>>;
-    };
+        abi: LPSugarABI,
+        functionName: 'all',
+        args: [BigInt(limit), BigInt(offset)],
+      });
+    },
 
-    return {
-      read,
-    };
-  }, [address, abi, publicClient]);
+    async getPositions(limit: number, offset: number, account: Address) {
+      return publicClient.readContract({
+        address,
+        abi: LPSugarABI,
+        functionName: 'positions',
+        args: [BigInt(limit), BigInt(offset), account],
+      });
+    },
+
+    async getTokens(limit: number, offset: number, account: Address, offchainOracleAddress: Address, connectors: Address[]) {
+      return publicClient.readContract({
+        address,
+        abi: LPSugarABI,
+        functionName: 'tokens',
+        args: [BigInt(limit), BigInt(offset), account, offchainOracleAddress, connectors],
+      });
+    },
+  };
+}
+
+export function useAerodromePoolContract(address: Address, publicClient: PublicClient) {
+  if (!AerodromePoolABI || !address || !publicClient) {
+    throw new Error('Required parameters not provided to useAerodromePoolContract');
+  }
+
+  return {
+    async getStable() {
+      return publicClient.readContract({
+        address,
+        abi: AerodromePoolABI,
+        functionName: 'stable',
+        args: [],
+      }) as Promise<boolean>;
+    },
+  };
+}
+
+export function useOffchainOracleContract(address: Address, publicClient: PublicClient) {
+  return {
+    async getRate(tokenIn: Address, tokenOut: Address, useWrappers: boolean) {
+      return await publicClient.readContract({
+        address,
+        abi: OffchainOracleABI,
+        functionName: 'getRate',
+        args: [tokenIn, tokenOut, useWrappers],
+      });
+    },
+  };
 }

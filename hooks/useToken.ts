@@ -1,18 +1,12 @@
-import { LPSugarABI, OffchainOracleABI } from '@/constants/abis';
-import { LP_SUGAR_ADDRESS, CONNECTORS_BASE, OFFCHAIN_ORACLE_ADDRESS, USDC_ADDRESS } from '@/constants/addresses';
 import { useState, useCallback, useEffect, useMemo } from 'react';
 import { PublicClient, Address, formatUnits } from 'viem';
 import { Token } from './types';
-import { useContract } from './useContract';
+import { useLpSugarContract, useOffchainOracleContract } from './useContract';
+import { LP_SUGAR_ADDRESS, CONNECTORS_BASE, OFFCHAIN_ORACLE_ADDRESS, USDC_ADDRESS } from '@/constants/addresses';
 
-export const getUsdPrice = async (tokenAddress: Address, offchainOracleContract: ReturnType<typeof useContract>): Promise<string> => {
+export const getUsdPrice = async (tokenAddress: Address, offchainOracle: ReturnType<typeof useOffchainOracleContract>): Promise<string> => {
   try {
-    const rate: any = await offchainOracleContract.read.getRate([
-      tokenAddress,
-      USDC_ADDRESS,
-      true, // useWrappers
-    ]);
-
+    const rate = (await offchainOracle.getRate(tokenAddress, USDC_ADDRESS, true)) as bigint;
     return formatUnits(rate, 6);
   } catch (error) {
     console.error(`Error fetching USD price for token ${tokenAddress}:`, error);
@@ -27,14 +21,15 @@ export function useToken(publicClient: PublicClient, account: Address, refreshIn
   const [lastUpdated, setLastUpdated] = useState<number>(0);
   const [chainId, setChainId] = useState<string | null>(null);
 
-  const lpSugarContract = useContract(LP_SUGAR_ADDRESS, LPSugarABI, publicClient);
-  const offchainOracleContract = useContract(OFFCHAIN_ORACLE_ADDRESS, OffchainOracleABI, publicClient);
+  const lpSugar = useLpSugarContract(LP_SUGAR_ADDRESS, publicClient);
+  const offchainOracle = useOffchainOracleContract(OFFCHAIN_ORACLE_ADDRESS, publicClient);
 
   const formatBalance = useCallback((balance: bigint, decimals: number): string => {
     return formatUnits(balance, decimals);
   }, []);
 
-  const fetchUsdPrice = useCallback((tokenAddress: Address) => getUsdPrice(tokenAddress, offchainOracleContract), [offchainOracleContract]);
+  const fetchUsdPrice = useCallback((tokenAddress: Address) => getUsdPrice(tokenAddress, offchainOracle), [offchainOracle]);
+
   const getLogoUrl = useCallback(
     (tokenAddress: Address): string => {
       if (!chainId) {
@@ -71,28 +66,33 @@ export function useToken(publicClient: PublicClient, account: Address, refreshIn
       setError(null);
 
       try {
-        const fetchedTokens = (await lpSugarContract.read.tokens([
-          BigInt(1000),
-          BigInt(0),
-          account,
-          OFFCHAIN_ORACLE_ADDRESS,
-          CONNECTORS_BASE,
-        ])) as Omit<Token, 'usd_price' | 'logo_url'>[];
-
+        const fetchedTokens = await lpSugar.getTokens(1000, 0, account, OFFCHAIN_ORACLE_ADDRESS, CONNECTORS_BASE);
         const tokensWithPricesAndLogos = await Promise.all(
-          fetchedTokens.map(async (token) => {
+          (
+            fetchedTokens as Array<{
+              token_address: Address;
+              account_balance: bigint;
+              decimals: number;
+              symbol: string;
+              listed: boolean;
+            }>
+          ).map(async (token) => {
             const usd_price = await fetchUsdPrice(token.token_address);
             const logo_url = getLogoUrl(token.token_address);
             return {
               ...token,
-              account_balance: formatBalance(token.account_balance as unknown as bigint, token.decimals),
+              account_balance: formatBalance(token.account_balance, token.decimals),
               usd_price,
               logo_url,
             };
           })
         );
 
-        setTokens(tokensWithPricesAndLogos);
+        setTokens(
+          tokensWithPricesAndLogos.map((token) => ({
+            ...token,
+          }))
+        );
         setLastUpdated(now);
       } catch (err) {
         console.error('Error fetching tokens:', err);
@@ -101,7 +101,7 @@ export function useToken(publicClient: PublicClient, account: Address, refreshIn
         setLoading(false);
       }
     },
-    [lpSugarContract, account, OFFCHAIN_ORACLE_ADDRESS, refreshInterval, lastUpdated, tokens.length, formatBalance, getUsdPrice]
+    [lpSugar, account, chainId, refreshInterval, lastUpdated, tokens.length, formatBalance, fetchUsdPrice, getLogoUrl, fetchChainId]
   );
 
   useEffect(() => {
@@ -137,7 +137,7 @@ export function useToken(publicClient: PublicClient, account: Address, refreshIn
       getTokenByAddress,
       getUsdPrice: fetchUsdPrice,
     }),
-    [tokens, loading, error, refreshTokens, lastUpdated, getTokenByAddress]
+    [tokens, loading, error, refreshTokens, lastUpdated, getTokenByAddress, fetchUsdPrice]
   );
 
   return memoizedReturnValue;

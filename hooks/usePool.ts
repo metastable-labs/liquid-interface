@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { Address, formatUnits, PublicClient } from 'viem';
-import { useContract } from './useContract';
+import { useLpSugarContract, useAerodromePoolContract } from './useContract';
 import { formatPool, formatPoolFee, formatPosition } from '@/utils/helpers';
 import { RawPool, FormattedPool, RawPosition, FormattedPosition, Token, EnhancedFormattedPool, VolumeReturn } from './types';
 import { AerodromePoolABI, LPSugarABI } from '@/constants/abis';
@@ -14,7 +14,7 @@ export function usePool(publicClient: PublicClient, account: Address, refreshInt
   const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<number>(0);
 
-  const { read } = useContract(LP_SUGAR_ADDRESS, LPSugarABI, publicClient);
+  const lpSugar = useLpSugarContract(LP_SUGAR_ADDRESS, publicClient);
   const { getTokenByAddress, tokens, loading: tokensLoading } = useToken(publicClient, account);
 
   const calculateTVL = (reserve0: bigint, reserve1: bigint, token0: Token, token1: Token): string => {
@@ -41,9 +41,9 @@ export function usePool(publicClient: PublicClient, account: Address, refreshInt
 
   const fetchPoolStability = useCallback(
     async (poolAddress: Address): Promise<boolean> => {
-      const { read } = useContract(poolAddress, AerodromePoolABI, publicClient);
+      const poolContract = useAerodromePoolContract(poolAddress, publicClient);
       try {
-        return (await read('stable', [])) as boolean;
+        return (await poolContract.getStable()) as boolean;
       } catch (error) {
         console.error(`Error fetching stability for pool ${poolAddress}:`, error);
         return false;
@@ -69,7 +69,7 @@ export function usePool(publicClient: PublicClient, account: Address, refreshInt
         const batchSize = 1000;
 
         while (hasMore) {
-          const poolsBatch = (await read('all', [BigInt(batchSize), BigInt(offset)])) as RawPool[];
+          const poolsBatch = (await lpSugar.getAll(batchSize, offset)) as RawPool[];
 
           const poolsWithStability = await Promise.all(
             poolsBatch.map(async (pool) => {
@@ -120,7 +120,7 @@ export function usePool(publicClient: PublicClient, account: Address, refreshInt
         setLoading(false);
       }
     },
-    [read, fetchPoolStability, getTokenByAddress, tokensLoading]
+    [lpSugar, fetchPoolStability, getTokenByAddress, tokensLoading]
   );
 
   const fetchV2Pools = useCallback(
@@ -138,14 +138,18 @@ export function usePool(publicClient: PublicClient, account: Address, refreshInt
   const fetchPositions = useCallback(
     async (account: Address, limit: number = 1000, offset: number = 0): Promise<FormattedPosition[]> => {
       try {
-        const positions = (await read('positions', [BigInt(limit), BigInt(offset), account])) as RawPosition[];
-        return positions.map(formatPosition);
+        const rawPositions = await lpSugar.getPositions(limit, offset, account);
+        if (!Array.isArray(rawPositions)) {
+          throw new Error('Unexpected response format from getPositions');
+        }
+        const formattedPositions = rawPositions.map(formatPosition);
+        return formattedPositions;
       } catch (err) {
         console.error('Error fetching positions:', err);
         throw new Error('Failed to fetch positions');
       }
     },
-    [read]
+    [lpSugar, account]
   );
 
   // Function to manually trigger a refresh
