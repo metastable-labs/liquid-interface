@@ -3,7 +3,6 @@ import { Address, formatUnits, PublicClient } from 'viem';
 import { useLpSugarContract, useAerodromePoolContract } from './useContract';
 import { formatPool, formatPoolFee, formatPosition } from '@/utils/helpers';
 import { RawPool, FormattedPool, RawPosition, FormattedPosition, Token, EnhancedFormattedPool, VolumeReturn } from './types';
-import { AerodromePoolABI, LPSugarABI } from '@/constants/abis';
 import { LP_SUGAR_ADDRESS, OFFCHAIN_ORACLE_ADDRESS } from '@/constants/addresses';
 import { useToken } from './useToken';
 
@@ -14,8 +13,9 @@ export function usePool(publicClient: PublicClient, account: Address, refreshInt
   const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<number>(0);
 
-  const lpSugar = useLpSugarContract(LP_SUGAR_ADDRESS, publicClient);
   const { getTokenByAddress, tokens, loading: tokensLoading } = useToken(publicClient, account);
+
+  const lpSugar = useMemo(() => useLpSugarContract(LP_SUGAR_ADDRESS, publicClient), [publicClient]);
 
   const calculateTVL = (reserve0: bigint, reserve1: bigint, token0: Token, token1: Token): string => {
     const value0 = Number(formatUnits(reserve0, token0.decimals)) * Number(token0.usd_price);
@@ -41,9 +41,9 @@ export function usePool(publicClient: PublicClient, account: Address, refreshInt
 
   const fetchPoolStability = useCallback(
     async (poolAddress: Address): Promise<boolean> => {
-      const poolContract = useAerodromePoolContract(poolAddress, publicClient);
       try {
-        return (await poolContract.getStable()) as boolean;
+        const poolContract = useAerodromePoolContract(poolAddress, publicClient);
+        return await poolContract.getStable();
       } catch (error) {
         console.error(`Error fetching stability for pool ${poolAddress}:`, error);
         return false;
@@ -56,7 +56,12 @@ export function usePool(publicClient: PublicClient, account: Address, refreshInt
     async (forceRefresh: boolean = false) => {
       const now = Date.now();
       if (!forceRefresh && allPools.length > 0 && now - lastUpdated < refreshInterval) {
-        return; // Only fetch if forced, empty, or refresh interval has passed
+        return;
+      }
+
+      // Don't fetch if we don't have tokens loaded yet
+      if (tokensLoading || tokens.length === 0) {
+        return;
       }
 
       setLoading(true);
@@ -69,44 +74,54 @@ export function usePool(publicClient: PublicClient, account: Address, refreshInt
         const batchSize = 1000;
 
         while (hasMore) {
-          const poolsBatch = (await lpSugar.getAll(batchSize, offset)) as RawPool[];
+          const poolsBatch = await lpSugar.getAll(batchSize, offset);
+          if (!poolsBatch || !Array.isArray(poolsBatch)) {
+            throw new Error('Invalid response from getAll');
+          }
 
           const poolsWithStability = await Promise.all(
             poolsBatch.map(async (pool) => {
-              const isStable = await fetchPoolStability(pool.lp as Address);
-              const formattedPool = formatPool(pool, isStable);
+              try {
+                const isStable = await fetchPoolStability(pool.lp as Address);
+                const formattedPool = formatPool(pool, isStable);
 
-              // Enhance the pool with Token objects
-              const token0 = getTokenByAddress(formattedPool.token0 as Address);
-              const token1 = getTokenByAddress(formattedPool.token1 as Address);
+                const token0 = getTokenByAddress(formattedPool.token0 as Address);
+                const token1 = getTokenByAddress(formattedPool.token1 as Address);
 
-              if (!token0 || !token1) {
-                console.error(`Token not found for pool ${formattedPool.lp}`);
+                if (!token0 || !token1) {
+                  console.error(`Token not found for pool ${formattedPool.lp}`);
+                  return null;
+                }
+
+                const tvl = calculateTVL(pool.reserve0, pool.reserve1, token0, token1);
+                const { volume0, volume1, cumulativeVolumeUSD } = calculateVolume(
+                  pool.token0_fees,
+                  pool.token1_fees,
+                  pool.pool_fee,
+                  token0,
+                  token1
+                );
+
+                return {
+                  ...formattedPool,
+                  token0,
+                  token1,
+                  pool_fee: formatPoolFee(pool.pool_fee),
+                  TVL: tvl,
+                  volume0,
+                  volume1,
+                  cumulativeVolumeUSD,
+                } as EnhancedFormattedPool;
+              } catch (err) {
+                console.error(`Error processing pool ${pool.lp}:`, err);
                 return null;
               }
-              const tvl = calculateTVL(pool.reserve0, pool.reserve1, token0, token1);
-              const { volume0, volume1, cumulativeVolumeUSD } = calculateVolume(
-                pool.token0_fees,
-                pool.token1_fees,
-                pool.pool_fee,
-                token0,
-                token1
-              );
-
-              return {
-                ...formattedPool,
-                token0,
-                token1,
-                pool_fee: formatPoolFee(pool.pool_fee),
-                TVL: tvl,
-                volume0,
-                volume1,
-                cumulativeVolumeUSD,
-              } as EnhancedFormattedPool;
             })
           );
 
-          allPoolsData = [...allPoolsData, ...(poolsWithStability.filter(Boolean) as EnhancedFormattedPool[])];
+          const validPools = poolsWithStability.filter(Boolean) as EnhancedFormattedPool[];
+          allPoolsData = [...allPoolsData, ...validPools];
+
           offset += batchSize;
           hasMore = poolsBatch.length === batchSize;
         }
@@ -120,7 +135,7 @@ export function usePool(publicClient: PublicClient, account: Address, refreshInt
         setLoading(false);
       }
     },
-    [lpSugar, fetchPoolStability, getTokenByAddress, tokensLoading]
+    [lpSugar, fetchPoolStability, getTokenByAddress, tokens, tokensLoading, refreshInterval, allPools, lastUpdated]
   );
 
   const fetchV2Pools = useCallback(
@@ -159,23 +174,17 @@ export function usePool(publicClient: PublicClient, account: Address, refreshInt
 
   // Set up automatic refresh
   useEffect(() => {
-    const intervalId = setInterval(() => {
+    if (!tokensLoading && tokens.length > 0) {
+      const intervalId = setInterval(() => {
+        fetchAllPools();
+      }, refreshInterval);
+
+      // Initial fetch
       fetchAllPools();
-    }, refreshInterval);
 
-    return () => clearInterval(intervalId);
-  }, [fetchAllPools, refreshInterval]);
-
-  // Initial fetch
-  useEffect(() => {
-    fetchAllPools();
-  }, [fetchAllPools]);
-
-  useEffect(() => {
-    if (tokens.length > 0 && !tokensLoading) {
-      fetchAllPools();
+      return () => clearInterval(intervalId);
     }
-  }, [tokens, tokensLoading, fetchAllPools]);
+  }, [fetchAllPools, refreshInterval, tokens, tokensLoading]);
 
   const memoizedReturnValue = useMemo(
     () => ({
@@ -184,7 +193,7 @@ export function usePool(publicClient: PublicClient, account: Address, refreshInt
       error,
       fetchV2Pools,
       fetchPositions,
-      refreshPools,
+      refreshPools: () => fetchAllPools(true),
       lastUpdated,
     }),
     [paginatedV2Pools, loading, error, fetchV2Pools, fetchPositions, refreshPools, lastUpdated]
