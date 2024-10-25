@@ -6,6 +6,9 @@ import { LQDButton, LQDPoolPairCard, LQDPoolPairPaper } from '@/components';
 import { CaretRightIcon, DirectUpIcon, DollarSquareIcon, TrendUpIcon } from '@/assets/icons';
 import { topGainers, poolPairs } from './dummy';
 import Section from './section';
+import { usePool } from '@/hooks/usePool';
+import { publicClient } from '@/init/viem';
+import { PublicClient } from 'viem';
 
 const balance = 36_708.89;
 
@@ -13,6 +16,9 @@ const Home = () => {
   const { router } = useSystemFunctions();
 
   const { whole, decimal } = formatAmountWithWholeAndDecimal(balance);
+  const { fetchV2Pools } = usePool(publicClient as PublicClient, '0x8dB6A7836ed47CeD0Ee15C8727EdABA5dd7baEA8');
+
+  console.log(fetchV2Pools, 'fetch v2 pools');
 
   const sections = [
     {

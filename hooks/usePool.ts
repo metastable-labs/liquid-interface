@@ -14,7 +14,7 @@ export function usePool(publicClient: PublicClient, account: Address, refreshInt
   const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<number>(0);
 
-  const contract = useContract(LP_SUGAR_ADDRESS, LPSugarABI, publicClient);
+  const { read } = useContract(LP_SUGAR_ADDRESS, LPSugarABI, publicClient);
   const { getTokenByAddress, tokens, loading: tokensLoading } = useToken(publicClient, account);
 
   const calculateTVL = (reserve0: bigint, reserve1: bigint, token0: Token, token1: Token): string => {
@@ -41,9 +41,9 @@ export function usePool(publicClient: PublicClient, account: Address, refreshInt
 
   const fetchPoolStability = useCallback(
     async (poolAddress: Address): Promise<boolean> => {
-      const poolContract = useContract(poolAddress, AerodromePoolABI, publicClient);
+      const { read } = useContract(poolAddress, AerodromePoolABI, publicClient);
       try {
-        return (await poolContract.read.stable()) as boolean;
+        return (await read('stable', [])) as boolean;
       } catch (error) {
         console.error(`Error fetching stability for pool ${poolAddress}:`, error);
         return false;
@@ -69,7 +69,7 @@ export function usePool(publicClient: PublicClient, account: Address, refreshInt
         const batchSize = 1000;
 
         while (hasMore) {
-          const poolsBatch = (await contract.read.all([BigInt(batchSize), BigInt(offset)])) as RawPool[];
+          const poolsBatch = (await read('all', [BigInt(batchSize), BigInt(offset)])) as RawPool[];
 
           const poolsWithStability = await Promise.all(
             poolsBatch.map(async (pool) => {
@@ -120,7 +120,7 @@ export function usePool(publicClient: PublicClient, account: Address, refreshInt
         setLoading(false);
       }
     },
-    [contract, fetchPoolStability, getTokenByAddress, tokensLoading]
+    [read, fetchPoolStability, getTokenByAddress, tokensLoading]
   );
 
   const fetchV2Pools = useCallback(
@@ -138,14 +138,14 @@ export function usePool(publicClient: PublicClient, account: Address, refreshInt
   const fetchPositions = useCallback(
     async (account: Address, limit: number = 1000, offset: number = 0): Promise<FormattedPosition[]> => {
       try {
-        const positions = (await contract.read.positions([BigInt(limit), BigInt(offset), account])) as RawPosition[];
+        const positions = (await read('positions', [BigInt(limit), BigInt(offset), account])) as RawPosition[];
         return positions.map(formatPosition);
       } catch (err) {
         console.error('Error fetching positions:', err);
         throw new Error('Failed to fetch positions');
       }
     },
-    [contract]
+    [read]
   );
 
   // Function to manually trigger a refresh

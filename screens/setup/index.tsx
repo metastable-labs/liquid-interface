@@ -61,7 +61,8 @@ const Setup = () => {
       if (setupStep === 1) {
         const firstStepDelayInMs = 1000 * 1; // 1s
         const timeout = setTimeout(() => {
-          setSmartAccount().then(progressToNextStep);
+          progressToNextStep();
+          // setSmartAccount().then(progressToNextStep);
         }, firstStepDelayInMs);
 
         return () => clearTimeout(timeout);
