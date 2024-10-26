@@ -14,27 +14,15 @@ export function useLpSugarContract(address: Address, publicClient: PublicClient)
 
   return {
     async getAll(limit: number, offset: number) {
-      try {
-        // Ensure limit is within safe bounds
-        const safeBatchSize = Math.min(limit, SAFE_BATCH_SIZE);
+      // Ensure limit is within safe bounds
+      const safeBatchSize = Math.min(limit, SAFE_BATCH_SIZE);
 
-        return await publicClient.readContract({
-          address,
-          abi: LpSugar.abi,
-          functionName: 'all',
-          args: [BigInt(safeBatchSize), BigInt(offset)],
-        });
-      } catch (error) {
-        if (error instanceof ContractFunctionExecutionError) {
-          console.error('Contract execution error:', {
-            function: 'all',
-            args: [limit, offset],
-            error: error.message,
-            details: error.details,
-          });
-        }
-        throw error;
-      }
+      return await publicClient.readContract({
+        address,
+        abi: LpSugar.abi,
+        functionName: 'all',
+        args: [BigInt(safeBatchSize), BigInt(offset)],
+      });
     },
 
     async getPositions(limit: number, offset: number, account: Address) {
@@ -75,42 +63,87 @@ export function useAerodromePoolContract(address: Address, publicClient: PublicC
 }
 
 export function useOffchainOracleContract(address: Address, publicClient: PublicClient) {
+  const BATCH_SIZE = 50;
   return {
-    async getRateToEth(tokenAddress: Address, useWrappers: boolean): Promise<bigint> {
-      const cacheKey = `rate-eth-${tokenAddress}-${useWrappers}`;
+    async getRateToUSD(tokenAddresses: Address[], useWrappers: boolean): Promise<bigint[]> {
+      // Filter out USDC addresses
+      const nonUsdcAddresses = tokenAddresses.filter((addr) => addr.toLowerCase() !== USDC_ADDRESS.toLowerCase());
 
-      const rate = await publicClient.readContract({
+      // If there are no non-USDC addresses, return early
+      if (nonUsdcAddresses.length === 0) {
+        return tokenAddresses.map((addr) => (addr.toLowerCase() === USDC_ADDRESS.toLowerCase() ? BigInt(1) : BigInt(0)));
+      }
+
+      // Prepare multicall contracts array
+      const contracts = nonUsdcAddresses.map((tokenAddress) => ({
         address,
         abi: OffchainOracle.abi,
-        functionName: 'getRateToEth',
-        args: [tokenAddress, useWrappers],
+        functionName: 'getRate',
+        args: [tokenAddress, USDC_ADDRESS, useWrappers] as const,
+      }));
+
+      // Execute multicall with proper typing
+      const results = await publicClient.multicall({
+        contracts: contracts as any[], // Type assertion needed due to viem typing limitations
       });
 
-      return rate as bigint;
+      // Map results back to original token array order
+      return tokenAddresses.map((addr) => {
+        if (addr.toLowerCase() === USDC_ADDRESS.toLowerCase()) {
+          return BigInt(1);
+        }
+        const index = nonUsdcAddresses.findIndex((nonUsdcAddr) => nonUsdcAddr.toLowerCase() === addr.toLowerCase());
+        if (index === -1) return BigInt(0);
+
+        const result = results[index];
+        return result.status === 'success' ? (result.result as bigint) : BigInt(0);
+      });
     },
 
-    async getUsdPrice(tokenAddress: Address): Promise<string> {
-      const cacheKey = `price-usd-${tokenAddress}`;
+    async getRateToUSDBatched(tokenAddresses: Address[], useWrappers: boolean): Promise<bigint[]> {
+      // Filter out USDC addresses
+      const nonUsdcAddresses = tokenAddresses.filter((addr) => addr.toLowerCase() !== USDC_ADDRESS.toLowerCase());
 
-      // If the token is USDC, return 1
-      if (tokenAddress.toLowerCase() === USDC_ADDRESS.toLowerCase()) {
-        return '1';
+      // If there are no non-USDC addresses, return early
+      if (nonUsdcAddresses.length === 0) {
+        return tokenAddresses.map((addr) => (addr.toLowerCase() === USDC_ADDRESS.toLowerCase() ? BigInt(1) : BigInt(0)));
       }
-      // First get token's rate to ETH
-      const [tokenToEthRate, ethToUsdRate] = await Promise.all([
-        this.getRateToEth(tokenAddress, true),
-        this.getRateToEth(USDC_ADDRESS, true),
-      ]);
-      // Then get ETH's rate to USDC
-      if (tokenToEthRate === BigInt(0) || ethToUsdRate === BigInt(0)) {
-        return '0';
-      }
-      // Calculate USD price:
-      // tokenToEthRate is in 1e18 format
-      // ethToUsdRate is in 1e6 format (USDC decimals)
-      // We need to adjust for both decimals
-      const priceInUsd = (tokenToEthRate * ethToUsdRate) / BigInt(1e18);
-      return formatUnits(priceInUsd, 6);
+
+      // Split into batches
+      const batches = Array.from({ length: Math.ceil(nonUsdcAddresses.length / BATCH_SIZE) }, (_, i) =>
+        nonUsdcAddresses.slice(i * BATCH_SIZE, (i + 1) * BATCH_SIZE)
+      );
+
+      // Process all batches
+      const batchResults = await Promise.all(
+        batches.map(async (batch) => {
+          const contracts = batch.map((tokenAddress) => ({
+            address,
+            abi: OffchainOracle.abi,
+            functionName: 'getRate',
+            args: [tokenAddress, USDC_ADDRESS, useWrappers] as const,
+          }));
+
+          return publicClient.multicall({
+            contracts: contracts as any[], // Type assertion needed due to viem typing limitations
+          });
+        })
+      );
+
+      // Flatten batch results
+      const flatResults = batchResults.flat();
+
+      // Map results back to original token array order
+      return tokenAddresses.map((addr) => {
+        if (addr.toLowerCase() === USDC_ADDRESS.toLowerCase()) {
+          return BigInt(1);
+        }
+        const index = nonUsdcAddresses.findIndex((nonUsdcAddr) => nonUsdcAddr.toLowerCase() === addr.toLowerCase());
+        if (index === -1) return BigInt(0);
+
+        const result = flatResults[index];
+        return result.status === 'success' ? (result.result as bigint) : BigInt(0);
+      });
     },
   };
 }

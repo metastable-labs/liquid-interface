@@ -1,153 +1,117 @@
-import { useState, useCallback, useEffect, useMemo } from 'react';
-import { PublicClient, Address, formatUnits, getAddress } from 'viem';
-import { Token } from './types';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { Address, formatUnits, PublicClient } from 'viem';
 import { useLpSugarContract, useOffchainOracleContract } from './useContract';
-import { LP_SUGAR_ADDRESS, CONNECTORS_BASE, OFFCHAIN_ORACLE_ADDRESS, USDC_ADDRESS } from '@/constants/addresses';
+import { Token, Pool } from './types';
+import { CONNECTORS_BASE, LP_SUGAR_ADDRESS, OFFCHAIN_ORACLE_ADDRESS } from '@/constants/addresses';
+import { OffchainOracle } from '@/constants/abis/OffchainOracle';
 
-export function useToken(publicClient: PublicClient, account: Address, refreshInterval: number = 60000) {
+// Constants for optimization
+const BATCH_SIZE = 100; // Number of tokens to fetch at once
+const PRICE_BATCH_SIZE = 20; // Number of prices to fetch in one multicall
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes in milliseconds
+const MAX_RETRIES = 3;
+const INITIAL_RETRY_DELAY = 1000; // 1 second
+
+// TODO: 1. Persist cache to localStorage
+// TODO: 2. Add priority queuing for important tokens
+interface CachedPrice {
+  price: string;
+  timestamp: number;
+}
+
+interface PriceCache {
+  [tokenAddress: string]: CachedPrice;
+}
+
+// Utility function to chunk array into smaller arrays
+const chunkArray = <T>(array: T[], size: number): T[][] => {
+  return Array.from({ length: Math.ceil(array.length / size) }, (_, index) => array.slice(index * size, (index + 1) * size));
+};
+
+export function useToken(publicClient: PublicClient, account?: Address) {
   const [tokens, setTokens] = useState<Token[]>([]);
-  const [tokenMap, setTokenMap] = useState<Map<string, Token>>(new Map());
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [lastUpdated, setLastUpdated] = useState<number>(0);
+  const [error, setError] = useState<Error | null>(null);
+  const priceCache = useRef<PriceCache>({});
 
-  // Memoize contract instances
-  const lpSugar = useMemo(() => useLpSugarContract(LP_SUGAR_ADDRESS, publicClient), [publicClient]);
+  const lpSugar = useLpSugarContract(LP_SUGAR_ADDRESS, publicClient);
+  const oracle = useOffchainOracleContract(OFFCHAIN_ORACLE_ADDRESS, publicClient);
 
-  const offchainOracle = useMemo(() => useOffchainOracleContract(OFFCHAIN_ORACLE_ADDRESS, publicClient), [publicClient]);
+  // Function to check if cached price is still valid
+  const isValidCache = (cachedPrice: CachedPrice): boolean => {
+    return Date.now() - cachedPrice.timestamp < CACHE_DURATION;
+  };
 
-  const formatBalance = useCallback((balance: bigint, decimals: number): string => {
-    return formatUnits(balance, decimals);
-  }, []);
+  const fetchTokens = async () => {
+    setLoading(true);
+    setError(null);
 
-  const fetchUsdPrice = useCallback(
-    async (tokenAddress: Address): Promise<string> => {
-      try {
-        return await offchainOracle.getUsdPrice(tokenAddress);
-      } catch (error) {
-        console.error(`Error fetching USD price for token ${tokenAddress}:`, error);
-        return '0';
-      }
-    },
-    [offchainOracle]
-  );
+    let allTokens: Token[] = [];
+  };
+  // const fetchTokens = useCallback(async () => {
+  //   if (!account) return;
 
-  const getLogoUrl = useCallback((tokenAddress: Address): string => {
-    return `https://assets.smold.app/api/token/8543/${tokenAddress}/logo-32.png`;
-  }, []);
+  //   try {
+  //     setLoading(true);
+  //     setError(null);
 
-  // Update token map whenever tokens array changes
-  useEffect(() => {
-    const newMap = new Map<string, Token>();
-    tokens.forEach((token) => {
-      try {
-        const checksummedAddress = getAddress(token.token_address);
-        newMap.set(checksummedAddress.toLowerCase(), token);
-      } catch (err) {
-        console.error(`Invalid token address: ${token.token_address}`);
-      }
-    });
-    setTokenMap(newMap);
-  }, [tokens]);
+  //     let allTokens: Token[] = [];
+  //     let offset = 0;
+  //     let hasMore = true;
 
-  const fetchTokens = useCallback(
-    async (forceRefresh: boolean = false) => {
-      const now = Date.now();
-      if (!forceRefresh && tokens.length > 0 && now - lastUpdated < refreshInterval) {
-        return;
-      }
+  //     while (hasMore) {
+  //       const batch = await lpSugar.getTokens(BATCH_SIZE, offset, account, CONNECTORS_BASE);
+  //       if (batch.length === 0) {
+  //         hasMore = false;
+  //         break;
+  //       }
 
-      setLoading(true);
-      setError(null);
+  //       // Create multicall contract calls for price fetching
+  //       const priceCallRequests = batch.map((token) => ({
+  //         ...oracle,
+  //         functionName: 'getRateToUSD',
+  //         args: [token.token_address, true],
+  //       }));
 
-      try {
-        const fetchedTokens = await lpSugar.getTokens(100, 0, account, CONNECTORS_BASE);
-        console.log(fetchedTokens, 'tokens');
+  //       // Execute multicall
+  //       const priceResults = await publicClient.multicall({
+  //         contracts: priceCallRequests.map((request) => ({
+  //           address: OFFCHAIN_ORACLE_ADDRESS,
+  //           abi: OffchainOracle.abi,
+  //           functionName: request.functionName,
+  //           args: request.args,
+  //         })),
+  //       });
 
-        const tokensWithPricesAndLogos = await Promise.all(
-          (
-            fetchedTokens as { token_address: `0x${string}`; symbol: string; decimals: number; account_balance: bigint; listed: boolean }[]
-          ).map(async (token) => {
-            const checksummedAddress = getAddress(token.token_address);
-            const usd_price = await fetchUsdPrice(token.token_address);
-            const logo_url = getLogoUrl(token.token_address);
-            return {
-              ...token,
-              token_address: checksummedAddress,
-              account_balance: formatBalance(token.account_balance, token.decimals),
-              usd_price,
-              logo_url,
-            };
-          })
-        );
+  //       // Map the results to tokens
+  //       const tokensWithPrice = batch.map((token, index) => {
+  //         const priceResult = priceResults[index];
+  //         return {
+  //           address: token.token_address,
+  //           symbol: token.symbol,
+  //           decimals: Number(token.decimals),
+  //           balance: formatUnits(token.account_balance, token.decimals),
+  //           isListed: token.listed,
+  //           usdPrice: priceResult.status === 'success' ? formatUnits(priceResult.result as unknown as bigint, 6) : '0',
+  //         };
+  //       });
 
-        const validTokens = tokensWithPricesAndLogos.filter(Boolean) as Token[];
-        console.log('Processed tokens:', validTokens);
+  //       allTokens = [...allTokens, ...tokensWithPrice];
+  //       offset += BATCH_SIZE;
+  //     }
 
-        setTokens(validTokens);
-        setLastUpdated(now);
-      } catch (err) {
-        console.error('Error fetching tokens:', err);
-        setError('Failed to fetch tokens');
-      } finally {
-        setLoading(false);
-      }
-    },
-    [lpSugar, account, refreshInterval, lastUpdated, tokens.length, formatBalance, fetchUsdPrice, getLogoUrl]
-  );
+  //     setTokens(allTokens);
+  //   } catch (err) {
+  //     console.error('Error fetching tokens:', err);
+  //     setError(err instanceof Error ? err : new Error('Failed to fetch tokens'));
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // }, [lpSugar, oracle, account, publicClient]);
 
-  // Initial fetch
-  useEffect(() => {
-    if (publicClient && account) {
-      fetchTokens();
-    }
-  }, [publicClient, account, fetchTokens]);
-
-  // Set up refresh interval
-  useEffect(() => {
-    if (!publicClient || !account) return;
-
-    const intervalId = setInterval(() => {
-      fetchTokens();
-    }, refreshInterval);
-
-    return () => clearInterval(intervalId);
-  }, [publicClient, account, fetchTokens, refreshInterval]);
-
-  const refreshTokens = useCallback(() => {
-    fetchTokens(true);
-  }, [fetchTokens]);
-
-  const getTokenByAddress = useCallback(
-    (address: Address): Token | undefined => {
-      try {
-        // Normalize the input address
-        const normalizedAddress = getAddress(address).toLowerCase();
-        const token = tokenMap.get(normalizedAddress);
-
-        if (!token) {
-          console.debug(`Token not found in map for address ${address}. Available tokens:`, Array.from(tokenMap.keys()));
-        }
-
-        return token;
-      } catch (err) {
-        console.error(`Error looking up token ${address}:`, err);
-        return undefined;
-      }
-    },
-    [tokenMap]
-  );
-
-  return useMemo(
-    () => ({
-      tokens,
-      loading,
-      error,
-      refreshTokens,
-      lastUpdated,
-      getTokenByAddress,
-      getUsdPrice: fetchUsdPrice,
-    }),
-    [tokens, loading, error, refreshTokens, lastUpdated, getTokenByAddress, fetchUsdPrice]
-  );
+  return {
+    tokens,
+    loading,
+    error,
+  };
 }

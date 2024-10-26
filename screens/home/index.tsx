@@ -6,10 +6,11 @@ import { LQDButton, LQDPoolPairCard, LQDPoolPairPaper } from '@/components';
 import { CaretRightIcon, DirectUpIcon, DollarSquareIcon, TrendUpIcon } from '@/assets/icons';
 import { topGainers, poolPairs } from './dummy';
 import Section from './section';
-import { usePool } from '@/hooks/usePool';
 import { publicClient } from '@/init/viem';
-import { PublicClient } from 'viem';
-import { useEffect } from 'react';
+import { formatUnits, PublicClient } from 'viem';
+import { useEffect, useState } from 'react';
+import { CONNECTORS_BASE, LP_SUGAR_ADDRESS, OFFCHAIN_ORACLE_ADDRESS } from '@/constants/addresses';
+import { useLpSugarContract, useOffchainOracleContract } from '@/hooks/useContract';
 
 const balance = 36_708.89;
 
@@ -17,16 +18,24 @@ const Home = () => {
   const { router } = useSystemFunctions();
 
   const { whole, decimal } = formatAmountWithWholeAndDecimal(balance);
-  const { fetchV2Pools, paginatedV2Pools } = usePool(publicClient as PublicClient, '0x4a8b9fCfBA0Bf99f02f621584017ab92A41320a9');
-  console.log(paginatedV2Pools, 'paginated v2 pool');
-  useEffect(() => {
-    async function fetchPools() {
-      const returnv2pools = await fetchV2Pools(100, 0);
-      console.log(returnv2pools, 'fetch v2 pools');
-    }
 
-    fetchPools();
-  }, []);
+  const lpSugar = useLpSugarContract(LP_SUGAR_ADDRESS, publicClient as PublicClient);
+  const oracle = useOffchainOracleContract(OFFCHAIN_ORACLE_ADDRESS, publicClient as PublicClient);
+
+  useEffect(() => {
+    const getPools = async () => {
+      const poolData = await lpSugar.getAll(100, 0);
+      const tokenData = await lpSugar.getTokens(200, 0, '0xF977814e90dA44bFA03b6295A0616a897441aceC', CONNECTORS_BASE);
+      console.log(poolData, 'data');
+      console.log(tokenData, 'token data');
+      const tokenData1Price = await oracle.getRateToUSD(tokenData[1].token_address, true);
+      console.log(formatUnits(tokenData1Price, 6), 'token data 1 price');
+
+      const position = await lpSugar.getPositions(10, 0, '0x5C183B6B02444977c7db8498Bd608a9adD62924a');
+      console.log(position, 'lp position');
+    };
+    getPools();
+  });
 
   const sections = [
     {
