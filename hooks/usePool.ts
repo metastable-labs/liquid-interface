@@ -52,15 +52,54 @@ export function usePool(publicClient: PublicClient, account: Address, refreshInt
     [publicClient]
   );
 
+  const processPool = useCallback(
+    async (pool: RawPool): Promise<EnhancedFormattedPool | null> => {
+      try {
+        const isStable = await fetchPoolStability(pool.lp as Address);
+        const formattedPool = formatPool(pool, isStable);
+
+        console.log(formattedPool.token0, 'token0');
+        console.log(formattedPool.token1, 'token1');
+
+        const token0 = getTokenByAddress(formattedPool.token0 as Address);
+        const token1 = getTokenByAddress(formattedPool.token1 as Address);
+
+        if (!token0 || !token1) {
+          console.warn(`Token not found for pool ${formattedPool.lp}, token0: ${formattedPool.token0}, token1: ${formattedPool.token1}`);
+          return null;
+        }
+
+        const tvl = calculateTVL(pool.reserve0, pool.reserve1, token0, token1);
+        const { volume0, volume1, cumulativeVolumeUSD } = calculateVolume(
+          pool.token0_fees,
+          pool.token1_fees,
+          pool.pool_fee,
+          token0,
+          token1
+        );
+
+        return {
+          ...formattedPool,
+          token0,
+          token1,
+          pool_fee: formatPoolFee(pool.pool_fee),
+          TVL: tvl,
+          volume0,
+          volume1,
+          cumulativeVolumeUSD,
+        } as EnhancedFormattedPool;
+      } catch (err) {
+        console.error(`Error processing pool ${pool.lp}:`, err);
+        return null;
+      }
+    },
+    [fetchPoolStability, getTokenByAddress]
+  );
+
   const fetchAllPools = useCallback(
     async (forceRefresh: boolean = false) => {
       const now = Date.now();
       if (!forceRefresh && allPools.length > 0 && now - lastUpdated < refreshInterval) {
-        return;
-      }
-
-      // Don't fetch if we don't have tokens loaded yet
-      if (tokensLoading || tokens.length === 0) {
         return;
       }
 
@@ -71,65 +110,32 @@ export function usePool(publicClient: PublicClient, account: Address, refreshInt
         let offset = 0;
         let allPoolsData: EnhancedFormattedPool[] = [];
         let hasMore = true;
-        const batchSize = 10;
+        const batchSize = 100; // Increased batch size
+
+        console.log(hasMore, 'has more');
 
         while (hasMore) {
+          console.log(`Fetching pools batch - offset: ${offset}, size: ${batchSize}`);
           const poolsBatch = await lpSugar.getAll(batchSize, offset);
-          if (!poolsBatch || !Array.isArray(poolsBatch)) {
-            throw new Error('Invalid response from getAll');
+          console.log(poolsBatch, 'pools batch');
+
+          if (!poolsBatch || !Array.isArray(poolsBatch) || poolsBatch.length === 0) {
+            console.log('No more pools found or invalid response');
+            break;
           }
 
-          const poolsWithStability = await Promise.all(
-            poolsBatch.map(async (pool) => {
-              try {
-                console.log(pool, 'pools');
-                const isStable = await fetchPoolStability(pool.lp as Address);
-                console.log(isStable, 'pool stabilitity');
-                const formattedPool = formatPool(pool, isStable);
+          console.log(`Processing ${poolsBatch.length} pools`);
+          const processedPools = await Promise.all(poolsBatch.map(processPool));
+          const validPools = processedPools.filter(Boolean) as EnhancedFormattedPool[];
 
-                const token0 = getTokenByAddress(formattedPool.token0 as Address);
-                const token1 = getTokenByAddress(formattedPool.token1 as Address);
-
-                console.log(token0, token1);
-
-                // if (!token0 || !token1) {
-                //   console.error(`Token not found for pool ${formattedPool.lp}`);
-                //   return null;
-                // }
-
-                const tvl = calculateTVL(pool.reserve0, pool.reserve1, token0!, token1!);
-                const { volume0, volume1, cumulativeVolumeUSD } = calculateVolume(
-                  pool.token0_fees,
-                  pool.token1_fees,
-                  pool.pool_fee,
-                  token0!,
-                  token1!
-                );
-
-                return {
-                  ...formattedPool,
-                  token0,
-                  token1,
-                  pool_fee: formatPoolFee(pool.pool_fee),
-                  TVL: tvl,
-                  volume0,
-                  volume1,
-                  cumulativeVolumeUSD,
-                } as EnhancedFormattedPool;
-              } catch (err) {
-                console.error(`Error processing pool ${pool.lp}:`, err);
-                return null;
-              }
-            })
-          );
-
-          const validPools = poolsWithStability.filter(Boolean) as EnhancedFormattedPool[];
+          console.log(`Added ${validPools.length} valid pools`);
           allPoolsData = [...allPoolsData, ...validPools];
 
           offset += batchSize;
           hasMore = poolsBatch.length === batchSize;
         }
 
+        console.log(`Total pools found: ${allPoolsData.length}`);
         setAllPools(allPoolsData);
         setLastUpdated(now);
       } catch (err) {
@@ -139,19 +145,26 @@ export function usePool(publicClient: PublicClient, account: Address, refreshInt
         setLoading(false);
       }
     },
-    [lpSugar, fetchPoolStability, getTokenByAddress, tokens, tokensLoading, refreshInterval, allPools, lastUpdated]
+    [lpSugar, processPool, tokens, tokensLoading, refreshInterval, allPools.length, lastUpdated]
   );
 
   const fetchV2Pools = useCallback(
     async (limit: number = 10, offset: number = 0) => {
-      await fetchAllPools(); // This will refresh if necessary
+      if (allPools.length === 0) {
+        await fetchAllPools();
+      }
 
-      const v2Pools = allPools.filter((pool) => pool.type === 'V2');
-      console.log(v2Pools, 'v2 pools from usePool');
+      const v2Pools = allPools.filter((pool) => {
+        console.log('Pool type:', pool.type); // Debug log
+        return pool.type === 'V2'; // Handle both number and string types
+      });
+
+      console.log(`Found ${v2Pools.length} V2 pools out of ${allPools.length} total pools`);
       const paginatedPools = v2Pools.slice(offset, offset + limit);
+      console.log(`Returning ${paginatedPools.length} paginated pools`);
 
       setPaginatedV2Pools(paginatedPools);
-      return v2Pools;
+      return paginatedPools;
     },
     [allPools, fetchAllPools]
   );

@@ -1,15 +1,15 @@
 import { useState, useCallback, useEffect, useMemo } from 'react';
-import { PublicClient, Address, formatUnits } from 'viem';
+import { PublicClient, Address, formatUnits, getAddress } from 'viem';
 import { Token } from './types';
 import { useLpSugarContract, useOffchainOracleContract } from './useContract';
 import { LP_SUGAR_ADDRESS, CONNECTORS_BASE, OFFCHAIN_ORACLE_ADDRESS, USDC_ADDRESS } from '@/constants/addresses';
 
 export function useToken(publicClient: PublicClient, account: Address, refreshInterval: number = 60000) {
   const [tokens, setTokens] = useState<Token[]>([]);
+  const [tokenMap, setTokenMap] = useState<Map<string, Token>>(new Map());
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<number>(0);
-  const [chainId, setChainId] = useState<string | null>(null);
 
   // Memoize contract instances
   const lpSugar = useMemo(() => useLpSugarContract(LP_SUGAR_ADDRESS, publicClient), [publicClient]);
@@ -36,25 +36,25 @@ export function useToken(publicClient: PublicClient, account: Address, refreshIn
     return `https://assets.smold.app/api/token/8543/${tokenAddress}/logo-32.png`;
   }, []);
 
-  const fetchChainId = useCallback(async () => {
-    try {
-      const id = await publicClient.getChainId();
-      setChainId(id.toString());
-    } catch (error) {
-      console.error('Error fetching chainId:', error);
-      setError('Failed to fetch chainId');
-    }
-  }, [publicClient]);
+  // Update token map whenever tokens array changes
+  useEffect(() => {
+    const newMap = new Map<string, Token>();
+    tokens.forEach((token) => {
+      try {
+        const checksummedAddress = getAddress(token.token_address);
+        newMap.set(checksummedAddress.toLowerCase(), token);
+      } catch (err) {
+        console.error(`Invalid token address: ${token.token_address}`);
+      }
+    });
+    setTokenMap(newMap);
+  }, [tokens]);
 
   const fetchTokens = useCallback(
     async (forceRefresh: boolean = false) => {
       const now = Date.now();
       if (!forceRefresh && tokens.length > 0 && now - lastUpdated < refreshInterval) {
         return;
-      }
-
-      if (!chainId) {
-        await fetchChainId();
       }
 
       setLoading(true);
@@ -68,10 +68,12 @@ export function useToken(publicClient: PublicClient, account: Address, refreshIn
           (
             fetchedTokens as { token_address: `0x${string}`; symbol: string; decimals: number; account_balance: bigint; listed: boolean }[]
           ).map(async (token) => {
+            const checksummedAddress = getAddress(token.token_address);
             const usd_price = await fetchUsdPrice(token.token_address);
             const logo_url = getLogoUrl(token.token_address);
             return {
               ...token,
+              token_address: checksummedAddress,
               account_balance: formatBalance(token.account_balance, token.decimals),
               usd_price,
               logo_url,
@@ -79,11 +81,10 @@ export function useToken(publicClient: PublicClient, account: Address, refreshIn
           })
         );
 
-        setTokens(
-          tokensWithPricesAndLogos.map((token) => ({
-            ...token,
-          }))
-        );
+        const validTokens = tokensWithPricesAndLogos.filter(Boolean) as Token[];
+        console.log('Processed tokens:', validTokens);
+
+        setTokens(validTokens);
         setLastUpdated(now);
       } catch (err) {
         console.error('Error fetching tokens:', err);
@@ -92,7 +93,7 @@ export function useToken(publicClient: PublicClient, account: Address, refreshIn
         setLoading(false);
       }
     },
-    [lpSugar, account, chainId, refreshInterval, lastUpdated, tokens.length, formatBalance, fetchUsdPrice, getLogoUrl, fetchChainId]
+    [lpSugar, account, refreshInterval, lastUpdated, tokens.length, formatBalance, fetchUsdPrice, getLogoUrl]
   );
 
   // Initial fetch
@@ -119,9 +120,22 @@ export function useToken(publicClient: PublicClient, account: Address, refreshIn
 
   const getTokenByAddress = useCallback(
     (address: Address): Token | undefined => {
-      return tokens.find((token) => token.token_address.toLowerCase() === address.toLowerCase());
+      try {
+        // Normalize the input address
+        const normalizedAddress = getAddress(address).toLowerCase();
+        const token = tokenMap.get(normalizedAddress);
+
+        if (!token) {
+          console.debug(`Token not found in map for address ${address}. Available tokens:`, Array.from(tokenMap.keys()));
+        }
+
+        return token;
+      } catch (err) {
+        console.error(`Error looking up token ${address}:`, err);
+        return undefined;
+      }
     },
-    [tokens]
+    [tokenMap]
   );
 
   return useMemo(
