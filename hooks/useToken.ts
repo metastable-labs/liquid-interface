@@ -97,6 +97,20 @@ export function useToken(publicClient: PublicClient, account?: Address) {
     }
   };
 
+  // Clean up expired cache entries periodically
+  useEffect(() => {
+    const cleanup = setInterval(() => {
+      const now = Date.now();
+      Object.keys(priceCache.current).forEach((key) => {
+        if (!isValidCache(priceCache.current[key])) {
+          delete priceCache.current[key];
+        }
+      });
+    }, CACHE_DURATION);
+
+    return () => clearInterval(cleanup);
+  }, []);
+
   return {
     tokens,
     loading,
