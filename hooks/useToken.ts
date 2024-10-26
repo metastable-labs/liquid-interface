@@ -23,13 +23,7 @@ export function useToken(publicClient: PublicClient, account: Address, refreshIn
   const fetchUsdPrice = useCallback(
     async (tokenAddress: Address): Promise<string> => {
       try {
-        const rate = await offchainOracle.getRate(tokenAddress, USDC_ADDRESS, true);
-        if (typeof rate === 'bigint') {
-          return formatUnits(rate, 6);
-        } else {
-          console.error(`Unexpected rate type for token ${tokenAddress}:`, typeof rate);
-          return '0';
-        }
+        return await offchainOracle.getUsdPrice(tokenAddress);
       } catch (error) {
         console.error(`Error fetching USD price for token ${tokenAddress}:`, error);
         return '0';
@@ -38,16 +32,9 @@ export function useToken(publicClient: PublicClient, account: Address, refreshIn
     [offchainOracle]
   );
 
-  const getLogoUrl = useCallback(
-    (tokenAddress: Address): string => {
-      if (!chainId) {
-        console.warn('ChainId not available, unable to construct logo URL');
-        return '';
-      }
-      return `https://assets.smold.app/api/token/${chainId}/${tokenAddress}/logo-32.png`;
-    },
-    [chainId]
-  );
+  const getLogoUrl = useCallback((tokenAddress: Address): string => {
+    return `https://assets.smold.app/api/token/8543/${tokenAddress}/logo-32.png`;
+  }, []);
 
   const fetchChainId = useCallback(async () => {
     try {
@@ -74,7 +61,8 @@ export function useToken(publicClient: PublicClient, account: Address, refreshIn
       setError(null);
 
       try {
-        const fetchedTokens = await lpSugar.getTokens(1000, 0, account, CONNECTORS_BASE);
+        const fetchedTokens = await lpSugar.getTokens(100, 0, account, CONNECTORS_BASE);
+        console.log(fetchedTokens, 'tokens');
 
         const tokensWithPricesAndLogos = await Promise.all(
           (

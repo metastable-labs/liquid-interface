@@ -9,6 +9,7 @@ import Section from './section';
 import { usePool } from '@/hooks/usePool';
 import { publicClient } from '@/init/viem';
 import { PublicClient } from 'viem';
+import { useEffect } from 'react';
 
 const balance = 36_708.89;
 
@@ -16,9 +17,16 @@ const Home = () => {
   const { router } = useSystemFunctions();
 
   const { whole, decimal } = formatAmountWithWholeAndDecimal(balance);
-  const { fetchV2Pools } = usePool(publicClient as PublicClient, '0x8dB6A7836ed47CeD0Ee15C8727EdABA5dd7baEA8');
+  const { fetchV2Pools, paginatedV2Pools } = usePool(publicClient as PublicClient, '0x4a8b9fCfBA0Bf99f02f621584017ab92A41320a9');
+  console.log(paginatedV2Pools, 'paginated v2 pool');
+  useEffect(() => {
+    async function fetchPools() {
+      const returnv2pools = await fetchV2Pools(100, 0);
+      console.log(returnv2pools, 'fetch v2 pools');
+    }
 
-  console.log(fetchV2Pools, 'fetch v2 pools');
+    fetchPools();
+  }, []);
 
   const sections = [
     {

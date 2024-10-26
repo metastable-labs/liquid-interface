@@ -71,7 +71,7 @@ export function usePool(publicClient: PublicClient, account: Address, refreshInt
         let offset = 0;
         let allPoolsData: EnhancedFormattedPool[] = [];
         let hasMore = true;
-        const batchSize = 1000;
+        const batchSize = 100;
 
         while (hasMore) {
           const poolsBatch = await lpSugar.getAll(batchSize, offset);
@@ -83,23 +83,26 @@ export function usePool(publicClient: PublicClient, account: Address, refreshInt
             poolsBatch.map(async (pool) => {
               try {
                 const isStable = await fetchPoolStability(pool.lp as Address);
+                console.log(isStable, 'pool stabilitity');
                 const formattedPool = formatPool(pool, isStable);
 
                 const token0 = getTokenByAddress(formattedPool.token0 as Address);
                 const token1 = getTokenByAddress(formattedPool.token1 as Address);
 
-                if (!token0 || !token1) {
-                  console.error(`Token not found for pool ${formattedPool.lp}`);
-                  return null;
-                }
+                console.log(token0, token1);
 
-                const tvl = calculateTVL(pool.reserve0, pool.reserve1, token0, token1);
+                // if (!token0 || !token1) {
+                //   console.error(`Token not found for pool ${formattedPool.lp}`);
+                //   return null;
+                // }
+
+                const tvl = calculateTVL(pool.reserve0, pool.reserve1, token0!, token1!);
                 const { volume0, volume1, cumulativeVolumeUSD } = calculateVolume(
                   pool.token0_fees,
                   pool.token1_fees,
                   pool.pool_fee,
-                  token0,
-                  token1
+                  token0!,
+                  token1!
                 );
 
                 return {
@@ -143,9 +146,11 @@ export function usePool(publicClient: PublicClient, account: Address, refreshInt
       await fetchAllPools(); // This will refresh if necessary
 
       const v2Pools = allPools.filter((pool) => pool.type === 'V2');
+      console.log(v2Pools, 'v2 pools from usePool');
       const paginatedPools = v2Pools.slice(offset, offset + limit);
 
       setPaginatedV2Pools(paginatedPools);
+      return v2Pools;
     },
     [allPools, fetchAllPools]
   );

@@ -1,7 +1,8 @@
-import { Address, ContractFunctionExecutionError, PublicClient } from 'viem';
-import { OffchainOracleABI } from '@/constants/abis';
+import { Address, ContractFunctionExecutionError, formatUnits, PublicClient } from 'viem';
 import { LpSugar } from '@/constants/abis/LPSugar';
 import { AerodromePool } from '@/constants/abis/AerodromePoolABI';
+import { OffchainOracle } from '@/constants/abis/OffchainOracle';
+import { USDC_ADDRESS } from '@/constants/addresses';
 
 export function useLpSugarContract(address: Address, publicClient: PublicClient) {
   if (!LpSugar.abi || !address || !publicClient) {
@@ -87,29 +88,45 @@ export function useAerodromePoolContract(address: Address, publicClient: PublicC
 }
 
 export function useOffchainOracleContract(address: Address, publicClient: PublicClient) {
-  if (!address || !publicClient) {
-    throw new Error('Address and publicClient are required for OffchainOracleContract');
-  }
-
   return {
-    async getRate(tokenIn: Address, tokenOut: Address, useWrappers: boolean) {
+    async getRateToEth(tokenAddress: Address, useWrappers: boolean) {
       try {
         return await publicClient.readContract({
           address,
-          abi: OffchainOracleABI,
-          functionName: 'getRate',
-          args: [tokenIn, tokenOut, useWrappers],
+          abi: OffchainOracle.abi,
+          functionName: 'getRateToEth',
+          args: [tokenAddress, useWrappers],
         });
       } catch (error) {
-        if (error instanceof ContractFunctionExecutionError) {
-          console.error('Contract execution error:', {
-            function: 'getRate',
-            args: [tokenIn, tokenOut, useWrappers],
-            error: error.message,
-            details: error.details,
-          });
+        console.error('Error getting rate to ETH:', error);
+        return BigInt(0);
+      }
+    },
+
+    async getUsdPrice(tokenAddress: Address): Promise<string> {
+      try {
+        // If the token is USDC, return 1
+        if (tokenAddress.toLowerCase() === USDC_ADDRESS.toLowerCase()) {
+          return '1';
         }
-        throw error;
+
+        // First get token's rate to ETH
+        const tokenToEthRate = await this.getRateToEth(tokenAddress, true);
+        if (tokenToEthRate === BigInt(0)) return '0';
+
+        // Then get ETH's rate to USDC
+        const ethToUsdRate = await this.getRateToEth(USDC_ADDRESS, true);
+        if (ethToUsdRate === BigInt(0)) return '0';
+
+        // Calculate USD price:
+        // tokenToEthRate is in 1e18 format
+        // ethToUsdRate is in 1e6 format (USDC decimals)
+        // We need to adjust for both decimals
+        const priceInUsd = (tokenToEthRate * ethToUsdRate) / BigInt(1e18);
+        return formatUnits(priceInUsd, 6);
+      } catch (error) {
+        console.error(`Error getting USD price for token ${tokenAddress}:`, error);
+        return '0';
       }
     },
   };
