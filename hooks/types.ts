@@ -7,6 +7,7 @@ export type RawPool = {
   decimals: number;
   liquidity: bigint;
   type: number;
+  tick: any;
   token0: Address;
   reserve0: bigint;
   staked0: bigint;
