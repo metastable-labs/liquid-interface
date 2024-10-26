@@ -63,7 +63,7 @@ export function useAerodromePoolContract(address: Address, publicClient: PublicC
 }
 
 export function useOffchainOracleContract(address: Address, publicClient: PublicClient) {
-  const BATCH_SIZE = 50;
+  const BATCH_SIZE = 10;
   return {
     async getRateToUSD(tokenAddresses: Address[], useWrappers: boolean): Promise<bigint[]> {
       // Filter out USDC addresses

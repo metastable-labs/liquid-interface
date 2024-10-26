@@ -7,6 +7,7 @@ export interface Token {
   balance: string;
   isListed: boolean;
   usdPrice: string;
+  logoUrl: string;
 }
 
 interface BasePool {
