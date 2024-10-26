@@ -3,6 +3,7 @@ import { LpSugar } from '@/constants/abis/LPSugar';
 import { AerodromePool } from '@/constants/abis/AerodromePoolABI';
 import { OffchainOracle } from '@/constants/abis/OffchainOracle';
 import { USDC_ADDRESS } from '@/constants/addresses';
+import { createRateLimitedContract } from '@/utils/rateLimit';
 
 export function useLpSugarContract(address: Address, publicClient: PublicClient) {
   if (!LpSugar.abi || !address || !publicClient) {
@@ -10,6 +11,7 @@ export function useLpSugarContract(address: Address, publicClient: PublicClient)
   }
 
   const SAFE_BATCH_SIZE = 100;
+  const rateLimitedContract = createRateLimitedContract(publicClient);
 
   return {
     async getAll(limit: number, offset: number) {
@@ -46,26 +48,16 @@ export function useLpSugarContract(address: Address, publicClient: PublicClient)
     },
 
     async getTokens(limit: number, offset: number, account: Address, connectors: readonly Address[]) {
-      try {
-        const safeBatchSize = Math.min(limit, SAFE_BATCH_SIZE);
+      const cacheKey = `tokens-${limit}-${offset}-${account}`;
 
-        return await publicClient.readContract({
+      return rateLimitedContract.call(cacheKey, async () => {
+        return publicClient.readContract({
           address,
           abi: LpSugar.abi,
           functionName: 'tokens',
-          args: [BigInt(safeBatchSize), BigInt(offset), account, connectors],
+          args: [BigInt(limit), BigInt(offset), account, connectors],
         });
-      } catch (error) {
-        if (error instanceof ContractFunctionExecutionError) {
-          console.error('Contract execution error:', {
-            function: 'tokens',
-            args: [limit, offset, account, connectors],
-            error: error.message,
-            details: error.details,
-          });
-        }
-        throw error;
-      }
+      });
     },
   };
 }
@@ -88,46 +80,47 @@ export function useAerodromePoolContract(address: Address, publicClient: PublicC
 }
 
 export function useOffchainOracleContract(address: Address, publicClient: PublicClient) {
+  const rateLimitedContract = createRateLimitedContract(publicClient);
   return {
-    async getRateToEth(tokenAddress: Address, useWrappers: boolean) {
-      try {
-        return await publicClient.readContract({
+    async getRateToEth(tokenAddress: Address, useWrappers: boolean): Promise<bigint> {
+      const cacheKey = `rate-eth-${tokenAddress}-${useWrappers}`;
+
+      return rateLimitedContract.call(cacheKey, async () => {
+        const rate = await publicClient.readContract({
           address,
           abi: OffchainOracle.abi,
           functionName: 'getRateToEth',
           args: [tokenAddress, useWrappers],
         });
-      } catch (error) {
-        console.error('Error getting rate to ETH:', error);
-        return BigInt(0);
-      }
+
+        return rate as bigint;
+      });
     },
 
     async getUsdPrice(tokenAddress: Address): Promise<string> {
-      try {
+      const cacheKey = `price-usd-${tokenAddress}`;
+
+      return rateLimitedContract.call(cacheKey, async () => {
         // If the token is USDC, return 1
         if (tokenAddress.toLowerCase() === USDC_ADDRESS.toLowerCase()) {
           return '1';
         }
-
         // First get token's rate to ETH
-        const tokenToEthRate = await this.getRateToEth(tokenAddress, true);
-        if (tokenToEthRate === BigInt(0)) return '0';
-
+        const [tokenToEthRate, ethToUsdRate] = await Promise.all([
+          this.getRateToEth(tokenAddress, true),
+          this.getRateToEth(USDC_ADDRESS, true),
+        ]);
         // Then get ETH's rate to USDC
-        const ethToUsdRate = await this.getRateToEth(USDC_ADDRESS, true);
-        if (ethToUsdRate === BigInt(0)) return '0';
-
+        if (tokenToEthRate === BigInt(0) || ethToUsdRate === BigInt(0)) {
+          return '0';
+        }
         // Calculate USD price:
         // tokenToEthRate is in 1e18 format
         // ethToUsdRate is in 1e6 format (USDC decimals)
         // We need to adjust for both decimals
         const priceInUsd = (tokenToEthRate * ethToUsdRate) / BigInt(1e18);
         return formatUnits(priceInUsd, 6);
-      } catch (error) {
-        console.error(`Error getting USD price for token ${tokenAddress}:`, error);
-        return '0';
-      }
+      });
     },
   };
 }

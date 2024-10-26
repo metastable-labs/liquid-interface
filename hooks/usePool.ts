@@ -71,7 +71,7 @@ export function usePool(publicClient: PublicClient, account: Address, refreshInt
         let offset = 0;
         let allPoolsData: EnhancedFormattedPool[] = [];
         let hasMore = true;
-        const batchSize = 100;
+        const batchSize = 10;
 
         while (hasMore) {
           const poolsBatch = await lpSugar.getAll(batchSize, offset);
@@ -82,6 +82,7 @@ export function usePool(publicClient: PublicClient, account: Address, refreshInt
           const poolsWithStability = await Promise.all(
             poolsBatch.map(async (pool) => {
               try {
+                console.log(pool, 'pools');
                 const isStable = await fetchPoolStability(pool.lp as Address);
                 console.log(isStable, 'pool stabilitity');
                 const formattedPool = formatPool(pool, isStable);
