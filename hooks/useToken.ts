@@ -47,71 +47,60 @@ export function useToken(publicClient: PublicClient, account?: Address) {
     setError(null);
 
     let allTokens: Token[] = [];
+    let offset = 0;
+    let hasMore = true;
+
+    while (hasMore) {
+      const batch = await lpSugar.getTokens(BATCH_SIZE, offset, account!, CONNECTORS_BASE);
+      if (batch.length === 0) {
+        hasMore = false;
+        break;
+      }
+
+      // Filter tokens that need price update
+      const tokensNeedingPrice = batch.filter(
+        (token) =>
+          !priceCache.current[token.token_address.toLowerCase()] || !isValidCache(priceCache.current[token.token_address.toLowerCase()])
+      );
+
+      // Only fetch prices for tokens not in cache or with expired cache
+      if (tokensNeedingPrice.length > 0) {
+        const tokenAddresses = tokensNeedingPrice.map((token) => token.token_address);
+        const prices = await oracle.getRateToUSDBatched(tokenAddresses, true);
+
+        // Update cache with new prices
+        tokensNeedingPrice.forEach((token, index) => {
+          priceCache.current[token.token_address.toLowerCase()] = {
+            price: prices[index].toString(),
+            timestamp: Date.now(),
+          };
+        });
+      }
+      // Map tokens with prices (either from cache or newly fetched)
+      const tokensWithPrice = batch.map((token) => {
+        const cachedData = priceCache.current[token.token_address.toLowerCase()];
+        return {
+          address: token.token_address,
+          symbol: token.symbol,
+          decimals: Number(token.decimals),
+          balance: formatUnits(BigInt(token.account_balance), token.decimals),
+          isListed: token.listed,
+          usdPrice: cachedData ? formatUnits(BigInt(cachedData.price), 6) : '0',
+        };
+      });
+
+      allTokens = [...allTokens, ...tokensWithPrice];
+      offset += BATCH_SIZE;
+
+      setTokens(allTokens);
+      setLoading(false);
+    }
   };
-  // const fetchTokens = useCallback(async () => {
-  //   if (!account) return;
-
-  //   try {
-  //     setLoading(true);
-  //     setError(null);
-
-  //     let allTokens: Token[] = [];
-  //     let offset = 0;
-  //     let hasMore = true;
-
-  //     while (hasMore) {
-  //       const batch = await lpSugar.getTokens(BATCH_SIZE, offset, account, CONNECTORS_BASE);
-  //       if (batch.length === 0) {
-  //         hasMore = false;
-  //         break;
-  //       }
-
-  //       // Create multicall contract calls for price fetching
-  //       const priceCallRequests = batch.map((token) => ({
-  //         ...oracle,
-  //         functionName: 'getRateToUSD',
-  //         args: [token.token_address, true],
-  //       }));
-
-  //       // Execute multicall
-  //       const priceResults = await publicClient.multicall({
-  //         contracts: priceCallRequests.map((request) => ({
-  //           address: OFFCHAIN_ORACLE_ADDRESS,
-  //           abi: OffchainOracle.abi,
-  //           functionName: request.functionName,
-  //           args: request.args,
-  //         })),
-  //       });
-
-  //       // Map the results to tokens
-  //       const tokensWithPrice = batch.map((token, index) => {
-  //         const priceResult = priceResults[index];
-  //         return {
-  //           address: token.token_address,
-  //           symbol: token.symbol,
-  //           decimals: Number(token.decimals),
-  //           balance: formatUnits(token.account_balance, token.decimals),
-  //           isListed: token.listed,
-  //           usdPrice: priceResult.status === 'success' ? formatUnits(priceResult.result as unknown as bigint, 6) : '0',
-  //         };
-  //       });
-
-  //       allTokens = [...allTokens, ...tokensWithPrice];
-  //       offset += BATCH_SIZE;
-  //     }
-
-  //     setTokens(allTokens);
-  //   } catch (err) {
-  //     console.error('Error fetching tokens:', err);
-  //     setError(err instanceof Error ? err : new Error('Failed to fetch tokens'));
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // }, [lpSugar, oracle, account, publicClient]);
 
   return {
     tokens,
     loading,
     error,
+    fetchTokens,
   };
 }
