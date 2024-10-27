@@ -25,13 +25,13 @@ const Home = () => {
   const oracle = useOffchainOracleContract(OFFCHAIN_ORACLE_ADDRESS, publicClient as PublicClient);
 
   const { pools, positions, fetchPools, fetchPositions } = usePool(publicClient as PublicClient);
+  const { tokens, fetchTokens, getTokenPrice } = useToken(publicClient as PublicClient, '0xF977814e90dA44bFA03b6295A0616a897441aceC');
 
   useEffect(() => {
     const BATCH_SIZE = 10;
     const getPools = async () => {
-      await fetchPools(BATCH_SIZE, 0);
-
-      await fetchPositions(BATCH_SIZE, 0, '0x5C183B6B02444977c7db8498Bd608a9adD62924a');
+      await fetchTokens(BATCH_SIZE, 0);
+      const tokenPrice = await getTokenPrice('0x940181a94A35A4569E4529A3CDfB74e38FD98631');
 
       // await fetchTokens();
       // const poolData = await lpSugar.getAll(100, 0);
@@ -43,7 +43,7 @@ const Home = () => {
       // const position = await lpSugar.getPositions(10, 0, '0x5C183B6B02444977c7db8498Bd608a9adD62924a');
       // console.log(position, 'lp position');
 
-      console.log(positions, 'v2 only positions');
+      console.log(tokenPrice, 'token price');
     };
     getPools();
   }, []);

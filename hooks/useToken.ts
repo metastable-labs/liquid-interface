@@ -18,9 +18,16 @@ export function useToken(publicClient: PublicClient, account?: Address) {
   const [tokens, setTokens] = useState<Token[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
+  const [tokenMap, setTokenMap] = useState<Map<string, Token>>(new Map());
 
   const lpSugar = useLpSugarContract(LP_SUGAR_ADDRESS, publicClient);
   const oracle = useOffchainOracleContract(OFFCHAIN_ORACLE_ADDRESS, publicClient);
+
+  // Update token map when tokens change
+  useEffect(() => {
+    const newTokenMap = new Map(tokens.map((token) => [token.address.toLowerCase(), token]));
+    setTokenMap(newTokenMap);
+  }, [tokens]);
 
   const fetchTokens = async (BATCH_SIZE: number, offset: number) => {
     setLoading(true);
@@ -51,11 +58,38 @@ export function useToken(publicClient: PublicClient, account?: Address) {
     setTokens(allTokens);
     setLoading(false);
   };
+  // Get token by address - case insensitive
+  const getTokenByAddress = useCallback(
+    (address: Address | string) => {
+      return tokenMap.get(address.toLowerCase());
+    },
+    [tokenMap]
+  );
+
+  // Get multiple tokens by addresses
+  const getTokensByAddresses = useCallback(
+    (addresses: (Address | string)[]) => {
+      return addresses.map((address) => tokenMap.get(address.toLowerCase())).filter(Boolean) as Token[];
+    },
+    [tokenMap]
+  );
+
+  // Get token price by address
+  const getTokenPrice = useCallback(
+    (address: Address | string) => {
+      const token = tokenMap.get(address.toLowerCase());
+      return token?.usdPrice || 0;
+    },
+    [tokenMap]
+  );
 
   return {
     tokens,
     loading,
     error,
     fetchTokens,
+    getTokenPrice,
+    getTokensByAddresses,
+    getTokenByAddress,
   };
 }
