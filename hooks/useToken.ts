@@ -22,44 +22,34 @@ export function useToken(publicClient: PublicClient, account?: Address) {
   const lpSugar = useLpSugarContract(LP_SUGAR_ADDRESS, publicClient);
   const oracle = useOffchainOracleContract(OFFCHAIN_ORACLE_ADDRESS, publicClient);
 
-  const fetchTokens = async () => {
+  const fetchTokens = async (BATCH_SIZE: number, offset: number) => {
     setLoading(true);
     setError(null);
 
     let allTokens: Token[] = [];
-    let offset = 0;
-    let hasMore = true;
+    const batch = await lpSugar.getTokens(BATCH_SIZE, offset, account!, CONNECTORS_BASE);
 
-    while (hasMore) {
-      const batch = await lpSugar.getTokens(BATCH_SIZE, offset, account!, CONNECTORS_BASE);
-      if (batch.length === 0) {
-        hasMore = false;
-        break;
-      }
+    if (batch.length > 0) {
+      const tokenAddresses = batch.map((token) => token.token_address);
+      const prices = await oracle.getRateToUSD(tokenAddresses, true);
 
-      if (batch.length > 0) {
-        const tokenAddresses = batch.map((token) => token.token_address);
-        const prices = await oracle.getRateToUSD(tokenAddresses, true);
+      // Map tokens with prices
+      const tokensWithPrice = batch.map((token, index) => ({
+        address: token.token_address,
+        symbol: token.symbol,
+        decimals: Number(token.decimals),
+        balance: formatUnits(token.account_balance, token.decimals),
+        isListed: token.listed,
+        usdPrice: prices[index],
+        logoUrl: `https://assets.smold.app/api/token/8453/${token.token_address}/logo-32.png`,
+      }));
 
-        // Map tokens with prices
-        const tokensWithPrice = batch.map((token, index) => ({
-          address: token.token_address,
-          symbol: token.symbol,
-          decimals: Number(token.decimals),
-          balance: formatUnits(token.account_balance, token.decimals),
-          isListed: token.listed,
-          usdPrice: formatUnits(prices[index], 6),
-          logoUrl: `https://assets.smold.app/api/token/8453/${token.token_address}/logo-32.png`,
-        }));
-        console.log(tokensWithPrice, 'tokens with price');
-
-        allTokens = [...allTokens, ...tokensWithPrice];
-        offset += BATCH_SIZE;
-      }
-
-      setTokens(allTokens);
-      setLoading(false);
+      allTokens = [...allTokens, ...tokensWithPrice];
+      offset += BATCH_SIZE;
     }
+
+    setTokens(allTokens);
+    setLoading(false);
   };
 
   return {

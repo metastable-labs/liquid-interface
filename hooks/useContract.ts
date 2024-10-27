@@ -1,4 +1,4 @@
-import { Address, ContractFunctionExecutionError, formatUnits, PublicClient } from 'viem';
+import { Address, ContractFunctionExecutionError, formatUnits, parseUnits, PublicClient } from 'viem';
 import { LpSugar } from '@/constants/abis/LPSugar';
 import { AerodromePool } from '@/constants/abis/AerodromePoolABI';
 import { OffchainOracle } from '@/constants/abis/OffchainOracle';
@@ -65,13 +65,13 @@ export function useAerodromePoolContract(address: Address, publicClient: PublicC
 export function useOffchainOracleContract(address: Address, publicClient: PublicClient) {
   const BATCH_SIZE = 10;
   return {
-    async getRateToUSD(tokenAddresses: Address[], useWrappers: boolean): Promise<bigint[]> {
+    async getRateToUSD(tokenAddresses: Address[], useWrappers: boolean): Promise<string[]> {
       // Filter out USDC addresses
       const nonUsdcAddresses = tokenAddresses.filter((addr) => addr.toLowerCase() !== USDC_ADDRESS.toLowerCase());
 
       // If there are no non-USDC addresses, return early
       if (nonUsdcAddresses.length === 0) {
-        return tokenAddresses.map((addr) => (addr.toLowerCase() === USDC_ADDRESS.toLowerCase() ? BigInt(1) : BigInt(0)));
+        return tokenAddresses.map((addr) => (addr.toLowerCase() === USDC_ADDRESS.toLowerCase() ? '1' : '0'));
       }
 
       // Prepare multicall contracts array
@@ -90,13 +90,13 @@ export function useOffchainOracleContract(address: Address, publicClient: Public
       // Map results back to original token array order
       return tokenAddresses.map((addr) => {
         if (addr.toLowerCase() === USDC_ADDRESS.toLowerCase()) {
-          return BigInt(1);
+          return '1';
         }
         const index = nonUsdcAddresses.findIndex((nonUsdcAddr) => nonUsdcAddr.toLowerCase() === addr.toLowerCase());
-        if (index === -1) return BigInt(0);
+        if (index === -1) return '0';
 
         const result = results[index];
-        return result.status === 'success' ? (result.result as bigint) : BigInt(0);
+        return result.status === 'success' ? formatUnits(result.result as bigint, 6) : '0';
       });
     },
 

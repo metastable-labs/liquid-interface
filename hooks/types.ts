@@ -10,7 +10,7 @@ export interface Token {
   logoUrl: string;
 }
 
-interface BasePool {
+export interface BasePool {
   address: Address;
   symbol: string;
   decimals: number;
@@ -42,6 +42,8 @@ interface BasePool {
     rate: string;
     tokenAddress: Address;
   };
+  type: string;
+  isStable: boolean;
 }
 
 export interface V2Pool extends BasePool {
@@ -57,6 +59,36 @@ export interface CLPool extends BasePool {
 }
 
 export type Pool = V2Pool | CLPool;
+
+// Position token info
+interface PositionToken {
+  address: Address;
+  balance: string;
+  stakedBalance: string;
+}
+
+// Fee info for positions
+interface PositionFees {
+  token0: string;
+  token1: string;
+}
+
+// Reward info
+interface Reward {
+  address: Address;
+  earned: string;
+}
+// Position interface
+export interface Position {
+  id: string; // 0 for v2 pools
+  poolAddress: Address;
+  balance: string; // LP token balance
+  stakedBalance: string; // Staked LP token balance
+  token0: PositionToken; // Token0 info
+  token1: PositionToken; // Token1 info
+  fees: PositionFees; // Unclaimed fees
+  reward: Reward; // Reward token info and unclaimed amount
+}
 
 export type MulticallResult = {
   result: bigint;
