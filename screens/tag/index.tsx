@@ -1,12 +1,15 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { View, Text, StyleSheet, Platform, StatusBar, TextInput } from 'react-native';
 
 import { LQDButton } from '@/components';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import { useUserActions } from '@/store/user/actions';
+import { useSmartAccountActions } from '@/store/smartAccount/actions';
+import { useDebouncedEffect } from '@/hooks/useDebouncedEffect';
+import api from '@/init/api';
 
-const dummyUsernames = ['bambam', 'meister', 'njoku', 'static', 'choco'];
+const TAG_DEBOUNCE_DELAY = 2000;
 
 const Tag = () => {
   const [tag, setTag] = useState('');
@@ -14,35 +17,68 @@ const Tag = () => {
   const { router } = useSystemFunctions();
 
   const disableButton = !tag || tag.length < 3 || formState === 'error';
+  const loadingButton = formState === 'loading';
 
   const stateMessage = {
     base: 'Username must be at least 3 characters',
+    loading: 'Checking availability...',
     error: 'This username is already taken',
     success: 'This username is available',
   };
 
   const handleTagChange = (value: string) => {
+    setFormState('loading');
     setTag(value);
   };
 
   const { setUser } = useUserActions();
+  const { setRegistrationOptions } = useSmartAccountActions();
 
   const onSubmit = () => {
+    if (formState !== 'success') return;
+
     console.log('tag', tag);
-    if (tag.length < 3) return;
-    setUser({ id: '1', username: tag });
     router.replace('/setup');
   };
 
-  useEffect(() => {
-    if (tag === '' || tag.length < 3) {
-      setFormState('base');
-    } else if (dummyUsernames.includes(tag)) {
-      setFormState('error');
-    } else {
-      setFormState('success');
-    }
-  }, [tag]);
+  useDebouncedEffect(
+    function checkTagAvailability() {
+      let isCancelled = false;
+
+      (async () => {
+        if (tag === '' || tag.length < 3) {
+          setFormState('base');
+          return;
+        }
+
+        try {
+          const options = await api.getRegistrationOptions(tag);
+          console.log('registrationOptions', options);
+
+          if (isCancelled) return;
+
+          const { user } = options;
+          setUser(user);
+
+          setRegistrationOptions(options);
+
+          setFormState('success');
+        } catch (error) {
+          if (isCancelled) return;
+
+          // TODO: report error to Bugsnag or Sentry
+          console.log('error', error);
+          setFormState('error');
+        }
+      })();
+
+      return () => {
+        isCancelled = true;
+      };
+    },
+    [tag],
+    TAG_DEBOUNCE_DELAY
+  );
 
   return (
     <View style={styles.root}>
@@ -64,7 +100,7 @@ const Tag = () => {
                 style={[styles.input, styles[`${formState}Input`]]}
                 value={tag}
                 onChangeText={handleTagChange}
-                placeholder="@yourtag"
+                placeholder="yourtag"
                 placeholderTextColor="#94A3B8"
                 autoCapitalize="none"
                 autoComplete="off"
@@ -79,7 +115,7 @@ const Tag = () => {
         </View>
 
         <View style={styles.buttonContainer}>
-          <LQDButton title="Continue" onPress={onSubmit} variant="secondary" disabled={disableButton} />
+          <LQDButton title="Continue" onPress={onSubmit} variant="secondary" disabled={disableButton} loading={loadingButton} />
         </View>
       </View>
     </View>
@@ -171,6 +207,10 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(109, 230, 79, 0.12)',
   },
 
+  loadingInputWrapper: {
+    borderColor: 'rgba(15, 23, 42, 0.01)',
+  },
+
   input: {
     alignSelf: 'stretch',
     padding: 12,
@@ -196,6 +236,10 @@ const styles = StyleSheet.create({
     borderColor: '#1A8860',
   },
 
+  loadingInput: {
+    borderColor: '#EAEEF4',
+  },
+
   stateMessage: {
     fontSize: adjustFontSizeForIOS(12, 2),
     lineHeight: 15.84,
@@ -212,6 +256,10 @@ const styles = StyleSheet.create({
 
   successStateMessage: {
     color: '#1A8860',
+  },
+
+  loadingStateMessage: {
+    color: '#64748B',
   },
 
   buttonContainer: {

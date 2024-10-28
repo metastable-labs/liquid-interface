@@ -7,14 +7,13 @@ import { LQDButton } from '@/components';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import LQDLoadingStep from '@/components/loading-step';
 import { useSmartAccountActions } from '@/store/smartAccount/actions';
-import Info from './info';
 import { ChartIcon, ShieldTickIcon, SwatchIcon } from '@/assets/icons';
 import useBiometrics from '@/hooks/useBiometrics';
+import Info from './info';
 
 const Setup = () => {
   const { router, userState } = useSystemFunctions();
   const { authenticateBiometrics } = useBiometrics();
-  const { create: createSmartAccount } = useSmartAccountActions();
   const buttonOpacity = useSharedValue(0);
   const animatedButtonStyle = useAnimatedStyle(() => ({
     opacity: buttonOpacity.value,
@@ -59,21 +58,14 @@ const Setup = () => {
     },
   ];
 
-  const createAccount = async () => {
-    if (!user) throw new Error('User not found');
-    const biometricsGranted = await authenticateBiometrics();
-
-    if (!biometricsGranted) return;
-
-    createSmartAccount(user.username).then(progressToNextStep);
-  };
+  const { setSmartAccount } = useSmartAccountActions();
 
   useEffect(
     function progressSteps() {
       if (setupStep === 1) {
         const firstStepDelayInMs = 1000 * 1; // 1s
         const timeout = setTimeout(() => {
-          createAccount();
+          setSmartAccount().then(progressToNextStep);
         }, firstStepDelayInMs);
 
         return () => clearTimeout(timeout);
