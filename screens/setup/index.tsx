@@ -8,12 +8,10 @@ import { adjustFontSizeForIOS } from '@/utils/helpers';
 import LQDLoadingStep from '@/components/loading-step';
 import { useSmartAccountActions } from '@/store/smartAccount/actions';
 import { ChartIcon, ShieldTickIcon, SwatchIcon } from '@/assets/icons';
-import useBiometrics from '@/hooks/useBiometrics';
 import Info from './info';
 
 const Setup = () => {
   const { router, userState } = useSystemFunctions();
-  const { authenticateBiometrics } = useBiometrics();
   const buttonOpacity = useSharedValue(0);
   const animatedButtonStyle = useAnimatedStyle(() => ({
     opacity: buttonOpacity.value,
