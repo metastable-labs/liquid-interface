@@ -37,6 +37,11 @@ export interface BasePool {
     poolFee: number;
     unstakedFee: number;
   };
+  volume: {
+    token0: string;
+    token1: string;
+    usd: string;
+  };
   factory: Address;
   emissions: {
     rate: string;
@@ -44,6 +49,7 @@ export interface BasePool {
   };
   type: string;
   isStable: boolean;
+  tvl: string;
 }
 
 export interface V2Pool extends BasePool {

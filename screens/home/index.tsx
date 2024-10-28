@@ -24,13 +24,15 @@ const Home = () => {
   const lpSugar = useLpSugarContract(LP_SUGAR_ADDRESS, publicClient as PublicClient);
   const oracle = useOffchainOracleContract(OFFCHAIN_ORACLE_ADDRESS, publicClient as PublicClient);
 
-  const { pools, positions, fetchPools, fetchPositions } = usePool(publicClient as PublicClient);
+  const { pools, positions, fetchPools, fetchPositions, getPoolByAddress } = usePool(publicClient as PublicClient);
   const { tokens, fetchTokens, getTokenPrice } = useToken(publicClient as PublicClient, '0xF977814e90dA44bFA03b6295A0616a897441aceC');
 
   useEffect(() => {
     const getPools = async () => {
-      await fetchTokens(200, 0);
+      await fetchTokens(218, 0);
       const tokenPrice = await getTokenPrice('0x940181a94A35A4569E4529A3CDfB74e38FD98631');
+
+      await fetchPools(1000, 0);
 
       // await fetchTokens();
       // const poolData = await lpSugar.getAll(100, 0);
@@ -42,8 +44,9 @@ const Home = () => {
       // const position = await lpSugar.getPositions(10, 0, '0x5C183B6B02444977c7db8498Bd608a9adD62924a');
       // console.log(position, 'lp position');
 
-      console.log(tokenPrice, 'token price');
-      console.log(tokens, 'tokens');
+      const pool = getPoolByAddress('0x6cDcb1C4A4D1C3C6d054b27AC5B77e89eAFb971d');
+
+      console.log(pool, 'pool');
     };
     getPools();
   }, []);
