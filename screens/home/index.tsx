@@ -1,7 +1,7 @@
 import { StyleSheet, View, Text, FlatList, ScrollView, TouchableOpacity } from 'react-native';
 
 import useSystemFunctions from '@/hooks/useSystemFunctions';
-import { adjustFontSizeForIOS, formatAmountWithWholeAndDecimal } from '@/utils/helpers';
+import { adjustFontSizeForIOS, formatAmount, formatAmountWithWholeAndDecimal } from '@/utils/helpers';
 import { LQDButton, LQDPoolPairCard, LQDPoolPairPaper } from '@/components';
 import { CaretRightIcon, DirectUpIcon, DollarSquareIcon, TrendUpIcon } from '@/assets/icons';
 import { topGainers, poolPairs } from './dummy';
@@ -17,39 +17,53 @@ import { usePool } from '@/hooks/usePool';
 const balance = 36_708.89;
 
 const Home = () => {
-  const { router } = useSystemFunctions();
+  const { router, poolsState } = useSystemFunctions();
 
   const { whole, decimal } = formatAmountWithWholeAndDecimal(balance);
 
   const lpSugar = useLpSugarContract(LP_SUGAR_ADDRESS, publicClient as PublicClient);
   const oracle = useOffchainOracleContract(OFFCHAIN_ORACLE_ADDRESS, publicClient as PublicClient);
 
-  const { pools, positions, fetchPools, fetchPositions, getPoolByAddress } = usePool(publicClient as PublicClient);
-  const { tokens, fetchTokens, getTokenPrice } = useToken(publicClient as PublicClient, '0xF977814e90dA44bFA03b6295A0616a897441aceC');
+  // const { tokens, fetchTokens, getTokenPrice } = useToken(publicClient as PublicClient, '0xF977814e90dA44bFA03b6295A0616a897441aceC');
 
-  useEffect(() => {
-    const getPools = async () => {
-      await fetchTokens(218, 0);
-      const tokenPrice = await getTokenPrice('0x940181a94A35A4569E4529A3CDfB74e38FD98631');
+  const { trendingPools, hotPools, topGainers } = poolsState;
 
-      await fetchPools(1000, 0);
-
-      // await fetchTokens();
-      // const poolData = await lpSugar.getAll(100, 0);
-      // const tokenData = await lpSugar.getTokens(200, 0, '0xF977814e90dA44bFA03b6295A0616a897441aceC', CONNECTORS_BASE);
-      // console.log(poolData, 'data');
-      // console.log(tokenData, 'token data');
-      // const tokenData1Price = await oracle.getRateToUSD(tokenData[1].token_address, true);
-      // console.log(formatUnits(tokenData1Price, 6), 'token data 1 price');
-      // const position = await lpSugar.getPositions(10, 0, '0x5C183B6B02444977c7db8498Bd608a9adD62924a');
-      // console.log(position, 'lp position');
-
-      const pool = getPoolByAddress('0x6cDcb1C4A4D1C3C6d054b27AC5B77e89eAFb971d');
-
-      console.log(pool, 'pool');
+  const top10TrendingPools: ILQDPoolPairPaper[] = trendingPools.slice(0, 10).map((pool) => {
+    return {
+      primaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
+      secondaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
+      symbol: pool.symbol,
+      apr: formatAmount(pool.emissions.rate, 2),
+      fees: pool.fees.poolFee,
+      volume: formatAmount(pool.volume.usd, 0),
+      address: pool.address,
+      isStable: pool.isStable,
     };
-    getPools();
-  }, []);
+  });
+
+  const top10HotPools: ILQDPoolPairPaper[] = hotPools.slice(0, 10).map((pool) => {
+    return {
+      primaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
+      secondaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
+      symbol: pool.symbol,
+      apr: formatAmount(pool.emissions.rate, 2),
+      fees: pool.fees.poolFee,
+      volume: formatAmount(pool.volume.usd, 0),
+      address: pool.address,
+      isStable: pool.isStable,
+    };
+  });
+
+  const top10Gainers: ILQDPoolPairCard[] = topGainers.map((pool) => {
+    return {
+      primaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
+      secondaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
+      symbol: pool.symbol,
+      increased: pool.gauge.isAlive,
+      change: 2.3,
+      address: pool.address,
+    };
+  });
 
   const sections = [
     {
@@ -59,7 +73,7 @@ const Home = () => {
       action: () => router.push('/(tabs)/home/top'),
       children: (
         <FlatList
-          data={topGainers}
+          data={top10Gainers}
           horizontal
           renderItem={({ item }) => <LQDPoolPairCard {...item} />}
           keyExtractor={(item, index) => index.toString()}
@@ -76,7 +90,7 @@ const Home = () => {
       action: () => router.push('/(tabs)/home/trending'),
       children: (
         <View style={styles.mapContainer}>
-          {poolPairs.map((poolPair, index) => (
+          {top10TrendingPools.map((poolPair, index) => (
             <LQDPoolPairPaper key={index} {...poolPair} />
           ))}
         </View>
@@ -90,8 +104,8 @@ const Home = () => {
       action: () => router.push('/(tabs)/home/hot'),
       children: (
         <View style={styles.mapContainer}>
-          {poolPairs.map((poolPair, index) => (
-            <LQDPoolPairPaper key={index} {...poolPair} capitalMetric="tvl" />
+          {top10HotPools.map((poolPair, index) => (
+            <LQDPoolPairPaper key={index} {...poolPair} />
           ))}
         </View>
       ),

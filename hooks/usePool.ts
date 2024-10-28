@@ -8,8 +8,6 @@ import { useToken } from './useToken';
 export function usePool(publicClient: PublicClient) {
   const [pools, setPools] = useState<BasePool[]>([]);
   const [positions, setPositions] = useState<Position[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
 
   const lpSugar = useLpSugarContract(LP_SUGAR_ADDRESS, publicClient);
   const { fetchTokens, getTokenByAddress, getTokensByAddresses, getTokenPrice } = useToken(
@@ -19,9 +17,6 @@ export function usePool(publicClient: PublicClient) {
 
   const fetchPools = async (BATCH_SIZE: number, offset: number): Promise<BasePool[] | undefined> => {
     try {
-      setLoading(true);
-      setError(null);
-
       let v2Pools: BasePool[] = [];
 
       const batch = await lpSugar.getAll(BATCH_SIZE, offset);
@@ -67,6 +62,10 @@ export function usePool(publicClient: PublicClient) {
           // Calculate TVL using formatted reserves and prices
           const tvl = token0Reserve * Number(token0Data?.usdPrice ?? 0) + token1Reserve * Number(token1Data?.usdPrice ?? 0);
 
+          const totalSecondsInAYear = 355 * 24 * 60 * 60;
+          const emission = Number(formatUnits(pool.emissions, 18).toString());
+          const emissionsRate = (emission * totalSecondsInAYear) / 100;
+
           return {
             address: pool.lp,
             symbol: pool.symbol,
@@ -104,7 +103,7 @@ export function usePool(publicClient: PublicClient) {
             },
             factory: pool.factory,
             emissions: {
-              rate: formatUnits(pool.emissions, 18), // Emissions typically use 18 decimals
+              rate: emissionsRate.toString(),
               tokenAddress: pool.emissions_token,
             },
             type: Number(pool.tick) === 0 || -1 ? 'v2' : 'cl',
@@ -118,23 +117,16 @@ export function usePool(publicClient: PublicClient) {
         v2Pools = [...v2Pools, ...v2FormattedPools];
 
         setPools(v2Pools);
-        setLoading(false);
-        setError(null);
-        return v2Pools;
       }
+
+      return v2Pools;
     } catch (err) {
       console.error('Error fetching pools:', err);
-      setError(err instanceof Error ? err : new Error('Failed to fetch pools'));
-    } finally {
-      setLoading(false);
     }
   };
 
   const fetchPositions = async (BATCH_SIZE: number, offset: number, account: Address) => {
     try {
-      setLoading(true);
-      setError(null);
-
       let allV2Positions: Position[] = [];
 
       const batch = await lpSugar.getPositions(BATCH_SIZE, offset, account);
@@ -176,23 +168,16 @@ export function usePool(publicClient: PublicClient) {
       setPositions(allV2Positions);
     } catch (err) {
       console.error('Error fetching positions:', err);
-      setError(err instanceof Error ? err : new Error('Failed to fetch positions'));
-    } finally {
-      setLoading(false);
     }
   };
-
-  // Filter helpers
 
   const stablePools = pools.filter((pool) => pool.isStable);
   const volatilePools = pools.filter((pool) => !pool.isStable);
 
-  // Helper function to get a pool by address
   const getPoolByAddress = (poolAddress: Address) => {
     return pools.find((pool) => pool.address.toLowerCase() === poolAddress.toLowerCase());
   };
 
-  // Get all V2 positions
   const getV2Positions = () => {
     return positions.filter((position) => position.id === '0');
   };
@@ -206,9 +191,6 @@ export function usePool(publicClient: PublicClient) {
     volatilePools,
     // position filters
     getV2Positions,
-    // Status
-    loading,
-    error,
     // Actions
     fetchPools,
     fetchPositions,

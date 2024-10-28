@@ -5,22 +5,21 @@ import { adjustFontSizeForIOS, formatNumberWithSuffix } from '@/utils/helpers';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 
 const LQDPoolPairPaper = ({
+  address,
   apr,
-  capital,
+  volume,
   fees,
-  id,
   primaryIconURL,
-  primaryTitle,
+  symbol,
   secondaryIconURL,
-  secondaryTitle,
-  capitalMetric = 'vol',
   navigationVariant = 'primary',
+  isStable,
 }: ILQDPoolPairPaper) => {
   const { router } = useSystemFunctions();
 
   const paths = {
-    primary: `/(tabs)/home/${id}` as Href<string>,
-    secondary: `/(tabs)/holdings/${id}` as Href<string>,
+    primary: `/(tabs)/home/${address}` as Href<string>,
+    secondary: `/(tabs)/holdings/${address}` as Href<string>,
   };
 
   const handlePress = () => router.push(paths[navigationVariant]);
@@ -37,12 +36,10 @@ const LQDPoolPairPaper = ({
         </View>
 
         <View style={styles.detailContainer}>
-          <Text style={styles.detailHeader}>
-            {primaryTitle} / {secondaryTitle}
-          </Text>
+          <Text style={styles.detailHeader}>{symbol}</Text>
 
           <View style={styles.details}>
-            <Text style={apr > 3 ? styles.basicTextStable : styles.basicTextVolatile}>{apr > 3 ? 'Basic Stable' : 'Basic Volatile'}</Text>
+            <Text style={isStable ? styles.basicTextStable : styles.basicTextVolatile}>{isStable ? 'Basic Stable' : 'Basic Volatile'}</Text>
 
             <View style={styles.separator}>
               <View style={styles.separatorCircle} />
@@ -54,9 +51,9 @@ const LQDPoolPairPaper = ({
       </View>
 
       <View style={styles.volumeWrapper}>
-        <Text style={styles.aprText}>APR: {apr}%</Text>
+        <Text style={styles.aprText}>APR: {apr.toLocaleString()}%</Text>
 
-        <Text style={styles.volumeText}>VOL: ${formatNumberWithSuffix(capital)}</Text>
+        <Text style={styles.volumeText}>VOL: ${formatNumberWithSuffix(volume)}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -161,7 +158,7 @@ const styles = StyleSheet.create({
 
   aprText: {
     color: '#156146',
-    fontSize: adjustFontSizeForIOS(13, 2),
+    fontSize: adjustFontSizeForIOS(12, 2),
     lineHeight: 16.12,
     fontWeight: '500',
     textTransform: 'uppercase',

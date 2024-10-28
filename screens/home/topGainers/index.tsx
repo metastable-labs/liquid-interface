@@ -2,17 +2,33 @@ import { StyleSheet, ScrollView, View } from 'react-native';
 
 import { TrendUpIcon } from '@/assets/icons';
 import { LQDPoolPairPaper } from '@/components';
-import { poolPairs as originalPoolPairs } from '../dummy';
+import useSystemFunctions from '@/hooks/useSystemFunctions';
+import { formatAmount } from '@/utils/helpers';
 import Section from '../section';
 
 const TopGainers = () => {
-  const poolPairs = [...originalPoolPairs, ...originalPoolPairs];
+  const { poolsState } = useSystemFunctions();
+
+  const { topGainers } = poolsState;
+
+  const pools: ILQDPoolPairPaper[] = topGainers.map((pool) => {
+    return {
+      primaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
+      secondaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
+      symbol: pool.symbol,
+      apr: formatAmount(pool.emissions.rate, 2),
+      fees: pool.fees.poolFee,
+      volume: formatAmount(pool.volume.usd, 0),
+      address: pool.address,
+      isStable: pool.isStable,
+    };
+  });
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer} showsVerticalScrollIndicator={false}>
       <Section title="Top gainers" subtitle="by APR" icon={<TrendUpIcon />} isShowingAll>
         <View style={styles.mapContainer}>
-          {poolPairs.map((poolPair, index) => (
+          {pools.map((poolPair, index) => (
             <LQDPoolPairPaper key={index} {...poolPair} />
           ))}
         </View>

@@ -2,6 +2,15 @@ import { formatUnits } from 'viem';
 import { Platform } from 'react-native';
 
 import { FormattedPool, FormattedPosition, RawPool, RawPosition } from '@/hooks/types';
+
+const formatAmount = (amount?: number | string, decimals = 4): number => {
+  if (!amount) return 0;
+
+  const factor = Math.pow(10, decimals);
+  const truncatedValue = Math.floor(Number(amount) * factor) / factor;
+  return truncatedValue;
+};
+
 const formatNumberWithSuffix = (num: number): string => {
   const formatWithPrecision = (value: number) => {
     return value % 1 === 0 ? value.toFixed(0) : value.toFixed(2).replace(/\.?0+$/, '');
@@ -122,4 +131,5 @@ export {
   formatPosition,
   formatPoolFee,
   adjustFontSizeForIOS,
+  formatAmount,
 };

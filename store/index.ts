@@ -6,6 +6,7 @@ import { FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist
 import userReducer from './user';
 import appReducer from './app';
 import smartAccountReducer from './smartAccount';
+import poolReducer from './pools';
 
 export interface CallbackProps {
   onSuccess?: Function;
@@ -16,12 +17,13 @@ const rootReducer = combineReducers({
   user: userReducer,
   app: appReducer,
   smartAccount: smartAccountReducer,
+  pools: poolReducer,
 });
 
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  whitelist: ['user'],
+  whitelist: ['user', 'pools'],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
