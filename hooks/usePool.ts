@@ -3,6 +3,7 @@ import { Address, PublicClient, formatUnits } from 'viem';
 import { useLpSugarContract } from './useContract';
 import { BasePool, CLPool, Pool, Position, V2Pool } from './types';
 import { LP_SUGAR_ADDRESS } from '@/constants/addresses';
+import { useToken } from './useToken';
 
 export function usePool(publicClient: PublicClient) {
   const [pools, setPools] = useState<BasePool[]>([]);
@@ -11,6 +12,7 @@ export function usePool(publicClient: PublicClient) {
   const [error, setError] = useState<Error | null>(null);
 
   const lpSugar = useLpSugarContract(LP_SUGAR_ADDRESS, publicClient);
+  const { fetchTokens, getTokenByAddress, getTokensByAddresses, getTokenPrice } = useToken(publicClient);
 
   const fetchPools = async (BATCH_SIZE: number, offset: number) => {
     try {

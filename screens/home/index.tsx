@@ -28,9 +28,8 @@ const Home = () => {
   const { tokens, fetchTokens, getTokenPrice } = useToken(publicClient as PublicClient, '0xF977814e90dA44bFA03b6295A0616a897441aceC');
 
   useEffect(() => {
-    const BATCH_SIZE = 10;
     const getPools = async () => {
-      await fetchTokens(BATCH_SIZE, 0);
+      await fetchTokens(200, 0);
       const tokenPrice = await getTokenPrice('0x940181a94A35A4569E4529A3CDfB74e38FD98631');
 
       // await fetchTokens();
@@ -44,6 +43,7 @@ const Home = () => {
       // console.log(position, 'lp position');
 
       console.log(tokenPrice, 'token price');
+      console.log(tokens, 'tokens');
     };
     getPools();
   }, []);
