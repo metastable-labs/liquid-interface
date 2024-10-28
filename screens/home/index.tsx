@@ -6,6 +6,13 @@ import { LQDButton, LQDPoolPairCard, LQDPoolPairPaper } from '@/components';
 import { CaretRightIcon, DirectUpIcon, DollarSquareIcon, TrendUpIcon } from '@/assets/icons';
 import { topGainers, poolPairs } from './dummy';
 import Section from './section';
+import { publicClient } from '@/init/viem';
+import { formatUnits, PublicClient } from 'viem';
+import { useEffect, useState } from 'react';
+import { CONNECTORS_BASE, LP_SUGAR_ADDRESS, OFFCHAIN_ORACLE_ADDRESS } from '@/constants/addresses';
+import { useLpSugarContract, useOffchainOracleContract } from '@/hooks/useContract';
+import { useToken } from '@/hooks/useToken';
+import { usePool } from '@/hooks/usePool';
 
 const balance = 36_708.89;
 
@@ -13,6 +20,36 @@ const Home = () => {
   const { router } = useSystemFunctions();
 
   const { whole, decimal } = formatAmountWithWholeAndDecimal(balance);
+
+  const lpSugar = useLpSugarContract(LP_SUGAR_ADDRESS, publicClient as PublicClient);
+  const oracle = useOffchainOracleContract(OFFCHAIN_ORACLE_ADDRESS, publicClient as PublicClient);
+
+  const { pools, positions, fetchPools, fetchPositions, getPoolByAddress } = usePool(publicClient as PublicClient);
+  const { tokens, fetchTokens, getTokenPrice } = useToken(publicClient as PublicClient, '0xF977814e90dA44bFA03b6295A0616a897441aceC');
+
+  useEffect(() => {
+    const getPools = async () => {
+      await fetchTokens(218, 0);
+      const tokenPrice = await getTokenPrice('0x940181a94A35A4569E4529A3CDfB74e38FD98631');
+
+      await fetchPools(1000, 0);
+
+      // await fetchTokens();
+      // const poolData = await lpSugar.getAll(100, 0);
+      // const tokenData = await lpSugar.getTokens(200, 0, '0xF977814e90dA44bFA03b6295A0616a897441aceC', CONNECTORS_BASE);
+      // console.log(poolData, 'data');
+      // console.log(tokenData, 'token data');
+      // const tokenData1Price = await oracle.getRateToUSD(tokenData[1].token_address, true);
+      // console.log(formatUnits(tokenData1Price, 6), 'token data 1 price');
+      // const position = await lpSugar.getPositions(10, 0, '0x5C183B6B02444977c7db8498Bd608a9adD62924a');
+      // console.log(position, 'lp position');
+
+      const pool = getPoolByAddress('0x6cDcb1C4A4D1C3C6d054b27AC5B77e89eAFb971d');
+
+      console.log(pool, 'pool');
+    };
+    getPools();
+  }, []);
 
   const sections = [
     {
