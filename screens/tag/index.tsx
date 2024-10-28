@@ -9,7 +9,7 @@ import { useSmartAccountActions } from '@/store/smartAccount/actions';
 import { useDebouncedEffect } from '@/hooks/useDebouncedEffect';
 import api from '@/init/api';
 
-const TAG_DEBOUNCE_DELAY = 1000;
+const TAG_DEBOUNCE_DELAY = 2000;
 
 const Tag = () => {
   const [tag, setTag] = useState('');
@@ -100,7 +100,7 @@ const Tag = () => {
                 style={[styles.input, styles[`${formState}Input`]]}
                 value={tag}
                 onChangeText={handleTagChange}
-                placeholder="@yourtag"
+                placeholder="yourtag"
                 placeholderTextColor="#94A3B8"
                 autoCapitalize="none"
                 autoComplete="off"
