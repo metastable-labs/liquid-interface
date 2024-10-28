@@ -22,7 +22,7 @@
       "config": {
         "usesNonExemptEncryption": false
       },
-      "associatedDomains": ["webcredentials:api.useliquid.xyz?mode=developer"]
+      "associatedDomains": ["webcredentials:api.useliquid.xyz?mode=developer", "webcredentials:api.useliquid.xyz"]
     },
     "android": {
       "adaptiveIcon": {
