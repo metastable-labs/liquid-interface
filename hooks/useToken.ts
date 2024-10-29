@@ -38,7 +38,8 @@ export function useToken(publicClient: PublicClient, account?: Address) {
 
     if (batch.length > 0) {
       const tokenAddresses = batch.map((token) => token.token_address);
-      const prices = await oracle.getRateToUSD(tokenAddresses, true);
+      const tokenDecimals = batch.map((token) => token.decimals);
+      const prices = await oracle.getRateToUSD(tokenAddresses, tokenDecimals, true);
 
       // Map tokens with prices
       const tokensWithPrice = batch.map((token, index) => ({

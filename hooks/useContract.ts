@@ -2,7 +2,7 @@ import { Address, ContractFunctionExecutionError, formatUnits, parseUnits, Publi
 import { LpSugar } from '@/constants/abis/LPSugar';
 import { AerodromePool } from '@/constants/abis/AerodromePoolABI';
 import { OffchainOracle } from '@/constants/abis/OffchainOracle';
-import { USDC_ADDRESS } from '@/constants/addresses';
+import { USDC_ADDRESS, WETH_ADDRESS } from '@/constants/addresses';
 import { createRateLimitedContract } from '@/utils/rateLimit';
 
 export function useLpSugarContract(address: Address, publicClient: PublicClient) {
@@ -10,7 +10,7 @@ export function useLpSugarContract(address: Address, publicClient: PublicClient)
     throw new Error('Required parameters not provided to useLpSugarContract');
   }
 
-  const SAFE_BATCH_SIZE = 100;
+  const SAFE_BATCH_SIZE = 1000;
 
   return {
     async getAll(limit: number, offset: number) {
@@ -65,38 +65,64 @@ export function useAerodromePoolContract(address: Address, publicClient: PublicC
 export function useOffchainOracleContract(address: Address, publicClient: PublicClient) {
   const BATCH_SIZE = 10;
   return {
-    async getRateToUSD(tokenAddresses: Address[], useWrappers: boolean): Promise<string[]> {
-      // Filter out USDC addresses
+    async getRateToUSD(tokenAddresses: Address[], tokenDecimals: number[], useWrappers: boolean): Promise<string[]> {
       const nonUsdcAddresses = tokenAddresses.filter((addr) => addr.toLowerCase() !== USDC_ADDRESS.toLowerCase());
 
-      // If there are no non-USDC addresses, return early
       if (nonUsdcAddresses.length === 0) {
         return tokenAddresses.map((addr) => (addr.toLowerCase() === USDC_ADDRESS.toLowerCase() ? '1' : '0'));
       }
 
-      // Prepare multicall contracts array
-      const contracts = nonUsdcAddresses.map((tokenAddress) => ({
+      // First get ETH/USDC rate (returns in 6 decimals since USDC is 6 decimals)
+      const ethUsdcContract = {
         address,
         abi: OffchainOracle.abi,
         functionName: 'getRate',
-        args: [tokenAddress, USDC_ADDRESS, useWrappers] as const,
+        args: [WETH_ADDRESS, USDC_ADDRESS, useWrappers] as const,
+      };
+
+      // Then get token/ETH rates for all tokens (returns in 18 decimals)
+      const tokenEthContracts = nonUsdcAddresses.map((tokenAddress) => ({
+        address,
+        abi: OffchainOracle.abi,
+        functionName: 'getRateToEth',
+        args: [tokenAddress, useWrappers] as const,
       }));
 
-      // Execute multicall with proper typing
       const results = await publicClient.multicall({
-        contracts: contracts as any[], // Type assertion needed due to viem typing limitations
+        contracts: [ethUsdcContract, ...tokenEthContracts] as any[],
       });
 
-      // Map results back to original token array order
-      return tokenAddresses.map((addr) => {
+      const [ethUsdcResult, ...tokenEthResults] = results;
+
+      if (ethUsdcResult.status !== 'success') return tokenAddresses.map(() => '0');
+      const ethUsdcRate = ethUsdcResult.result as bigint;
+
+      return tokenAddresses.map((addr, i) => {
         if (addr.toLowerCase() === USDC_ADDRESS.toLowerCase()) {
           return '1';
         }
+
         const index = nonUsdcAddresses.findIndex((nonUsdcAddr) => nonUsdcAddr.toLowerCase() === addr.toLowerCase());
+
         if (index === -1) return '0';
 
-        const result = results[index];
-        return result.status === 'success' ? formatUnits(result.result as bigint, 6) : '0';
+        const result = tokenEthResults[index];
+        if (result.status !== 'success') return '0';
+
+        const tokenEthRate = result.result as bigint;
+
+        // For 6 decimal tokens, we need to adjust the calculation
+        if (tokenDecimals[i] === 6) {
+          // Adjust for 6 decimal tokens:
+          // (tokenEthRate * ethUsdcRate) / (1e18 * 1e12)
+          const tokenUsdcRate = (tokenEthRate * ethUsdcRate) / BigInt(1e30);
+          return formatUnits(tokenUsdcRate, 6);
+        }
+
+        // For 18 decimal tokens:
+        // (tokenEthRate * ethUsdcRate) / 1e18
+        const tokenUsdcRate = (tokenEthRate * ethUsdcRate) / BigInt(1e18);
+        return formatUnits(tokenUsdcRate, 6);
       });
     },
 

@@ -19,11 +19,13 @@ export interface BasePool {
     address: Address;
     reserve: string;
     staked: string;
+    logoUrl: string;
   };
   token1: {
     address: Address;
     reserve: string;
     staked: string;
+    logoUrl: string;
   };
   gauge: {
     address: Address;

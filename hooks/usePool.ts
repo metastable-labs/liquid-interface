@@ -4,6 +4,7 @@ import { useLpSugarContract } from './useContract';
 import { BasePool, CLPool, Pool, Position, V2Pool } from './types';
 import { LP_SUGAR_ADDRESS } from '@/constants/addresses';
 import { useToken } from './useToken';
+import { formatPoolFee } from '@/utils/helpers';
 
 export function usePool(publicClient: PublicClient) {
   const [pools, setPools] = useState<BasePool[]>([]);
@@ -48,7 +49,7 @@ export function usePool(publicClient: PublicClient) {
 
           // Calculate volume from fees
           // Convert basis points to decimal percentage (30 -> 0.003)
-          const poolFeePercentage = Number(pool.pool_fee) / 1000;
+          const poolFeePercentage = Number(formatPoolFee(pool.pool_fee));
 
           // Calculate volumes: fees / fee_percentage
           const token0Volume = token0Fees / (poolFeePercentage / 100);
@@ -64,11 +65,13 @@ export function usePool(publicClient: PublicClient) {
 
           const totalSecondsInAYear = 355 * 24 * 60 * 60;
           const emission = Number(formatUnits(pool.emissions, 18).toString());
-          const emissionsRate = (emission * totalSecondsInAYear) / 100;
+          const apr = (emission * totalSecondsInAYear) / 10000;
+
+          const symbol = pool.symbol.split('-')[1].replace('/', ' / ');
 
           return {
             address: pool.lp,
-            symbol: pool.symbol.replace('/', ' / '),
+            symbol,
             decimals: Number(pool.decimals),
             totalLiquidity: formatUnits(pool.liquidity, Number(pool.decimals)),
             tvl: tvl.toString(),
@@ -77,12 +80,14 @@ export function usePool(publicClient: PublicClient) {
               reserve: token0Reserve.toString(),
               staked: token0Staked.toString(),
               price: token0Data?.usdPrice ?? '0',
+              logoUrl: token0Data?.logoUrl!,
             },
             token1: {
               address: pool.token1,
               reserve: token1Reserve.toString(),
               staked: token1Staked.toString(),
               price: token1Data?.usdPrice ?? '0',
+              logoUrl: token1Data?.logoUrl!,
             },
             gauge: {
               address: pool.gauge,
@@ -93,7 +98,7 @@ export function usePool(publicClient: PublicClient) {
               address: pool.fee,
               token0: token0Fees.toString(),
               token1: token1Fees.toString(),
-              poolFee: Number(pool.pool_fee), // basis points (e.g., 30 = 0.3%)
+              poolFee: Number(formatPoolFee(pool.pool_fee)), // basis points (e.g., 30 = 0.3%)
               unstakedFee: Number(pool.unstaked_fee),
             },
             volume: {
@@ -103,7 +108,7 @@ export function usePool(publicClient: PublicClient) {
             },
             factory: pool.factory,
             emissions: {
-              rate: emissionsRate.toString(),
+              rate: apr.toString(),
               tokenAddress: pool.emissions_token,
             },
             type: Number(pool.tick) === 0 || -1 ? 'v2' : 'cl',

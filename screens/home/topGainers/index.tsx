@@ -13,8 +13,8 @@ const TopGainers = () => {
 
   const pools: ILQDPoolPairPaper[] = topGainers.map((pool) => {
     return {
-      primaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
-      secondaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
+      primaryIconURL: pool.token0.logoUrl,
+      secondaryIconURL: pool.token1.logoUrl,
       symbol: pool.symbol,
       apr: formatAmount(pool.emissions.rate, 2),
       fees: pool.fees.poolFee,

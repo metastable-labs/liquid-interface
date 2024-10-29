@@ -30,21 +30,22 @@ const Home = () => {
 
   const top10TrendingPools: ILQDPoolPairPaper[] = trendingPools.slice(0, 10).map((pool) => {
     return {
-      primaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
-      secondaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
+      primaryIconURL: pool.token0.logoUrl,
+      secondaryIconURL: pool.token1.logoUrl,
       symbol: pool.symbol,
-      apr: formatAmount(pool.emissions.rate, 2),
+      apr: Number(pool.emissions.rate),
       fees: pool.fees.poolFee,
       volume: formatAmount(pool.volume.usd, 0),
       address: pool.address,
       isStable: pool.isStable,
     };
   });
+  // console.log(top10TrendingPools[0].address, top10TrendingPools[0].volume);
 
   const top10HotPools: ILQDPoolPairPaper[] = hotPools.slice(0, 10).map((pool) => {
     return {
-      primaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
-      secondaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
+      primaryIconURL: pool.token0.logoUrl,
+      secondaryIconURL: pool.token1.logoUrl,
       symbol: pool.symbol,
       apr: formatAmount(pool.emissions.rate, 2),
       fees: pool.fees.poolFee,
@@ -56,8 +57,8 @@ const Home = () => {
 
   const top10Gainers: ILQDPoolPairCard[] = topGainers.map((pool) => {
     return {
-      primaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
-      secondaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
+      primaryIconURL: pool.token0.logoUrl,
+      secondaryIconURL: pool.token1.logoUrl,
       symbol: pool.symbol,
       increased: pool.gauge.isAlive,
       change: 2.3,
