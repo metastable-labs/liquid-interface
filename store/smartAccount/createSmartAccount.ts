@@ -34,7 +34,12 @@ export async function createSmartAccount(registrationOptions: CreatePassKeyCrede
       clientDataJSON,
     };
 
-    // const verificationResponse = await this.api.verifyRegistration(username, registrationResponse);
+    const verificationResponse = await api.verifyRegistration(registrationOptions.user.name, registrationResponse);
+    console.log('verificationResponse', verificationResponse);
+
+    if (!verificationResponse.verified) {
+      throw new Error('Failed to verify registration');
+    }
 
     const publicKeyBuffer = utf8StringToBuffer(publicKey);
     const publicKeyHex = `0x${Array.from(new Uint8Array(publicKeyBuffer))

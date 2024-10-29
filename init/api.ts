@@ -28,7 +28,7 @@ class LiquidAPI {
   }
 
   async getRegistrationOptions(username: string): Promise<CreatePassKeyCredentialOptions> {
-    return this.fetchWithErrorHandling(`${this.apiBaseUrl}/registration/options?user=${encodeURIComponent(username)}`, {
+    return this.fetchWithErrorHandling(`${this.apiBaseUrl}/registration/options?username=${encodeURIComponent(username)}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -40,12 +40,13 @@ class LiquidAPI {
     username: string,
     registrationResponse: PasskeyRegistrationResult
   ): Promise<{ verified: boolean; publicKey: string }> {
+    console.log('verifyRegistration > body', JSON.stringify({ username, registrationResponse }));
     return this.fetchWithErrorHandling(`${this.apiBaseUrl}/registration/verify`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ userName: username, registrationResponse }),
+      body: JSON.stringify({ username, registrationResponse }),
     });
   }
 
