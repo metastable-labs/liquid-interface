@@ -64,7 +64,7 @@ const Setup = () => {
         const firstStepDelayInMs = 1000 * 1; // 1s
         const timeout = setTimeout(() => {
           progressToNextStep();
-          // setSmartAccount().then(progressToNextStep);
+          setSmartAccount().then(progressToNextStep);
         }, firstStepDelayInMs);
 
         return () => clearTimeout(timeout);

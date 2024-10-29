@@ -16,6 +16,9 @@ const formatNumberWithSuffix = (num: number): string => {
     return value % 1 === 0 ? value.toFixed(0) : value.toFixed(2).replace(/\.?0+$/, '');
   };
 
+  if (num >= 1e12) {
+    return formatWithPrecision(num / 1e12) + 't';
+  }
   if (num >= 1e9) {
     return formatWithPrecision(num / 1e9) + 'b';
   }

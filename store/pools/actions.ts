@@ -16,7 +16,7 @@ export function usePoolActions() {
 
       if (!pools) return;
 
-      console.log(pools[0]);
+      console.log(pools[0].volume.usd);
 
       dispatch(setpools(pools));
 

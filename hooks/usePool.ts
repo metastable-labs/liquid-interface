@@ -68,7 +68,7 @@ export function usePool(publicClient: PublicClient) {
 
           return {
             address: pool.lp,
-            symbol: pool.symbol,
+            symbol: pool.symbol.replace('/', ' / '),
             decimals: Number(pool.decimals),
             totalLiquidity: formatUnits(pool.liquidity, Number(pool.decimals)),
             tvl: tvl.toString(),
