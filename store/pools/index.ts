@@ -3,10 +3,10 @@ import { BasePool } from '@/hooks/types';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
 export interface PoolsState {
-  pools: BasePool[] | [];
-  trendingPools: BasePool[] | [];
-  hotPools: BasePool[] | [];
-  topGainers: BasePool[] | [];
+  pools: BasePool[];
+  trendingPools: BasePool[];
+  hotPools: BasePool[];
+  topGainers: BasePool[];
   loadingPools: Boolean;
 }
 
