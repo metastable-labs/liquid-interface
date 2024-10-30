@@ -1,0 +1,29 @@
+name: Expo CI
+on: [push]
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Find yarn cache location
+        id: yarn-cache
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - name: JS package cache
+        uses: actions/cache@v1
+        with:
+          path: $(( steps.yarn-cache.outputs.dir ))
+          key: $(( runner.os ))-yarn-$(( hashFiles('**/yarn.lock') ))
+          restore-keys: |
+            $(( runner.os ))-yarn-
+
+      - name: Install Node Modules
+        run: yarn install
+
+      - name: Run Lint
+        run: yarn lint
+
+      - name: Run tests
+        run: yarn test

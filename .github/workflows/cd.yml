@@ -1,0 +1,58 @@
+name: build
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: EAS build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check for EXPO_TOKEN
+        run: |
+          if [ -z "$(( secrets.EXPO_TOKEN ))" ]; then
+            echo "You must provide an EXPO_TOKEN secret linked to this project's Expo account in this repo's secrets. Learn more: https://docs.expo.dev/eas-update/github-actions"
+            exit 1
+          fi
+
+      - name: 'Set ENV'
+        run: echo "$(EXPO_PUBLIC_BASE_RPC_URL)"
+        env:
+          EXPO_PUBLIC_BASE_RPC_URL: https://api.developer.coinbase.com/rpc/v1/base/oj7HJIzX_a5kKDxnOgnNItwP8Z2ytEGI
+
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 20.x
+          cache: yarn
+
+      - name: Setup Expo
+        uses: expo/expo-github-action@v7
+        with:
+          expo-version: latest
+          eas-version: latest
+          token: $(( secrets.EXPO_TOKEN ))
+
+      - name: Find yarn cache
+        id: yarn-cache-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - name: Restore cache
+        uses: actions/cache@v2
+        with:
+          path: '$(( steps.yarn-cache-path.outputs.dir ))'
+          key: "$(( runner.os ))-yarn-$(( hashFiles('**/yarn.lock') ))"
+          restore-keys: '$(( runner.os ))-yarn-'
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Publish IOS build
+        run: eas build -p ios --auto-submit
+
+      - name: Publish Android build
+        run: eas build --p android --profile preview
