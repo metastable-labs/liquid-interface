@@ -4,17 +4,15 @@ import { useEffect, useState } from 'react';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import { Provider as ReduxProvider } from 'react-redux';
-import { PersistGate } from 'redux-persist/integration/react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 // setup viem and api on app start
 import '@/init/viem';
 import '@/init/api';
 
-import { persistor, store } from '@/store';
 import { LQDStackHeader } from '@/components';
 import { ThemeProvider } from '@/components/providers/ThemeProvider';
+import { ReduxProvider } from '@/components/providers/ReduxProvider';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -64,39 +62,37 @@ export default function RootLayout() {
 
   return (
     <GestureHandlerRootView>
-      <ReduxProvider store={store}>
-        <PersistGate loading={null} persistor={persistor} onBeforeLift={() => setPersisted(true)}>
-          <ThemeProvider>
-            <Stack screenOptions={{ headerShown: false }}>
-              <Stack.Screen name="(onboarding)" />
-              <Stack.Screen name="(tabs)" />
-              <Stack.Screen
-                name="(liquidity-actions)"
-                options={{
-                  presentation: 'modal',
-                  animation: 'slide_from_bottom',
-                }}
-              />
-              <Stack.Screen name="setup" />
-              <Stack.Screen
-                name="liquidity-management"
-                options={{
-                  presentation: 'modal',
-                  animation: 'slide_from_bottom',
-                }}
-              />
-              <Stack.Screen
-                name="withdraw"
-                options={{
-                  header: (props) => <LQDStackHeader {...props} style={{ paddingTop: 80 }} hasTitle />,
-                  headerTitle: 'Withdraw',
-                  headerShown: true,
-                }}
-              />
-              <Stack.Screen name="+not-found" options={{ headerShown: true }} />
-            </Stack>
-          </ThemeProvider>
-        </PersistGate>
+      <ReduxProvider>
+        <ThemeProvider>
+          <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="(onboarding)" />
+            <Stack.Screen name="(tabs)" />
+            <Stack.Screen
+              name="(liquidity-actions)"
+              options={{
+                presentation: 'modal',
+                animation: 'slide_from_bottom',
+              }}
+            />
+            <Stack.Screen name="setup" />
+            <Stack.Screen
+              name="liquidity-management"
+              options={{
+                presentation: 'modal',
+                animation: 'slide_from_bottom',
+              }}
+            />
+            <Stack.Screen
+              name="withdraw"
+              options={{
+                header: (props) => <LQDStackHeader {...props} style={{ paddingTop: 80 }} hasTitle />,
+                headerTitle: 'Withdraw',
+                headerShown: true,
+              }}
+            />
+            <Stack.Screen name="+not-found" options={{ headerShown: true }} />
+          </Stack>
+        </ThemeProvider>
       </ReduxProvider>
     </GestureHandlerRootView>
   );
