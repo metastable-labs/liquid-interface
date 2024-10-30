@@ -6,6 +6,7 @@
     "orientation": "portrait",
     "icon": "./assets/images/liquid-icon.png",
     "scheme": "liquid",
+    "newArchEnabled": true,
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/images/splash.png",
@@ -63,7 +64,6 @@
         "projectId": "20908dc9-e9a6-4a99-bbe3-45e48c281ae0"
       }
     },
-    "owner": "supermigrate",
-    "newArchEnabled": true
+    "owner": "supermigrate"
   }
 }
