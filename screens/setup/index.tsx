@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { View, Text, StyleSheet, Platform, StatusBar } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing } from 'react-native-reanimated';
+import { useLoginWithPasskey, useLinkWithPasskey } from '@privy-io/expo/passkey';
 
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { LQDButton } from '@/components';
@@ -87,6 +88,14 @@ const Setup = () => {
     [setupStep]
   );
 
+  const { loginWithPasskey, state } = useLoginWithPasskey();
+
+  const handleSubmit = async () => {
+    await loginWithPasskey({ relyingParty: 'https://api.useliquid.xyz' });
+  };
+
+  console.log('privy auth state', state);
+
   return (
     <View style={styles.root}>
       <View style={styles.container}>
@@ -114,7 +123,7 @@ const Setup = () => {
           <Info />
 
           <Animated.View style={animatedButtonStyle}>
-            <LQDButton title="Let's go!" onPress={() => router.replace('/(tabs)/home/')} variant="secondary" />
+            <LQDButton title="Let's go!" onPress={handleSubmit} variant="secondary" />
           </Animated.View>
         </View>
       </View>
