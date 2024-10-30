@@ -1,27 +1,25 @@
+import 'react-native-reanimated';
+
 import { useEffect, useState } from 'react';
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { Provider as ReduxProvider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
-
-import 'react-native-reanimated';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 // setup viem and api on app start
 import '@/init/viem';
 import '@/init/api';
 
-import { useColorScheme } from '@/hooks/useColorScheme';
 import { persistor, store } from '@/store';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { LQDStackHeader } from '@/components';
+import { ThemeProvider } from '@/components/providers/ThemeProvider';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
   const [loaded] = useFonts({
     ClashDisplayBold: require('../assets/fonts/ClashDisplay/ClashDisplay-Bold.otf'),
     ClashDisplayRegular: require('../assets/fonts/ClashDisplay/ClashDisplay-Regular.otf'),
@@ -68,7 +66,7 @@ export default function RootLayout() {
     <GestureHandlerRootView>
       <ReduxProvider store={store}>
         <PersistGate loading={null} persistor={persistor} onBeforeLift={() => setPersisted(true)}>
-          <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+          <ThemeProvider>
             <Stack screenOptions={{ headerShown: false }}>
               <Stack.Screen name="(onboarding)" />
               <Stack.Screen name="(tabs)" />
