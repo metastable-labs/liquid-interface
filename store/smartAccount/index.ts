@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { PayloadAction } from '@reduxjs/toolkit';
 import { Address } from 'viem';
-import { ToCoinbaseSmartAccountReturnType } from 'viem/_types/account-abstraction';
+import { ToCoinbaseSmartAccountReturnType } from 'viem/account-abstraction';
 import { CreatePassKeyCredentialOptions } from '@/init/types';
 
 export interface SmartAccountState {

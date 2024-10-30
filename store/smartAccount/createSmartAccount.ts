@@ -1,13 +1,15 @@
 import { Alert } from 'react-native';
 import * as Passkeys from 'react-native-passkeys';
+import * as SecureStore from 'expo-secure-store';
 import { Address, hashMessage, hashTypedData, Hex, SignableMessage } from 'viem';
 import { ToCoinbaseSmartAccountReturnType, WebAuthnAccount, toCoinbaseSmartAccount } from 'viem/account-abstraction';
 import type { SignReturnType } from 'webauthn-p256';
-import { utf8StringToBuffer, bufferToBase64URLString } from '@/utils/base64';
+
 import { publicClient } from '@/init/viem';
 import { CreatePassKeyCredentialOptions } from '@/init/types';
-import { isDev } from '@/constants/env';
 import api from '@/init/api';
+import { utf8StringToBuffer, bufferToBase64URLString } from '@/utils/base64';
+import { isDev } from '@/constants/env';
 
 export async function createSmartAccount(registrationOptions: CreatePassKeyCredentialOptions): Promise<{
   smartAccount: ToCoinbaseSmartAccountReturnType;
@@ -102,6 +104,15 @@ export async function createSmartAccount(registrationOptions: CreatePassKeyCrede
     if (!updateUserAddressResponse.success) {
       throw new Error('Failed to update user address');
     }
+
+    const smartAccountInfo = {
+      credentialId,
+      publicKey,
+      clientDataJSON,
+      address,
+    };
+
+    await SecureStore.setItemAsync('smartAccountInfo', JSON.stringify(smartAccountInfo));
 
     return { smartAccount, address };
   } catch (error: any) {
