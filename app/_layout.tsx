@@ -8,7 +8,6 @@ import * as SplashScreen from 'expo-splash-screen';
 import { Provider as ReduxProvider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { PrivyProvider } from '@privy-io/expo';
 
 // setup viem and api on app start
 import '@/init/viem';
@@ -17,6 +16,7 @@ import '@/init/api';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { persistor, store } from '@/store';
 import { LQDStackHeader } from '@/components';
+import { PrivyProvider } from '@/components/providers/PrivyProvider';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -70,7 +70,7 @@ export default function RootLayout() {
       <ReduxProvider store={store}>
         <PersistGate loading={null} persistor={persistor} onBeforeLift={() => setPersisted(true)}>
           <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-            <PrivyProvider appId={'insert-your-privy-app-id'} clientId={'insert-your-privy-app-client-id'}>
+            <PrivyProvider>
               <Stack screenOptions={{ headerShown: false }}>
                 <Stack.Screen name="(onboarding)" />
                 <Stack.Screen name="(tabs)" />
