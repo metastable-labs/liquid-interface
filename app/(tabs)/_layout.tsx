@@ -1,9 +1,8 @@
 import { Tabs } from 'expo-router';
-import { Platform, StatusBar, StyleSheet, View } from 'react-native';
+import { Platform, StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
 
 import { TabBarIcon } from '@/components/navigation/TabBarIcon';
 import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
 import { LQDNavigation, LQDSearch } from '@/components';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 
