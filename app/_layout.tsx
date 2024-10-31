@@ -12,11 +12,9 @@ import { LQDStackHeader } from '@/components';
 export default function RootLayout() {
   return (
     <AllProviders>
-      <Stack screenOptions={{ headerShown: false }}>
+      <Stack screenOptions={{ headerShown: false }} initialRouteName="(onboarding)">
         {/* Unprotected routes */}
         <Stack.Screen name="(onboarding)" />
-        <Stack.Screen name="tag" />
-        <Stack.Screen name="setup" />
 
         {/* Protected routes */}
         <Stack.Screen name="(tabs)" />

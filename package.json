@@ -5,7 +5,7 @@
   "private": true,
   "packageManager": "yarn@1.22.22",
   "scripts": {
-    "start": "expo start",
+    "start": "expo start -c",
     "reset-project": "node ./scripts/reset-project.js",
     "android": "expo run:android",
     "ios": "expo run:ios",
@@ -53,7 +53,7 @@
     "react-native-gesture-handler": "~2.16.1",
     "react-native-image-colors": "^2.4.0",
     "react-native-linear-gradient": "^2.8.3",
-    "react-native-pager-view": "^6.4.1",
+    "react-native-pager-view": "6.3.0",
     "react-native-passkeys": "^0.3.0",
     "react-native-qrcode-svg": "^6.3.2",
     "react-native-reanimated": "~3.10.1",

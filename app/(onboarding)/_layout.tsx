@@ -5,7 +5,8 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { LQDButton } from '@/components';
 import { LQDOnboardingIndicator } from '@/components/onboarding';
-import Step1 from '.';
+
+import Step1 from './step1';
 import Step2 from './step2';
 import Step3 from './step3';
 
@@ -13,8 +14,6 @@ const Tab = createMaterialTopTabNavigator();
 
 const getCurrentStep = (pathname: string) => {
   switch (pathname) {
-    case '/':
-      return 0;
     case '/step2':
       return 1;
     case '/step3':
@@ -41,6 +40,7 @@ export default function OnboardingTabLayout() {
   const navigateToNextScreen = () => {
     switch (pathname) {
       case '/':
+      case '/step1':
         router.push('/(onboarding)/step2');
         break;
       case '/step2':
@@ -99,6 +99,7 @@ export default function OnboardingTabLayout() {
       </View>
 
       <Tab.Navigator
+        initialRouteName="step1"
         screenOptions={{
           tabBarShowLabel: false,
           tabBarShowIcon: false,
@@ -130,7 +131,7 @@ export default function OnboardingTabLayout() {
       </Tab.Navigator>
 
       <View style={styles.action}>
-        <LQDButton onPress={() => router.replace('/tag')} title="Let's go!" />
+        <LQDButton onPress={() => router.replace('/(onboarding)/tag')} title="Let's go!" />
       </View>
     </>
   );
