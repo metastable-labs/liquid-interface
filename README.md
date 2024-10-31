@@ -11,7 +11,7 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
 2. Install dependencies:
 
    ```bash
-   yarn
+   yarn i
    ```
 
 3. Setup your `.env` file based on `.env.example`. Make sure you have a valid Liquid API key.
