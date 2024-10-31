@@ -1,3 +1,5 @@
+import { Address, Hex } from 'viem';
+
 export type BuildUserOperationParams = {
   ownerIndex: bigint;
   authenticatorData: string;
@@ -41,4 +43,11 @@ export const WebAuthnAuthStruct = {
   ],
   name: 'WebAuthnAuth',
   type: 'tuple',
+};
+
+export type Call = {
+  index: number;
+  target: Address;
+  value: bigint;
+  data: Hex;
 };
