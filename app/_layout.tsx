@@ -13,7 +13,12 @@ export default function RootLayout() {
   return (
     <AllProviders>
       <Stack screenOptions={{ headerShown: false }}>
+        {/* Unprotected routes */}
         <Stack.Screen name="(onboarding)" />
+        <Stack.Screen name="tag" />
+        <Stack.Screen name="setup" />
+
+        {/* Protected routes */}
         <Stack.Screen name="(tabs)" />
         <Stack.Screen
           name="(liquidity-actions)"
@@ -22,7 +27,6 @@ export default function RootLayout() {
             animation: 'slide_from_bottom',
           }}
         />
-        <Stack.Screen name="setup" />
         <Stack.Screen
           name="liquidity-management"
           options={{
@@ -38,6 +42,8 @@ export default function RootLayout() {
             headerShown: true,
           }}
         />
+
+        {/* Common routes */}
         <Stack.Screen name="+not-found" options={{ headerShown: true }} />
       </Stack>
     </AllProviders>
