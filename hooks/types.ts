@@ -1,4 +1,4 @@
-import { Address } from 'viem';
+import { Address, Hex } from 'viem';
 
 // Raw types (as returned by the contract)
 export type RawPool = {
@@ -259,10 +259,7 @@ export interface PoolMetadata {
   t1: Address;
 }
 
-// Example usage of types:
-export const createRoute = (from: Address, to: Address, stable: boolean = false, factory: Address): IRouter.RouteStruct => ({
-  from,
-  to,
-  stable,
-  factory,
-});
+export interface TransactionConfig {
+  hash: Hex;
+  waitForReceipt?: boolean;
+}

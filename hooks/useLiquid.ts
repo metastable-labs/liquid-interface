@@ -1,34 +1,113 @@
 import { useCallback } from 'react';
-import { PublicClient, Address, formatUnits } from 'viem';
-import { AddLiquidityQuoteParams, AddLiquidityQuoteResult } from './types';
-import { AerodromeConnectorABI } from '@/constants/abis';
+import { Address, Hex, PublicClient, WaitForTransactionReceiptParameters } from 'viem';
+import { makeCalls } from '@/utils/calls';
+import { encodePluginExecute, encodeAddLiquidity, encodeRemoveLiquidity, encodeSwap, encodeStake } from '@/utils/encoders';
+import { AERODROME_CONNECTOR, CONNECTOR_PLUGIN } from '@/constants/addresses';
+import { AddLiquidityParams, RemoveLiquidityParams, StakeParams, SwapExactTokensParams, TransactionConfig } from './types';
 
-export function usePool(publicClient: PublicClient) {
-  const getDepositQuote = async (
-    connectorAddress: Address,
-    { tokenA, tokenB, stable, amountA, amountB, decimalsA, decimalsB, balanceTokenRatio = true }: AddLiquidityQuoteParams
-  ): Promise<AddLiquidityQuoteResult> => {
-    try {
-      const result = await publicClient.readContract({
-        address: connectorAddress,
-        abi: AerodromeConnectorABI.abi,
-        functionName: 'quoteDepositLiquidity',
-        args: [tokenA, tokenB, stable, amountA, amountB, balanceTokenRatio],
+async function handleTransaction(client: PublicClient, { hash, waitForReceipt = true }: TransactionConfig) {
+  if (!waitForReceipt) return { hash };
+
+  const receipt = await client.waitForTransactionReceipt({
+    hash,
+  });
+
+  return {
+    hash,
+    receipt,
+  };
+}
+
+export function useLiquidity(publicClient: PublicClient, account: Address) {
+  const createPluginCall = useCallback(
+    (connectorData: Hex) => {
+      const pluginCalldata = encodePluginExecute(AERODROME_CONNECTOR, connectorData);
+      return {
+        target: CONNECTOR_PLUGIN,
+        value: 0n,
+        data: pluginCalldata,
+        index: 0,
+      };
+    },
+    [AERODROME_CONNECTOR, CONNECTOR_PLUGIN]
+  );
+
+  const addLiquidity = useCallback(
+    async (params: AddLiquidityParams, txConfig?: Partial<TransactionConfig>) => {
+      const connectorData = encodeAddLiquidity(params);
+      const call = createPluginCall(connectorData);
+
+      const { opHash } = await makeCalls({
+        calls: [call],
+        account,
       });
 
-      return {
-        // Raw Values
-        amountA: result.amountA,
-        amountB: result.amountB,
-        // Formatted Values
-        formattedAmountA: formatUnits(result.amountA, decimalsA),
-        formattedAmountB: formatUnits(result.amountB, decimalsB),
-      };
-    } catch (error) {
-      console.error('Failed to get deposit quote:', error);
-      throw error;
-    }
-  };
+      return handleTransaction(publicClient, {
+        hash: opHash,
+        ...txConfig,
+      });
+    },
+    [publicClient, createPluginCall]
+  );
 
-  return useCallback(() => {}, []);
+  const removeLiquidity = useCallback(
+    async (params: RemoveLiquidityParams, txConfig?: Partial<TransactionConfig>) => {
+      const connectorData = encodeRemoveLiquidity(params);
+      const call = createPluginCall(connectorData);
+
+      const { opHash } = await makeCalls({
+        calls: [call],
+        account,
+      });
+
+      return handleTransaction(publicClient, {
+        hash: opHash,
+        ...txConfig,
+      });
+    },
+    [publicClient, createPluginCall]
+  );
+
+  const swap = useCallback(
+    async (params: SwapExactTokensParams, txConfig?: Partial<TransactionConfig>) => {
+      const connectorData = encodeSwap(params);
+      const call = createPluginCall(connectorData);
+
+      const { opHash } = await makeCalls({
+        calls: [call],
+        account,
+      });
+
+      return handleTransaction(publicClient, {
+        hash: opHash,
+        ...txConfig,
+      });
+    },
+    [publicClient, createPluginCall]
+  );
+
+  const stake = useCallback(
+    async (params: StakeParams, txConfig?: Partial<TransactionConfig>) => {
+      const connectorData = encodeStake(params);
+      const call = createPluginCall(connectorData);
+
+      const { opHash } = await makeCalls({
+        calls: [call],
+        account,
+      });
+
+      return handleTransaction(publicClient, {
+        hash: opHash,
+        ...txConfig,
+      });
+    },
+    [publicClient, createPluginCall]
+  );
+
+  return {
+    addLiquidity,
+    removeLiquidity,
+    swap,
+    stake,
+  };
 }

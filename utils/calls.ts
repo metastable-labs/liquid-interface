@@ -5,25 +5,15 @@ import { entryPoint06Address } from 'viem/_types/account-abstraction';
 import { paymasterClient, bundlerClient } from '@/init/viem';
 
 // Main function to execute calls
-export async function makeCalls({
-  calls,
-  account,
-  paymasterData = '0x' as Hex,
-  verificationGasLimit = 800000n,
-}: {
-  calls: Call[];
-  account: Address;
-  paymasterData?: Hex;
-  verificationGasLimit?: bigint;
-}) {
+export async function makeCalls({ calls, account }: { calls: Call[]; account: Address }) {
   // Build the user operation
   const op = await buildUserOp(account, bundlerClient, {
     calls,
-    paymasterAndData: paymasterData,
+    paymasterAndData: '0x', // Initialize with empty paymaster data
   });
 
   // Set verification gas limit
-  op.verificationGasLimit = verificationGasLimit;
+  op.verificationGasLimit = 800000n;
 
   // Get paymaster data
   const paymasterResult = await getPaymasterData({
