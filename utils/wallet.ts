@@ -85,18 +85,6 @@ export function createAccountCalldata({ owners, nonce }: { owners: Hex[]; nonce:
   });
 }
 
-export async function getAccountAddress<TChain extends Chain | undefined>(
-  client: PublicClient<Transport, TChain>,
-  { owners, nonce }: { owners: Hex[]; nonce: bigint }
-) {
-  return await readContract(client, {
-    abi: SmartWalletFactoryAbi,
-    address: ACCOUNT_FACTORY_ADDRESS,
-    functionName: 'getAddress',
-    args: [owners, nonce],
-  });
-}
-
 export function buildUserOperationCalldata({ calls }: { calls: Call[] }): Hex {
   // sort ascending order, 0 first
   const _calls = calls.sort((a, b) => a.index - b.index);
