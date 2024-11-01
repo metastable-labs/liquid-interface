@@ -1,8 +1,9 @@
 import { BundlerClient } from 'permissionless';
 import { Address, Hex } from 'viem';
-import { buildUserOp, getUserOpHash } from './wallet';
+import { buildUserOp, getPaymasterData, getUserOpHash } from './wallet';
 import { Call } from './types';
 import { entryPoint06Address } from 'viem/_types/account-abstraction';
+import { paymasterClient } from '@/init/viem';
 
 // Main function to execute calls
 export async function makeCalls({
@@ -26,6 +27,23 @@ export async function makeCalls({
 
   // Set verification gas limit
   op.verificationGasLimit = verificationGasLimit;
+
+  // Get paymaster data
+  const paymasterResult = await getPaymasterData({
+    paymasterClient: paymasterClient,
+    callData: op.callData,
+    sender: op.sender,
+    nonce: op.nonce,
+    initCode: op.initCode,
+    maxFeePerGas: op.maxFeePerGas,
+    maxPriorityFeePerGas: op.maxPriorityFeePerGas,
+    callGasLimit: op.callGasLimit,
+    verificationGasLimit: op.verificationGasLimit,
+    preVerificationGas: op.preVerificationGas,
+  });
+
+  // Update operation with paymaster data
+  op.paymasterAndData = paymasterResult.paymasterAndData;
 
   // Get the operation hash
   const hash = getUserOpHash({

@@ -2,9 +2,9 @@ import { EntryPointABI, SmartWalletAbi, SmartWalletFactoryAbi } from '@/constant
 import { ACCOUNT_FACTORY_ADDRESS } from '@/constants/addresses';
 import { BundlerClient, estimateUserOperationGas, UserOperation } from 'permissionless';
 import { Address, Chain, encodeAbiParameters, encodeFunctionData, Hex, keccak256, PublicClient, Transport } from 'viem';
-import { entryPoint06Abi, entryPoint06Address } from 'viem/_types/account-abstraction';
+import { entryPoint06Abi, entryPoint06Address, PaymasterClient } from 'viem/_types/account-abstraction';
 import { estimateFeesPerGas, getBytecode, readContract } from 'viem/actions';
-import { Call } from './types';
+import { Call, PaymasterResult } from './types';
 
 export const PASSKEY_OWNER_DUMMY_SIGNATURE: Hex =
   '0x0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000c0000000000000000000000000000000000000000000000000000000000000012000000000000000000000000000000000000000000000000000000000000000170000000000000000000000000000000000000000000000000000000000000001949fc7c88032b9fcb5f6efc7a7b8c63668eae9871b765e23123bb473ff57aa831a7c0d9276168ebcc29f2875a0239cffdf2a9cd1c2007c5c77c071db9264df1d000000000000000000000000000000000000000000000000000000000000002549960de5880e8c687434170f6476605b8fe4aeb9a28632c7995cf3ba831d97630500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008a7b2274797065223a22776562617574686e2e676574222c226368616c6c656e6765223a2273496a396e6164474850596759334b7156384f7a4a666c726275504b474f716d59576f4d57516869467773222c226f726967696e223a2268747470733a2f2f7369676e2e636f696e626173652e636f6d222c2263726f73734f726967696e223a66616c73657d00000000000000000000000000000000000000000000';
@@ -141,4 +141,57 @@ export function getUserOpHash({ userOperation, chainId }: { userOperation: UserO
     [hashedUserOp, entryPoint06Address, chainId]
   );
   return keccak256(encodedWithChainAndEntryPoint);
+}
+
+export async function getPaymasterData({
+  paymasterClient,
+  callData,
+  sender,
+  nonce,
+  initCode = '0x',
+  maxFeePerGas,
+  maxPriorityFeePerGas,
+  callGasLimit,
+  verificationGasLimit,
+  preVerificationGas,
+  paymasterContext = {},
+}: {
+  paymasterClient: PaymasterClient;
+  callData: Hex;
+  sender: Address;
+  nonce: bigint;
+  initCode?: Hex;
+  maxFeePerGas?: bigint;
+  maxPriorityFeePerGas?: bigint;
+  callGasLimit?: bigint;
+  verificationGasLimit?: bigint;
+  preVerificationGas?: bigint;
+  paymasterContext?: Record<string, unknown>;
+}): Promise<PaymasterResult> {
+  try {
+    const paymasterAndData = await paymasterClient.getPaymasterData({
+      chainId: 8543,
+      entryPointAddress: entryPoint06Address,
+      callData,
+      sender,
+      nonce,
+      initCode,
+      maxFeePerGas,
+      maxPriorityFeePerGas,
+      callGasLimit,
+      verificationGasLimit,
+      preVerificationGas,
+      context: paymasterContext,
+    });
+
+    return {
+      paymaster: paymasterAndData.paymaster ?? '0x',
+      paymasterAndData: paymasterAndData.paymasterAndData ?? '0x',
+      paymasterVerificationGasLimit: paymasterAndData.paymasterVerificationGasLimit ?? 0n,
+      paymasterPostOpGasLimit: paymasterAndData.paymasterPostOpGasLimit ?? 0n,
+    };
+  } catch (error) {
+    console.error('Failed to get paymaster data:', error);
+    throw error;
+  }
 }

@@ -51,3 +51,10 @@ export type Call = {
   value: bigint;
   data: Hex;
 };
+
+export interface PaymasterResult {
+  paymaster: Address;
+  paymasterAndData: Hex;
+  paymasterVerificationGasLimit: bigint;
+  paymasterPostOpGasLimit: bigint;
+}
