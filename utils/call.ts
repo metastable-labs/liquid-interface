@@ -1,26 +1,23 @@
-import { BundlerClient } from 'permissionless';
 import { Address, Hex } from 'viem';
 import { buildUserOp, getPaymasterData, getUserOpHash } from './wallet';
 import { Call } from './types';
 import { entryPoint06Address } from 'viem/_types/account-abstraction';
-import { paymasterClient } from '@/init/viem';
+import { paymasterClient, bundlerClient } from '@/init/viem';
 
 // Main function to execute calls
 export async function makeCalls({
   calls,
-  client,
   account,
   paymasterData = '0x' as Hex,
   verificationGasLimit = 800000n,
 }: {
   calls: Call[];
-  client: BundlerClient;
   account: Address;
   paymasterData?: Hex;
   verificationGasLimit?: bigint;
 }) {
   // Build the user operation
-  const op = await buildUserOp(account, client, {
+  const op = await buildUserOp(account, bundlerClient, {
     calls,
     paymasterAndData: paymasterData,
   });
@@ -58,7 +55,7 @@ export async function makeCalls({
   op.signature = signature;
 
   // Send the user operation
-  const opHash = await client.sendUserOperation({
+  const opHash = await bundlerClient.sendUserOperation({
     userOperation: op,
     entryPoint: entryPoint06Address,
   });

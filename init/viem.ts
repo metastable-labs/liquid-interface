@@ -1,5 +1,6 @@
 import { createPublicClient, http } from 'viem';
-import { createBundlerClient, createPaymasterClient } from 'viem/account-abstraction';
+import { createPaymasterClient } from 'viem/account-abstraction';
+import { estimateUserOperationGas, UserOperation, createBundlerClient } from 'permissionless';
 import { base } from 'viem/chains';
 
 import { rpcUrl, bundlerUrl } from '@/constants/env';
@@ -10,9 +11,8 @@ export const publicClient = createPublicClient({
 });
 
 export const bundlerClient = createBundlerClient({
-  client: publicClient,
+  chain: base,
   transport: http(bundlerUrl),
-  paymaster: true,
 });
 
 export const paymasterClient = createPaymasterClient({
