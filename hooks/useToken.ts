@@ -4,6 +4,7 @@ import { useState, useCallback, useEffect, useMemo } from 'react';
 import { PublicClient, Address, formatUnits } from 'viem';
 import { Token } from './types';
 import { useContract } from './useContract';
+import useSystemFunctions from './useSystemFunctions';
 
 export const getUsdPrice = async (tokenAddress: Address, offchainOracleContract: ReturnType<typeof useContract>): Promise<string> => {
   try {
@@ -20,7 +21,9 @@ export const getUsdPrice = async (tokenAddress: Address, offchainOracleContract:
   }
 };
 
-export function useToken(publicClient: PublicClient, account: Address, refreshInterval: number = 60000) {
+export function useToken(publicClient: PublicClient, refreshInterval: number = 60000) {
+  const { smartAccountState } = useSystemFunctions();
+
   const [tokens, setTokens] = useState<Token[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -58,6 +61,8 @@ export function useToken(publicClient: PublicClient, account: Address, refreshIn
 
   const fetchTokens = useCallback(
     async (forceRefresh: boolean = false) => {
+      if (!smartAccountState.address) return;
+
       const now = Date.now();
       if (!forceRefresh && tokens.length > 0 && now - lastUpdated < refreshInterval) {
         return;
@@ -74,7 +79,7 @@ export function useToken(publicClient: PublicClient, account: Address, refreshIn
         const fetchedTokens = (await lpSugarContract.read.tokens([
           BigInt(1000),
           BigInt(0),
-          account,
+          smartAccountState.address,
           OFFCHAIN_ORACLE_ADDRESS,
           CONNECTORS_BASE,
         ])) as Omit<Token, 'usd_price' | 'logo_url'>[];
@@ -101,7 +106,16 @@ export function useToken(publicClient: PublicClient, account: Address, refreshIn
         setLoading(false);
       }
     },
-    [lpSugarContract, account, OFFCHAIN_ORACLE_ADDRESS, refreshInterval, lastUpdated, tokens.length, formatBalance, getUsdPrice]
+    [
+      lpSugarContract,
+      smartAccountState.address,
+      OFFCHAIN_ORACLE_ADDRESS,
+      refreshInterval,
+      lastUpdated,
+      tokens.length,
+      formatBalance,
+      getUsdPrice,
+    ]
   );
 
   useEffect(() => {

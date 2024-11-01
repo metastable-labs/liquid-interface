@@ -17,7 +17,8 @@
       "bundleIdentifier": "com.liquid.supermigrate",
       "buildNumber": "1",
       "infoPlist": {
-        "NSFaceIDUsageDescription": "This app uses Face ID to sign in with Passkeys."
+        "NSFaceIDUsageDescription": "This app uses Face ID to sign in with Passkeys.",
+        "LSApplicationQueriesSchemes": ""
       },
       "config": {
         "usesNonExemptEncryption": false

@@ -1,6 +1,6 @@
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { CallbackProps } from '..';
-import { setHideSearch, setSearchIsFocused } from '.';
+import { setCoinbaseIsActive, setHideSearch, setSearchIsFocused } from '.';
 
 const useAppActions = () => {
   const { dispatch } = useSystemFunctions();
@@ -13,9 +13,14 @@ const useAppActions = () => {
     dispatch(setSearchIsFocused(focused));
   };
 
+  const coinbaseIsActive = (active: boolean) => {
+    dispatch(setCoinbaseIsActive(active));
+  };
+
   return {
     hideSearch,
     searchIsFocused,
+    coinbaseIsActive,
   };
 };
 

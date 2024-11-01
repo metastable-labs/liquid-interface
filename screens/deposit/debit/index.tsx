@@ -1,11 +1,17 @@
 import { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, TextInput, Platform } from 'react-native';
 
-import { LQDButton, LQDNumericKeyboard } from '@/components';
+import { publicClient } from '@/init/viem';
+import { PublicClient } from 'viem';
+
+import { LQDButton, LQDCoinbaseWebView, LQDNumericKeyboard } from '@/components';
 import { formatWithThousandSeparator, removeCommasFromNumber } from '@/utils/helpers';
 import { CardIcon, CaretDownIcon } from '@/assets/icons';
 import PaymentMethodSelection from '../method-selection';
+import useSystemFunctions from '@/hooks/useSystemFunctions';
+import { useToken } from '@/hooks/useToken';
 import styles from '../styles';
+import useAppActions from '@/store/app/actions';
 
 const getMaxWidth = (amount: string) => {
   const baseWidth = 27;
@@ -26,6 +32,11 @@ const getMaxWidth = (amount: string) => {
 };
 
 const DebitDeposit = () => {
+  const { smartAccountState, appState } = useSystemFunctions();
+  const { coinbaseIsActive } = useAppActions();
+
+  // const {} = useToken(publicClient as PublicClient);
+
   const [amount, setAmount] = useState('');
   const [balance, setBalance] = useState(999);
   const [showCursor, setShowCursor] = useState(true);
@@ -51,14 +62,29 @@ const DebitDeposit = () => {
   const onSubmit = () => {
     const amountNumber = parseFloat(removeCommasFromNumber(amount));
     console.log('submit', { amount: amountNumber });
+
+    coinbaseIsActive(true);
   };
 
   useEffect(() => {
+    coinbaseIsActive(false);
+
     const cursorInterval = setInterval(() => {
       setShowCursor((prev) => !prev);
     }, 500);
     return () => clearInterval(cursorInterval);
   }, []);
+
+  if (appState.coinbaseIsActive) {
+    return (
+      <>
+        <LQDCoinbaseWebView
+          amount={parseFloat(removeCommasFromNumber(amount))}
+          destinationAddress={smartAccountState.address || '0x6Ad870d1dD2Fac9b21b0110330e55414324C03aa'}
+        />
+      </>
+    );
+  }
 
   return (
     <>

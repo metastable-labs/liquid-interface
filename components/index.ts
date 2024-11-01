@@ -10,6 +10,7 @@ import LQDBottomSheet from './bottom-sheet';
 import LQDBarChart from './bar-chart';
 import LQDAssetSelection from './asset-selection';
 import LQDLoadingStep from './loading-step';
+import LQDCoinbaseWebView from './coinbase-webview';
 
 export {
   LQDButton,
@@ -23,4 +24,5 @@ export {
   LQDBottomSheet,
   LQDBarChart,
   LQDAssetSelection,
+  LQDCoinbaseWebView,
 };
