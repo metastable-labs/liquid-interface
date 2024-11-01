@@ -212,53 +212,6 @@ export namespace IRouter {
   }
 }
 
-// Export additional types used in the Aerodrome ecosystem
-export interface IPool {
-  token0: () => Promise<Address>;
-  token1: () => Promise<Address>;
-  stable: () => Promise<boolean>;
-  metadata: () => Promise<{
-    dec0: bigint;
-    dec1: bigint;
-    r0: bigint;
-    r1: bigint;
-    st: boolean;
-    t0: Address;
-    t1: Address;
-  }>;
-  getReserves: () => Promise<{
-    reserve0: bigint;
-    reserve1: bigint;
-    blockTimestampLast: bigint;
-  }>;
-}
-
-export interface IGauge {
-  deposit: (amount: bigint, account: Address) => Promise<void>;
-  withdraw: (amount: bigint) => Promise<void>;
-  getReward: (account: Address, tokens: Address[]) => Promise<void>;
-  balanceOf: (account: Address) => Promise<bigint>;
-  earned: (token: Address, account: Address) => Promise<bigint>;
-  stakingToken: () => Promise<Address>;
-}
-
-// Additional helper types
-export interface PoolReserves {
-  reserve0: bigint;
-  reserve1: bigint;
-  blockTimestampLast: bigint;
-}
-
-export interface PoolMetadata {
-  dec0: bigint;
-  dec1: bigint;
-  r0: bigint;
-  r1: bigint;
-  st: boolean;
-  t0: Address;
-  t1: Address;
-}
-
 export interface TransactionConfig {
   hash: Hex;
   waitForReceipt?: boolean;
