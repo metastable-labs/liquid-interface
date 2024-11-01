@@ -103,3 +103,146 @@ export type EnhancedFormattedPool = Omit<FormattedPool, EnhancedFormattedPoolTyp
 type EnhancedFormattedPoolType = 'token0' | 'token1' | 'TVL' | 'volume0' | 'volume1' | 'cumulativeVolumeUSD';
 
 export type VolumeReturn = { volume0: string; volume1: string; cumulativeVolumeUSD: string };
+
+export interface AddLiquidityParams {
+  tokenA: Address;
+  tokenB: Address;
+  stable: boolean;
+  amountAIn: bigint;
+  amountBIn: bigint;
+  amountAMin: bigint;
+  amountBMin: bigint;
+  balanceTokenRatio: boolean;
+  to: Address;
+  deadline: bigint;
+}
+
+export interface RemoveLiquidityParams {
+  tokenA: Address;
+  tokenB: Address;
+  stable: boolean;
+  liquidity: bigint;
+  amountAMin: bigint;
+  amountBMin: bigint;
+  to: Address;
+  deadline: bigint;
+}
+
+export interface SwapExactTokensParams {
+  amountIn: bigint;
+  minReturnAmount: bigint;
+  routes: IRouter.RouteStruct[];
+  to: Address;
+  deadline: bigint;
+}
+
+export interface StakeParams {
+  gaugeAddress: Address;
+  amount: bigint;
+}
+
+// types/aerodrome.ts
+export namespace IRouter {
+  export interface RouteStruct {
+    from: Address;
+    to: Address;
+    stable: boolean;
+    factory: Address;
+  }
+
+  // Define the full router interface
+  export interface IRouter {
+    // Swap functions
+    swapExactTokensForTokens: (
+      amountIn: bigint,
+      amountOutMin: bigint,
+      routes: RouteStruct[],
+      to: Address,
+      deadline: bigint
+    ) => Promise<bigint[]>;
+
+    getAmountsOut: (amountIn: bigint, routes: RouteStruct[]) => Promise<bigint[]>;
+
+    // Liquidity functions
+    addLiquidity: (
+      tokenA: Address,
+      tokenB: Address,
+      stable: boolean,
+      amountADesired: bigint,
+      amountBDesired: bigint,
+      amountAMin: bigint,
+      amountBMin: bigint,
+      to: Address,
+      deadline: bigint
+    ) => Promise<[bigint, bigint, bigint]>;
+
+    removeLiquidity: (
+      tokenA: Address,
+      tokenB: Address,
+      stable: boolean,
+      liquidity: bigint,
+      amountAMin: bigint,
+      amountBMin: bigint,
+      to: Address,
+      deadline: bigint
+    ) => Promise<[bigint, bigint]>;
+
+    // Pool related functions
+    poolFor: (tokenA: Address, tokenB: Address, stable: boolean, factory: Address) => Promise<Address>;
+  }
+}
+
+// Export additional types used in the Aerodrome ecosystem
+export interface IPool {
+  token0: () => Promise<Address>;
+  token1: () => Promise<Address>;
+  stable: () => Promise<boolean>;
+  metadata: () => Promise<{
+    dec0: bigint;
+    dec1: bigint;
+    r0: bigint;
+    r1: bigint;
+    st: boolean;
+    t0: Address;
+    t1: Address;
+  }>;
+  getReserves: () => Promise<{
+    reserve0: bigint;
+    reserve1: bigint;
+    blockTimestampLast: bigint;
+  }>;
+}
+
+export interface IGauge {
+  deposit: (amount: bigint, account: Address) => Promise<void>;
+  withdraw: (amount: bigint) => Promise<void>;
+  getReward: (account: Address, tokens: Address[]) => Promise<void>;
+  balanceOf: (account: Address) => Promise<bigint>;
+  earned: (token: Address, account: Address) => Promise<bigint>;
+  stakingToken: () => Promise<Address>;
+}
+
+// Additional helper types
+export interface PoolReserves {
+  reserve0: bigint;
+  reserve1: bigint;
+  blockTimestampLast: bigint;
+}
+
+export interface PoolMetadata {
+  dec0: bigint;
+  dec1: bigint;
+  r0: bigint;
+  r1: bigint;
+  st: boolean;
+  t0: Address;
+  t1: Address;
+}
+
+// Example usage of types:
+export const createRoute = (from: Address, to: Address, stable: boolean = false, factory: Address): IRouter.RouteStruct => ({
+  from,
+  to,
+  stable,
+  factory,
+});

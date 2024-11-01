@@ -1,4 +1,4 @@
-import { EntryPointABI, SmartWalletAbi, SmartWalletFactoryAbi } from '@/constants/abis';
+import { EntryPointABI, SmartWalletABI, SmartWalletFactoryABI } from '@/constants/abis';
 import { ACCOUNT_FACTORY_ADDRESS } from '@/constants/addresses';
 import { estimateUserOperationGas, UserOperation, BundlerClient } from 'permissionless';
 import { Address, Chain, encodeAbiParameters, encodeFunctionData, Hex, keccak256, PublicClient, Transport } from 'viem';
@@ -79,7 +79,7 @@ export function getInitCode({ owners, index }: { owners: Hex[]; index: bigint })
 
 export function createAccountCalldata({ owners, nonce }: { owners: Hex[]; nonce: bigint }) {
   return encodeFunctionData({
-    abi: SmartWalletFactoryAbi,
+    abi: SmartWalletFactoryABI,
     functionName: 'createAccount',
     args: [owners, nonce],
   });
@@ -89,7 +89,7 @@ export function buildUserOperationCalldata({ calls }: { calls: Call[] }): Hex {
   // sort ascending order, 0 first
   const _calls = calls.sort((a, b) => a.index - b.index);
   return encodeFunctionData({
-    abi: SmartWalletAbi,
+    abi: SmartWalletABI,
     functionName: 'executeBatch',
     args: [_calls],
   });
