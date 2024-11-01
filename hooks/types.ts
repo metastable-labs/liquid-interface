@@ -141,6 +141,26 @@ export interface StakeParams {
   amount: bigint;
 }
 
+export interface AddLiquidityQuoteParams {
+  tokenA: Address;
+  tokenB: Address;
+  stable: boolean;
+  amountA: bigint;
+  amountB: bigint;
+  balanceTokenRatio?: boolean;
+  decimalsA: number;
+  decimalsB: number;
+}
+
+export interface AddLiquidityQuoteResult {
+  // Raw Values
+  amountAOut: bigint;
+  amountBOut: bigint;
+  // Formatted Values
+  formattedAmountAOut: string;
+  formattedAmountBOut: string;
+}
+
 // types/aerodrome.ts
 export namespace IRouter {
   export interface RouteStruct {
