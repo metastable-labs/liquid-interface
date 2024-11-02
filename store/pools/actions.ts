@@ -13,7 +13,7 @@ export function usePoolActions() {
       dispatch(setLoadingPools(true));
 
       const hotPools = await api.getPools(PoolType.hot);
-      console.log(hotPools.pagination);
+
       dispatch(setHotPools(hotPools));
 
       const trendingPools = await api.getPools(PoolType.trending);

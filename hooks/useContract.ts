@@ -2,8 +2,11 @@ import { Address, formatUnits, PublicClient } from 'viem';
 import { AerodromePoolABI, LPSugarABI, OffchainOracleABI } from '@/constants/abis';
 import { USDC_ADDRESS, WETH_ADDRESS } from '@/constants/addresses';
 
+const { LpSugar } = LPSugarABI;
+const { OffchainOracle } = OffchainOracleABI;
+
 export function useLpSugarContract(address: Address, publicClient: PublicClient) {
-  if (!LPSugarABI || !address || !publicClient) {
+  if (!LpSugar || !address || !publicClient) {
     throw new Error('Required parameters not provided to useLpSugarContract');
   }
 
@@ -16,7 +19,7 @@ export function useLpSugarContract(address: Address, publicClient: PublicClient)
 
       return await publicClient.readContract({
         address,
-        abi: LPSugarABI,
+        abi: LpSugar.abi,
         functionName: 'all',
         args: [BigInt(safeBatchSize), BigInt(offset)],
       });
@@ -25,16 +28,16 @@ export function useLpSugarContract(address: Address, publicClient: PublicClient)
     async getPositions(limit: number, offset: number, account: Address) {
       return publicClient.readContract({
         address,
-        abi: LPSugarABI,
+        abi: LpSugar.abi,
         functionName: 'positions',
         args: [BigInt(limit), BigInt(offset), account],
       });
     },
 
-    async getTokens(limit: number, offset: number, account: Address, connectors: readonly Address[]) {
+    async getTokens(limit: number, offset: number, account: Address, connectors: readonly Address[]): Promise<any> {
       return publicClient.readContract({
         address,
-        abi: LPSugarABI,
+        abi: LpSugar.abi,
         functionName: 'tokens',
         args: [BigInt(limit), BigInt(offset), account, connectors],
       });
@@ -72,7 +75,7 @@ export function useOffchainOracleContract(address: Address, publicClient: Public
       // First get ETH/USDC rate (returns in 6 decimals since USDC is 6 decimals)
       const ethUsdcContract = {
         address,
-        abi: OffchainOracleABI,
+        abi: OffchainOracle.abi,
         functionName: 'getRate',
         args: [WETH_ADDRESS, USDC_ADDRESS, useWrappers] as const,
       };
@@ -80,7 +83,7 @@ export function useOffchainOracleContract(address: Address, publicClient: Public
       // Then get token/ETH rates for all tokens (returns in 18 decimals)
       const tokenEthContracts = nonUsdcAddresses.map((tokenAddress) => ({
         address,
-        abi: OffchainOracleABI,
+        abi: OffchainOracle.abi,
         functionName: 'getRateToEth',
         args: [tokenAddress, useWrappers] as const,
       }));

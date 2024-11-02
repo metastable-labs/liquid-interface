@@ -35,7 +35,6 @@ const TopGainers = () => {
           data={pools}
           renderItem={({ item }) => <LQDPoolPairPaper {...item} />}
           keyExtractor={(_, index) => index.toString()}
-          showsHorizontalScrollIndicator={false}
           contentContainerStyle={{ gap: 24 }}
           onEndReached={() => getPaginatedTopGainers()}
           onEndReachedThreshold={0.1}

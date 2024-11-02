@@ -5,33 +5,32 @@ import { BasePool, CLPool, Pool, Position, V2Pool } from './types';
 import { LP_SUGAR_ADDRESS } from '@/constants/addresses';
 import { useToken } from './useToken';
 import { formatPoolFee } from '@/utils/helpers';
+import useSystemFunctions from './useSystemFunctions';
 
 export function usePool(publicClient: PublicClient) {
+  const { smartAccountState } = useSystemFunctions();
   const [pools, setPools] = useState<BasePool[]>([]);
   const [positions, setPositions] = useState<Position[]>([]);
 
   const lpSugar = useLpSugarContract(LP_SUGAR_ADDRESS, publicClient);
-  const { fetchTokens, getTokenByAddress, getTokensByAddresses, getTokenPrice } = useToken(
-    publicClient,
-    '0xF977814e90dA44bFA03b6295A0616a897441aceC'
-  );
+  const { fetchTokens, getTokenByAddress, getTokensByAddresses, getTokenPrice } = useToken(publicClient);
 
   const fetchPools = async (BATCH_SIZE: number, offset: number): Promise<BasePool[] | undefined> => {
     try {
       let v2Pools: BasePool[] = [];
 
-      const batch = await lpSugar.getAll(BATCH_SIZE, offset);
+      const batch: any = await lpSugar.getAll(BATCH_SIZE, offset);
 
       // TODO: 1. Get TVL for each pool.
       /**TVL is caluclated by (token0.reserve * token0price) + (token1.reserve * token1price) */
       if (batch.length > 0) {
         // Get all unique token addresses from the batch
-        const tokenAddresses = [...new Set(batch.flatMap((pool) => [pool.token0, pool.token1]))];
+        const tokenAddresses = [...new Set(batch.flatMap((pool: any) => [pool.token0, pool.token1]))];
 
         // Fetch token prices for all tokens in batch
         await fetchTokens(tokenAddresses.length, 0);
 
-        const formattedPool = batch.map((pool) => {
+        const formattedPool = batch.map((pool: any) => {
           // Calculate TVL using token reserves and prices
           const token0Data = getTokenByAddress(pool.token0);
           const token1Data = getTokenByAddress(pool.token1);
@@ -130,14 +129,20 @@ export function usePool(publicClient: PublicClient) {
     }
   };
 
-  const fetchPositions = async (BATCH_SIZE: number, offset: number, account: Address) => {
+  const fetchPositions = async (BATCH_SIZE: number, offset: number) => {
     try {
+      const account = smartAccountState?.address || '0xF977814e90dA44bFA03b6295A0616a897441aceC';
+
       let allV2Positions: Position[] = [];
 
-      const batch = await lpSugar.getPositions(BATCH_SIZE, offset, account);
+      if (!account) {
+        return allV2Positions;
+      }
+
+      const batch: any = await lpSugar.getPositions(BATCH_SIZE, offset, account);
 
       const processedPositions = await Promise.all(
-        batch.map(async (pos) => {
+        batch.map(async (pos: any) => {
           const pool = pools.find((p) => p.address.toLowerCase() === pos.lp.toLowerCase());
           return {
             id: pos.id.toString(),
@@ -171,6 +176,8 @@ export function usePool(publicClient: PublicClient) {
       allV2Positions = [...allV2Positions, ...v2Positions] as Position[];
 
       setPositions(allV2Positions);
+
+      return allV2Positions;
     } catch (err) {
       console.error('Error fetching positions:', err);
     }

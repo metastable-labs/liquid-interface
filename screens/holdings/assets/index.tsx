@@ -1,15 +1,16 @@
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, FlatList } from 'react-native';
 
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { LQDButton } from '@/components';
 import { ILQDButton } from '@/components/button/types';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import AssetPaper from './paper';
-
-const holdings = 1_234_567.89;
+import { useAccountActions } from '@/store/account/actions';
 
 const Assets = () => {
-  const { router } = useSystemFunctions();
+  const { router, accountState } = useSystemFunctions();
+  const { getPositions } = useAccountActions();
+  const { tokens, tokenBalance, refreshing } = accountState;
 
   const actions: Array<ILQDButton> = [
     {
@@ -30,39 +31,19 @@ const Assets = () => {
     },
   ];
 
-  const assets: Array<IAssetPaper> = [
-    {
-      iconUrl: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
-      name: 'USDC',
-      value: 4_506.78,
-      usdValue: 4_506.78,
-    },
-    {
-      iconUrl: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
-      name: 'ETH',
-      value: 300,
-      usdValue: 1_234_567.89,
-    },
-    {
-      iconUrl: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
-      name: 'USDC',
-      value: 4_506.78,
-      usdValue: 4_506.78,
-    },
-    {
-      iconUrl: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
-      name: 'ETH',
-      value: 300,
-      usdValue: 1_234_567.89,
-    },
-  ];
+  const assets: IAssetPaper[] = tokens.map((token) => ({
+    iconUrl: token.logoUrl,
+    name: token.symbol,
+    value: Number(token.balance),
+    usdValue: Number(token.balance) * Number(token.usdPrice),
+  }));
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer} showsVerticalScrollIndicator={false}>
+    <View style={styles.container}>
       <View style={styles.balanceAndActionsContainer}>
         <View style={styles.balanceContainer}>
           <Text style={styles.balanceText}>Total Holdings</Text>
-          <Text style={styles.balanceValue}>${holdings.toLocaleString()}</Text>
+          <Text style={styles.balanceValue}>${tokenBalance.toLocaleString()}</Text>
         </View>
 
         <View style={styles.actionsContainer}>
@@ -72,16 +53,19 @@ const Assets = () => {
         </View>
       </View>
 
-      <View style={styles.assetContainer}>
-        <Text style={styles.assetLabel}>Assets</Text>
+      <Text style={styles.assetLabel}>Assets</Text>
 
-        <View style={styles.assetMap}>
-          {assets.map((asset, index) => (
-            <AssetPaper key={index} {...asset} />
-          ))}
-        </View>
-      </View>
-    </ScrollView>
+      <FlatList
+        data={assets}
+        renderItem={({ item }) => <AssetPaper {...item} />}
+        keyExtractor={(_, index) => index.toString()}
+        contentContainerStyle={{ gap: 24 }}
+        refreshing={refreshing}
+        onRefresh={() => getPositions(true)}
+        bounces={true}
+        showsVerticalScrollIndicator={false}
+      />
+    </View>
   );
 };
 
@@ -91,13 +75,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 28,
+    paddingBottom: 80,
+    gap: 47,
     paddingHorizontal: 16,
     backgroundColor: '#fff',
-  },
-
-  contentContainer: {
-    paddingBottom: 175,
-    gap: 47,
   },
 
   balanceAndActionsContainer: {
@@ -134,21 +115,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 
-  assetContainer: {
-    alignSelf: 'stretch',
-    gap: 20,
-  },
-
   assetLabel: {
     color: '#0F172A',
     fontSize: adjustFontSizeForIOS(20, 3),
     lineHeight: 23.2,
     fontWeight: '500',
     fontFamily: 'AeonikMedium',
-  },
-
-  assetMap: {
-    alignItems: 'stretch',
-    gap: 24,
+    marginBottom: -20,
   },
 });

@@ -35,7 +35,6 @@ const Hot = () => {
           data={pools}
           renderItem={({ item }) => <LQDPoolPairPaper {...item} />}
           keyExtractor={(_, index) => index.toString()}
-          showsHorizontalScrollIndicator={false}
           contentContainerStyle={{ gap: 24 }}
           onEndReached={() => getPaginatedHotPools()}
           onEndReachedThreshold={0.1}

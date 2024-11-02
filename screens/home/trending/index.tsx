@@ -35,7 +35,6 @@ const Trending = () => {
           data={pools}
           renderItem={({ item }) => <LQDPoolPairPaper {...item} />}
           keyExtractor={(_, index) => index.toString()}
-          showsHorizontalScrollIndicator={false}
           contentContainerStyle={{ gap: 24 }}
           onEndReached={() => getPaginatedTrendingPools()}
           onEndReachedThreshold={0.1}

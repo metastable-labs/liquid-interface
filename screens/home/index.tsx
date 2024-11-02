@@ -5,15 +5,16 @@ import { adjustFontSizeForIOS, formatAmount, formatAmountWithWholeAndDecimal } f
 import { LQDButton, LQDPoolPairCard, LQDPoolPairPaper } from '@/components';
 import { CaretRightIcon, DirectUpIcon, DollarSquareIcon, TrendUpIcon } from '@/assets/icons';
 import Section from './section';
-
-const balance = 36_708.89;
+import { useEffect } from 'react';
+import { useAccountActions } from '@/store/account/actions';
 
 const Home = () => {
-  const { router, poolsState } = useSystemFunctions();
-
-  const { whole, decimal } = formatAmountWithWholeAndDecimal(balance);
+  const { router, poolsState, smartAccountState, accountState } = useSystemFunctions();
+  const { getTokens, getPositions } = useAccountActions();
 
   const { trendingPools, hotPools, topGainers } = poolsState;
+
+  const { whole, decimal } = formatAmountWithWholeAndDecimal(accountState.tokenBalance.toFixed(2));
 
   const top10TrendingPools: ILQDPoolPairPaper[] = trendingPools.data.slice(0, 10).map((pool) => {
     const symbol = pool.symbol.split('-')[1].replace('/', ' / ');
@@ -104,6 +105,14 @@ const Home = () => {
       ),
     },
   ];
+
+  useEffect(
+    function fetchBalances() {
+      getTokens();
+      getPositions();
+    },
+    [smartAccountState.address]
+  );
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer} showsVerticalScrollIndicator={false}>
