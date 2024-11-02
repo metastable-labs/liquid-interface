@@ -1,4 +1,4 @@
-import { Address } from 'viem';
+import { Address, Hex } from 'viem';
 
 // Raw types (as returned by the contract)
 export type RawPool = {
@@ -103,3 +103,116 @@ export type EnhancedFormattedPool = Omit<FormattedPool, EnhancedFormattedPoolTyp
 type EnhancedFormattedPoolType = 'token0' | 'token1' | 'TVL' | 'volume0' | 'volume1' | 'cumulativeVolumeUSD';
 
 export type VolumeReturn = { volume0: string; volume1: string; cumulativeVolumeUSD: string };
+
+export interface AddLiquidityParams {
+  tokenA: Address;
+  tokenB: Address;
+  stable: boolean;
+  amountAIn: bigint;
+  amountBIn: bigint;
+  amountAMin: bigint;
+  amountBMin: bigint;
+  balanceTokenRatio: boolean;
+  to: Address;
+  deadline: bigint;
+}
+
+export interface RemoveLiquidityParams {
+  tokenA: Address;
+  tokenB: Address;
+  stable: boolean;
+  liquidity: bigint;
+  amountAMin: bigint;
+  amountBMin: bigint;
+  to: Address;
+  deadline: bigint;
+}
+
+export interface SwapExactTokensParams {
+  amountIn: bigint;
+  minReturnAmount: bigint;
+  routes: IRouter.RouteStruct[];
+  to: Address;
+  deadline: bigint;
+}
+
+export interface StakeParams {
+  gaugeAddress: Address;
+  amount: bigint;
+}
+
+export interface AddLiquidityQuoteParams {
+  tokenA: Address;
+  tokenB: Address;
+  stable: boolean;
+  amountA: bigint;
+  amountB: bigint;
+  balanceTokenRatio?: boolean;
+  decimalsA: number;
+  decimalsB: number;
+}
+
+export interface AddLiquidityQuoteResult {
+  // Raw Values
+  amountAOut: bigint;
+  amountBOut: bigint;
+  // Formatted Values
+  formattedAmountAOut: string;
+  formattedAmountBOut: string;
+}
+
+// types/aerodrome.ts
+export namespace IRouter {
+  export interface RouteStruct {
+    from: Address;
+    to: Address;
+    stable: boolean;
+    factory: Address;
+  }
+
+  // Define the full router interface
+  export interface IRouter {
+    // Swap functions
+    swapExactTokensForTokens: (
+      amountIn: bigint,
+      amountOutMin: bigint,
+      routes: RouteStruct[],
+      to: Address,
+      deadline: bigint
+    ) => Promise<bigint[]>;
+
+    getAmountsOut: (amountIn: bigint, routes: RouteStruct[]) => Promise<bigint[]>;
+
+    // Liquidity functions
+    addLiquidity: (
+      tokenA: Address,
+      tokenB: Address,
+      stable: boolean,
+      amountADesired: bigint,
+      amountBDesired: bigint,
+      amountAMin: bigint,
+      amountBMin: bigint,
+      to: Address,
+      deadline: bigint
+    ) => Promise<[bigint, bigint, bigint]>;
+
+    removeLiquidity: (
+      tokenA: Address,
+      tokenB: Address,
+      stable: boolean,
+      liquidity: bigint,
+      amountAMin: bigint,
+      amountBMin: bigint,
+      to: Address,
+      deadline: bigint
+    ) => Promise<[bigint, bigint]>;
+
+    // Pool related functions
+    poolFor: (tokenA: Address, tokenB: Address, stable: boolean, factory: Address) => Promise<Address>;
+  }
+}
+
+export interface TransactionConfig {
+  hash: Hex;
+  waitForReceipt?: boolean;
+}
