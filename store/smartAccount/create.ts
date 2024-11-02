@@ -9,6 +9,7 @@ import { CreatePassKeyCredentialOptions, SmartAccount, Address, SmartAccountPers
 import { getPublicKeyHex } from '@/utils/base64';
 
 import { getFn } from './getFn';
+import { FailedToCreatePasskeyCredentialError, FailedToUpdateUserAddressError, PasskeyNotSupportedError } from './errors';
 
 export async function createSmartAccount(registrationOptions: CreatePassKeyCredentialOptions): Promise<{
   smartAccount: SmartAccount;
@@ -18,13 +19,12 @@ export async function createSmartAccount(registrationOptions: CreatePassKeyCrede
   try {
     const isPasskeyAvailable = Passkeys.isSupported();
     if (!isPasskeyAvailable) {
-      throw new Error('Passkeys are not available on this device');
+      throw new PasskeyNotSupportedError();
     }
 
     const credential = await Passkeys.create(registrationOptions);
-
     if (!credential) {
-      throw new Error('Failed to create passkey credential');
+      throw new FailedToCreatePasskeyCredentialError();
     }
 
     const credentialId = credential.id;
@@ -56,10 +56,8 @@ export async function createSmartAccount(registrationOptions: CreatePassKeyCrede
     console.log('address', address);
 
     const updateUserAddressResponse = await api.updateUserAddress(registrationOptions.user.name, address);
-    console.log('updateUserAddressResponse', updateUserAddressResponse);
-
     if (!updateUserAddressResponse.success) {
-      throw new Error('Failed to update user address');
+      throw new FailedToUpdateUserAddressError();
     }
 
     return {

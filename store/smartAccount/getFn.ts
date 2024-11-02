@@ -3,13 +3,15 @@ import type { SignParameters } from 'webauthn-p256';
 
 import { base64ToBytes, bufferToBase64URLString } from '@/utils/base64';
 
+import { CredentialRequestOptionsNotAvailableError, FailedToGetPasskeyCredentialError } from './errors';
+
 type GetFnType = Required<SignParameters>['getFn'];
 
 export const getFn: GetFnType = async (options) => {
   try {
-    if (!options) throw new Error('options are required');
-    if (!options.publicKey) throw new Error('options.publicKey is required');
-    if (!options.publicKey.rpId) throw new Error('options.publicKey.rpId is required');
+    if (!options) throw new CredentialRequestOptionsNotAvailableError('options');
+    if (!options.publicKey) throw new CredentialRequestOptionsNotAvailableError('options.publicKey');
+    if (!options.publicKey.rpId) throw new CredentialRequestOptionsNotAvailableError('options.publicKey.rpId');
 
     const { rpId, challenge, allowCredentials } = options.publicKey;
 
@@ -25,9 +27,8 @@ export const getFn: GetFnType = async (options) => {
     };
 
     const result = await Passkeys.get(requestOptions);
-
     if (!result) {
-      throw new Error('Failed to get credential');
+      throw new FailedToGetPasskeyCredentialError();
     }
 
     const credential = {

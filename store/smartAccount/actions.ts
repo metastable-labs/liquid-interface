@@ -10,6 +10,7 @@ import { getPublicKeyHex } from '@/utils/base64';
 import { createSmartAccount } from './create';
 import { getPersistedSmartAccountInfo, persistSmartAccountInfo } from './persist';
 import { getFn } from './getFn';
+import { RegistrationOptionsNotAvailableError } from './errors';
 
 export function useSmartAccountActions() {
   const dispatch = useAppDispatch();
@@ -22,7 +23,7 @@ export function useSmartAccountActions() {
 
   const setSmartAccountAction = async () => {
     if (!smartAccountState.registrationOptions) {
-      throw new Error('Registration options are not available');
+      throw new RegistrationOptionsNotAvailableError();
     }
 
     const { address, smartAccountInfo, smartAccount } = await createSmartAccount(smartAccountState.registrationOptions);
