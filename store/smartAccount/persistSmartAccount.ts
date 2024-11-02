@@ -2,7 +2,7 @@ import * as SecureStore from 'expo-secure-store';
 import { SmartAccountPersistedInfo } from '@/init/types';
 import { smartAccountInfoKey } from '@/constants/env';
 
-import { SmartAccountInfoNotFoundError } from './errors';
+import { SmartAccountInfoNotFoundError, SmartAccountInfoNotPersistedError } from './errors';
 
 export async function persistSmartAccountInfo(smartAccountInfo: SmartAccountPersistedInfo) {
   try {
@@ -22,7 +22,7 @@ export async function getPersistedSmartAccountInfo(): Promise<SmartAccountPersis
     const smartAccountInfoJSON = await SecureStore.getItemAsync(smartAccountInfoKey);
 
     if (!smartAccountInfoJSON) {
-      throw new SmartAccountInfoNotFoundError();
+      throw new SmartAccountInfoNotPersistedError();
     }
 
     return JSON.parse(smartAccountInfoJSON);

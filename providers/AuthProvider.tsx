@@ -4,7 +4,7 @@ import * as Passkeys from 'react-native-passkeys';
 import { useOnMount } from '@/hooks/useOnMount';
 import { SmartAccount } from '@/init/types';
 import { getPersistedSmartAccountInfo } from '@/store/smartAccount/persistSmartAccount';
-import { SmartAccountInfoNotFoundError } from '@/store/smartAccount/errors';
+import { SmartAccountInfoNotPersistedError } from '@/store/smartAccount/errors';
 import { rpId } from '@/constants/env';
 import { toCoinbaseSmartAccount, toWebAuthnAccount } from 'viem/account-abstraction';
 import { publicClient } from '@/init/viem';
@@ -51,7 +51,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
 
       setSession(smartAccount);
     } catch (error) {
-      if (error instanceof SmartAccountInfoNotFoundError) {
+      if (error instanceof SmartAccountInfoNotPersistedError) {
         //TODO: get challenge from backend
         const passkey = await Passkeys.get({ challenge: 'mock-challenge', rpId });
 

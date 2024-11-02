@@ -7,9 +7,8 @@ import { publicClient } from '@/init/viem';
 import { rpId } from '@/constants/env';
 import { getPublicKeyHex } from '@/utils/base64';
 
-import { createSmartAccount } from './createSmartAccount';
+import { createSmartAccount } from './create';
 import { getPersistedSmartAccountInfo, persistSmartAccountInfo } from './persistSmartAccount';
-
 import { getFn } from './getFn';
 
 export function useSmartAccountActions() {

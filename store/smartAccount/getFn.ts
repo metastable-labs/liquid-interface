@@ -26,8 +26,6 @@ export const getFn: GetFnType = async (options) => {
 
     const result = await Passkeys.get(requestOptions);
 
-    console.log('Passkeys.get > result', result);
-
     if (!result) {
       throw new Error('Failed to get credential');
     }
