@@ -1,6 +1,5 @@
 import 'react-native-reanimated';
 
-import { useEffect } from 'react';
 import { Stack } from 'expo-router';
 
 // setup viem and api on app start
@@ -9,14 +8,23 @@ import '@/init/api';
 
 import { AllProviders } from '@/providers';
 import { LQDStackHeader } from '@/components';
+import { useOnMount } from '@/hooks/useOnMount';
 import { usePoolActions } from '@/store/pools/actions';
+
+export default function RootLayout() {
+  return (
+    <AllProviders>
+      <RootStack />
+    </AllProviders>
+  );
+}
 
 function RootStack() {
   const { getPools } = usePoolActions();
 
-  useEffect(function loadData() {
+  useOnMount(function loadData() {
     getPools();
-  }, []);
+  });
 
   return (
     <Stack screenOptions={{ headerShown: false }} initialRouteName="index">
@@ -55,13 +63,5 @@ function RootStack() {
       {/* Common routes */}
       <Stack.Screen name="+not-found" options={{ headerShown: true }} />
     </Stack>
-  );
-}
-
-export default function RootLayout() {
-  return (
-    <AllProviders>
-      <RootStack />
-    </AllProviders>
   );
 }
