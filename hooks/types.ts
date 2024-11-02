@@ -1,70 +1,106 @@
 import { Address, Hex } from 'viem';
 
-// Raw types (as returned by the contract)
-export type RawPool = {
-  lp: Address;
+export interface Token {
+  address: Address;
   symbol: string;
   decimals: number;
-  liquidity: bigint;
-  type: number;
-  token0: Address;
-  reserve0: bigint;
-  staked0: bigint;
-  token1: Address;
-  reserve1: bigint;
-  staked1: bigint;
-  gauge: Address;
-  gauge_liquidity: bigint;
-  gauge_alive: boolean;
-  fee: Address;
-  bribe: Address;
+  balance: string;
+  isListed: boolean;
+  usdPrice: string;
+  logoUrl: string;
+}
+
+export interface BasePool {
+  address: Address;
+  symbol: string;
+  decimals: number;
+  totalLiquidity: string;
+  token0: {
+    address: Address;
+    reserve: string;
+    staked: string;
+    logoUrl: string;
+  };
+  token1: {
+    address: Address;
+    reserve: string;
+    staked: string;
+    logoUrl: string;
+  };
+  gauge: {
+    address: Address;
+    liquidity: string;
+    isAlive: boolean;
+  };
+  fees: {
+    address: Address;
+    token0: string;
+    token1: string;
+    poolFee: number;
+    unstakedFee: number;
+  };
+  volume: {
+    token0: string;
+    token1: string;
+    usd: string;
+  };
   factory: Address;
-  emissions: bigint;
-  emissions_token: Address;
-  pool_fee: bigint;
-  token0_fees: bigint;
-  token1_fees: bigint;
-};
+  emissions: {
+    rate: string;
+    tokenAddress: Address;
+  };
+  type: string;
+  isStable: boolean;
+  tvl: string;
+}
 
-export type RawPosition = {
-  id: bigint;
-  lp: Address;
-  liquidity: bigint;
-  staked: bigint;
-  amount0: bigint;
-  amount1: bigint;
-  staked0: bigint;
-  staked1: bigint;
-  unstaked_earned0: bigint;
-  unstaked_earned1: bigint;
-  emissions_earned: bigint;
-};
+export interface V2Pool extends BasePool {
+  type: 'v2';
+  isStable: boolean; // true for stable pools (-1), false for volatile pools (0)
+}
 
-// Formatted types (after processing)
-export type FormattedPool = {
-  lp: string;
-  symbol: string;
-  decimals: number;
-  liquidity: string;
-  type: 'CL' | 'V2';
-  stable: boolean;
+export interface CLPool extends BasePool {
+  type: 'cl';
+  tickSpacing: number;
+  currentTick: number;
+  sqrtRatio: string;
+}
+
+export type Pool = V2Pool | CLPool;
+
+// Position token info
+interface PositionToken {
+  address: Address;
+  balance: string;
+  stakedBalance: string;
+}
+
+// Fee info for positions
+interface PositionFees {
   token0: string;
-  reserve0: string;
-  staked0: string;
   token1: string;
-  reserve1: string;
-  staked1: string;
-  gauge: string;
-  gauge_liquidity: string;
-  gauge_alive: boolean;
-  fee: string;
-  bribe: string;
-  factory: string;
-  emissions: string;
-  emissions_token: string;
-  pool_fee: string;
-  token0_fees: string;
-  token1_fees: string;
+}
+
+// Reward info
+interface Reward {
+  address: Address;
+  earned: string;
+}
+// Position interface
+export interface Position {
+  id: string; // 0 for v2 pools
+  poolAddress: Address;
+  balance: string; // LP token balance
+  stakedBalance: string; // Staked LP token balance
+  token0: PositionToken; // Token0 info
+  token1: PositionToken; // Token1 info
+  fees: PositionFees; // Unclaimed fees
+  reward: Reward; // Reward token info and unclaimed amount
+}
+
+export type MulticallResult = {
+  result: bigint;
+  status: 'success' | 'failure';
 };
 
 export type FormattedPosition = {

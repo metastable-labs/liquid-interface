@@ -1,4 +1,5 @@
-import { CreatePassKeyCredentialOptions, Address, PasskeyRegistrationResult } from './types';
+import { PoolResponse } from '@/store/pools/types';
+import { CreatePassKeyCredentialOptions, Address, PasskeyRegistrationResult, PoolType } from './types';
 
 class LiquidAPI {
   private apiBaseUrl: string;
@@ -57,6 +58,15 @@ class LiquidAPI {
         'X-API-Key': this.apiKey,
       },
       body: JSON.stringify({ userName: username, userAddress }),
+    });
+  }
+
+  async getPools(type: PoolType, query?: string): Promise<PoolResponse> {
+    return this.fetchWithErrorHandling(`${this.apiBaseUrl}/pools/${type}${query || ''}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
   }
 }

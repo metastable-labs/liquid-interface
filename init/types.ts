@@ -10,3 +10,11 @@ export type PasskeyRegistrationResult = {
   attestationObject: string;
   clientDataJSON: string;
 };
+
+export enum PoolType {
+  v2 = 'v2',
+  hot = 'hot',
+  trending = 'trending',
+  gainers = 'gainers',
+  search = 'search',
+}

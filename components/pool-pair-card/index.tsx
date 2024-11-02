@@ -10,19 +10,18 @@ const textColors = ['#A4262C', '#156146'];
 
 const LQDPoolPairCard = ({
   change,
-  id,
+  address,
   increased,
   primaryIconURL,
-  primaryTitle,
+  symbol,
   secondaryIconURL,
-  secondaryTitle,
   navigationVariant = 'primary',
 }: ILQDPoolPairCard) => {
   const { router } = useSystemFunctions();
 
   const paths = {
-    primary: `/(tabs)/home/${id}` as Href<string>,
-    secondary: `/(tabs)/holdings/${id}` as Href<string>,
+    primary: `/(tabs)/home/${address}` as Href<string>,
+    secondary: `/(tabs)/holdings/${address}` as Href<string>,
   };
 
   const handlePress = () => router.push(paths[navigationVariant]);
@@ -48,9 +47,7 @@ const LQDPoolPairCard = ({
         </View>
       </View>
 
-      <Text style={styles.title}>
-        {primaryTitle} / {secondaryTitle}
-      </Text>
+      <Text style={styles.title}>{symbol}</Text>
     </TouchableOpacity>
   );
 };
@@ -92,7 +89,7 @@ const styles = StyleSheet.create({
 
   title: {
     color: '#1E293B',
-    fontSize: adjustFontSizeForIOS(15, 2),
+    fontSize: adjustFontSizeForIOS(13, 2),
     lineHeight: 18.48,
     fontWeight: '500',
     fontFamily: 'AeonikMedium',

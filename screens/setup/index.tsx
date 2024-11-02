@@ -11,14 +11,16 @@ import { ChartIcon, ShieldTickIcon, SwatchIcon } from '@/assets/icons';
 import Info from './info';
 
 const Setup = () => {
-  const { router } = useSystemFunctions();
-  const [setupStep, setSetupStep] = useState(1);
-  const [completedSteps, setCompletedSteps] = useState([false, false, false]);
+  const { router, userState } = useSystemFunctions();
   const buttonOpacity = useSharedValue(0);
-
   const animatedButtonStyle = useAnimatedStyle(() => ({
     opacity: buttonOpacity.value,
   }));
+
+  const [setupStep, setSetupStep] = useState(1);
+  const [completedSteps, setCompletedSteps] = useState([false, false, false]);
+
+  const { user } = userState;
 
   const progressToNextStep = useCallback(() => {
     setCompletedSteps((prev) => prev.map((step, index) => (index + 1 === setupStep ? true : step)));
@@ -61,6 +63,7 @@ const Setup = () => {
       if (setupStep === 1) {
         const firstStepDelayInMs = 1000 * 1; // 1s
         const timeout = setTimeout(() => {
+          progressToNextStep();
           setSmartAccount().then(progressToNextStep);
         }, firstStepDelayInMs);
 

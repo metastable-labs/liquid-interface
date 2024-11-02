@@ -1,12 +1,12 @@
 interface ILQDPoolPairPaper {
-  id: string;
+  address: `0x${string}`;
   primaryIconURL: string;
   secondaryIconURL: string;
-  primaryTitle: string;
-  secondaryTitle: string;
+  symbol: string;
   apr: number;
   fees: number;
   capitalMetric?: 'vol' | 'tvl';
-  capital: number;
+  volume: number;
   navigationVariant?: 'primary' | 'secondary';
+  isStable: boolean;
 }

@@ -1,9 +1,8 @@
 interface ILQDPoolPairCard {
-  id: string;
+  address: `0x${string}`;
   primaryIconURL: string;
   secondaryIconURL: string;
-  primaryTitle: string;
-  secondaryTitle: string;
+  symbol: string;
   increased: boolean;
   change: number;
   navigationVariant?: 'primary' | 'secondary';
