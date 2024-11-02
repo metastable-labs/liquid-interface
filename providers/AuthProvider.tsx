@@ -3,7 +3,7 @@ import * as Passkeys from 'react-native-passkeys';
 
 import { useOnMount } from '@/hooks/useOnMount';
 import { SmartAccount } from '@/init/types';
-import { getPersistedSmartAccountInfo } from '@/store/smartAccount/persistSmartAccount';
+import { getPersistedSmartAccountInfo } from '@/store/smartAccount/persist';
 import { SmartAccountInfoNotPersistedError } from '@/store/smartAccount/errors';
 import { rpId } from '@/constants/env';
 import { toCoinbaseSmartAccount, toWebAuthnAccount } from 'viem/account-abstraction';

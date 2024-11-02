@@ -8,7 +8,7 @@ import { rpId } from '@/constants/env';
 import { getPublicKeyHex } from '@/utils/base64';
 
 import { createSmartAccount } from './create';
-import { getPersistedSmartAccountInfo, persistSmartAccountInfo } from './persistSmartAccount';
+import { getPersistedSmartAccountInfo, persistSmartAccountInfo } from './persist';
 import { getFn } from './getFn';
 
 export function useSmartAccountActions() {

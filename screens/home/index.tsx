@@ -5,7 +5,7 @@ import { adjustFontSizeForIOS, formatAmount, formatAmountWithWholeAndDecimal } f
 import { LQDButton, LQDPoolPairCard, LQDPoolPairPaper } from '@/components';
 import { CaretRightIcon, DirectUpIcon, DollarSquareIcon, TrendUpIcon } from '@/assets/icons';
 import Section from './section';
-import { clearPersistedSmartAccountInfo } from '@/store/smartAccount/persistSmartAccount';
+import { clearPersistedSmartAccountInfo } from '@/store/smartAccount/persist';
 import { useAuth } from '@/providers';
 
 const balance = 36_708.89;
