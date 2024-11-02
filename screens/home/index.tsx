@@ -4,15 +4,7 @@ import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { adjustFontSizeForIOS, formatAmount, formatAmountWithWholeAndDecimal } from '@/utils/helpers';
 import { LQDButton, LQDPoolPairCard, LQDPoolPairPaper } from '@/components';
 import { CaretRightIcon, DirectUpIcon, DollarSquareIcon, TrendUpIcon } from '@/assets/icons';
-import { topGainers, poolPairs } from './dummy';
 import Section from './section';
-import { publicClient } from '@/init/viem';
-import { formatUnits, PublicClient } from 'viem';
-import { useEffect, useState } from 'react';
-import { CONNECTORS_BASE, LP_SUGAR_ADDRESS, OFFCHAIN_ORACLE_ADDRESS } from '@/constants/addresses';
-import { useLpSugarContract, useOffchainOracleContract } from '@/hooks/useContract';
-import { useToken } from '@/hooks/useToken';
-import { usePool } from '@/hooks/usePool';
 
 const balance = 36_708.89;
 
@@ -21,18 +13,15 @@ const Home = () => {
 
   const { whole, decimal } = formatAmountWithWholeAndDecimal(balance);
 
-  const lpSugar = useLpSugarContract(LP_SUGAR_ADDRESS, publicClient as PublicClient);
-  const oracle = useOffchainOracleContract(OFFCHAIN_ORACLE_ADDRESS, publicClient as PublicClient);
-
-  // const { tokens, fetchTokens, getTokenPrice } = useToken(publicClient as PublicClient, '0xF977814e90dA44bFA03b6295A0616a897441aceC');
-
   const { trendingPools, hotPools, topGainers } = poolsState;
 
-  const top10TrendingPools: ILQDPoolPairPaper[] = trendingPools.slice(0, 10).map((pool) => {
+  const top10TrendingPools: ILQDPoolPairPaper[] = trendingPools.data.slice(0, 10).map((pool) => {
+    const symbol = pool.symbol.split('-')[1].replace('/', ' / ');
+
     return {
       primaryIconURL: pool.token0.logoUrl,
       secondaryIconURL: pool.token1.logoUrl,
-      symbol: pool.symbol,
+      symbol,
       apr: Number(pool.emissions.rate),
       fees: pool.fees.poolFee,
       volume: formatAmount(pool.volume.usd, 0),
@@ -40,13 +29,14 @@ const Home = () => {
       isStable: pool.isStable,
     };
   });
-  // console.log(top10TrendingPools[0].address, top10TrendingPools[0].volume);
 
-  const top10HotPools: ILQDPoolPairPaper[] = hotPools.slice(0, 10).map((pool) => {
+  const top10HotPools: ILQDPoolPairPaper[] = hotPools.data.slice(0, 10).map((pool) => {
+    const symbol = pool.symbol.split('-')[1].replace('/', ' / ');
+
     return {
       primaryIconURL: pool.token0.logoUrl,
       secondaryIconURL: pool.token1.logoUrl,
-      symbol: pool.symbol,
+      symbol,
       apr: formatAmount(pool.emissions.rate, 2),
       fees: pool.fees.poolFee,
       volume: formatAmount(pool.volume.usd, 0),
@@ -55,11 +45,13 @@ const Home = () => {
     };
   });
 
-  const top10Gainers: ILQDPoolPairCard[] = topGainers.map((pool) => {
+  const top10Gainers: ILQDPoolPairCard[] = topGainers.data.slice(0, 10).map((pool) => {
+    const symbol = pool.symbol.split('-')[1].replace('/', ' / ');
+
     return {
       primaryIconURL: pool.token0.logoUrl,
       secondaryIconURL: pool.token1.logoUrl,
-      symbol: pool.symbol,
+      symbol,
       increased: pool.gauge.isAlive,
       change: 2.3,
       address: pool.address,

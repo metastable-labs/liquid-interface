@@ -1,33 +1,26 @@
 import useSystemFunctions from '@/hooks/useSystemFunctions';
-import { usePool } from '@/hooks/usePool';
-import { publicClient } from '@/init/viem';
-import { PublicClient } from 'viem';
-import { setHotPools, setLoadingPools, setTopGainers, setTrendingPools, setpools } from '.';
-import { BasePool } from '@/hooks/types';
+import { setHotPools, setLoadingPools, setRefreshing, setTopGainers, setTrendingPools } from '.';
+import api from '@/init/api';
+import { PoolType } from '@/init/types';
 
 export function usePoolActions() {
-  const { dispatch, userState, poolsState } = useSystemFunctions();
-  const { pools, positions, fetchPools, fetchPositions, getPoolByAddress } = usePool(publicClient as PublicClient);
+  const { dispatch, poolsState } = useSystemFunctions();
 
-  const totalPools = 1800;
+  const { hotPools, topGainers, trendingPools } = poolsState;
 
   const getPools = async () => {
     try {
       dispatch(setLoadingPools(true));
-      _setPools([]);
 
-      let allPools: BasePool[] = [];
+      const hotPools = await api.getPools(PoolType.hot);
+      console.log(hotPools.pagination);
+      dispatch(setHotPools(hotPools));
 
-      for (let i = 0; i < totalPools; i += 300) {
-        const pools = await fetchPools(300, i);
-        if (!pools) return;
+      const trendingPools = await api.getPools(PoolType.trending);
+      dispatch(setTrendingPools(trendingPools));
 
-        console.log('fetched pools', pools.length);
-        allPools.push(...pools);
-      }
-
-      console.log('all pools is ', allPools.length);
-      _setPools(allPools);
+      const topGainers = await api.getPools(PoolType.gainers);
+      dispatch(setTopGainers(topGainers));
     } catch (error: any) {
       //
     } finally {
@@ -35,26 +28,103 @@ export function usePoolActions() {
     }
   };
 
-  const _setPools = (pools: BasePool[]) => {
-    dispatch(setpools(pools));
+  const getPaginatedHotPools = async (refresh?: boolean) => {
+    try {
+      if (refresh) {
+        dispatch(setRefreshing(true));
+        const pools = await api.getPools(PoolType.hot);
 
-    const trendingPools = pools.sort((a, b) => {
-      return Number(b.volume.usd) - Number(a.volume.usd);
-    });
-    dispatch(setTrendingPools(trendingPools));
+        return dispatch(setHotPools(pools));
+      }
 
-    const hotPools = pools.sort((a, b) => {
-      return Number(b.tvl) - Number(a.tvl);
-    });
-    dispatch(setHotPools(hotPools));
+      if (hotPools.pagination.page == hotPools.pagination.totalPages) return;
 
-    const topGainers = pools.sort((a, b) => {
-      return Number(b.emissions.rate) - Number(a.emissions.rate);
-    });
-    dispatch(setTopGainers(topGainers));
+      dispatch(setLoadingPools(true));
+
+      const nextPage = hotPools.pagination.page + 1;
+
+      const query = `?page=${nextPage}`;
+
+      const pools = await api.getPools(PoolType.hot, query);
+
+      const newData = { ...hotPools.data, ...pools.data };
+      pools.data = newData;
+
+      dispatch(setHotPools(pools));
+    } catch (error: any) {
+      //
+    } finally {
+      dispatch(setLoadingPools(false));
+      dispatch(setRefreshing(false));
+    }
+  };
+
+  const getPaginatedTrendingPools = async (refresh?: boolean) => {
+    try {
+      if (refresh) {
+        dispatch(setRefreshing(true));
+        const pools = await api.getPools(PoolType.trending);
+
+        return dispatch(setTrendingPools(pools));
+      }
+
+      if (trendingPools.pagination.page == trendingPools.pagination.totalPages) return;
+
+      dispatch(setLoadingPools(true));
+
+      const nextPage = trendingPools.pagination.page + 1;
+
+      const query = `?page=${nextPage}`;
+
+      const pools = await api.getPools(PoolType.trending, query);
+
+      const newData = { ...trendingPools.data, ...pools.data };
+      pools.data = newData;
+
+      dispatch(setTrendingPools(pools));
+    } catch (error: any) {
+      //
+    } finally {
+      dispatch(setLoadingPools(false));
+      dispatch(setRefreshing(false));
+    }
+  };
+
+  const getPaginatedTopGainers = async (refresh?: boolean) => {
+    try {
+      if (refresh) {
+        dispatch(setRefreshing(true));
+        const pools = await api.getPools(PoolType.gainers);
+
+        return dispatch(setTopGainers(pools));
+      }
+
+      if (topGainers.pagination.page == topGainers.pagination.totalPages) return;
+
+      dispatch(setLoadingPools(true));
+
+      const nextPage = topGainers.pagination.page + 1;
+
+      const query = `?page=${nextPage}`;
+
+      const pools = await api.getPools(PoolType.gainers, query);
+
+      const newData = { ...topGainers.data, ...pools.data };
+      pools.data = newData;
+
+      dispatch(setTopGainers(pools));
+    } catch (error: any) {
+      //
+    } finally {
+      dispatch(setLoadingPools(false));
+      dispatch(setRefreshing(false));
+    }
   };
 
   return {
     getPools,
+    getPaginatedHotPools,
+    getPaginatedTrendingPools,
+    getPaginatedTopGainers,
   };
 }
