@@ -1,4 +1,4 @@
-import { Address } from 'viem';
+import { Address, Hex } from 'viem';
 
 export interface Token {
   address: Address;
@@ -102,3 +102,153 @@ export type MulticallResult = {
   result: bigint;
   status: 'success' | 'failure';
 };
+
+export type FormattedPosition = {
+  id: string;
+  lp: string;
+  liquidity: string;
+  staked: string;
+  amount0: string;
+  amount1: string;
+  staked0: string;
+  staked1: string;
+  unstaked_earned0: string;
+  unstaked_earned1: string;
+  emissions_earned: string;
+};
+
+export type Token = {
+  token_address: Address;
+  symbol: string;
+  decimals: number;
+  account_balance: string;
+  listed: boolean;
+  usd_price: string;
+  logo_url: string;
+};
+
+export type EnhancedFormattedPool = Omit<FormattedPool, EnhancedFormattedPoolType> & {
+  token0: Token;
+  token1: Token;
+  TVL: string;
+  volume0: string;
+  volume1: string;
+  cumulativeVolumeUSD: string;
+};
+
+type EnhancedFormattedPoolType = 'token0' | 'token1' | 'TVL' | 'volume0' | 'volume1' | 'cumulativeVolumeUSD';
+
+export type VolumeReturn = { volume0: string; volume1: string; cumulativeVolumeUSD: string };
+
+export interface AddLiquidityParams {
+  tokenA: Address;
+  tokenB: Address;
+  stable: boolean;
+  amountAIn: bigint;
+  amountBIn: bigint;
+  amountAMin: bigint;
+  amountBMin: bigint;
+  balanceTokenRatio: boolean;
+  to: Address;
+  deadline: bigint;
+}
+
+export interface RemoveLiquidityParams {
+  tokenA: Address;
+  tokenB: Address;
+  stable: boolean;
+  liquidity: bigint;
+  amountAMin: bigint;
+  amountBMin: bigint;
+  to: Address;
+  deadline: bigint;
+}
+
+export interface SwapExactTokensParams {
+  amountIn: bigint;
+  minReturnAmount: bigint;
+  routes: IRouter.RouteStruct[];
+  to: Address;
+  deadline: bigint;
+}
+
+export interface StakeParams {
+  gaugeAddress: Address;
+  amount: bigint;
+}
+
+export interface AddLiquidityQuoteParams {
+  tokenA: Address;
+  tokenB: Address;
+  stable: boolean;
+  amountA: bigint;
+  amountB: bigint;
+  balanceTokenRatio?: boolean;
+  decimalsA: number;
+  decimalsB: number;
+}
+
+export interface AddLiquidityQuoteResult {
+  // Raw Values
+  amountAOut: bigint;
+  amountBOut: bigint;
+  // Formatted Values
+  formattedAmountAOut: string;
+  formattedAmountBOut: string;
+}
+
+// types/aerodrome.ts
+export namespace IRouter {
+  export interface RouteStruct {
+    from: Address;
+    to: Address;
+    stable: boolean;
+    factory: Address;
+  }
+
+  // Define the full router interface
+  export interface IRouter {
+    // Swap functions
+    swapExactTokensForTokens: (
+      amountIn: bigint,
+      amountOutMin: bigint,
+      routes: RouteStruct[],
+      to: Address,
+      deadline: bigint
+    ) => Promise<bigint[]>;
+
+    getAmountsOut: (amountIn: bigint, routes: RouteStruct[]) => Promise<bigint[]>;
+
+    // Liquidity functions
+    addLiquidity: (
+      tokenA: Address,
+      tokenB: Address,
+      stable: boolean,
+      amountADesired: bigint,
+      amountBDesired: bigint,
+      amountAMin: bigint,
+      amountBMin: bigint,
+      to: Address,
+      deadline: bigint
+    ) => Promise<[bigint, bigint, bigint]>;
+
+    removeLiquidity: (
+      tokenA: Address,
+      tokenB: Address,
+      stable: boolean,
+      liquidity: bigint,
+      amountAMin: bigint,
+      amountBMin: bigint,
+      to: Address,
+      deadline: bigint
+    ) => Promise<[bigint, bigint]>;
+
+    // Pool related functions
+    poolFor: (tokenA: Address, tokenB: Address, stable: boolean, factory: Address) => Promise<Address>;
+  }
+}
+
+export interface TransactionConfig {
+  hash: Hex;
+  waitForReceipt?: boolean;
+}
