@@ -1,12 +1,9 @@
-import { Address, ContractFunctionExecutionError, formatUnits, parseUnits, PublicClient } from 'viem';
-import { LpSugar } from '@/constants/abis/LPSugar';
-import { AerodromePool } from '@/constants/abis/AerodromePoolABI';
-import { OffchainOracle } from '@/constants/abis/OffchainOracle';
+import { Address, formatUnits, PublicClient } from 'viem';
+import { AerodromePoolABI, LPSugarABI, OffchainOracleABI } from '@/constants/abis';
 import { USDC_ADDRESS, WETH_ADDRESS } from '@/constants/addresses';
-import { createRateLimitedContract } from '@/utils/rateLimit';
 
 export function useLpSugarContract(address: Address, publicClient: PublicClient) {
-  if (!LpSugar.abi || !address || !publicClient) {
+  if (!LPSugarABI || !address || !publicClient) {
     throw new Error('Required parameters not provided to useLpSugarContract');
   }
 
@@ -19,7 +16,7 @@ export function useLpSugarContract(address: Address, publicClient: PublicClient)
 
       return await publicClient.readContract({
         address,
-        abi: LpSugar.abi,
+        abi: LPSugarABI,
         functionName: 'all',
         args: [BigInt(safeBatchSize), BigInt(offset)],
       });
@@ -28,7 +25,7 @@ export function useLpSugarContract(address: Address, publicClient: PublicClient)
     async getPositions(limit: number, offset: number, account: Address) {
       return publicClient.readContract({
         address,
-        abi: LpSugar.abi,
+        abi: LPSugarABI,
         functionName: 'positions',
         args: [BigInt(limit), BigInt(offset), account],
       });
@@ -37,7 +34,7 @@ export function useLpSugarContract(address: Address, publicClient: PublicClient)
     async getTokens(limit: number, offset: number, account: Address, connectors: readonly Address[]) {
       return publicClient.readContract({
         address,
-        abi: LpSugar.abi,
+        abi: LPSugarABI,
         functionName: 'tokens',
         args: [BigInt(limit), BigInt(offset), account, connectors],
       });
@@ -46,7 +43,7 @@ export function useLpSugarContract(address: Address, publicClient: PublicClient)
 }
 
 export function useAerodromePoolContract(address: Address, publicClient: PublicClient) {
-  if (!AerodromePool.abi || !address || !publicClient) {
+  if (!AerodromePoolABI || !address || !publicClient) {
     throw new Error('Required parameters not provided to useAerodromePoolContract');
   }
 
@@ -54,7 +51,7 @@ export function useAerodromePoolContract(address: Address, publicClient: PublicC
     async getStable() {
       return publicClient.readContract({
         address,
-        abi: AerodromePool.abi,
+        abi: AerodromePoolABI,
         functionName: 'stable',
         args: [],
       }) as Promise<boolean>;
@@ -75,7 +72,7 @@ export function useOffchainOracleContract(address: Address, publicClient: Public
       // First get ETH/USDC rate (returns in 6 decimals since USDC is 6 decimals)
       const ethUsdcContract = {
         address,
-        abi: OffchainOracle.abi,
+        abi: OffchainOracleABI,
         functionName: 'getRate',
         args: [WETH_ADDRESS, USDC_ADDRESS, useWrappers] as const,
       };
@@ -83,7 +80,7 @@ export function useOffchainOracleContract(address: Address, publicClient: Public
       // Then get token/ETH rates for all tokens (returns in 18 decimals)
       const tokenEthContracts = nonUsdcAddresses.map((tokenAddress) => ({
         address,
-        abi: OffchainOracle.abi,
+        abi: OffchainOracleABI,
         functionName: 'getRateToEth',
         args: [tokenAddress, useWrappers] as const,
       }));
@@ -145,7 +142,7 @@ export function useOffchainOracleContract(address: Address, publicClient: Public
         batches.map(async (batch) => {
           const contracts = batch.map((tokenAddress) => ({
             address,
-            abi: OffchainOracle.abi,
+            abi: OffchainOracleABI,
             functionName: 'getRate',
             args: [tokenAddress, USDC_ADDRESS, useWrappers] as const,
           }));
