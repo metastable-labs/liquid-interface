@@ -1,10 +1,12 @@
-import { StyleSheet, View, Text, FlatList, ScrollView, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, FlatList, ScrollView, TouchableOpacity, Alert } from 'react-native';
 
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { adjustFontSizeForIOS, formatAmount, formatAmountWithWholeAndDecimal } from '@/utils/helpers';
 import { LQDButton, LQDPoolPairCard, LQDPoolPairPaper } from '@/components';
 import { CaretRightIcon, DirectUpIcon, DollarSquareIcon, TrendUpIcon } from '@/assets/icons';
 import Section from './section';
+import { clearPersistedSmartAccountInfo } from '@/store/smartAccount/persistSmartAccount';
+import { useAuth } from '@/providers';
 
 const balance = 36_708.89;
 
@@ -105,6 +107,47 @@ const Home = () => {
     },
   ];
 
+  const handleSignOut = () => {
+    Alert.alert('Sign out', 'Are you sure you want to sign out?', [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Sign out',
+        style: 'destructive',
+        onPress: () => {
+          clearPersistedSmartAccountInfo()
+            .then(() => router.replace('/(onboarding)/step1'))
+            .catch((error) => console.log(error));
+        },
+      },
+    ]);
+  };
+
+  const { session } = useAuth();
+
+  const handleSmartAccountSign = async () => {
+    if (!session) {
+      throw new Error('No smart account found');
+    }
+
+    try {
+      const messageToSign = {
+        message: 'Hello, world!',
+        timestamp: Date.now(),
+      };
+
+      const signature = await session.signMessage({ message: JSON.stringify(messageToSign) });
+
+      console.log('Signature successful:', signature);
+
+      Alert.alert('Signing Successful', 'Signature: ' + signature);
+    } catch (error: any) {
+      console.log('Error signing message:', error);
+      console.log('Error cause:', error.cause);
+
+      Alert.alert('Signing Failed', error.message + '\n' + error.cause);
+    }
+  };
+
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer} showsVerticalScrollIndicator={false}>
       <View style={styles.balanceAndActionContainer}>
@@ -128,6 +171,9 @@ const Home = () => {
           iconColor="#334155"
           style={{ alignSelf: 'stretch' }}
         />
+
+        <LQDButton title="Sign message" onPress={handleSmartAccountSign} variant="tertiaryOutline" />
+        <LQDButton title="Sign out" onPress={handleSignOut} variant="tertiaryOutline" />
       </View>
 
       {sections.map((section, index) => (

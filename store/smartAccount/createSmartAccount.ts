@@ -1,17 +1,19 @@
 import { Alert } from 'react-native';
 import * as Passkeys from 'react-native-passkeys';
-import { Address, hashMessage, hashTypedData, Hex, SignableMessage } from 'viem';
-import { ToCoinbaseSmartAccountReturnType, WebAuthnAccount, toCoinbaseSmartAccount } from 'viem/account-abstraction';
-import type { SignReturnType } from 'webauthn-p256';
-import { utf8StringToBuffer, bufferToBase64URLString } from '@/utils/base64';
-import { publicClient } from '@/init/viem';
-import { CreatePassKeyCredentialOptions } from '@/init/types';
-import { isDev } from '@/constants/env';
+import { toCoinbaseSmartAccount, toWebAuthnAccount } from 'viem/account-abstraction';
+
 import api from '@/init/api';
+import { publicClient } from '@/init/viem';
+import { isDev, rpId } from '@/constants/env';
+import { CreatePassKeyCredentialOptions, SmartAccount, Address, SmartAccountPersistedInfo } from '@/init/types';
+import { getPublicKeyHex } from '@/utils/base64';
+
+import { getFn } from './getFn';
 
 export async function createSmartAccount(registrationOptions: CreatePassKeyCredentialOptions): Promise<{
-  smartAccount: ToCoinbaseSmartAccountReturnType;
+  smartAccount: SmartAccount;
   address: Address;
+  smartAccountInfo: SmartAccountPersistedInfo;
 }> {
   try {
     const isPasskeyAvailable = Passkeys.isSupported();
@@ -33,60 +35,16 @@ export async function createSmartAccount(registrationOptions: CreatePassKeyCrede
       attestationObject,
       clientDataJSON,
     };
-
     // const verificationResponse = await this.api.verifyRegistration(username, registrationResponse);
 
-    const publicKeyBuffer = utf8StringToBuffer(publicKey);
-    const publicKeyHex = `0x${Array.from(new Uint8Array(publicKeyBuffer))
-      .map((byte) => byte.toString(16).padStart(2, '0'))
-      .join('')}` as Hex;
-
-    const webAuthnAccount: WebAuthnAccount = {
-      type: 'webAuthn',
-      publicKey: publicKeyHex,
-      sign: async ({ hash }: { hash: Hex }) => {
-        try {
-          const challenge = bufferToBase64URLString(utf8StringToBuffer(hash));
-
-          const signResult = await Passkeys.get({
-            challenge: hash,
-            allowCredentials: [{ id: credentialId, type: 'public-key' }],
-          });
-
-          if (!signResult) {
-            throw new Error('Failed to sign with passkey');
-          }
-
-          const signature = signResult.response.signature;
-          const signatureHex = `0x${Buffer.from(signature, 'base64').toString('hex')}` as Hex;
-
-          const authenticatorData = signResult.response.authenticatorData;
-          const authenticatorDataHex = `0x${Buffer.from(authenticatorData, 'base64').toString('hex')}` as Hex;
-
-          return {
-            signature: signatureHex,
-            webauthn: {
-              authenticatorData: authenticatorDataHex,
-              challengeIndex: clientDataJSON.indexOf(challenge.slice(2)),
-              clientDataJSON,
-              typeIndex: clientDataJSON.indexOf('"type":"webauthn.get"'),
-              userVerificationRequired: false,
-            },
-          } as SignReturnType;
-        } catch (error) {
-          console.error(error);
-          throw error;
-        }
+    const webAuthnAccount = toWebAuthnAccount({
+      credential: {
+        id: registrationResponse.credentialId,
+        publicKey: getPublicKeyHex(publicKey),
       },
-      signMessage: async ({ message }: { message: SignableMessage }) => {
-        const hash = hashMessage(message);
-        return webAuthnAccount.sign({ hash });
-      },
-      signTypedData: async (typedData) => {
-        const hash = hashTypedData(typedData);
-        return webAuthnAccount.sign({ hash });
-      },
-    };
+      getFn,
+      rpId,
+    });
 
     const smartAccount = await toCoinbaseSmartAccount({
       client: publicClient,
@@ -103,7 +61,14 @@ export async function createSmartAccount(registrationOptions: CreatePassKeyCrede
       throw new Error('Failed to update user address');
     }
 
-    return { smartAccount, address };
+    return {
+      smartAccount,
+      address,
+      smartAccountInfo: {
+        publicKey,
+        registrationResponse,
+      },
+    };
   } catch (error: any) {
     if (error.message && error.message.includes('Biometrics must be enabled')) {
       const alertTitle = 'Device not enrolled to FaceID';
