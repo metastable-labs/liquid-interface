@@ -2,23 +2,18 @@ import * as SecureStore from 'expo-secure-store';
 import { SmartAccountPersistedInfo } from '@/init/types';
 import { smartAccountInfoKey } from '@/constants/env';
 
+import { SmartAccountInfoNotFoundError } from './errors';
+
 export async function persistSmartAccountInfo(smartAccountInfo: SmartAccountPersistedInfo) {
   try {
     if (!smartAccountInfo) {
-      throw new Error('Smart account info is not available');
+      throw new SmartAccountInfoNotFoundError();
     }
 
     await SecureStore.setItemAsync(smartAccountInfoKey, JSON.stringify(smartAccountInfo));
   } catch (error) {
     console.log('Error persisting smart account info', error);
     throw error;
-  }
-}
-
-export class SmartAccountInfoNotFoundError extends Error {
-  constructor() {
-    super('Smart account info is not available');
-    this.name = 'SmartAccountInfoNotFoundError';
   }
 }
 

@@ -28,13 +28,6 @@ export function useSmartAccountActions() {
 
     const { address, smartAccountInfo, smartAccount } = await createSmartAccount(smartAccountState.registrationOptions);
 
-    // try {
-    //   const signature = await smartAccount.signMessage({ message: 'Hello world' });
-    //   console.log('signature', signature);
-    // } catch (error) {
-    //   console.log('error signing message', error);
-    // }
-
     await persistSmartAccountInfo(smartAccountInfo);
 
     dispatch(setAddress(address));

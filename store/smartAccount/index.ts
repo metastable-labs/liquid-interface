@@ -1,7 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { PayloadAction } from '@reduxjs/toolkit';
-import { CreatePassKeyCredentialOptions } from '@/init/types';
-import { Address } from 'viem';
+import { CreatePassKeyCredentialOptions, Address } from '@/init/types';
 
 export interface SmartAccountState {
   readonly registrationOptions: CreatePassKeyCredentialOptions | null;

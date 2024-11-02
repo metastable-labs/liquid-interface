@@ -35,6 +35,7 @@ export async function createSmartAccount(registrationOptions: CreatePassKeyCrede
       attestationObject,
       clientDataJSON,
     };
+
     // const verificationResponse = await this.api.verifyRegistration(username, registrationResponse);
 
     const webAuthnAccount = toWebAuthnAccount({
