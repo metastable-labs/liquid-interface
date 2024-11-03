@@ -6,6 +6,7 @@ import { useLoadAppFonts } from '@/hooks/useLoadAppFonts';
 
 import { ReduxProvider } from './ReduxProvider';
 import { ThemeProvider } from './ThemeProvider';
+import { AuthProvider } from './AuthProvider';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -34,7 +35,9 @@ export function AllProviders({ children }: PropsWithChildren) {
   return (
     <GestureHandlerRootView>
       <ReduxProvider onBeforeLift={handleReduxStorePersisted}>
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          <AuthProvider>{children}</AuthProvider>
+        </ThemeProvider>
       </ReduxProvider>
     </GestureHandlerRootView>
   );

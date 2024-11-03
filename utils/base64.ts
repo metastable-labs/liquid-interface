@@ -1,4 +1,5 @@
 import base64 from '@hexagon/base64';
+import { Hex } from 'viem';
 
 // ! taken from https://github.com/MasterKale/SimpleWebAuthn/blob/e02dce6f2f83d8923f3a549f84e0b7b3d44fa3da/packages/browser/src/helpers/bufferToBase64URLString.ts
 /**
@@ -38,8 +39,7 @@ export function base64UrlToString(base64UrlString: string): string {
 
 // Base64 strings typically have a length that is a multiple of 4 and may end with one or two = characters for padding
 function isBase64(str: string): boolean {
-  const base64Regex =
-    /^(?:[A-Za-z0-9+\/]{4})*(?:[A-Za-z0-9+\/]{2}==|[A-Za-z0-9+\/]{3}=)?$/;
+  const base64Regex = /^(?:[A-Za-z0-9+\/]{4})*(?:[A-Za-z0-9+\/]{2}==|[A-Za-z0-9+\/]{3}=)?$/;
   return base64Regex.test(str);
 }
 
@@ -62,4 +62,34 @@ export function base64URLStringToBuffer(base64URLString: string): ArrayBuffer {
   }
 
   return buffer;
+}
+
+/**
+ * Convert a base64 string to Uint8Array bytes
+ * This is specifically for handling WebAuthn clientDataJSON
+ */
+export function base64ToBytes(base64String: string): Uint8Array {
+  // Add padding if needed
+  const paddedBase64 = base64String.padEnd(base64String.length + ((4 - (base64String.length % 4)) % 4), '=');
+
+  // Convert base64url to standard base64
+  const standardBase64 = paddedBase64.replace(/-/g, '+').replace(/_/g, '/');
+
+  // Decode base64
+  const binaryString = atob(standardBase64);
+
+  // Convert binary string to Uint8Array
+  const bytes = new Uint8Array(binaryString.length);
+  for (let i = 0; i < binaryString.length; i++) {
+    bytes[i] = binaryString.charCodeAt(i);
+  }
+
+  return bytes;
+}
+
+export function getPublicKeyHex(publicKey: string): Hex {
+  const publicKeyBuffer = utf8StringToBuffer(publicKey);
+  return `0x${Array.from(new Uint8Array(publicKeyBuffer))
+    .map((byte) => byte.toString(16).padStart(2, '0'))
+    .join('')}` as Hex;
 }

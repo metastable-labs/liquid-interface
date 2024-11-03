@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { View, Text, StyleSheet, Platform, StatusBar, TextInput } from 'react-native';
+import { View, Text, StyleSheet, Platform, TextInput, StatusBar as RNStatusBar } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
 
 import { LQDButton } from '@/components';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
@@ -82,6 +83,8 @@ const Tag = () => {
 
   return (
     <View style={styles.root}>
+      <StatusBar style="inverted" />
+
       <View style={styles.container}>
         <View style={styles.topContainer}>
           <View style={styles.description}>
@@ -127,7 +130,7 @@ export default Tag;
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 54,
+    paddingTop: Platform.OS === 'android' ? RNStatusBar.currentHeight : 54,
     backgroundColor: '#FFF',
   },
 
