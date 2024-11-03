@@ -1,9 +1,6 @@
-interface ILQDPoolPairCard {
-  address: `0x${string}`;
-  primaryIconURL: string;
-  secondaryIconURL: string;
-  symbol: string;
-  increased: boolean;
-  change: number;
+import { Pool } from '@/store/pools/types';
+
+export interface PoolPairCard {
+  pool: Pool;
   navigationVariant?: 'primary' | 'secondary';
 }

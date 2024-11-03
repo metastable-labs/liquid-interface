@@ -117,15 +117,15 @@ export type FormattedPosition = {
   emissions_earned: string;
 };
 
-export type Token = {
-  token_address: Address;
-  symbol: string;
-  decimals: number;
-  account_balance: string;
-  listed: boolean;
-  usd_price: string;
-  logo_url: string;
-};
+// export type Token = {
+//   token_address: Address;
+//   symbol: string;
+//   decimals: number;
+//   account_balance: string;
+//   listed: boolean;
+//   usd_price: string;
+//   logo_url: string;
+// };
 
 export type EnhancedFormattedPool = Omit<FormattedPool, EnhancedFormattedPoolType> & {
   token0: Token;
@@ -252,3 +252,19 @@ export interface TransactionConfig {
   hash: Hex;
   waitForReceipt?: boolean;
 }
+
+export type LPSugarToken = {
+  account_balance: bigint;
+  decimals: number;
+  listed: boolean;
+  symbol: string;
+  token_address: Address;
+};
+
+export type LPSugarTokenResponse = {
+  account_balance: bigint;
+  decimals: number;
+  listed: boolean;
+  symbol: string;
+  token_address: Address;
+}[];

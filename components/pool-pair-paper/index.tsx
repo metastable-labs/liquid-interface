@@ -1,28 +1,31 @@
 import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native';
 import { Href } from 'expo-router';
 
-import { adjustFontSizeForIOS, formatNumberWithSuffix } from '@/utils/helpers';
+import { adjustFontSizeForIOS, formatAmount, formatNumberWithSuffix } from '@/utils/helpers';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
+import { setSelectedPool } from '@/store/pools';
+import { PoolPairPaper } from './types';
 
-const LQDPoolPairPaper = ({
-  address,
-  apr,
-  volume,
-  fees,
-  primaryIconURL,
-  symbol,
-  secondaryIconURL,
-  navigationVariant = 'primary',
-  isStable,
-}: ILQDPoolPairPaper) => {
-  const { router } = useSystemFunctions();
+const LQDPoolPairPaper = ({ pool, navigationVariant = 'primary' }: PoolPairPaper) => {
+  const { router, dispatch } = useSystemFunctions();
 
   const paths = {
-    primary: `/(tabs)/home/${address}` as Href<string>,
-    secondary: `/(tabs)/holdings/${address}` as Href<string>,
+    primary: `/(tabs)/home/${pool.address}` as Href<string>,
+    secondary: `/(tabs)/holdings/${pool.address}` as Href<string>,
   };
 
-  const handlePress = () => router.push(paths[navigationVariant]);
+  const handlePress = () => {
+    dispatch(setSelectedPool(pool));
+    router.push(paths[navigationVariant]);
+  };
+
+  const primaryIconURL = pool.token0.logoUrl;
+  const secondaryIconURL = pool.token1.logoUrl;
+  const symbol = pool.symbol.split('-')[1].replace('/', ' / ');
+  const apr = formatAmount(pool.emissions.rate, 2);
+  const fees = pool.fees.poolFee;
+  const volume = formatAmount(pool.volume.usd, 0);
+  const isStable = pool.isStable;
 
   return (
     <TouchableOpacity onPress={handlePress} style={styles.container}>
