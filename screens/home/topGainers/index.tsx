@@ -3,7 +3,6 @@ import { StyleSheet, View, FlatList } from 'react-native';
 import { TrendUpIcon } from '@/assets/icons';
 import { LQDPoolPairPaper } from '@/components';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
-import { formatAmount } from '@/utils/helpers';
 import { usePoolActions } from '@/store/pools/actions';
 import Section from '../section';
 
@@ -13,27 +12,12 @@ const TopGainers = () => {
 
   const { topGainers, refreshingPools } = poolsState;
 
-  const pools: ILQDPoolPairPaper[] = topGainers.data.map((pool) => {
-    const symbol = pool.symbol.split('-')[1].replace('/', ' / ');
-
-    return {
-      primaryIconURL: pool.token0.logoUrl,
-      secondaryIconURL: pool.token1.logoUrl,
-      symbol,
-      apr: formatAmount(pool.emissions.rate, 2),
-      fees: pool.fees.poolFee,
-      volume: formatAmount(pool.volume.usd, 0),
-      address: pool.address,
-      isStable: pool.isStable,
-    };
-  });
-
   return (
     <View style={styles.container}>
       <Section title="Top gainers" subtitle="by APR" icon={<TrendUpIcon />} isShowingAll>
         <FlatList
-          data={pools}
-          renderItem={({ item }) => <LQDPoolPairPaper {...item} />}
+          data={topGainers.data}
+          renderItem={({ item }) => <LQDPoolPairPaper pool={item} />}
           keyExtractor={(_, index) => index.toString()}
           contentContainerStyle={{ gap: 24 }}
           onEndReached={() => getPaginatedTopGainers()}

@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import { BoxSearchIcon, SendIcon } from '@/assets/icons';
 
-const Header = ({ condition, fee, id, primaryIconURL, primaryTitle, secondaryIconURL, secondaryTitle }: IPool) => {
+const Header = ({ condition, fee, primaryIconURL, symbol, secondaryIconURL }: PoolDetails) => {
   const flagColors = {
     stable: '#B47818',
     volatile: '#AF1D38',
@@ -15,7 +15,7 @@ const Header = ({ condition, fee, id, primaryIconURL, primaryTitle, secondaryIco
       icon: <BoxSearchIcon />,
     },
     {
-      action: () => console.log('sharing', id),
+      action: () => console.log('sharing', symbol),
       icon: <SendIcon />,
     },
   ];
@@ -32,9 +32,7 @@ const Header = ({ condition, fee, id, primaryIconURL, primaryTitle, secondaryIco
         </View>
 
         <View style={styles.detailContainer}>
-          <Text style={styles.detailHeader}>
-            {condition.charAt(0)}AMM - {primaryTitle} / {secondaryTitle}
-          </Text>
+          <Text style={styles.detailHeader}>{symbol}</Text>
 
           <View style={styles.details}>
             <Text style={[styles.detailText, { color: flagColors[condition], textTransform: 'capitalize' }]}>Basic {condition}</Text>

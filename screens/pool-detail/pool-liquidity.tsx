@@ -14,7 +14,7 @@ const PoolLiquidity = ({
   secondaryIconURL,
   secondaryTitle,
   secondaryUSDValue,
-}: IPool) => {
+}: PoolDetails) => {
   const [primaryColor, setPrimaryColor] = useState('#375DFB');
   const [secondaryColor, setSecondaryColor] = useState('#F2AE40');
   const [primaryProgress, setPrimaryProgress] = useState(0.5);

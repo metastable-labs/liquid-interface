@@ -3,21 +3,21 @@ import { View, Text, StyleSheet } from 'react-native';
 import { adjustFontSizeForIOS, formatNumberWithSuffix } from '@/utils/helpers';
 import { Chart2AltIcon, CoinsLGIcon, MoneyTickIcon, SwapHorizontalIcon } from '@/assets/icons';
 
-const PoolStats = () => {
+const PoolStats = ({ volume, fee, tvl }: Stat) => {
   const stats = [
     {
       title: 'Volume',
-      value: `$${formatNumberWithSuffix(607_000)}`,
+      value: `$${formatNumberWithSuffix(volume)}`,
       icon: <Chart2AltIcon />,
     },
     {
       title: 'TVL',
-      value: `$${formatNumberWithSuffix(1_300_000)}`,
+      value: `$${formatNumberWithSuffix(tvl)}`,
       icon: <MoneyTickIcon />,
     },
     {
       title: 'Fees',
-      value: `$${formatNumberWithSuffix(24_400)}`,
+      value: `$${formatNumberWithSuffix(fee)}`,
       icon: <CoinsLGIcon width={20} height={20} />,
     },
     {

@@ -3,7 +3,6 @@ import { StyleSheet, View, FlatList } from 'react-native';
 import { LQDPoolPairPaper } from '@/components';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { DirectUpIcon } from '@/assets/icons';
-import { formatAmount } from '@/utils/helpers';
 import { usePoolActions } from '@/store/pools/actions';
 import Section from '../section';
 
@@ -13,27 +12,12 @@ const Trending = () => {
 
   const { trendingPools, refreshingPools } = poolsState;
 
-  const pools: ILQDPoolPairPaper[] = trendingPools.data.map((pool) => {
-    const symbol = pool.symbol.split('-')[1].replace('/', ' / ');
-
-    return {
-      primaryIconURL: pool.token0.logoUrl,
-      secondaryIconURL: pool.token1.logoUrl,
-      symbol,
-      apr: formatAmount(pool.emissions.rate, 2),
-      fees: pool.fees.poolFee,
-      volume: formatAmount(pool.volume.usd, 0),
-      address: pool.address,
-      isStable: pool.isStable,
-    };
-  });
-
   return (
     <View style={styles.container}>
       <Section title="Trending" subtitle="by Volume" icon={<DirectUpIcon />} isShowingAll>
         <FlatList
-          data={pools}
-          renderItem={({ item }) => <LQDPoolPairPaper {...item} />}
+          data={trendingPools.data}
+          renderItem={({ item }) => <LQDPoolPairPaper pool={item} />}
           keyExtractor={(_, index) => index.toString()}
           contentContainerStyle={{ gap: 24 }}
           onEndReached={() => getPaginatedTrendingPools()}

@@ -1,12 +1,12 @@
+import { useEffect } from 'react';
 import { StyleSheet, View, Text, FlatList, ScrollView, TouchableOpacity } from 'react-native';
 
 import useSystemFunctions from '@/hooks/useSystemFunctions';
-import { adjustFontSizeForIOS, formatAmount, formatAmountWithWholeAndDecimal } from '@/utils/helpers';
+import { adjustFontSizeForIOS, formatAmountWithWholeAndDecimal } from '@/utils/helpers';
 import { LQDButton, LQDPoolPairCard, LQDPoolPairPaper } from '@/components';
 import { CaretRightIcon, DirectUpIcon, DollarSquareIcon, TrendUpIcon } from '@/assets/icons';
-import Section from './section';
-import { useEffect } from 'react';
 import { useAccountActions } from '@/store/account/actions';
+import Section from './section';
 
 const Home = () => {
   const { router, poolsState, smartAccountState, accountState } = useSystemFunctions();
@@ -16,48 +16,11 @@ const Home = () => {
 
   const { whole, decimal } = formatAmountWithWholeAndDecimal(accountState.tokenBalance.toFixed(2));
 
-  const top10TrendingPools: ILQDPoolPairPaper[] = trendingPools.data.slice(0, 10).map((pool) => {
-    const symbol = pool.symbol.split('-')[1].replace('/', ' / ');
+  const top10TrendingPools = trendingPools.data.slice(0, 10);
 
-    return {
-      primaryIconURL: pool.token0.logoUrl,
-      secondaryIconURL: pool.token1.logoUrl,
-      symbol,
-      apr: Number(pool.emissions.rate),
-      fees: pool.fees.poolFee,
-      volume: formatAmount(pool.volume.usd, 0),
-      address: pool.address,
-      isStable: pool.isStable,
-    };
-  });
+  const top10HotPools = hotPools.data.slice(0, 10);
 
-  const top10HotPools: ILQDPoolPairPaper[] = hotPools.data.slice(0, 10).map((pool) => {
-    const symbol = pool.symbol.split('-')[1].replace('/', ' / ');
-
-    return {
-      primaryIconURL: pool.token0.logoUrl,
-      secondaryIconURL: pool.token1.logoUrl,
-      symbol,
-      apr: formatAmount(pool.emissions.rate, 2),
-      fees: pool.fees.poolFee,
-      volume: formatAmount(pool.volume.usd, 0),
-      address: pool.address,
-      isStable: pool.isStable,
-    };
-  });
-
-  const top10Gainers: ILQDPoolPairCard[] = topGainers.data.slice(0, 10).map((pool) => {
-    const symbol = pool.symbol.split('-')[1].replace('/', ' / ');
-
-    return {
-      primaryIconURL: pool.token0.logoUrl,
-      secondaryIconURL: pool.token1.logoUrl,
-      symbol,
-      increased: pool.gauge.isAlive,
-      change: 2.3,
-      address: pool.address,
-    };
-  });
+  const top7Gainers = topGainers.data.slice(0, 7);
 
   const sections = [
     {
@@ -67,10 +30,10 @@ const Home = () => {
       action: () => router.push('/(tabs)/home/top'),
       children: (
         <FlatList
-          data={top10Gainers}
+          data={top7Gainers}
           horizontal
-          renderItem={({ item }) => <LQDPoolPairCard {...item} />}
-          keyExtractor={(item, index) => index.toString()}
+          renderItem={({ item }) => <LQDPoolPairCard pool={item} />}
+          keyExtractor={(_, index) => index.toString()}
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={{ gap: 10 }}
         />
@@ -84,8 +47,8 @@ const Home = () => {
       action: () => router.push('/(tabs)/home/trending'),
       children: (
         <View style={styles.mapContainer}>
-          {top10TrendingPools.map((poolPair, index) => (
-            <LQDPoolPairPaper key={index} {...poolPair} />
+          {top10TrendingPools.map((pool, index) => (
+            <LQDPoolPairPaper key={index} pool={pool} />
           ))}
         </View>
       ),
@@ -98,8 +61,8 @@ const Home = () => {
       action: () => router.push('/(tabs)/home/hot'),
       children: (
         <View style={styles.mapContainer}>
-          {top10HotPools.map((poolPair, index) => (
-            <LQDPoolPairPaper key={index} {...poolPair} />
+          {top10HotPools.map((pool, index) => (
+            <LQDPoolPairPaper key={index} pool={pool} />
           ))}
         </View>
       ),
