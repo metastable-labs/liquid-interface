@@ -17,6 +17,7 @@ export function usePoolActions() {
       dispatch(setHotPools(hotPools));
 
       const trendingPools = await api.getPools(PoolType.trending);
+      console.log(trendingPools.pagination);
       dispatch(setTrendingPools(trendingPools));
 
       const topGainers = await api.getPools(PoolType.gainers);
@@ -44,7 +45,7 @@ export function usePoolActions() {
       const nextPage = hotPools.pagination.page + 1;
 
       const query = `?page=${nextPage}`;
-
+      console.log('hdhdhdhdh', query);
       const pools = await api.getPools(PoolType.hot, query);
 
       const newData = { ...hotPools.data, ...pools.data };
@@ -77,8 +78,8 @@ export function usePoolActions() {
       const query = `?page=${nextPage}`;
 
       const pools = await api.getPools(PoolType.trending, query);
-
-      const newData = { ...trendingPools.data, ...pools.data };
+      console.log(pools.pagination);
+      const newData = [...trendingPools.data, ...pools.data];
       pools.data = newData;
 
       dispatch(setTrendingPools(pools));

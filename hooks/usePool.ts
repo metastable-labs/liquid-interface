@@ -131,7 +131,7 @@ export function usePool(publicClient: PublicClient) {
 
   const fetchPositions = async (BATCH_SIZE: number, offset: number) => {
     try {
-      const account = smartAccountState?.address || '0xF977814e90dA44bFA03b6295A0616a897441aceC';
+      const account = smartAccountState?.address || '0xF831A8c0788a44483Df72f0D129F03Cb0e01bBe2';
 
       let allV2Positions: Position[] = [];
 

@@ -28,6 +28,7 @@ const Hot = () => {
           showsVerticalScrollIndicator={false}
         />
       </Section>
+      <View style={{ height: 130 }} />
     </View>
   );
 };
@@ -38,7 +39,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 32,
-    paddingBottom: 170,
     paddingHorizontal: 16,
     backgroundColor: '#fff',
     gap: 46,

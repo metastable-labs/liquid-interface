@@ -4,10 +4,11 @@ import { CONNECTORS_BASE, LP_SUGAR_ADDRESS, OFFCHAIN_ORACLE_ADDRESS } from '@/co
 import { useLpSugarContract, useOffchainOracleContract } from './useContract';
 import { LPSugarToken, LPSugarTokenResponse, Token } from './types';
 import useSystemFunctions from './useSystemFunctions';
+import { OffchainOracleABI } from '@/constants/abis';
 
 export function useToken(publicClient: PublicClient) {
   const { smartAccountState } = useSystemFunctions();
-  const account = smartAccountState?.address || '0xF977814e90dA44bFA03b6295A0616a897441aceC';
+  const account = smartAccountState?.address || '0xF831A8c0788a44483Df72f0D129F03Cb0e01bBe2';
 
   const [tokens, setTokens] = useState<Token[]>([]);
   const [tokenMap, setTokenMap] = useState<Map<string, Token>>(new Map());
@@ -27,16 +28,35 @@ export function useToken(publicClient: PublicClient) {
       const tokenAddresses = batch.map((token: LPSugarToken) => token.token_address);
       const tokenDecimals = batch.map((token: LPSugarToken) => token.decimals);
       const prices = await oracle.getRateToUSD(tokenAddresses, tokenDecimals, true);
-
-      const tokensWithPrice = batch.map((token: LPSugarToken, index: number) => ({
-        address: token.token_address,
-        symbol: token.symbol,
-        decimals: Number(token.decimals),
-        balance: formatUnits(token.account_balance, token.decimals),
-        isListed: token.listed,
-        usdPrice: prices[index],
-        logoUrl: `https://assets.smold.app/api/token/8453/${token.token_address}/logo-32.png`,
+      const tokenEthContracts = tokenAddresses.map((tokenAddress) => ({
+        address: OFFCHAIN_ORACLE_ADDRESS,
+        abi: OffchainOracleABI.OffchainOracle.abi,
+        functionName: 'getRateToEth',
+        args: [tokenAddress, true] as const,
       }));
+      const ethPrices: any = await publicClient.multicall({
+        contracts: tokenEthContracts,
+      });
+
+      const tokensWithPrice = batch.map((token: LPSugarToken, index: number) => {
+        // let ethPrice: any = 0;
+
+        // if (ethPrices[index]) {
+        //   ethPrice = ethPrices[index].result as bigint;
+        //   const formatEthPrice = formatUnits(ethPrice, 18);
+        //   console.log(token.symbol, ' => ', formatEthPrice);
+        // }
+
+        return {
+          address: token.token_address,
+          symbol: token.symbol,
+          decimals: Number(token.decimals),
+          balance: formatUnits(token.account_balance, token.decimals),
+          isListed: token.listed,
+          usdPrice: prices[index],
+          logoUrl: `https://assets.smold.app/api/token/8453/${token.token_address}/logo-32.png`,
+        };
+      });
 
       allTokens = [...allTokens, ...tokensWithPrice];
       offset += BATCH_SIZE;

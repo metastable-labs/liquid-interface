@@ -111,7 +111,7 @@ const Home = () => {
       Alert.alert('Signing Failed', error.message + '\n' + error.cause);
     }
   };
-  
+
   useEffect(
     function fetchBalances() {
       getTokens();

@@ -20,14 +20,17 @@ const Trending = () => {
           renderItem={({ item }) => <LQDPoolPairPaper pool={item} />}
           keyExtractor={(_, index) => index.toString()}
           contentContainerStyle={{ gap: 24 }}
-          onEndReached={() => getPaginatedTrendingPools()}
-          onEndReachedThreshold={0.1}
+          onEndReached={() => {
+            getPaginatedTrendingPools();
+          }}
+          onEndReachedThreshold={0}
           refreshing={refreshingPools}
           onRefresh={() => getPaginatedTrendingPools(true)}
           bounces={true}
           showsVerticalScrollIndicator={false}
         />
       </Section>
+      <View style={{ height: 130 }} />
     </View>
   );
 };
@@ -38,7 +41,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 32,
-    paddingBottom: 170,
     paddingHorizontal: 16,
     backgroundColor: '#fff',
     gap: 46,
