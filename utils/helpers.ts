@@ -77,6 +77,11 @@ const formatPoolFee = (fee: bigint): string => {
 const adjustFontSizeForIOS = (baseFontSize: number, addition: number): number =>
   Platform.OS === 'ios' ? baseFontSize + addition : baseFontSize;
 
+const emailIsValid = (email: string): boolean => {
+  const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+  return emailRegex.test(email);
+};
+
 export {
   formatNumberWithSuffix,
   truncateDecimal,
@@ -89,4 +94,5 @@ export {
   formatPoolFee,
   adjustFontSizeForIOS,
   formatAmount,
+  emailIsValid,
 };

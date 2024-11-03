@@ -1,10 +1,10 @@
 import { PrivyProvider } from '@privy-io/expo';
-import { Tag } from '@/screens';
+import VerifyEmail from '@/screens/tag/verify-email';
 
-const TagScreen = () => (
+const VerifyEmailScreen = () => (
   <PrivyProvider appId={process.env.EXPO_PUBLIC_PRIVY_APP_ID!} clientId={process.env.EXPO_PUBLIC_PRIVY_CLIENT_ID}>
-    <Tag />
+    <VerifyEmail />
   </PrivyProvider>
 );
 
-export default TagScreen;
+export default VerifyEmailScreen;

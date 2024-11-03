@@ -53,7 +53,6 @@ export async function createSmartAccount(registrationOptions: CreatePassKeyCrede
     });
 
     const address = await smartAccount.getAddress();
-    console.log('address', address);
 
     const updateUserAddressResponse = await api.updateUserAddress(registrationOptions.user.name, address);
     if (!updateUserAddressResponse.success) {

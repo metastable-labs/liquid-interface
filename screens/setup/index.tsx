@@ -18,11 +18,11 @@ const Setup = () => {
   const animatedButtonStyle = useAnimatedStyle(() => ({
     opacity: buttonOpacity.value,
   }));
+  const { setSmartAccount } = useSmartAccountActions();
+  const { setSession } = useAuth();
 
   const [setupStep, setSetupStep] = useState(1);
   const [completedSteps, setCompletedSteps] = useState([false, false, false]);
-
-  const { user } = userState;
 
   const progressToNextStep = useCallback(() => {
     setCompletedSteps((prev) => prev.map((step, index) => (index + 1 === setupStep ? true : step)));
@@ -57,10 +57,6 @@ const Setup = () => {
       isLast: true,
     },
   ];
-
-  const { setSmartAccount } = useSmartAccountActions();
-
-  const { setSession } = useAuth();
 
   useEffect(
     function progressSteps() {

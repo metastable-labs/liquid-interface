@@ -1,27 +1,25 @@
 import { toCoinbaseSmartAccount, toWebAuthnAccount } from 'viem/account-abstraction';
 
-import { useAppDispatch, useAppSelector } from '@/hooks/useRedux';
 import { setAddress, setRegistrationOptions } from '@/store/smartAccount';
 import { CreatePassKeyCredentialOptions } from '@/init/types';
 import { publicClient } from '@/init/viem';
 import { rpId } from '@/constants/env';
 import { getPublicKeyHex } from '@/utils/base64';
+import useSystemFunctions from '@/hooks/useSystemFunctions';
 
 import { createSmartAccount } from './create';
-import { getPersistedSmartAccountInfo, persistSmartAccountInfo } from './persist';
+import { clearPersistedSmartAccountInfo, getPersistedSmartAccountInfo, persistSmartAccountInfo } from './persist';
 import { getFn } from './getFn';
 import { RegistrationOptionsNotAvailableError } from './errors';
 
 export function useSmartAccountActions() {
-  const dispatch = useAppDispatch();
+  const { dispatch, router, smartAccountState } = useSystemFunctions();
 
-  const smartAccountState = useAppSelector((state) => state.smartAccount);
-
-  const setRegistrationOptionsAction = (options: CreatePassKeyCredentialOptions) => {
+  const updateRegistrationOptions = (options: CreatePassKeyCredentialOptions) => {
     dispatch(setRegistrationOptions(options));
   };
 
-  const setSmartAccountAction = async () => {
+  const setSmartAccount = async () => {
     if (!smartAccountState.registrationOptions) {
       throw new RegistrationOptionsNotAvailableError();
     }
@@ -35,7 +33,7 @@ export function useSmartAccountActions() {
     return smartAccount;
   };
 
-  const getSmartAccountAction = async () => {
+  const getSmartAccount = async () => {
     const { publicKey, registrationResponse } = await getPersistedSmartAccountInfo();
 
     const webAuthnAccount = toWebAuthnAccount({
@@ -55,10 +53,21 @@ export function useSmartAccountActions() {
     return smartAccount;
   };
 
+  const logout = async () => {
+    try {
+      await dispatch(setAddress(null));
+      await clearPersistedSmartAccountInfo();
+
+      return router.replace('/(onboarding)/step1');
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return {
-    address: smartAccountState.address,
-    setRegistrationOptions: setRegistrationOptionsAction,
-    setSmartAccount: setSmartAccountAction,
-    getSmartAccount: getSmartAccountAction,
+    updateRegistrationOptions,
+    setSmartAccount,
+    getSmartAccount,
+    logout,
   };
 }

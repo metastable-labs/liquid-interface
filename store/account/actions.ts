@@ -41,7 +41,6 @@ export function useAccountActions() {
 
       dispatch(setLoading(true));
       const positions = await fetchPositions(15, 0);
-      console.log(positions);
 
       return _setValidPositions(positions || []);
     } catch (error: any) {

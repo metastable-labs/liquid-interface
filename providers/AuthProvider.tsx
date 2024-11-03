@@ -10,6 +10,8 @@ import { toCoinbaseSmartAccount, toWebAuthnAccount } from 'viem/account-abstract
 import { publicClient } from '@/init/viem';
 import { getPublicKeyHex } from '@/utils/base64';
 import { getFn } from '@/store/smartAccount/getFn';
+import useSystemFunctions from '@/hooks/useSystemFunctions';
+import { setAddress } from '@/store/smartAccount';
 
 type AuthContextType = {
   isLoading: boolean;
@@ -24,6 +26,7 @@ const AuthContext = createContext<AuthContextType>({
 });
 
 export function AuthProvider({ children }: PropsWithChildren) {
+  const { dispatch } = useSystemFunctions();
   const [isLoading, setIsLoading] = useState(true);
   const [session, setSession] = useState<AuthContextType['session']>(null);
 
@@ -50,6 +53,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
       });
 
       setSession(smartAccount);
+      dispatch(setAddress(smartAccount.address));
     } catch (error) {
       if (error instanceof SmartAccountInfoNotPersistedError) {
         //TODO: get challenge from backend
@@ -75,6 +79,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
         });
 
         setSession(smartAccount);
+        dispatch(setAddress(smartAccount.address));
 
         return; // stop execution
       }
