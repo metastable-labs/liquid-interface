@@ -1,34 +1,64 @@
-import { setAddress, setSmartAccount, setRegistrationOptions } from '@/store/smartAccount';
+import { toCoinbaseSmartAccount, toWebAuthnAccount } from 'viem/account-abstraction';
+
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux';
-import { createSmartAccount } from './createSmartAccount';
+import { setAddress, setRegistrationOptions } from '@/store/smartAccount';
 import { CreatePassKeyCredentialOptions } from '@/init/types';
+import { publicClient } from '@/init/viem';
+import { rpId } from '@/constants/env';
+import { getPublicKeyHex } from '@/utils/base64';
+
+import { createSmartAccount } from './create';
+import { getPersistedSmartAccountInfo, persistSmartAccountInfo } from './persist';
+import { getFn } from './getFn';
+import { RegistrationOptionsNotAvailableError } from './errors';
 
 export function useSmartAccountActions() {
   const dispatch = useAppDispatch();
 
   const smartAccountState = useAppSelector((state) => state.smartAccount);
 
-  const setSmartAccountAction = async () => {
-    if (!smartAccountState.registrationOptions) {
-      throw new Error('Registration options are not available');
-    }
-
-    const { smartAccount, address } = await createSmartAccount(smartAccountState.registrationOptions);
-
-    // TODO: fix serialization error of smartAccount into redux store, how are we going to save it?
-    // dispatch(setSmartAccount(smartAccount));
-
-    dispatch(setAddress(address));
-  };
-
   const setRegistrationOptionsAction = (options: CreatePassKeyCredentialOptions) => {
     dispatch(setRegistrationOptions(options));
   };
 
+  const setSmartAccountAction = async () => {
+    if (!smartAccountState.registrationOptions) {
+      throw new RegistrationOptionsNotAvailableError();
+    }
+
+    const { address, smartAccountInfo, smartAccount } = await createSmartAccount(smartAccountState.registrationOptions);
+
+    await persistSmartAccountInfo(smartAccountInfo);
+
+    dispatch(setAddress(address));
+
+    return smartAccount;
+  };
+
+  const getSmartAccountAction = async () => {
+    const { publicKey, registrationResponse } = await getPersistedSmartAccountInfo();
+
+    const webAuthnAccount = toWebAuthnAccount({
+      credential: {
+        id: registrationResponse.credentialId,
+        publicKey: getPublicKeyHex(publicKey),
+      },
+      getFn,
+      rpId,
+    });
+
+    const smartAccount = toCoinbaseSmartAccount({
+      client: publicClient,
+      owners: [webAuthnAccount],
+    });
+
+    return smartAccount;
+  };
+
   return {
-    smartAccount: smartAccountState.smartAccount,
     address: smartAccountState.address,
-    setSmartAccount: setSmartAccountAction,
     setRegistrationOptions: setRegistrationOptionsAction,
+    setSmartAccount: setSmartAccountAction,
+    getSmartAccount: getSmartAccountAction,
   };
 }

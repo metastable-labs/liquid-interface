@@ -1,5 +1,6 @@
 import { Tabs } from 'expo-router';
-import { Platform, StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
+import { Platform, StatusBar as RNStatusBar, StyleSheet, useColorScheme, View } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
 
 import { TabBarIcon } from '@/components/navigation/TabBarIcon';
 import { Colors } from '@/constants/Colors';
@@ -12,6 +13,7 @@ export default function TabLayout() {
 
   return (
     <>
+      <StatusBar style="inverted" />
       {!appState.hideSearch && (
         <View style={styles.shortcut}>
           <LQDSearch />
@@ -19,11 +21,11 @@ export default function TabLayout() {
       )}
 
       <Tabs
+        tabBar={(props) => <LQDNavigation {...props} />}
         screenOptions={{
           tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
           headerShown: false,
         }}
-        tabBar={(props) => <LQDNavigation {...props} />}
       >
         <Tabs.Screen
           name="home"
@@ -53,7 +55,7 @@ const styles = StyleSheet.create({
     gap: 12,
     paddingHorizontal: 21,
     paddingBottom: 10,
-    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 54,
+    paddingTop: Platform.OS === 'android' ? RNStatusBar.currentHeight : 54,
     zIndex: 10,
     backgroundColor: '#fff',
   },

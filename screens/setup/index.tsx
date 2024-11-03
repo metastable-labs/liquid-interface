@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
-import { View, Text, StyleSheet, Platform, StatusBar } from 'react-native';
+import { View, Text, StyleSheet, Platform, StatusBar as RNStatusBar } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing } from 'react-native-reanimated';
+import { StatusBar } from 'expo-status-bar';
 
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { LQDButton } from '@/components';
@@ -9,6 +10,7 @@ import LQDLoadingStep from '@/components/loading-step';
 import { useSmartAccountActions } from '@/store/smartAccount/actions';
 import { ChartIcon, ShieldTickIcon, SwatchIcon } from '@/assets/icons';
 import Info from './info';
+import { useAuth } from '@/providers';
 
 const Setup = () => {
   const { router, userState } = useSystemFunctions();
@@ -58,13 +60,17 @@ const Setup = () => {
 
   const { setSmartAccount } = useSmartAccountActions();
 
+  const { setSession } = useAuth();
+
   useEffect(
     function progressSteps() {
       if (setupStep === 1) {
         const firstStepDelayInMs = 1000 * 1; // 1s
         const timeout = setTimeout(() => {
-          progressToNextStep();
-          setSmartAccount().then(progressToNextStep);
+          setSmartAccount().then((smartAccount) => {
+            setSession(smartAccount);
+            progressToNextStep();
+          });
         }, firstStepDelayInMs);
 
         return () => clearTimeout(timeout);
@@ -92,6 +98,8 @@ const Setup = () => {
 
   return (
     <View style={styles.root}>
+      <StatusBar style="inverted" />
+
       <View style={styles.container}>
         <View style={styles.topContainer}>
           <Text style={styles.header}>Hang on, we’re setting you up...</Text>
@@ -130,7 +138,7 @@ export default Setup;
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 54,
+    paddingTop: Platform.OS === 'android' ? RNStatusBar.currentHeight : 54,
     backgroundColor: '#FFF',
   },
 

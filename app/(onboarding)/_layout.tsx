@@ -1,11 +1,13 @@
 import { useState, useEffect, useRef } from 'react';
-import { StyleSheet, Dimensions, Platform, StatusBar, View } from 'react-native';
+import { StyleSheet, Dimensions, Platform, View, StatusBar as RNStatusBar } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { StatusBar } from 'expo-status-bar';
 
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { LQDButton } from '@/components';
 import { LQDOnboardingIndicator } from '@/components/onboarding';
-import Step1 from '.';
+
+import Step1 from './step1';
 import Step2 from './step2';
 import Step3 from './step3';
 
@@ -13,8 +15,6 @@ const Tab = createMaterialTopTabNavigator();
 
 const getCurrentStep = (pathname: string) => {
   switch (pathname) {
-    case '/':
-      return 0;
     case '/step2':
       return 1;
     case '/step3':
@@ -40,7 +40,7 @@ export default function OnboardingTabLayout() {
 
   const navigateToNextScreen = () => {
     switch (pathname) {
-      case '/':
+      case '/step1':
         router.push('/(onboarding)/step2');
         break;
       case '/step2':
@@ -86,7 +86,7 @@ export default function OnboardingTabLayout() {
 
   return (
     <>
-      <StatusBar barStyle="light-content" />
+      <StatusBar style="light" />
       <View style={styles.indicator}>
         <LQDOnboardingIndicator
           timer={timer}
@@ -99,6 +99,7 @@ export default function OnboardingTabLayout() {
       </View>
 
       <Tab.Navigator
+        initialRouteName="step1"
         screenOptions={{
           tabBarShowLabel: false,
           tabBarShowIcon: false,
@@ -141,7 +142,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     left: 0,
-    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 54,
+    paddingTop: Platform.OS === 'android' ? RNStatusBar.currentHeight : 54,
     paddingHorizontal: 16,
     zIndex: 1,
     justifyContent: 'space-between',
