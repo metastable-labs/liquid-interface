@@ -8,10 +8,8 @@ import { useLoginWithEmail } from '@privy-io/expo';
 import { LQDButton } from '@/components';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
-import { useSmartAccountActions } from '@/store/smartAccount/actions';
-import api from '@/init/api';
 
-const VerifyEmail = () => {
+const LoginVerifyEmail = () => {
   const { router } = useSystemFunctions();
   const params = useLocalSearchParams();
 
@@ -22,10 +20,9 @@ const VerifyEmail = () => {
       Alert.alert('An error occurred. Please check your email and try again.');
     },
     onLoginSuccess: async () => {
-      registerUser();
+      router.push('/setup');
     },
   });
-  const { updateRegistrationOptions } = useSmartAccountActions();
 
   const [otp, setOtp] = useState('');
   const [loading, setLoading] = useState(false);
@@ -42,23 +39,6 @@ const VerifyEmail = () => {
       await loginWithCode({ code: otp, email: email as string });
     } catch (error) {
       setError(true);
-    }
-  };
-
-  const registerUser = async () => {
-    try {
-      setLoading(false);
-      const options = await api.getRegistrationOptions(email as string);
-
-      await updateRegistrationOptions(options);
-      router.push('/setup');
-    } catch (error) {
-      Alert.alert(`User with email ${email} already exist! Please login`, '', [
-        {
-          text: 'Login',
-          onPress: () => router.push('/login'),
-        },
-      ]);
     }
   };
 
@@ -107,7 +87,7 @@ const VerifyEmail = () => {
   );
 };
 
-export default VerifyEmail;
+export default LoginVerifyEmail;
 
 const styles = StyleSheet.create({
   root: {

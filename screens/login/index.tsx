@@ -6,9 +6,12 @@ import { useLoginWithEmail, usePrivy } from '@privy-io/expo';
 import { LQDButton } from '@/components';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { adjustFontSizeForIOS, emailIsValid } from '@/utils/helpers';
+import { useSmartAccountActions } from '@/store/smartAccount/actions';
+import api from '@/init/api';
 
-const Tag = () => {
+const LoginEmail = () => {
   const { router } = useSystemFunctions();
+  const { updateRegistrationOptions } = useSmartAccountActions();
   const { logout } = usePrivy();
   const { sendCode } = useLoginWithEmail({
     onError: (error) => {
@@ -29,12 +32,20 @@ const Tag = () => {
     try {
       setLoading(true);
 
+      const options = await api.getRegistrationOptions(email as string);
+
       const response = await sendCode({ email });
       if (!response.success) return Alert.alert('An error occurred. Please check your email and try again.');
 
-      router.push({ pathname: '/verify-email', params: { email } });
+      await updateRegistrationOptions(options);
+      router.push({ pathname: '/(onboarding)/signup/verify-email', params: { email } });
     } catch (error) {
-      Alert.alert('An error occurred. Please check your email and try again.');
+      Alert.alert(`User with email ${email} does not exist! Please create account`, '', [
+        {
+          text: 'Sign Up',
+          onPress: () => router.push('/(onboarding)/signup'),
+        },
+      ]);
     } finally {
       setLoading(false);
     }
@@ -81,7 +92,7 @@ const Tag = () => {
   );
 };
 
-export default Tag;
+export default LoginEmail;
 
 const styles = StyleSheet.create({
   root: {

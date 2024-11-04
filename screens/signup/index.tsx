@@ -1,14 +1,17 @@
 import { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Platform, TextInput, StatusBar as RNStatusBar, Alert } from 'react-native';
+import { View, Text, StyleSheet, Platform, TextInput, StatusBar as RNStatusBar, Alert, TouchableOpacity } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useLoginWithEmail, usePrivy } from '@privy-io/expo';
 
 import { LQDButton } from '@/components';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { adjustFontSizeForIOS, emailIsValid } from '@/utils/helpers';
+import { useSmartAccountActions } from '@/store/smartAccount/actions';
+import api from '@/init/api';
 
-const Tag = () => {
+const SignupEmail = () => {
   const { router } = useSystemFunctions();
+  const { updateRegistrationOptions } = useSmartAccountActions();
   const { logout } = usePrivy();
   const { sendCode } = useLoginWithEmail({
     onError: (error) => {
@@ -29,12 +32,20 @@ const Tag = () => {
     try {
       setLoading(true);
 
+      const options = await api.getRegistrationOptions(email as string);
+
       const response = await sendCode({ email });
       if (!response.success) return Alert.alert('An error occurred. Please check your email and try again.');
 
-      router.push({ pathname: '/verify-email', params: { email } });
+      await updateRegistrationOptions(options);
+      router.push({ pathname: '/(onboarding)/signup/verify-email', params: { email } });
     } catch (error) {
-      Alert.alert('An error occurred. Please check your email and try again.');
+      Alert.alert(`User with email ${email} already exist! Please login`, '', [
+        {
+          text: 'Login',
+          onPress: () => router.push('/(onboarding)/login'),
+        },
+      ]);
     } finally {
       setLoading(false);
     }
@@ -71,6 +82,10 @@ const Tag = () => {
               />
             </View>
           </View>
+
+          <TouchableOpacity onPress={() => router.push('/(onboarding)/login')}>
+            <Text style={styles.subtitle}>Already have an account? Login</Text>
+          </TouchableOpacity>
         </View>
 
         <View style={styles.buttonContainer}>
@@ -81,7 +96,7 @@ const Tag = () => {
   );
 };
 
-export default Tag;
+export default SignupEmail;
 
 const styles = StyleSheet.create({
   root: {

@@ -55,34 +55,34 @@ export function AuthProvider({ children }: PropsWithChildren) {
       setSession(smartAccount);
       dispatch(setAddress(smartAccount.address));
     } catch (error) {
-      if (error instanceof SmartAccountInfoNotPersistedError) {
-        //TODO: get challenge from backend
-        const passkey = await Passkeys.get({ challenge: 'mock-challenge', rpId });
+      // if (error instanceof SmartAccountInfoNotPersistedError) {
+      //   //TODO: get challenge from backend
+      //   const passkey = await Passkeys.get({ challenge: 'mock-challenge', rpId });
 
-        if (!passkey) {
-          throw new Error('No passkey found');
-        }
+      //   if (!passkey) {
+      //     throw new Error('No passkey found');
+      //   }
 
-        const webAuthnAccount = toWebAuthnAccount({
-          credential: {
-            id: passkey.id,
-            // should be the publickey tied to the credential ID
-            publicKey: getPublicKeyHex(passkey.response.signature),
-          },
-          getFn,
-          rpId,
-        });
+      //   const webAuthnAccount = toWebAuthnAccount({
+      //     credential: {
+      //       id: passkey.id,
+      //       // should be the publickey tied to the credential ID
+      //       publicKey: getPublicKeyHex(passkey.response.signature),
+      //     },
+      //     getFn,
+      //     rpId,
+      //   });
 
-        const smartAccount = await toCoinbaseSmartAccount({
-          client: publicClient,
-          owners: [webAuthnAccount],
-        });
+      //   const smartAccount = await toCoinbaseSmartAccount({
+      //     client: publicClient,
+      //     owners: [webAuthnAccount],
+      //   });
 
-        setSession(smartAccount);
-        dispatch(setAddress(smartAccount.address));
+      //   setSession(smartAccount);
+      //   dispatch(setAddress(smartAccount.address));
 
-        return; // stop execution
-      }
+      //   return; // stop execution
+      // }
 
       // catch all
       console.log('Failed to load session:', error);
