@@ -32,18 +32,19 @@ const LoginEmail = () => {
     try {
       setLoading(true);
 
-      const options = await api.getRegistrationOptions(email as string);
+      const options = await api.getAuthenticationOptions(email as string);
 
       const response = await sendCode({ email });
       if (!response.success) return Alert.alert('An error occurred. Please check your email and try again.');
 
       await updateRegistrationOptions(options);
-      router.push({ pathname: '/(onboarding)/signup/verify-email', params: { email } });
+      router.push({ pathname: '/(login)/verify-email', params: { email } });
     } catch (error) {
+      console.log(error);
       Alert.alert(`User with email ${email} does not exist! Please create account`, '', [
         {
           text: 'Sign Up',
-          onPress: () => router.push('/(onboarding)/signup'),
+          onPress: () => router.push('/(signup)'),
         },
       ]);
     } finally {

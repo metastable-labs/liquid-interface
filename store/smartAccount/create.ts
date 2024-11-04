@@ -36,8 +36,6 @@ export async function createSmartAccount(registrationOptions: CreatePassKeyCrede
       clientDataJSON,
     };
 
-    // const verificationResponse = await this.api.verifyRegistration(username, registrationResponse);
-
     const webAuthnAccount = toWebAuthnAccount({
       credential: {
         id: registrationResponse.credentialId,
@@ -53,8 +51,12 @@ export async function createSmartAccount(registrationOptions: CreatePassKeyCrede
     });
 
     const address = await smartAccount.getAddress();
+    console.log(registrationOptions.user.name, address);
+    const username = registrationOptions.user.name;
 
-    const updateUserAddressResponse = await api.updateUserAddress(registrationOptions.user.name, address);
+    // await api.verifyRegistration(username, registrationResponse);
+
+    const updateUserAddressResponse = await api.updateUserAddress(username, address);
     if (!updateUserAddressResponse.success) {
       throw new FailedToUpdateUserAddressError();
     }

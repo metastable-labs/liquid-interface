@@ -20,7 +20,7 @@ const LoginVerifyEmail = () => {
       Alert.alert('An error occurred. Please check your email and try again.');
     },
     onLoginSuccess: async () => {
-      router.push('/setup');
+      router.push({ pathname: '/setup', params: { fromLogin: 'true' } });
     },
   });
 

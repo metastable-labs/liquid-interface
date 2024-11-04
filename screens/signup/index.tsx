@@ -38,12 +38,13 @@ const SignupEmail = () => {
       if (!response.success) return Alert.alert('An error occurred. Please check your email and try again.');
 
       await updateRegistrationOptions(options);
-      router.push({ pathname: '/(onboarding)/signup/verify-email', params: { email } });
+      router.push({ pathname: '/(signup)/verify-email', params: { email } });
     } catch (error) {
+      console.log('error', error);
       Alert.alert(`User with email ${email} already exist! Please login`, '', [
         {
           text: 'Login',
-          onPress: () => router.push('/(onboarding)/login'),
+          onPress: () => router.push('/(login)'),
         },
       ]);
     } finally {
@@ -83,7 +84,7 @@ const SignupEmail = () => {
             </View>
           </View>
 
-          <TouchableOpacity onPress={() => router.push('/(onboarding)/login')}>
+          <TouchableOpacity onPress={() => router.push('/(login)')}>
             <Text style={styles.subtitle}>Already have an account? Login</Text>
           </TouchableOpacity>
         </View>

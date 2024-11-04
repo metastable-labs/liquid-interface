@@ -53,7 +53,7 @@ export function useAccountActions() {
 
   const _setValidTokens = async (tokens: Token[]) => {
     const validTokens = await tokens.filter((token) => token.isListed && token.balance !== '0');
-    const totalBalance = validTokens.reduce((acc, token) => acc + parseFloat(token.balance), 0);
+    const totalBalance = validTokens.reduce((acc, token) => acc + parseFloat(token.balance) * parseFloat(token.usdPrice), 0);
 
     dispatch(setTokens(validTokens));
     dispatch(setTokenBalance(totalBalance));
