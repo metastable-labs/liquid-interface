@@ -83,7 +83,7 @@ export function useSmartAccountActions() {
       });
       setSession(smartAccount);
       dispatch(setAddress(smartAccount.address));
-      return router.replace('/(tabs)');
+      return router.replace('/(tabs)/home');
     } catch (error) {
       console.log(error);
     }
