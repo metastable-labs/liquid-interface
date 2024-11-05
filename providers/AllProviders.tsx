@@ -3,6 +3,8 @@ import * as SplashScreen from 'expo-splash-screen';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { useLoadAppFonts } from '@/hooks/useLoadAppFonts';
+import { PrivyProvider } from '@privy-io/expo';
+import { privyAppId, privyClientId } from '@/constants/env';
 
 import { ReduxProvider } from './ReduxProvider';
 import { ThemeProvider } from './ThemeProvider';
@@ -34,11 +36,13 @@ export function AllProviders({ children }: PropsWithChildren) {
 
   return (
     <GestureHandlerRootView>
-      <ReduxProvider onBeforeLift={handleReduxStorePersisted}>
-        <ThemeProvider>
-          <AuthProvider>{children}</AuthProvider>
-        </ThemeProvider>
-      </ReduxProvider>
+      <PrivyProvider appId={privyAppId} clientId={privyClientId}>
+        <ReduxProvider onBeforeLift={handleReduxStorePersisted}>
+          <ThemeProvider>
+            <AuthProvider>{children}</AuthProvider>
+          </ThemeProvider>
+        </ReduxProvider>
+      </PrivyProvider>
     </GestureHandlerRootView>
   );
 }
