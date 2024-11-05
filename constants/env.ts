@@ -7,3 +7,6 @@ export const bundlerUrl = process.env.EXPO_PUBLIC_BUNDLER_RPC_URL;
 export const rpId = 'api.useliquid.xyz';
 
 export const smartAccountInfoKey = 'SMART_ACCOUNT_INFO';
+
+export const privyAppId = process.env.EXPO_PUBLIC_PRIVY_APP_ID;
+export const privyClientId = process.env.EXPO_PUBLIC_PRIVY_CLIENT_ID;
