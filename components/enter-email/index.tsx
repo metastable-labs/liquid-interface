@@ -97,6 +97,7 @@ const EnterEmail = ({ isSignup }: Props) => {
                   placeholderTextColor="#94A3B8"
                   autoComplete="off"
                   autoCorrect={false}
+                  autoCapitalize="none"
                   spellCheck={false}
                   autoFocus={true}
                   inputMode="email"
@@ -109,13 +110,6 @@ const EnterEmail = ({ isSignup }: Props) => {
           </View>
 
           <View style={styles.bottomContainer}>
-            <View style={styles.disclaimerContainer}>
-              <Text style={styles.disclaimerText}>By clicking continue, you agree to Liquid’s </Text>
-              <Text style={[styles.disclaimerText, styles.disclaimerTextBold]}>Terms of Service</Text>
-              <Text style={styles.disclaimerText}> and </Text>
-              <Text style={[styles.disclaimerText, styles.disclaimerTextBold]}>Privacy Policy</Text>
-            </View>
-
             <LQDButton title="Continue" onPress={onSubmit} variant="secondary" disabled={!isValid} loading={loading} />
 
             {isSignup && (
@@ -214,6 +208,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingBottom: 23,
     flexDirection: 'row',
+    textAlign: 'center',
+    justifyContent: 'center',
     flexWrap: 'wrap',
   },
 

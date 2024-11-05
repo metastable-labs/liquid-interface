@@ -34,7 +34,6 @@ function RootStack() {
       <Stack.Screen name="(onboarding)" />
       <Stack.Screen name="(login)" />
       <Stack.Screen name="(signup)" />
-      <Stack.Screen name="tag" />
       <Stack.Screen name="setup" />
 
       {/* Protected routes */}
