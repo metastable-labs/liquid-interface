@@ -1,4 +1,4 @@
-import { Address, Hex, encodeFunctionData } from 'viem';
+import { Address, Hex, encodeFunctionData, erc20Abi } from 'viem';
 import { AerodromeConnectorABI, ConnectorPluginABI } from '@/constants/abis';
 import { IRouter } from '@/hooks/types';
 
@@ -91,5 +91,12 @@ export function encodeStake({ gaugeAddress, amount }: { gaugeAddress: Address; a
     abi: AerodromeConnectorABI.abi,
     functionName: 'deposit',
     args: [gaugeAddress, amount],
+  });
+}
+export function encodeApprove({ amount, spender }: { amount: bigint; spender: Address }) {
+  return encodeFunctionData({
+    abi: erc20Abi,
+    functionName: 'approve',
+    args: [spender, amount],
   });
 }

@@ -1,9 +1,10 @@
 import { useCallback } from 'react';
-import { Address, Hex, PublicClient, WaitForTransactionReceiptParameters } from 'viem';
+import { Address, erc20Abi, Hex, PublicClient, WaitForTransactionReceiptParameters } from 'viem';
 import { makeCalls } from '@/utils/calls';
-import { encodePluginExecute, encodeAddLiquidity, encodeRemoveLiquidity, encodeSwap, encodeStake } from '@/utils/encoders';
+import { encodePluginExecute, encodeAddLiquidity, encodeRemoveLiquidity, encodeSwap, encodeStake, encodeApprove } from '@/utils/encoders';
 import { AERODROME_CONNECTOR, CONNECTOR_PLUGIN } from '@/constants/addresses';
 import { AddLiquidityParams, RemoveLiquidityParams, StakeParams, SwapExactTokensParams, TransactionConfig } from './types';
+import { Call } from '@/utils/types';
 
 async function handleTransaction(client: PublicClient, { hash, waitForReceipt = true }: TransactionConfig) {
   if (!waitForReceipt) return { hash };
@@ -104,10 +105,37 @@ export function useLiquidity(publicClient: PublicClient, account: Address) {
     [publicClient, createPluginCall]
   );
 
+  const approveTokens = useCallback(
+    async (tokenAddress: Address, spender: Address, amount: bigint, txConfig?: Partial<TransactionConfig>) => {
+      const approveData = encodeApprove({ amount, spender });
+
+      const calls: Call[] = [
+        {
+          index: 0,
+          target: tokenAddress,
+          data: approveData,
+          value: 0n,
+        },
+      ];
+
+      const { opHash } = await makeCalls({
+        calls,
+        account,
+      });
+
+      return handleTransaction(publicClient, {
+        hash: opHash,
+        ...txConfig,
+      });
+    },
+    [publicClient, createPluginCall]
+  );
+
   return {
     addLiquidity,
     removeLiquidity,
     swap,
     stake,
+    approveTokens,
   };
 }
