@@ -1,11 +1,19 @@
 import { Address as EthereumAddress } from 'viem';
 import { ToCoinbaseSmartAccountReturnType } from 'viem/account-abstraction';
-import { PublicKeyCredentialCreationOptionsJSON } from 'react-native-passkeys/build/ReactNativePasskeys.types';
+import {
+  PublicKeyCredentialCreationOptionsJSON,
+  PublicKeyCredentialRequestOptionsJSON,
+} from 'react-native-passkeys/build/ReactNativePasskeys.types';
 
 export type Address = EthereumAddress;
 
 export type CreatePassKeyCredentialOptions = {
   data: PublicKeyCredentialCreationOptionsJSON;
+  success: boolean;
+};
+
+export type AuthCredentialOptions = {
+  data: PublicKeyCredentialRequestOptionsJSON;
   success: boolean;
 };
 
@@ -35,14 +43,12 @@ export type SmartAccountPersistedInfo = {
 
 export type VerifyRegistration = {
   username: string;
-  registrationResponse: {
-    id: string;
-    rawId: string;
-    type: string;
-    authenticationAttachment: string;
-    response: {
-      attestationObject: any;
-      clientDataJSON: any;
-    };
+  id: string;
+  rawId: string;
+  response: {
+    attestationObject: string;
+    clientDataJSON: string;
   };
+  type: string;
+  authenticatorAttachment: string;
 };

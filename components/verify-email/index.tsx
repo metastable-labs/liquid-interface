@@ -8,9 +8,11 @@ import LQDButton from '@/components/button';
 import LQDKeyboardWrapper from '@/components/keyboard-wrapper';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
+import { useSmartAccountActions } from '@/store/smartAccount/actions';
 
 const VerifyEmail = ({ email, isSignup }: { email: string; isSignup?: boolean }) => {
   const { router } = useSystemFunctions();
+  const { login } = useSmartAccountActions();
 
   const { loginWithCode, sendCode } = useLoginWithEmail({
     onError: (error) => {
@@ -22,7 +24,7 @@ const VerifyEmail = ({ email, isSignup }: { email: string; isSignup?: boolean })
       if (isSignup) {
         return router.push('/setup');
       }
-
+      login(email);
       //   smart account stuff
     },
     onSendCodeSuccess: () => {

@@ -1,5 +1,12 @@
 import { PoolResponse } from '@/store/pools/types';
-import { CreatePassKeyCredentialOptions, Address, PasskeyRegistrationResult, PoolType, VerifyRegistration } from './types';
+import {
+  CreatePassKeyCredentialOptions,
+  Address,
+  PasskeyRegistrationResult,
+  PoolType,
+  VerifyRegistration,
+  AuthCredentialOptions,
+} from './types';
 
 class LiquidAPI {
   private apiBaseUrl: string;
@@ -37,7 +44,7 @@ class LiquidAPI {
     });
   }
 
-  async getAuthenticationOptions(username: string): Promise<CreatePassKeyCredentialOptions> {
+  async getAuthenticationOptions(username: string): Promise<AuthCredentialOptions> {
     return this.fetchWithErrorHandling(`${this.apiBaseUrl}/authentication/options?username=${encodeURIComponent(username)}`, {
       method: 'GET',
       headers: {

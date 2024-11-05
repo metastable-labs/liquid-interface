@@ -56,16 +56,14 @@ export async function createSmartAccount(registrationOptions: PublicKeyCredentia
 
     const smartAccountInfo: VerifyRegistration = {
       username: registrationOptions.user.name,
-      registrationResponse: {
-        id: registrationResponse.credentialId,
-        rawId: registrationResponse.credentialId,
-        type: 'public-key',
-        authenticationAttachment: 'platform',
-        response: {
-          attestationObject: registrationResponse.attestationObject,
-          clientDataJSON: registrationResponse.clientDataJSON,
-        },
+      id: registrationResponse.credentialId,
+      rawId: registrationResponse.credentialId,
+      response: {
+        attestationObject: registrationResponse.attestationObject,
+        clientDataJSON: registrationResponse.clientDataJSON,
       },
+      type: 'public-key',
+      authenticatorAttachment: 'platform',
     };
 
     await api.verifyRegistration(smartAccountInfo);

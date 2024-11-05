@@ -1,8 +1,10 @@
 import { createContext, useContext, useState, PropsWithChildren } from 'react';
+import * as Passkeys from 'react-native-passkeys';
 
 import { useOnMount } from '@/hooks/useOnMount';
 import { SmartAccount } from '@/init/types';
 import { getPersistedSmartAccountInfo } from '@/store/smartAccount/persist';
+import { SmartAccountInfoNotPersistedError } from '@/store/smartAccount/errors';
 import { rpId } from '@/constants/env';
 import { toCoinbaseSmartAccount, toWebAuthnAccount } from 'viem/account-abstraction';
 import { publicClient } from '@/init/viem';
@@ -53,6 +55,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
       setSession(smartAccount);
       dispatch(setAddress(smartAccount.address));
     } catch (error) {
+      // catch all
       console.log('Failed to load session:', error);
     } finally {
       setIsLoading(false);
