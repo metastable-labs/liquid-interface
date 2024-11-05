@@ -11,6 +11,7 @@ import { createSmartAccount } from './create';
 import { clearPersistedSmartAccountInfo, getPersistedSmartAccountInfo, persistSmartAccountInfo } from './persist';
 import { getFn } from './getFn';
 import { RegistrationOptionsNotAvailableError } from './errors';
+import { setLpBalance, setPositions, setTokenBalance, setTokens } from '../account';
 
 export function useSmartAccountActions() {
   const { dispatch, router, smartAccountState } = useSystemFunctions();
@@ -55,7 +56,11 @@ export function useSmartAccountActions() {
 
   const logout = async () => {
     try {
-      await dispatch(setAddress(null));
+      dispatch(setAddress(null));
+      dispatch(setTokens([]));
+      dispatch(setTokenBalance(0));
+      dispatch(setPositions([]));
+      dispatch(setLpBalance(0));
       await clearPersistedSmartAccountInfo();
 
       return router.replace('/(onboarding)/step1');

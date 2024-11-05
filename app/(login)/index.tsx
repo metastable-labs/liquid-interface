@@ -1,9 +1,9 @@
 import { PrivyProvider } from '@privy-io/expo';
-import LoginEmail from '@/screens/login';
+import { EnterEmail } from '@/components';
 
 const LoginTagScreen = () => (
   <PrivyProvider appId={process.env.EXPO_PUBLIC_PRIVY_APP_ID!} clientId={process.env.EXPO_PUBLIC_PRIVY_CLIENT_ID}>
-    <LoginEmail />
+    <EnterEmail />
   </PrivyProvider>
 );
 

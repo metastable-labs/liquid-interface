@@ -1,10 +1,16 @@
 import { PrivyProvider } from '@privy-io/expo';
-import SignupVerifyEmail from '@/screens/signup/verify-email';
+import { VerifyEmail } from '@/components';
+import { useLocalSearchParams } from 'expo-router';
 
-const SignupVerifyEmailScreen = () => (
-  <PrivyProvider appId={process.env.EXPO_PUBLIC_PRIVY_APP_ID!} clientId={process.env.EXPO_PUBLIC_PRIVY_CLIENT_ID}>
-    <SignupVerifyEmail />
-  </PrivyProvider>
-);
+const SignupVerifyEmailScreen = () => {
+  const params = useLocalSearchParams();
+
+  const email = params?.email;
+  return (
+    <PrivyProvider appId={process.env.EXPO_PUBLIC_PRIVY_APP_ID!} clientId={process.env.EXPO_PUBLIC_PRIVY_CLIENT_ID}>
+      <VerifyEmail email={email as string} />
+    </PrivyProvider>
+  );
+};
 
 export default SignupVerifyEmailScreen;
