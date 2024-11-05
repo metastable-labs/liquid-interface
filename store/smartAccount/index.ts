@@ -1,9 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { PayloadAction } from '@reduxjs/toolkit';
-import { CreatePassKeyCredentialOptions, Address } from '@/init/types';
+import { Address } from '@/init/types';
+import { PublicKeyCredentialCreationOptionsJSON } from 'react-native-passkeys/build/ReactNativePasskeys.types';
 
 export interface SmartAccountState {
-  readonly registrationOptions: CreatePassKeyCredentialOptions | null;
+  readonly registrationOptions: PublicKeyCredentialCreationOptionsJSON | null;
   readonly address: Address | null;
 }
 
@@ -16,7 +17,7 @@ export const smartAccountReducer = createSlice({
   name: 'smartAccount',
   initialState,
   reducers: {
-    setRegistrationOptions: (state, action: PayloadAction<CreatePassKeyCredentialOptions | null>) => {
+    setRegistrationOptions: (state, action: PayloadAction<PublicKeyCredentialCreationOptionsJSON | null>) => {
       if (action.payload) {
         // attestation and extensions are not supported by react-native-passkeys
         const { attestation, extensions, ...registrationOptions } = action.payload;

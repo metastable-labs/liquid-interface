@@ -17,7 +17,7 @@ export function useSmartAccountActions() {
   const { dispatch, router, smartAccountState } = useSystemFunctions();
 
   const updateRegistrationOptions = (options: CreatePassKeyCredentialOptions) => {
-    dispatch(setRegistrationOptions(options));
+    dispatch(setRegistrationOptions(options.data));
   };
 
   const setSmartAccount = async () => {

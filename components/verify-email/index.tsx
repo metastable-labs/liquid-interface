@@ -4,11 +4,12 @@ import { StatusBar } from 'expo-status-bar';
 import { OtpInput } from 'react-native-otp-entry';
 import { useLoginWithEmail } from '@privy-io/expo';
 
-import { LQDButton, LQDKeyboardWrapper } from '@/components';
+import LQDButton from '@/components/button';
+import LQDKeyboardWrapper from '@/components/keyboard-wrapper';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 
-const VerifyEmail = ({ email }: { email: string }) => {
+const VerifyEmail = ({ email, isSignup }: { email: string; isSignup?: boolean }) => {
   const { router } = useSystemFunctions();
 
   const { loginWithCode, sendCode } = useLoginWithEmail({
@@ -18,7 +19,11 @@ const VerifyEmail = ({ email }: { email: string }) => {
       Alert.alert('An error occurred. Please check your email and try again.');
     },
     onLoginSuccess: async () => {
-      router.push('/setup');
+      if (isSignup) {
+        return router.push('/setup');
+      }
+
+      //   smart account stuff
     },
     onSendCodeSuccess: () => {
       setResendDisabled(true);

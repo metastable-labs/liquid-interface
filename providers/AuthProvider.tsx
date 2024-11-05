@@ -1,10 +1,8 @@
 import { createContext, useContext, useState, PropsWithChildren } from 'react';
-import * as Passkeys from 'react-native-passkeys';
 
 import { useOnMount } from '@/hooks/useOnMount';
 import { SmartAccount } from '@/init/types';
 import { getPersistedSmartAccountInfo } from '@/store/smartAccount/persist';
-import { SmartAccountInfoNotPersistedError } from '@/store/smartAccount/errors';
 import { rpId } from '@/constants/env';
 import { toCoinbaseSmartAccount, toWebAuthnAccount } from 'viem/account-abstraction';
 import { publicClient } from '@/init/viem';
@@ -55,38 +53,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
       setSession(smartAccount);
       dispatch(setAddress(smartAccount.address));
     } catch (error) {
-      // if (error instanceof SmartAccountInfoNotPersistedError) {
-      //   //TODO: get challenge from backend
-      //   const passkey = await Passkeys.get({ challenge: 'mock-challenge', rpId });
-
-      //   if (!passkey) {
-      //     throw new Error('No passkey found');
-      //   }
-
-      //   const webAuthnAccount = toWebAuthnAccount({
-      //     credential: {
-      //       id: passkey.id,
-      //       // should be the publickey tied to the credential ID
-      //       publicKey: getPublicKeyHex(passkey.response.signature),
-      //     },
-      //     getFn,
-      //     rpId,
-      //   });
-
-      //   const smartAccount = await toCoinbaseSmartAccount({
-      //     client: publicClient,
-      //     owners: [webAuthnAccount],
-      //   });
-
-      //   setSession(smartAccount);
-      //   dispatch(setAddress(smartAccount.address));
-
-      //   return; // stop execution
-      // }
-
-      // catch all
       console.log('Failed to load session:', error);
-      throw error;
     } finally {
       setIsLoading(false);
     }

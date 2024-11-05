@@ -3,7 +3,8 @@ import { View, Text, StyleSheet, Platform, TextInput, StatusBar as RNStatusBar, 
 import { StatusBar } from 'expo-status-bar';
 import { useLoginWithEmail, usePrivy } from '@privy-io/expo';
 
-import { LQDButton, LQDKeyboardWrapper } from '@/components';
+import LQDButton from '@/components/button';
+import LQDKeyboardWrapper from '@/components/keyboard-wrapper';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { adjustFontSizeForIOS, emailIsValid } from '@/utils/helpers';
 import { useSmartAccountActions } from '@/store/smartAccount/actions';

@@ -4,7 +4,10 @@ import { PublicKeyCredentialCreationOptionsJSON } from 'react-native-passkeys/bu
 
 export type Address = EthereumAddress;
 
-export type CreatePassKeyCredentialOptions = PublicKeyCredentialCreationOptionsJSON;
+export type CreatePassKeyCredentialOptions = {
+  data: PublicKeyCredentialCreationOptionsJSON;
+  success: boolean;
+};
 
 export type PasskeyRegistrationResult = {
   credentialId: string;
@@ -28,4 +31,18 @@ export type SmartAccount = ToCoinbaseSmartAccountReturnType;
 export type SmartAccountPersistedInfo = {
   publicKey: string;
   registrationResponse: PasskeyRegistrationResult;
+};
+
+export type VerifyRegistration = {
+  username: string;
+  registrationResponse: {
+    id: string;
+    rawId: string;
+    type: string;
+    authenticationAttachment: string;
+    response: {
+      attestationObject: any;
+      clientDataJSON: any;
+    };
+  };
 };

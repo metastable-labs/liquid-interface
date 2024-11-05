@@ -1,5 +1,5 @@
 import { PoolResponse } from '@/store/pools/types';
-import { CreatePassKeyCredentialOptions, Address, PasskeyRegistrationResult, PoolType } from './types';
+import { CreatePassKeyCredentialOptions, Address, PasskeyRegistrationResult, PoolType, VerifyRegistration } from './types';
 
 class LiquidAPI {
   private apiBaseUrl: string;
@@ -46,16 +46,13 @@ class LiquidAPI {
     });
   }
 
-  async verifyRegistration(
-    username: string,
-    registrationResponse: PasskeyRegistrationResult
-  ): Promise<{ verified: boolean; publicKey: string }> {
+  async verifyRegistration(data: VerifyRegistration): Promise<{ verified: boolean; publicKey: string }> {
     return this.fetchWithErrorHandling(`${this.apiBaseUrl}/registration/verify`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ userName: username, registrationResponse }),
+      body: JSON.stringify(data),
     });
   }
 
