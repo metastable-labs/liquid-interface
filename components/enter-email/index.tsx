@@ -75,7 +75,7 @@ const EnterEmail = ({ isSignup }: Props) => {
     }
   };
 
-  useEffect(() => {
+  useEffect(function destroyPrivySession() {
     logout();
   }, []);
 
