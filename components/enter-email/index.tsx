@@ -110,6 +110,15 @@ const EnterEmail = ({ isSignup }: Props) => {
           </View>
 
           <View style={styles.bottomContainer}>
+            {isSignup && (
+              <View style={styles.disclaimerContainer}>
+                <Text style={styles.disclaimerText}>By clicking continue, you agree to Liquid’s </Text>
+                <Text style={[styles.disclaimerText, styles.disclaimerTextBold]}>Terms of Service</Text>
+                <Text style={styles.disclaimerText}> and </Text>
+                <Text style={[styles.disclaimerText, styles.disclaimerTextBold]}>Privacy Policy</Text>
+              </View>
+            )}
+
             <LQDButton title="Continue" onPress={onSubmit} variant="secondary" disabled={!isValid} loading={loading} />
 
             {isSignup && (
