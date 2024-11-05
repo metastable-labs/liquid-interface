@@ -8,7 +8,7 @@ import { OffchainOracleABI } from '@/constants/abis';
 
 export function useToken(publicClient: PublicClient) {
   const { smartAccountState } = useSystemFunctions();
-  const account = smartAccountState?.address || '0xF831A8c0788a44483Df72f0D129F03Cb0e01bBe2';
+  const account = smartAccountState?.address;
 
   const [tokens, setTokens] = useState<Token[]>([]);
   const [tokenMap, setTokenMap] = useState<Map<string, Token>>(new Map());

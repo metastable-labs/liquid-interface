@@ -5,13 +5,14 @@ import { toCoinbaseSmartAccount, toWebAuthnAccount } from 'viem/account-abstract
 import api from '@/init/api';
 import { publicClient } from '@/init/viem';
 import { isDev, rpId } from '@/constants/env';
-import { CreatePassKeyCredentialOptions, SmartAccount, Address, SmartAccountPersistedInfo } from '@/init/types';
+import { SmartAccount, Address, SmartAccountPersistedInfo, VerifyRegistration } from '@/init/types';
 import { getPublicKeyHex } from '@/utils/base64';
 
 import { getFn } from './getFn';
 import { FailedToCreatePasskeyCredentialError, FailedToUpdateUserAddressError, PasskeyNotSupportedError } from './errors';
+import { PublicKeyCredentialCreationOptionsJSON } from 'react-native-passkeys/build/ReactNativePasskeys.types';
 
-export async function createSmartAccount(registrationOptions: CreatePassKeyCredentialOptions): Promise<{
+export async function createSmartAccount(registrationOptions: PublicKeyCredentialCreationOptionsJSON): Promise<{
   smartAccount: SmartAccount;
   address: Address;
   smartAccountInfo: SmartAccountPersistedInfo;
@@ -36,8 +37,6 @@ export async function createSmartAccount(registrationOptions: CreatePassKeyCrede
       clientDataJSON,
     };
 
-    // const verificationResponse = await this.api.verifyRegistration(username, registrationResponse);
-
     const webAuthnAccount = toWebAuthnAccount({
       credential: {
         id: registrationResponse.credentialId,
@@ -53,9 +52,23 @@ export async function createSmartAccount(registrationOptions: CreatePassKeyCrede
     });
 
     const address = await smartAccount.getAddress();
-    console.log('address', address);
+    const username = registrationOptions.user.name;
 
-    const updateUserAddressResponse = await api.updateUserAddress(registrationOptions.user.name, address);
+    const smartAccountInfo: VerifyRegistration = {
+      username: registrationOptions.user.name,
+      id: registrationResponse.credentialId,
+      rawId: registrationResponse.credentialId,
+      response: {
+        attestationObject: registrationResponse.attestationObject,
+        clientDataJSON: registrationResponse.clientDataJSON,
+      },
+      type: 'public-key',
+      authenticatorAttachment: 'platform',
+    };
+
+    await api.verifyRegistration(smartAccountInfo);
+
+    const updateUserAddressResponse = await api.updateUserAddress(username, address);
     if (!updateUserAddressResponse.success) {
       throw new FailedToUpdateUserAddressError();
     }

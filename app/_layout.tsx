@@ -32,7 +32,10 @@ function RootStack() {
 
       {/* Unprotected routes */}
       <Stack.Screen name="(onboarding)" />
-      <Stack.Screen name="tag" />
+      <Stack.Screen name="(login)/index" />
+      <Stack.Screen name="(login)/verify-email" />
+      <Stack.Screen name="(signup)/index" />
+      <Stack.Screen name="(signup)/verify-email" />
       <Stack.Screen name="setup" />
 
       {/* Protected routes */}

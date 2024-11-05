@@ -41,7 +41,6 @@ export function useAccountActions() {
 
       dispatch(setLoading(true));
       const positions = await fetchPositions(15, 0);
-      console.log(positions);
 
       return _setValidPositions(positions || []);
     } catch (error: any) {
@@ -54,7 +53,7 @@ export function useAccountActions() {
 
   const _setValidTokens = async (tokens: Token[]) => {
     const validTokens = await tokens.filter((token) => token.isListed && token.balance !== '0');
-    const totalBalance = validTokens.reduce((acc, token) => acc + parseFloat(token.balance), 0);
+    const totalBalance = validTokens.reduce((acc, token) => acc + parseFloat(token.balance) * parseFloat(token.usdPrice), 0);
 
     dispatch(setTokens(validTokens));
     dispatch(setTokenBalance(totalBalance));

@@ -131,7 +131,7 @@ export default function OnboardingTabLayout() {
       </Tab.Navigator>
 
       <View style={styles.action}>
-        <LQDButton onPress={() => router.replace('/home')} title="Let's go!" />
+        <LQDButton onPress={() => router.replace('/(signup)')} title="Let's go!" />
       </View>
     </>
   );

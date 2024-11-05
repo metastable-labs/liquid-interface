@@ -10,6 +10,8 @@ import { toCoinbaseSmartAccount, toWebAuthnAccount } from 'viem/account-abstract
 import { publicClient } from '@/init/viem';
 import { getPublicKeyHex } from '@/utils/base64';
 import { getFn } from '@/store/smartAccount/getFn';
+import useSystemFunctions from '@/hooks/useSystemFunctions';
+import { setAddress } from '@/store/smartAccount';
 
 type AuthContextType = {
   isLoading: boolean;
@@ -24,6 +26,7 @@ const AuthContext = createContext<AuthContextType>({
 });
 
 export function AuthProvider({ children }: PropsWithChildren) {
+  const { dispatch } = useSystemFunctions();
   const [isLoading, setIsLoading] = useState(true);
   const [session, setSession] = useState<AuthContextType['session']>(null);
 
@@ -50,38 +53,10 @@ export function AuthProvider({ children }: PropsWithChildren) {
       });
 
       setSession(smartAccount);
+      dispatch(setAddress(smartAccount.address));
     } catch (error) {
-      if (error instanceof SmartAccountInfoNotPersistedError) {
-        //TODO: get challenge from backend
-        const passkey = await Passkeys.get({ challenge: 'mock-challenge', rpId });
-
-        if (!passkey) {
-          throw new Error('No passkey found');
-        }
-
-        const webAuthnAccount = toWebAuthnAccount({
-          credential: {
-            id: passkey.id,
-            // should be the publickey tied to the credential ID
-            publicKey: getPublicKeyHex(passkey.response.signature),
-          },
-          getFn,
-          rpId,
-        });
-
-        const smartAccount = await toCoinbaseSmartAccount({
-          client: publicClient,
-          owners: [webAuthnAccount],
-        });
-
-        setSession(smartAccount);
-
-        return; // stop execution
-      }
-
       // catch all
       console.log('Failed to load session:', error);
-      throw error;
     } finally {
       setIsLoading(false);
     }

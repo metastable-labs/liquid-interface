@@ -9,10 +9,12 @@ import { useAccountActions } from '@/store/account/actions';
 import Section from './section';
 import { clearPersistedSmartAccountInfo } from '@/store/smartAccount/persist';
 import { useAuth } from '@/providers';
+import { useSmartAccountActions } from '@/store/smartAccount/actions';
 
 const Home = () => {
-  const { router, poolsState, smartAccountState, accountState } = useSystemFunctions();
+  const { router, poolsState, smartAccountState, accountState, dispatch } = useSystemFunctions();
   const { getTokens, getPositions } = useAccountActions();
+  const { logout } = useSmartAccountActions();
 
   const { trendingPools, hotPools, topGainers } = poolsState;
 
@@ -77,11 +79,7 @@ const Home = () => {
       {
         text: 'Sign out',
         style: 'destructive',
-        onPress: () => {
-          clearPersistedSmartAccountInfo()
-            .then(() => router.replace('/(onboarding)/step1'))
-            .catch((error) => console.log(error));
-        },
+        onPress: logout,
       },
     ]);
   };
