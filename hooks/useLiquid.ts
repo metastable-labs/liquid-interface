@@ -35,11 +35,28 @@ export function useLiquidity(publicClient: PublicClient, account: Address) {
 
   const addLiquidity = useCallback(
     async (params: AddLiquidityParams, txConfig?: Partial<TransactionConfig>) => {
+      const approveTokenAData = encodeApprove({ amount: params.amountAIn, spender: AERODROME_CONNECTOR });
+      const approveTokenBData = encodeApprove({ amount: params.amountBIn, spender: AERODROME_CONNECTOR });
       const connectorData = encodeAddLiquidity(params);
-      const call = createPluginCall(connectorData);
+      const addLiquidtyCall = createPluginCall(connectorData);
+      const calls: Call[] = [
+        {
+          index: 0,
+          target: params.tokenA,
+          data: approveTokenAData,
+          value: 0n,
+        },
+        {
+          index: 1,
+          target: params.tokenB,
+          data: approveTokenBData,
+          value: 0n,
+        },
+        addLiquidtyCall,
+      ];
 
       const { opHash } = await makeCalls({
-        calls: [call],
+        calls,
         account,
       });
 

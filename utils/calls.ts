@@ -1,9 +1,11 @@
-import { Address, Hex } from 'viem';
+import { Address, encodeFunctionData, Hex } from 'viem';
 import { buildUserOp, getPaymasterData, getUserOpHash } from './wallet';
 import { Call } from './types';
 import { entryPoint06Address } from 'viem/_types/account-abstraction';
 import { paymasterClient, bundlerClient } from '@/init/viem';
 import { useSmartAccountActions } from '@/store/smartAccount/actions';
+import { smartAccountAbi } from 'viem/_types/constants/abis';
+import { SmartWalletABI } from '@/constants/abis';
 
 // Main function to execute calls
 export async function makeCalls({ calls, account }: { calls: Call[]; account: Address }) {
@@ -54,4 +56,14 @@ export async function makeCalls({ calls, account }: { calls: Call[]; account: Ad
     opHash,
     userOpHash: hash,
   };
+}
+
+export function buildUserOperationCalldata({ calls }: { calls: Call[] }): Hex {
+  // sort ascending order, 0 first
+  const _calls = calls.sort((a, b) => a.index - b.index);
+  return encodeFunctionData({
+    abi: SmartWalletABI,
+    functionName: 'executeBatch',
+    args: [_calls],
+  });
 }
