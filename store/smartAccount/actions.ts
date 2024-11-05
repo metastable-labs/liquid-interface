@@ -62,12 +62,10 @@ export function useSmartAccountActions() {
     try {
       const authOptions = await api.getAuthenticationOptions(userName);
 
-      console.log(authOptions, 'auth options');
       const passkey = await Passkeys.get({ challenge: authOptions.data.challenge, rpId: authOptions.data.rpId });
       if (!passkey) {
         throw new Error('No passkey found');
       }
-      console.log(passkey);
       const webAuthnAccount = toWebAuthnAccount({
         credential: {
           id: passkey.id,

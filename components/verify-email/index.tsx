@@ -103,7 +103,6 @@ const VerifyEmail = ({ email, isSignup }: { email: string; isSignup?: boolean })
                 focusColor="#1A8860"
                 focusStickBlinkingDuration={500}
                 onTextChange={(text) => setOtp(text)}
-                onFilled={(text) => console.log(`OTP is ${text}`)}
                 textInputProps={{
                   accessibilityLabel: 'One-Time Password',
                 }}
