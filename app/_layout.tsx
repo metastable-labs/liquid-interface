@@ -28,6 +28,10 @@ function RootStack() {
     getPools();
   });
 
+  if (!privyAppId || !privyClientId) {
+    throw new Error('Privy App ID and Client ID are required');
+  }
+
   return (
     <PrivyProvider appId={privyAppId} clientId={privyClientId}>
       <Stack screenOptions={{ headerShown: false }} initialRouteName="index">
