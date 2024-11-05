@@ -52,7 +52,6 @@ const EnterEmail = ({ isSignup }: Props) => {
       const response = await sendCode({ email });
       if (!response.success) return Alert.alert('An error occurred. Please check your email and try again.');
 
-      await updateRegistrationOptions(options);
       return router.push({ pathname: '/(login)/verify-email', params: { email } });
     } catch (error) {
       setEmailError(true);
