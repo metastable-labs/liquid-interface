@@ -1,4 +1,5 @@
 import { toCoinbaseSmartAccount, toWebAuthnAccount } from 'viem/account-abstraction';
+import * as Passkeys from 'react-native-passkeys';
 
 import { setAddress, setRegistrationOptions } from '@/store/smartAccount';
 import { CreatePassKeyCredentialOptions } from '@/init/types';
@@ -12,9 +13,12 @@ import { clearPersistedSmartAccountInfo, getPersistedSmartAccountInfo, persistSm
 import { getFn } from './getFn';
 import { RegistrationOptionsNotAvailableError } from './errors';
 import { setLpBalance, setPositions, setTokenBalance, setTokens } from '../account';
+import api from '@/init/api';
+import { useAuth } from '@/providers';
 
 export function useSmartAccountActions() {
   const { dispatch, router, smartAccountState } = useSystemFunctions();
+  const { setSession } = useAuth();
 
   const updateRegistrationOptions = (options: CreatePassKeyCredentialOptions) => {
     dispatch(setRegistrationOptions(options.data));
@@ -54,6 +58,35 @@ export function useSmartAccountActions() {
     return smartAccount;
   };
 
+  const login = async (userName: string) => {
+    try {
+      const authOptions = await api.getAuthenticationOptions(userName);
+
+      const passkey = await Passkeys.get({ challenge: authOptions.data.challenge, rpId: authOptions.data.rpId });
+      if (!passkey) {
+        throw new Error('No passkey found');
+      }
+      const webAuthnAccount = toWebAuthnAccount({
+        credential: {
+          id: passkey.id,
+          // should be the publickey tied to the credential ID
+          publicKey: getPublicKeyHex(passkey.response.signature),
+        },
+        getFn,
+        rpId,
+      });
+      const smartAccount = await toCoinbaseSmartAccount({
+        client: publicClient,
+        owners: [webAuthnAccount],
+      });
+      setSession(smartAccount);
+      dispatch(setAddress(smartAccount.address));
+      return router.replace('/(tabs)/home');
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const logout = async () => {
     try {
       dispatch(setAddress(null));
@@ -74,5 +107,6 @@ export function useSmartAccountActions() {
     setSmartAccount,
     getSmartAccount,
     logout,
+    login,
   };
 }

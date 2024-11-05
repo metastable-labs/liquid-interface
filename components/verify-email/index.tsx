@@ -8,9 +8,11 @@ import LQDButton from '@/components/button';
 import LQDKeyboardWrapper from '@/components/keyboard-wrapper';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
+import { useSmartAccountActions } from '@/store/smartAccount/actions';
 
 const VerifyEmail = ({ email, isSignup }: { email: string; isSignup?: boolean }) => {
   const { router } = useSystemFunctions();
+  const { login } = useSmartAccountActions();
 
   const { loginWithCode, sendCode } = useLoginWithEmail({
     onError: (error) => {
@@ -22,7 +24,7 @@ const VerifyEmail = ({ email, isSignup }: { email: string; isSignup?: boolean })
       if (isSignup) {
         return router.push('/setup');
       }
-
+      login(email);
       //   smart account stuff
     },
     onSendCodeSuccess: () => {
@@ -101,7 +103,6 @@ const VerifyEmail = ({ email, isSignup }: { email: string; isSignup?: boolean })
                 focusColor="#1A8860"
                 focusStickBlinkingDuration={500}
                 onTextChange={(text) => setOtp(text)}
-                onFilled={(text) => console.log(`OTP is ${text}`)}
                 textInputProps={{
                   accessibilityLabel: 'One-Time Password',
                 }}

@@ -13,7 +13,6 @@ export default function AuthGate() {
   const { isLoading, session } = useAuth();
 
   if (isLoading) {
-    // TODO: implement proper loading state
     return <Step1 />;
   }
 
