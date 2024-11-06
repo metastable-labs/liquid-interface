@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { StyleSheet, View, FlatList, Text } from 'react-native';
 import { useForm } from 'react-hook-form';
-import { debounce } from 'lodash';
+import debounce from 'lodash/debounce';
 import Animated, { useSharedValue, withTiming, useAnimatedStyle } from 'react-native-reanimated';
 
 import { adjustFontSizeForIOS } from '@/utils/helpers';
