@@ -1,6 +1,6 @@
 import { Address, Hex, encodeFunctionData, erc20Abi } from 'viem';
 import { AerodromeConnectorABI, ConnectorPluginABI } from '@/constants/abis';
-import { IRouter } from '@/hooks/types';
+import { IRouter, Token } from '@/hooks/types';
 
 export function encodePluginExecute(connector: Address, data: Hex) {
   return encodeFunctionData({
@@ -22,8 +22,8 @@ export function encodeAddLiquidity({
   to,
   deadline,
 }: {
-  tokenA: Address;
-  tokenB: Address;
+  tokenA: Token;
+  tokenB: Token;
   stable: boolean;
   amountAIn: bigint;
   amountBIn: bigint;
@@ -50,8 +50,8 @@ export function encodeRemoveLiquidity({
   to,
   deadline,
 }: {
-  tokenA: Address;
-  tokenB: Address;
+  tokenA: Token;
+  tokenB: Token;
   stable: boolean;
   liquidity: bigint;
   amountAMin: bigint;

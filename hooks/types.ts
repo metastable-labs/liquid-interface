@@ -130,48 +130,47 @@ export type FormattedPosition = {
 export type VolumeReturn = { volume0: string; volume1: string; cumulativeVolumeUSD: string };
 
 export interface AddLiquidityParams {
-  tokenA: Address;
-  tokenB: Address;
+  tokenA: Token;
+  tokenB: Token;
   stable: boolean;
-  amountAIn: bigint;
-  amountBIn: bigint;
-  amountAMin: bigint;
-  amountBMin: bigint;
-  balanceTokenRatio: boolean;
+  amountAIn: string;
+  amountBIn: string;
   to: Address;
   deadline: bigint;
 }
 
 export interface RemoveLiquidityParams {
-  tokenA: Address;
-  tokenB: Address;
+  tokenA: Token;
+  tokenB: Token;
   stable: boolean;
-  liquidity: bigint;
-  amountAMin: bigint;
-  amountBMin: bigint;
+  liquidity: string;
+  amountAMin: string;
+  amountBMin: string;
   to: Address;
   deadline: bigint;
 }
 
 export interface SwapExactTokensParams {
-  amountIn: bigint;
-  minReturnAmount: bigint;
-  routes: IRouter.RouteStruct[];
+  amountIn: string;
+  minReturnAmount: string;
+  tokenA: Token;
+  tokenB: Token;
   to: Address;
   deadline: bigint;
+  stable: boolean;
 }
 
 export interface StakeParams {
-  gaugeAddress: Address;
-  amount: bigint;
+  gauge: Token;
+  amount: string;
 }
 
 export interface AddLiquidityQuoteParams {
-  tokenA: Address;
-  tokenB: Address;
+  tokenA: Token;
+  tokenB: Token;
   stable: boolean;
-  amountA: bigint;
-  amountB: bigint;
+  amountA: string;
+  amountB: string;
   balanceTokenRatio?: boolean;
   decimalsA: number;
   decimalsB: number;
