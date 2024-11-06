@@ -5,6 +5,10 @@ import 'react-native-get-random-values';
 import '@ethersproject/shims';
 import 'expo-router/entry';
 
+if (__DEV__) {
+  require('@/init/reactotron');
+}
+
 import { Redirect } from 'expo-router';
 import { useAuth } from '@/providers/AuthProvider';
 import Step1 from './(onboarding)/step1';
