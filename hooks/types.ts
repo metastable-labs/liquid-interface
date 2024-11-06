@@ -165,6 +165,16 @@ export interface StakeParams {
   amount: string;
 }
 
+export interface PreSwapConfig {
+  enabled: boolean;
+  params: SwapExactTokensParams;
+}
+
+// Extend AddLiquidity params to include optional swap
+export interface AddLiquidityWithSwapParams extends AddLiquidityParams {
+  preSwap?: PreSwapConfig;
+}
+
 export interface AddLiquidityQuoteParams {
   tokenA: Token;
   tokenB: Token;
