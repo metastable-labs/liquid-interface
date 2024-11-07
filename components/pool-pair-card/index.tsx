@@ -4,28 +4,30 @@ import { Href } from 'expo-router';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import { ArrowDownIcon, ArrowUpAltIcon } from '@/assets/icons';
+import { setSelectedPool } from '@/store/pools';
+import { PoolPairCard } from './types';
 
 const backgroundColors = ['#FDEAEA', '#EFFAF6'];
 const textColors = ['#A4262C', '#156146'];
 
-const LQDPoolPairCard = ({
-  change,
-  id,
-  increased,
-  primaryIconURL,
-  primaryTitle,
-  secondaryIconURL,
-  secondaryTitle,
-  navigationVariant = 'primary',
-}: ILQDPoolPairCard) => {
-  const { router } = useSystemFunctions();
+const LQDPoolPairCard = ({ pool, navigationVariant = 'primary' }: PoolPairCard) => {
+  const { router, dispatch } = useSystemFunctions();
 
   const paths = {
-    primary: `/(tabs)/home/${id}` as Href<string>,
-    secondary: `/(tabs)/holdings/${id}` as Href<string>,
+    primary: `/(tabs)/home/${pool.address}` as Href<string>,
+    secondary: `/(tabs)/holdings/${pool.address}` as Href<string>,
   };
 
-  const handlePress = () => router.push(paths[navigationVariant]);
+  const handlePress = () => {
+    dispatch(setSelectedPool(pool));
+    router.push(paths[navigationVariant]);
+  };
+
+  const primaryIconURL = pool.token0.logoUrl;
+  const secondaryIconURL = pool.token1.logoUrl;
+  const symbol = pool.symbol.split('-')[1].replace('/', ' / ');
+  const increased = pool.gauge.isAlive;
+  const change = 2.3;
 
   return (
     <TouchableOpacity onPress={handlePress} style={styles.container}>
@@ -48,9 +50,7 @@ const LQDPoolPairCard = ({
         </View>
       </View>
 
-      <Text style={styles.title}>
-        {primaryTitle} / {secondaryTitle}
-      </Text>
+      <Text style={styles.title}>{symbol}</Text>
     </TouchableOpacity>
   );
 };
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
 
   title: {
     color: '#1E293B',
-    fontSize: adjustFontSizeForIOS(15, 2),
+    fontSize: adjustFontSizeForIOS(13, 2),
     lineHeight: 18.48,
     fontWeight: '500',
     fontFamily: 'AeonikMedium',

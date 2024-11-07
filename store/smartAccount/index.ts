@@ -1,18 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { PayloadAction } from '@reduxjs/toolkit';
-import { Address } from 'viem';
-import { ToCoinbaseSmartAccountReturnType } from 'viem/_types/account-abstraction';
-import { CreatePassKeyCredentialOptions } from '@/init/types';
+import { Address } from '@/init/types';
+import { PublicKeyCredentialCreationOptionsJSON } from 'react-native-passkeys/build/ReactNativePasskeys.types';
 
 export interface SmartAccountState {
-  readonly registrationOptions: CreatePassKeyCredentialOptions | null;
-  readonly smartAccount: ToCoinbaseSmartAccountReturnType | null;
+  readonly registrationOptions: PublicKeyCredentialCreationOptionsJSON | null;
   readonly address: Address | null;
 }
 
 const initialState: SmartAccountState = {
   registrationOptions: null,
-  smartAccount: null,
   address: null,
 };
 
@@ -20,16 +17,7 @@ export const smartAccountReducer = createSlice({
   name: 'smartAccount',
   initialState,
   reducers: {
-    setSmartAccount: (state, action: PayloadAction<ToCoinbaseSmartAccountReturnType | null>) => {
-      if (action.payload) {
-        // @ts-expect-error Types of property 'abi' are incompatible. 'readonly' cannot be assigned to the mutable type
-        state.smartAccount = { ...action.payload };
-      } else {
-        state.smartAccount = null;
-      }
-    },
-
-    setRegistrationOptions: (state, action: PayloadAction<CreatePassKeyCredentialOptions | null>) => {
+    setRegistrationOptions: (state, action: PayloadAction<PublicKeyCredentialCreationOptionsJSON | null>) => {
       if (action.payload) {
         // attestation and extensions are not supported by react-native-passkeys
         const { attestation, extensions, ...registrationOptions } = action.payload;
@@ -49,6 +37,6 @@ export const smartAccountReducer = createSlice({
   },
 });
 
-export const { setSmartAccount, setRegistrationOptions, setAddress } = smartAccountReducer.actions;
+export const { setRegistrationOptions, setAddress } = smartAccountReducer.actions;
 
 export default smartAccountReducer.reducer;

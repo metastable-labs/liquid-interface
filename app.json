@@ -22,7 +22,11 @@
       "config": {
         "usesNonExemptEncryption": false
       },
-      "associatedDomains": ["webcredentials:api.useliquid.xyz?mode=developer", "webcredentials:api.useliquid.xyz"]
+      "associatedDomains": [
+        "webcredentials:api.useliquid.xyz?mode=developer",
+        "webcredentials:api.useliquid.xyz",
+        "webcredentials:development.useliquid.xyz"
+      ]
     },
     "android": {
       "adaptiveIcon": {
@@ -38,6 +42,7 @@
     },
     "plugins": [
       "expo-router",
+      "expo-secure-store",
       [
         "expo-build-properties",
         {

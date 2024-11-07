@@ -17,6 +17,8 @@ const useSystemFunctions = () => {
   const userState = useAppSelector((state) => state.user);
   const appState = useAppSelector((state) => state.app);
   const smartAccountState = useAppSelector((state) => state.smartAccount);
+  const poolsState = useAppSelector((state) => state.pools);
+  const accountState = useAppSelector((state) => state.account);
 
   return {
     dispatch,
@@ -28,6 +30,8 @@ const useSystemFunctions = () => {
     userState,
     appState,
     smartAccountState,
+    poolsState,
+    accountState,
   };
 };
 

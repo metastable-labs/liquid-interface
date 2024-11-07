@@ -36,9 +36,7 @@ const PoolDetailLayout = () => {
           header: (props) => <LQDStackHeader {...props} style={{ paddingTop: 50 }} />,
           headerShown: true,
         }}
-      >
-        <Stack.Screen name="index" options={{ animation: 'slide_from_bottom' }} />
-      </Stack>
+      ></Stack>
 
       <View style={styles.actionsContainer}>
         {actions.map((action) => (

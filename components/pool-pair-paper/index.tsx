@@ -1,29 +1,31 @@
 import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native';
 import { Href } from 'expo-router';
 
-import { adjustFontSizeForIOS, formatNumberWithSuffix } from '@/utils/helpers';
+import { adjustFontSizeForIOS, formatAmount, formatNumberWithSuffix } from '@/utils/helpers';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
+import { setSelectedPool } from '@/store/pools';
+import { PoolPairPaper } from './types';
 
-const LQDPoolPairPaper = ({
-  apr,
-  capital,
-  fees,
-  id,
-  primaryIconURL,
-  primaryTitle,
-  secondaryIconURL,
-  secondaryTitle,
-  capitalMetric = 'vol',
-  navigationVariant = 'primary',
-}: ILQDPoolPairPaper) => {
-  const { router } = useSystemFunctions();
+const LQDPoolPairPaper = ({ pool, navigationVariant = 'primary' }: PoolPairPaper) => {
+  const { router, dispatch } = useSystemFunctions();
 
   const paths = {
-    primary: `/(tabs)/home/${id}` as Href<string>,
-    secondary: `/(tabs)/holdings/${id}` as Href<string>,
+    primary: `/(tabs)/home/${pool.address}` as Href<string>,
+    secondary: `/(tabs)/holdings/${pool.address}` as Href<string>,
   };
 
-  const handlePress = () => router.push(paths[navigationVariant]);
+  const handlePress = () => {
+    dispatch(setSelectedPool(pool));
+    router.push(paths[navigationVariant]);
+  };
+
+  const primaryIconURL = pool.token0.logoUrl;
+  const secondaryIconURL = pool.token1.logoUrl;
+  const symbol = pool.symbol.split('-')[1].replace('/', ' / ');
+  const apr = formatAmount(pool.emissions.rate, 2);
+  const fees = pool.fees.poolFee;
+  const volume = formatAmount(pool.volume.usd, 0);
+  const isStable = pool.isStable;
 
   return (
     <TouchableOpacity onPress={handlePress} style={styles.container}>
@@ -37,12 +39,10 @@ const LQDPoolPairPaper = ({
         </View>
 
         <View style={styles.detailContainer}>
-          <Text style={styles.detailHeader}>
-            {primaryTitle} / {secondaryTitle}
-          </Text>
+          <Text style={styles.detailHeader}>{symbol}</Text>
 
           <View style={styles.details}>
-            <Text style={apr > 3 ? styles.basicTextStable : styles.basicTextVolatile}>{apr > 3 ? 'Basic Stable' : 'Basic Volatile'}</Text>
+            <Text style={isStable ? styles.basicTextStable : styles.basicTextVolatile}>{isStable ? 'Basic Stable' : 'Basic Volatile'}</Text>
 
             <View style={styles.separator}>
               <View style={styles.separatorCircle} />
@@ -54,9 +54,9 @@ const LQDPoolPairPaper = ({
       </View>
 
       <View style={styles.volumeWrapper}>
-        <Text style={styles.aprText}>APR: {apr}%</Text>
+        <Text style={styles.aprText}>APR: {apr.toLocaleString()}%</Text>
 
-        <Text style={styles.volumeText}>VOL: ${formatNumberWithSuffix(capital)}</Text>
+        <Text style={styles.volumeText}>VOL: ${formatNumberWithSuffix(volume)}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
 
   aprText: {
     color: '#156146',
-    fontSize: adjustFontSizeForIOS(13, 2),
+    fontSize: adjustFontSizeForIOS(12, 2),
     lineHeight: 16.12,
     fontWeight: '500',
     textTransform: 'uppercase',

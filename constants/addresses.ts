@@ -3,6 +3,15 @@ import { Address } from 'viem';
 export const LP_SUGAR_ADDRESS: Address = '0x68c19e13618C41158fE4bAba1B8fb3A9c74bDb0A' as Address;
 export const AERODROME_FACTORY_ADDRESS: Address = '0x420DD381b31aEf6683db6B902084cB0FFECe40Da' as Address;
 export const USDC_ADDRESS: Address = '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913' as Address;
+export const WETH_ADDRESS: Address = '0x4200000000000000000000000000000000000006' as Address;
+
+// smart account constants
+export const ACCOUNT_FACTORY_ADDRESS: Address = '0x0BA5ED0c6AA8c49038F819E587E2633c4A9F428a' as Address;
+export const ENTRYPOINT_V06_ADDRESS: Address = '0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789' as Address;
+
+// Liquid connectors
+export const AERODROME_CONNECTOR: Address = '0x10e1aC384A4Fb3e0Bc4724D097B0d7F4e99143E6' as Address;
+export const CONNECTOR_PLUGIN: Address = '0x96281563A06a8D3319C9822B58d8808FaC7EA14D' as Address;
 
 export const CONNECTORS_BASE: Address[] = [
   USDC_ADDRESS, // USDC

@@ -1,9 +1,8 @@
-interface IPoolDetail {
+interface PoolID {
   poolId: string;
 }
 
-interface IPool {
-  id: string;
+interface PoolDetails {
   primaryIconURL: string;
   secondaryIconURL: string;
   primaryTitle: string;
@@ -17,6 +16,15 @@ interface IPool {
   aero: number;
   stakedAero: number;
   availableAero: number;
+  symbol: string;
+  volume: number;
+  tvl: number;
+}
+
+interface Stat {
+  fee: number;
+  volume: number;
+  tvl: number;
 }
 
 type Metric = 'tvl' | 'volume' | 'fees';

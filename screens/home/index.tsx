@@ -1,18 +1,30 @@
-import { StyleSheet, View, Text, FlatList, ScrollView, TouchableOpacity } from 'react-native';
+import { useEffect } from 'react';
+import { StyleSheet, View, Text, FlatList, ScrollView, TouchableOpacity, Alert } from 'react-native';
 
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { adjustFontSizeForIOS, formatAmountWithWholeAndDecimal } from '@/utils/helpers';
 import { LQDButton, LQDPoolPairCard, LQDPoolPairPaper } from '@/components';
 import { CaretRightIcon, DirectUpIcon, DollarSquareIcon, TrendUpIcon } from '@/assets/icons';
-import { topGainers, poolPairs } from './dummy';
+import { useAccountActions } from '@/store/account/actions';
 import Section from './section';
-
-const balance = 36_708.89;
+import { clearPersistedSmartAccountInfo } from '@/store/smartAccount/persist';
+import { useAuth } from '@/providers';
+import { useSmartAccountActions } from '@/store/smartAccount/actions';
 
 const Home = () => {
-  const { router } = useSystemFunctions();
+  const { router, poolsState, smartAccountState, accountState, dispatch } = useSystemFunctions();
+  const { getTokens, getPositions } = useAccountActions();
+  const { logout } = useSmartAccountActions();
 
-  const { whole, decimal } = formatAmountWithWholeAndDecimal(balance);
+  const { trendingPools, hotPools, topGainers } = poolsState;
+
+  const { whole, decimal } = formatAmountWithWholeAndDecimal(accountState.tokenBalance.toFixed(2));
+
+  const top10TrendingPools = trendingPools.data.slice(0, 10);
+
+  const top10HotPools = hotPools.data.slice(0, 10);
+
+  const top7Gainers = topGainers.data.slice(0, 7);
 
   const sections = [
     {
@@ -22,10 +34,10 @@ const Home = () => {
       action: () => router.push('/(tabs)/home/top'),
       children: (
         <FlatList
-          data={topGainers}
+          data={top7Gainers}
           horizontal
-          renderItem={({ item }) => <LQDPoolPairCard {...item} />}
-          keyExtractor={(item, index) => index.toString()}
+          renderItem={({ item }) => <LQDPoolPairCard pool={item} />}
+          keyExtractor={(_, index) => index.toString()}
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={{ gap: 10 }}
         />
@@ -39,8 +51,8 @@ const Home = () => {
       action: () => router.push('/(tabs)/home/trending'),
       children: (
         <View style={styles.mapContainer}>
-          {poolPairs.map((poolPair, index) => (
-            <LQDPoolPairPaper key={index} {...poolPair} />
+          {top10TrendingPools.map((pool, index) => (
+            <LQDPoolPairPaper key={index} pool={pool} />
           ))}
         </View>
       ),
@@ -53,13 +65,58 @@ const Home = () => {
       action: () => router.push('/(tabs)/home/hot'),
       children: (
         <View style={styles.mapContainer}>
-          {poolPairs.map((poolPair, index) => (
-            <LQDPoolPairPaper key={index} {...poolPair} capitalMetric="tvl" />
+          {top10HotPools.map((pool, index) => (
+            <LQDPoolPairPaper key={index} pool={pool} />
           ))}
         </View>
       ),
     },
   ];
+
+  const handleSignOut = () => {
+    Alert.alert('Sign out', 'Are you sure you want to sign out?', [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Sign out',
+        style: 'destructive',
+        onPress: logout,
+      },
+    ]);
+  };
+
+  const { session } = useAuth();
+
+  const handleSmartAccountSign = async () => {
+    if (!session) {
+      throw new Error('No smart account found');
+    }
+
+    try {
+      const messageToSign = {
+        message: 'Hello, world!',
+        timestamp: Date.now(),
+      };
+
+      const signature = await session.signMessage({ message: JSON.stringify(messageToSign) });
+
+      console.log('Signature successful:', signature);
+
+      Alert.alert('Signing Successful', 'Signature: ' + signature);
+    } catch (error: any) {
+      console.log('Error signing message:', error);
+      console.log('Error cause:', error.cause);
+
+      Alert.alert('Signing Failed', error.message + '\n' + error.cause);
+    }
+  };
+
+  useEffect(
+    function fetchBalances() {
+      getTokens();
+      getPositions();
+    },
+    [smartAccountState.address]
+  );
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer} showsVerticalScrollIndicator={false}>
@@ -84,6 +141,9 @@ const Home = () => {
           iconColor="#334155"
           style={{ alignSelf: 'stretch' }}
         />
+
+        <LQDButton title="Sign message" onPress={handleSmartAccountSign} variant="tertiaryOutline" />
+        <LQDButton title="Sign out" onPress={handleSignOut} variant="tertiaryOutline" />
       </View>
 
       {sections.map((section, index) => (

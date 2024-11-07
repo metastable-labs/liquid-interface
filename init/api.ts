@@ -1,4 +1,12 @@
-import { CreatePassKeyCredentialOptions, Address, PasskeyRegistrationResult } from './types';
+import { PoolResponse } from '@/store/pools/types';
+import {
+  CreatePassKeyCredentialOptions,
+  Address,
+  PasskeyRegistrationResult,
+  PoolType,
+  VerifyRegistration,
+  AuthCredentialOptions,
+} from './types';
 
 class LiquidAPI {
   private apiBaseUrl: string;
@@ -28,7 +36,7 @@ class LiquidAPI {
   }
 
   async getRegistrationOptions(username: string): Promise<CreatePassKeyCredentialOptions> {
-    return this.fetchWithErrorHandling(`${this.apiBaseUrl}/registration/options?user=${encodeURIComponent(username)}`, {
+    return this.fetchWithErrorHandling(`${this.apiBaseUrl}/registration/options?username=${encodeURIComponent(username)}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -36,16 +44,22 @@ class LiquidAPI {
     });
   }
 
-  async verifyRegistration(
-    username: string,
-    registrationResponse: PasskeyRegistrationResult
-  ): Promise<{ verified: boolean; publicKey: string }> {
+  async getAuthenticationOptions(username: string): Promise<AuthCredentialOptions> {
+    return this.fetchWithErrorHandling(`${this.apiBaseUrl}/authentication/options?username=${encodeURIComponent(username)}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  }
+
+  async verifyRegistration(data: VerifyRegistration): Promise<{ verified: boolean; publicKey: string }> {
     return this.fetchWithErrorHandling(`${this.apiBaseUrl}/registration/verify`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ userName: username, registrationResponse }),
+      body: JSON.stringify(data),
     });
   }
 
@@ -57,6 +71,15 @@ class LiquidAPI {
         'X-API-Key': this.apiKey,
       },
       body: JSON.stringify({ userName: username, userAddress }),
+    });
+  }
+
+  async getPools(type: PoolType, query?: string): Promise<PoolResponse> {
+    return this.fetchWithErrorHandling(`${this.apiBaseUrl}/pools/${type}${query || ''}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
   }
 }

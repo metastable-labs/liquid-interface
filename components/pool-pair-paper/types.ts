@@ -1,12 +1,6 @@
-interface ILQDPoolPairPaper {
-  id: string;
-  primaryIconURL: string;
-  secondaryIconURL: string;
-  primaryTitle: string;
-  secondaryTitle: string;
-  apr: number;
-  fees: number;
-  capitalMetric?: 'vol' | 'tvl';
-  capital: number;
+import { Pool } from '@/store/pools/types';
+
+export interface PoolPairPaper {
+  pool: Pool;
   navigationVariant?: 'primary' | 'secondary';
 }

@@ -1,144 +1,106 @@
-import { LPSugarABI, OffchainOracleABI } from '@/constants/abis';
-import { LP_SUGAR_ADDRESS, CONNECTORS_BASE, OFFCHAIN_ORACLE_ADDRESS, USDC_ADDRESS } from '@/constants/addresses';
-import { useState, useCallback, useEffect, useMemo } from 'react';
-import { PublicClient, Address, formatUnits } from 'viem';
-import { Token } from './types';
-import { useContract } from './useContract';
+import { useCallback, useEffect, useState } from 'react';
+import { Address, formatUnits, PublicClient } from 'viem';
+import { CONNECTORS_BASE, LP_SUGAR_ADDRESS, OFFCHAIN_ORACLE_ADDRESS } from '@/constants/addresses';
+import { useLpSugarContract, useOffchainOracleContract } from './useContract';
+import { LPSugarToken, LPSugarTokenResponse, Token } from './types';
+import useSystemFunctions from './useSystemFunctions';
+import { OffchainOracleABI } from '@/constants/abis';
 
-export const getUsdPrice = async (tokenAddress: Address, offchainOracleContract: ReturnType<typeof useContract>): Promise<string> => {
-  try {
-    const rate: any = await offchainOracleContract.read.getRate([
-      tokenAddress,
-      USDC_ADDRESS,
-      true, // useWrappers
-    ]);
+export function useToken(publicClient: PublicClient) {
+  const { smartAccountState } = useSystemFunctions();
+  const account = smartAccountState?.address;
 
-    return formatUnits(rate, 6);
-  } catch (error) {
-    console.error(`Error fetching USD price for token ${tokenAddress}:`, error);
-    return '0';
-  }
-};
-
-export function useToken(publicClient: PublicClient, account: Address, refreshInterval: number = 60000) {
   const [tokens, setTokens] = useState<Token[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [lastUpdated, setLastUpdated] = useState<number>(0);
-  const [chainId, setChainId] = useState<string | null>(null);
+  const [tokenMap, setTokenMap] = useState<Map<string, Token>>(new Map());
 
-  const lpSugarContract = useContract(LP_SUGAR_ADDRESS, LPSugarABI, publicClient);
-  const offchainOracleContract = useContract(OFFCHAIN_ORACLE_ADDRESS, OffchainOracleABI, publicClient);
+  const lpSugar = useLpSugarContract(LP_SUGAR_ADDRESS, publicClient);
+  const oracle = useOffchainOracleContract(OFFCHAIN_ORACLE_ADDRESS, publicClient);
 
-  const formatBalance = useCallback((balance: bigint, decimals: number): string => {
-    return formatUnits(balance, decimals);
-  }, []);
-
-  const fetchUsdPrice = useCallback((tokenAddress: Address) => getUsdPrice(tokenAddress, offchainOracleContract), [offchainOracleContract]);
-  const getLogoUrl = useCallback(
-    (tokenAddress: Address): string => {
-      if (!chainId) {
-        console.warn('ChainId not available, unable to construct logo URL');
-        return '';
-      }
-      return `https://assets.smold.app/api/token/${chainId}/${tokenAddress}/logo-32.png`;
-    },
-    [chainId]
-  );
-
-  const fetchChainId = useCallback(async () => {
-    try {
-      const id = await publicClient.getChainId();
-      setChainId(id.toString());
-    } catch (error) {
-      console.error('Error fetching chainId:', error);
-      setError('Failed to fetch chainId');
+  const fetchTokens = async (BATCH_SIZE: number, offset: number): Promise<Token[]> => {
+    if (!account) {
+      return [];
     }
-  }, [publicClient]);
 
-  const fetchTokens = useCallback(
-    async (forceRefresh: boolean = false) => {
-      const now = Date.now();
-      if (!forceRefresh && tokens.length > 0 && now - lastUpdated < refreshInterval) {
-        return;
-      }
+    let allTokens: Token[] = [];
+    const batch: LPSugarTokenResponse = await lpSugar.getTokens(BATCH_SIZE, offset, account!, CONNECTORS_BASE);
 
-      if (!chainId) {
-        await fetchChainId();
-      }
+    if (batch.length > 0) {
+      const tokenAddresses = batch.map((token: LPSugarToken) => token.token_address);
+      const tokenDecimals = batch.map((token: LPSugarToken) => token.decimals);
+      const prices = await oracle.getRateToUSD(tokenAddresses, tokenDecimals, true);
+      const tokenEthContracts = tokenAddresses.map((tokenAddress) => ({
+        address: OFFCHAIN_ORACLE_ADDRESS,
+        abi: OffchainOracleABI.OffchainOracle.abi,
+        functionName: 'getRateToEth',
+        args: [tokenAddress, true] as const,
+      }));
+      const ethPrices: any = await publicClient.multicall({
+        contracts: tokenEthContracts,
+      });
 
-      setLoading(true);
-      setError(null);
+      const tokensWithPrice = batch.map((token: LPSugarToken, index: number) => {
+        // let ethPrice: any = 0;
 
-      try {
-        const fetchedTokens = (await lpSugarContract.read.tokens([
-          BigInt(1000),
-          BigInt(0),
-          account,
-          OFFCHAIN_ORACLE_ADDRESS,
-          CONNECTORS_BASE,
-        ])) as Omit<Token, 'usd_price' | 'logo_url'>[];
+        // if (ethPrices[index]) {
+        //   ethPrice = ethPrices[index].result as bigint;
+        //   const formatEthPrice = formatUnits(ethPrice, 18);
+        //   console.log(token.symbol, ' => ', formatEthPrice);
+        // }
 
-        const tokensWithPricesAndLogos = await Promise.all(
-          fetchedTokens.map(async (token) => {
-            const usd_price = await fetchUsdPrice(token.token_address);
-            const logo_url = getLogoUrl(token.token_address);
-            return {
-              ...token,
-              account_balance: formatBalance(token.account_balance as unknown as bigint, token.decimals),
-              usd_price,
-              logo_url,
-            };
-          })
-        );
+        return {
+          address: token.token_address,
+          symbol: token.symbol,
+          decimals: Number(token.decimals),
+          balance: formatUnits(token.account_balance, token.decimals),
+          isListed: token.listed,
+          usdPrice: prices[index],
+          logoUrl: `https://assets.smold.app/api/token/8453/${token.token_address}/logo-32.png`,
+        };
+      });
 
-        setTokens(tokensWithPricesAndLogos);
-        setLastUpdated(now);
-      } catch (err) {
-        console.error('Error fetching tokens:', err);
-        setError('Failed to fetch tokens');
-      } finally {
-        setLoading(false);
-      }
-    },
-    [lpSugarContract, account, OFFCHAIN_ORACLE_ADDRESS, refreshInterval, lastUpdated, tokens.length, formatBalance, getUsdPrice]
-  );
+      allTokens = [...allTokens, ...tokensWithPrice];
+      offset += BATCH_SIZE;
+    }
 
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      fetchTokens();
-    }, refreshInterval);
-
-    return () => clearInterval(intervalId);
-  }, [fetchTokens, refreshInterval]);
-
-  useEffect(() => {
-    fetchTokens();
-  }, [fetchTokens]);
-
-  const refreshTokens = useCallback(() => {
-    fetchTokens(true);
-  }, [fetchTokens]);
+    setTokens(allTokens);
+    return allTokens;
+  };
 
   const getTokenByAddress = useCallback(
-    (address: Address): Token | undefined => {
-      return tokens.find((token) => token.token_address.toLowerCase() === address.toLowerCase());
+    (address: Address | string) => {
+      return tokenMap.get(address.toLowerCase());
+    },
+    [tokenMap]
+  );
+
+  const getTokensByAddresses = useCallback(
+    (addresses: (Address | string)[]) => {
+      return addresses.map((address) => tokenMap.get(address.toLowerCase())).filter(Boolean) as Token[];
+    },
+    [tokenMap]
+  );
+
+  const getTokenPrice = useCallback(
+    (address: Address | string) => {
+      const token = tokenMap.get(address.toLowerCase());
+      return token?.usdPrice || 0;
+    },
+    [tokenMap]
+  );
+
+  useEffect(
+    function loadTokenMap() {
+      const newTokenMap = new Map(tokens.map((token) => [token.address.toLowerCase(), token]));
+      setTokenMap(newTokenMap);
     },
     [tokens]
   );
 
-  const memoizedReturnValue = useMemo(
-    () => ({
-      tokens,
-      loading,
-      error,
-      refreshTokens,
-      lastUpdated,
-      getTokenByAddress,
-      getUsdPrice: fetchUsdPrice,
-    }),
-    [tokens, loading, error, refreshTokens, lastUpdated, getTokenByAddress]
-  );
-
-  return memoizedReturnValue;
+  return {
+    tokens,
+    fetchTokens,
+    getTokenPrice,
+    getTokensByAddresses,
+    getTokenByAddress,
+  };
 }

@@ -1,23 +1,37 @@
-import { StyleSheet, ScrollView, View } from 'react-native';
+import { StyleSheet, View, FlatList } from 'react-native';
 
 import { LQDPoolPairPaper } from '@/components';
+import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { DirectUpIcon } from '@/assets/icons';
-import { poolPairs as originalPoolPairs } from '../dummy';
+import { usePoolActions } from '@/store/pools/actions';
 import Section from '../section';
 
 const Trending = () => {
-  const poolPairs = [...originalPoolPairs, ...originalPoolPairs];
+  const { poolsState } = useSystemFunctions();
+  const { getPaginatedTrendingPools } = usePoolActions();
+
+  const { trendingPools, refreshingPools } = poolsState;
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer} showsVerticalScrollIndicator={false}>
+    <View style={styles.container}>
       <Section title="Trending" subtitle="by Volume" icon={<DirectUpIcon />} isShowingAll>
-        <View style={styles.mapContainer}>
-          {poolPairs.map((poolPair, index) => (
-            <LQDPoolPairPaper key={index} {...poolPair} />
-          ))}
-        </View>
+        <FlatList
+          data={trendingPools.data}
+          renderItem={({ item }) => <LQDPoolPairPaper pool={item} />}
+          keyExtractor={(_, index) => index.toString()}
+          contentContainerStyle={{ gap: 24 }}
+          onEndReached={() => {
+            getPaginatedTrendingPools();
+          }}
+          onEndReachedThreshold={0}
+          refreshing={refreshingPools}
+          onRefresh={() => getPaginatedTrendingPools(true)}
+          bounces={true}
+          showsVerticalScrollIndicator={false}
+        />
       </Section>
-    </ScrollView>
+      <View style={{ height: 130 }} />
+    </View>
   );
 };
 
@@ -29,16 +43,6 @@ const styles = StyleSheet.create({
     paddingTop: 32,
     paddingHorizontal: 16,
     backgroundColor: '#fff',
-  },
-
-  contentContainer: {
-    paddingBottom: 175,
     gap: 46,
-  },
-
-  mapContainer: {
-    flex: 1,
-    gap: 24,
-    alignItems: 'stretch',
   },
 });

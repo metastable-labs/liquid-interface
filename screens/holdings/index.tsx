@@ -8,10 +8,9 @@ import Card from './card';
 import Empty from './empty';
 import { emptyData } from './dummy';
 
-const holdings = 1_234_567.89;
-
 const Holdings = () => {
-  const { router } = useSystemFunctions();
+  const { router, accountState } = useSystemFunctions();
+  const { tokens, tokenBalance, positions, lpBalance } = accountState;
 
   const actions: Array<ILQDButton & { hide?: boolean }> = [
     {
@@ -29,7 +28,7 @@ const Holdings = () => {
       fullWidth: false,
       icon: 'arrow-up',
       style: styles.action,
-      hide: holdings <= 0,
+      hide: tokenBalance <= 0,
     },
   ];
 
@@ -38,9 +37,9 @@ const Holdings = () => {
   const items: Array<IItem> = [
     {
       variant: 'primary',
-      details: [{ title: 'Assets', value: `${6} assets` }],
-      subtitle: `$${(12_304).toLocaleString()}`,
-      title: `$${(12_304).toLocaleString()}`,
+      details: [{ title: 'Assets', value: `${tokens?.length} assets` }],
+      subtitle: '',
+      title: `$${tokenBalance.toLocaleString()}`,
       empty: {
         ...emptyData.primary,
         action: {
@@ -48,16 +47,16 @@ const Holdings = () => {
           onPress: () => console.log('Deposit'),
         },
       },
-      isEmpty: true,
+      isEmpty: tokens?.length === 0,
     },
     {
       variant: 'secondary',
       details: [
         { title: 'Staked Balance:', value: `${100} AERO-LP` },
-        { title: 'Your Pools', value: `${13} pools` },
+        { title: 'Your Pools', value: `${positions?.length} pools` },
       ],
       subtitle: `$${(10_706).toLocaleString()}`,
-      title: `${260} AERO-LP`,
+      title: `${lpBalance.toLocaleString()} AERO-LP`,
       empty: {
         ...emptyData.secondary,
         action: {
@@ -65,7 +64,7 @@ const Holdings = () => {
           onPress: () => console.log('explore'),
         },
       },
-      isEmpty: true,
+      isEmpty: positions?.length === 0,
     },
     {
       variant: 'tertiary',
@@ -94,7 +93,7 @@ const Holdings = () => {
       <View style={styles.balanceAndActionsContainer}>
         <View style={styles.balanceContainer}>
           <Text style={styles.balanceText}>Total Holdings</Text>
-          <Text style={styles.balanceValue}>${holdings.toLocaleString()}</Text>
+          <Text style={styles.balanceValue}>${(tokenBalance + lpBalance).toLocaleString()}</Text>
         </View>
 
         <View style={styles.actionsContainer}>
