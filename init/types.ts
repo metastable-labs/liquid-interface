@@ -38,7 +38,7 @@ export type SmartAccount = ToCoinbaseSmartAccountReturnType;
  */
 export type SmartAccountPersistedInfo = {
   publicKey: string;
-  registrationResponse: PasskeyRegistrationResult;
+  credentialID: string;
 };
 
 export type VerifyRegistration = {

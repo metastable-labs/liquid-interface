@@ -39,11 +39,11 @@ export function useSmartAccountActions() {
   };
 
   const getSmartAccount = async () => {
-    const { publicKey, registrationResponse } = await getPersistedSmartAccountInfo();
+    const { publicKey, credentialID } = await getPersistedSmartAccountInfo();
 
     const webAuthnAccount = toWebAuthnAccount({
       credential: {
-        id: registrationResponse.credentialId,
+        id: credentialID,
         publicKey: getPublicKeyHex(publicKey),
       },
       getFn,
@@ -79,6 +79,13 @@ export function useSmartAccountActions() {
         client: publicClient,
         owners: [webAuthnAccount],
       });
+      const smartAccountInfo = {
+        publicKey: getPublicKeyHex(passkey.response.signature),
+        credentialID: passkey.id,
+      };
+
+      await persistSmartAccountInfo(smartAccountInfo);
+
       setSession(smartAccount);
       dispatch(setAddress(smartAccount.address));
       return router.replace('/(tabs)/home');

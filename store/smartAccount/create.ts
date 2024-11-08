@@ -78,7 +78,7 @@ export async function createSmartAccount(registrationOptions: PublicKeyCredentia
       address,
       smartAccountInfo: {
         publicKey,
-        registrationResponse,
+        credentialID: smartAccountInfo.id,
       },
     };
   } catch (error: any) {
