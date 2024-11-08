@@ -13,8 +13,8 @@ class LiquidAPI {
   private apiKey: string;
 
   constructor() {
-    const apiUrl = process.env.EXPO_PUBLIC_API_URL;
-    const apiKey = process.env.EXPO_PUBLIC_API_KEY;
+    const apiUrl = process.env.EXPO_PUBLIC_X_API_URL;
+    const apiKey = process.env.EXPO_PUBLIC_X_API_KEY;
 
     if (!apiUrl || !apiKey) {
       throw new Error('EXPO_PUBLIC_API_URL or EXPO_PUBLIC_API_KEY is not set');
