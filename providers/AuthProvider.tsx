@@ -36,11 +36,11 @@ export function AuthProvider({ children }: PropsWithChildren) {
 
   async function loadSession() {
     try {
-      const { publicKey, registrationResponse } = await getPersistedSmartAccountInfo();
+      const { publicKey, credentialID } = await getPersistedSmartAccountInfo();
 
       const webAuthnAccount = toWebAuthnAccount({
         credential: {
-          id: registrationResponse.credentialId,
+          id: credentialID,
           publicKey: getPublicKeyHex(publicKey),
         },
         getFn,

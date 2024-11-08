@@ -7,6 +7,7 @@ import {
   VerifyRegistration,
   AuthCredentialOptions,
 } from './types';
+import { AuthenticationResponseJSON } from 'react-native-passkeys/build/ReactNativePasskeys.types';
 
 class LiquidAPI {
   private apiBaseUrl: string;
@@ -55,6 +56,18 @@ class LiquidAPI {
 
   async verifyRegistration(data: VerifyRegistration): Promise<{ verified: boolean; publicKey: string }> {
     return this.fetchWithErrorHandling(`${this.apiBaseUrl}/registration/verify`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+  }
+
+  async verifyAuthentication(
+    data: AuthenticationResponseJSON
+  ): Promise<{ verified: boolean; userName: string; publicKey: string; userAddress: string }> {
+    return this.fetchWithErrorHandling(`${this.apiBaseUrl}/authentication/verify`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
