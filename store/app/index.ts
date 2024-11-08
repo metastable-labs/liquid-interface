@@ -2,12 +2,12 @@ import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
 export interface AppState {
-  hideSearch: boolean;
+  showSearch: boolean;
   searchIsFocused: boolean;
 }
 
 const initialState: AppState = {
-  hideSearch: false,
+  showSearch: false,
   searchIsFocused: false,
 };
 
@@ -15,8 +15,8 @@ export const appReducer = createSlice({
   name: 'app',
   initialState,
   reducers: {
-    setHideSearch: (state, action: PayloadAction<boolean>) => {
-      state.hideSearch = action.payload;
+    setShowSearch: (state, action: PayloadAction<boolean>) => {
+      state.showSearch = action.payload;
     },
 
     setSearchIsFocused: (state, action: PayloadAction<boolean>) => {
@@ -25,6 +25,6 @@ export const appReducer = createSlice({
   },
 });
 
-export const { setHideSearch, setSearchIsFocused } = appReducer.actions;
+export const { setShowSearch, setSearchIsFocused } = appReducer.actions;
 
 export default appReducer.reducer;
