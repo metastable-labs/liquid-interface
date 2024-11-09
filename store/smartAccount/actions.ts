@@ -39,11 +39,11 @@ export function useSmartAccountActions() {
   };
 
   const getSmartAccount = async () => {
-    const { publicKey, registrationResponse } = await getPersistedSmartAccountInfo();
+    const { publicKey, credentialID } = await getPersistedSmartAccountInfo();
 
     const webAuthnAccount = toWebAuthnAccount({
       credential: {
-        id: registrationResponse.credentialId,
+        id: credentialID,
         publicKey: getPublicKeyHex(publicKey),
       },
       getFn,
@@ -62,15 +62,16 @@ export function useSmartAccountActions() {
     try {
       const authOptions = await api.getAuthenticationOptions(userName);
 
-      const passkey = await Passkeys.get({ challenge: authOptions.data.challenge, rpId: authOptions.data.rpId });
-      if (!passkey) {
+      const passkeyResult = await Passkeys.get({ challenge: authOptions.data.challenge, rpId: authOptions.data.rpId });
+      if (!passkeyResult) {
         throw new Error('No passkey found');
       }
+      const verification = await api.verifyAuthentication(passkeyResult);
+
       const webAuthnAccount = toWebAuthnAccount({
         credential: {
-          id: passkey.id,
-          // should be the publickey tied to the credential ID
-          publicKey: getPublicKeyHex(passkey.response.signature),
+          id: passkeyResult.id,
+          publicKey: getPublicKeyHex(verification.publicKey),
         },
         getFn,
         rpId,
@@ -79,6 +80,13 @@ export function useSmartAccountActions() {
         client: publicClient,
         owners: [webAuthnAccount],
       });
+      const smartAccountInfo = {
+        publicKey: getPublicKeyHex(passkeyResult.response.signature),
+        credentialID: passkeyResult.id,
+      };
+
+      await persistSmartAccountInfo(smartAccountInfo);
+
       setSession(smartAccount);
       dispatch(setAddress(smartAccount.address));
       return router.replace('/(tabs)/home');

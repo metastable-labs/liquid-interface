@@ -25,7 +25,6 @@ const VerifyEmail = ({ email, isSignup }: { email: string; isSignup?: boolean })
         return router.push('/setup');
       }
       login(email);
-      //   smart account stuff
     },
     onSendCodeSuccess: () => {
       setResendDisabled(true);
