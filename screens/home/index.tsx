@@ -1,20 +1,24 @@
 import { useEffect } from 'react';
-import { StyleSheet, View, Text, FlatList, ScrollView, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, View, Text, FlatList, ScrollView, TouchableOpacity, Alert, Platform, StatusBar as RNStatusBar } from 'react-native';
 
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { adjustFontSizeForIOS, formatAmountWithWholeAndDecimal } from '@/utils/helpers';
-import { LQDButton, LQDPoolPairCard, LQDPoolPairPaper } from '@/components';
-import { CaretRightIcon, DirectUpIcon, DollarSquareIcon, TrendUpIcon } from '@/assets/icons';
+import { LQDButton, LQDPoolPairCard, LQDPoolPairPaper, LQDSearch, SearchUI } from '@/components';
+import { CaretRightIcon, DirectUpIcon, DollarSquareIcon, SearchIcon, TrendUpIcon } from '@/assets/icons';
 import { useAccountActions } from '@/store/account/actions';
 import Section from './section';
-import { clearPersistedSmartAccountInfo } from '@/store/smartAccount/persist';
 import { useAuth } from '@/providers';
 import { useSmartAccountActions } from '@/store/smartAccount/actions';
+import useAppActions from '@/store/app/actions';
+import { usePoolActions } from '@/store/pools/actions';
+import { useOnMount } from '@/hooks/useOnMount';
 
 const Home = () => {
-  const { router, poolsState, smartAccountState, accountState, dispatch } = useSystemFunctions();
+  const { router, poolsState, smartAccountState, accountState, appState } = useSystemFunctions();
   const { getTokens, getPositions } = useAccountActions();
+  const { getPools } = usePoolActions();
   const { logout } = useSmartAccountActions();
+  const { searchIsFocused: focusSearch, showSearch } = useAppActions();
 
   const { trendingPools, hotPools, topGainers } = poolsState;
 
@@ -25,6 +29,11 @@ const Home = () => {
   const top10HotPools = hotPools.data.slice(0, 10);
 
   const top7Gainers = topGainers.data.slice(0, 7);
+
+  const focusInput = () => {
+    focusSearch(true);
+    showSearch(true);
+  };
 
   const sections = [
     {
@@ -118,38 +127,64 @@ const Home = () => {
     [smartAccountState.address]
   );
 
+  useOnMount(function loadData() {
+    getPools();
+  });
+
+  if (appState.showSearch) {
+    return (
+      <View style={styles.searchWrapper}>
+        <SearchUI />
+      </View>
+    );
+  }
+
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer} showsVerticalScrollIndicator={false}>
-      <View style={styles.balanceAndActionContainer}>
-        <View style={styles.balanceContainer}>
-          <Text style={styles.balanceTitle}>Total Balance</Text>
+    <>
+      <View style={styles.searchInnerWrapper}>
+        <View style={styles.inputWrapper}>
+          <TouchableOpacity style={styles.inputContainer} onPress={focusInput}>
+            <SearchIcon />
 
-          <TouchableOpacity onPress={() => router.push('/(tabs)/holdings')} style={styles.balanceValueContainer}>
-            <Text style={styles.balanceWholeValue}>
-              ${whole}.<Text style={styles.balanceDecimalValue}>{decimal}</Text>
-            </Text>
-
-            <CaretRightIcon width={20} height={20} fill="#F8FAFC" />
+            <View>
+              <Text style={styles.inputPlaceholderText}>Search...</Text>
+            </View>
           </TouchableOpacity>
         </View>
-
-        <LQDButton
-          title="Add money"
-          onPress={() => router.push('/deposit/debit')}
-          variant="tertiaryOutline"
-          icon="money"
-          iconColor="#334155"
-          style={{ alignSelf: 'stretch' }}
-        />
-
-        <LQDButton title="Sign message" onPress={handleSmartAccountSign} variant="tertiaryOutline" />
-        <LQDButton title="Sign out" onPress={handleSignOut} variant="tertiaryOutline" />
       </View>
 
-      {sections.map((section, index) => (
-        <Section key={index} {...section} />
-      ))}
-    </ScrollView>
+      <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer} showsVerticalScrollIndicator={false}>
+        <View style={styles.balanceAndActionContainer}>
+          <View style={styles.balanceContainer}>
+            <Text style={styles.balanceTitle}>Total Balance</Text>
+
+            <TouchableOpacity onPress={() => router.push('/(tabs)/holdings')} style={styles.balanceValueContainer}>
+              <Text style={styles.balanceWholeValue}>
+                ${whole}.<Text style={styles.balanceDecimalValue}>{decimal}</Text>
+              </Text>
+
+              <CaretRightIcon width={20} height={20} fill="#F8FAFC" />
+            </TouchableOpacity>
+          </View>
+
+          <LQDButton
+            title="Add money"
+            onPress={() => router.push('/deposit/debit')}
+            variant="tertiaryOutline"
+            icon="money"
+            iconColor="#334155"
+            style={{ alignSelf: 'stretch' }}
+          />
+
+          <LQDButton title="Sign message" onPress={handleSmartAccountSign} variant="tertiaryOutline" />
+          <LQDButton title="Sign out" onPress={handleSignOut} variant="tertiaryOutline" />
+        </View>
+
+        {sections.map((section, index) => (
+          <Section key={index} {...section} />
+        ))}
+      </ScrollView>
+    </>
   );
 };
 
@@ -219,5 +254,51 @@ const styles = StyleSheet.create({
     flex: 1,
     gap: 24,
     alignItems: 'stretch',
+  },
+
+  searchWrapper: {
+    flex: 1,
+    paddingHorizontal: 16,
+    backgroundColor: '#fff',
+    paddingTop: Platform.OS === 'android' ? RNStatusBar.currentHeight : 20,
+    paddingBottom: Platform.OS === 'android' ? -(RNStatusBar.currentHeight || 0) : -48,
+  },
+
+  searchInnerWrapper: {
+    paddingHorizontal: 16,
+    backgroundColor: '#fff',
+    paddingTop: Platform.OS === 'android' ? RNStatusBar.currentHeight : 20,
+    paddingBottom: Platform.OS === 'android' ? -(RNStatusBar.currentHeight || 0) : -48,
+  },
+
+  inputWrapper: {
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    backgroundColor: '#fff',
+  },
+
+  inputContainer: {
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    borderRadius: 13,
+    borderColor: '#EAEEF4',
+    borderWidth: 1,
+    shadowColor: 'rgba(15, 23, 42, 0.04)',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
+    elevation: 1,
+    backgroundColor: '#fff',
+    width: '100%',
+  },
+
+  inputPlaceholderText: {
+    fontSize: adjustFontSizeForIOS(14, 2),
+    lineHeight: 18.48,
+    color: '#94A3B8',
+    fontFamily: 'AeonikRegular',
   },
 });

@@ -1,5 +1,5 @@
 import useSystemFunctions from '@/hooks/useSystemFunctions';
-import { setHotPools, setLoadingPools, setRefreshing, setTopGainers, setTrendingPools } from '.';
+import { setHotPools, setLoadingPools, setRefreshing, setSearchedPools, setSearchingPools, setTopGainers, setTrendingPools } from '.';
 import api from '@/init/api';
 import { PoolType } from '@/init/types';
 
@@ -119,10 +119,26 @@ export function usePoolActions() {
     }
   };
 
+  const searchPools = async (query: string) => {
+    try {
+      dispatch(setSearchingPools(true));
+
+      const pools = await api.searchPools(query);
+
+      dispatch(setSearchedPools(pools));
+    } catch (error: any) {
+      //
+    } finally {
+      dispatch(setSearchingPools(false));
+      dispatch(setRefreshing(false));
+    }
+  };
+
   return {
     getPools,
     getPaginatedHotPools,
     getPaginatedTrendingPools,
     getPaginatedTopGainers,
+    searchPools,
   };
 }

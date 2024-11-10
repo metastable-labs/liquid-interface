@@ -26,7 +26,7 @@ const LQDPoolPairCard = ({ pool, navigationVariant = 'primary' }: PoolPairCard) 
   const primaryIconURL = pool.token0.logoUrl;
   const secondaryIconURL = pool.token1.logoUrl;
   const symbol = pool.symbol.split('-')[1].replace('/', ' / ');
-  const increased = pool.gauge.isAlive;
+  const increased = pool.isStable;
   const change = 2.3;
 
   return (

@@ -5,6 +5,7 @@ import { adjustFontSizeForIOS, formatAmount, formatNumberWithSuffix } from '@/ut
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { setSelectedPool } from '@/store/pools';
 import { PoolPairPaper } from './types';
+import { formatEther } from 'viem';
 
 const LQDPoolPairPaper = ({ pool, navigationVariant = 'primary' }: PoolPairPaper) => {
   const { router, dispatch } = useSystemFunctions();
@@ -22,9 +23,9 @@ const LQDPoolPairPaper = ({ pool, navigationVariant = 'primary' }: PoolPairPaper
   const primaryIconURL = pool.token0.logoUrl;
   const secondaryIconURL = pool.token1.logoUrl;
   const symbol = pool.symbol.split('-')[1].replace('/', ' / ');
-  const apr = 10;
-  const fees = pool.fees.poolFee;
-  const volume = formatAmount(pool.volume.usd, 0);
+  const apr = formatAmount(pool.apr, 2);
+  const fees = '';
+  const volume = formatAmount(formatEther(BigInt(pool.totalVolumeUSD)), 0);
   const isStable = pool.isStable;
 
   return (
