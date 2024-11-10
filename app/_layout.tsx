@@ -8,8 +8,6 @@ import '@/init/api';
 
 import { AllProviders } from '@/providers';
 import { LQDStackHeader } from '@/components';
-import { useOnMount } from '@/hooks/useOnMount';
-import { usePoolActions } from '@/store/pools/actions';
 
 export default function RootLayout() {
   return (
@@ -20,12 +18,6 @@ export default function RootLayout() {
 }
 
 function RootStack() {
-  const { getPools } = usePoolActions();
-
-  useOnMount(function loadData() {
-    getPools();
-  });
-
   return (
     <Stack screenOptions={{ headerShown: false }} initialRouteName="index">
       <Stack.Screen name="index" options={{ title: 'AuthGate' }} />

@@ -28,6 +28,7 @@ class LiquidAPI {
   private async fetchWithErrorHandling(url: string, options: RequestInit) {
     console.log('fetchWithErrorHandling', url);
     const response = await fetch(url, options);
+
     if (!response.ok || response.status !== 200) {
       const errorData = await response.text();
       const errorMessage = `HTTP error - status: ${response.status} - ${errorData}`;
@@ -89,6 +90,15 @@ class LiquidAPI {
 
   async getPools(type: PoolType, query?: string): Promise<PoolResponse> {
     return this.fetchWithErrorHandling(`${this.apiBaseUrl}/pools/${type}${query || ''}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  }
+
+  async searchPools(query: string): Promise<PoolResponse> {
+    return this.fetchWithErrorHandling(`${this.apiBaseUrl}/pools/search?symbol=${query}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

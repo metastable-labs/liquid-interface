@@ -4,21 +4,15 @@ import { StatusBar } from 'expo-status-bar';
 
 import { TabBarIcon } from '@/components/navigation/TabBarIcon';
 import { Colors } from '@/constants/Colors';
-import { LQDNavigation, LQDSearch } from '@/components';
-import useSystemFunctions from '@/hooks/useSystemFunctions';
+import { LQDNavigation } from '@/components';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
-  const { appState } = useSystemFunctions();
 
   return (
     <>
       <StatusBar style="inverted" />
-      {!appState.hideSearch && (
-        <View style={styles.shortcut}>
-          <LQDSearch />
-        </View>
-      )}
+      <View style={styles.container} />
 
       <Tabs
         tabBar={(props) => <LQDNavigation {...props} />}
@@ -48,15 +42,8 @@ export default function TabLayout() {
 }
 
 const styles = StyleSheet.create({
-  shortcut: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    gap: 12,
-    paddingHorizontal: 21,
-    paddingBottom: 10,
-    paddingTop: Platform.OS === 'android' ? RNStatusBar.currentHeight : 54,
-    zIndex: 10,
+  container: {
+    paddingTop: Platform.OS === 'android' ? RNStatusBar.currentHeight : 48,
     backgroundColor: '#fff',
   },
 });

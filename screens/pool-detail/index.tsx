@@ -6,7 +6,7 @@ import Balance from './balance';
 import PoolLiquidity from './pool-liquidity';
 import PoolStats from './stats';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
-import { Address } from 'viem';
+import { Address, formatEther } from 'viem';
 
 const PoolDetail = ({ poolId }: PoolID) => {
   const { poolsState, accountState } = useSystemFunctions();
@@ -34,14 +34,14 @@ const PoolDetail = ({ poolId }: PoolID) => {
     secondaryBalance: getTokenBalance(pool?.token1.address),
     secondaryUSDValue: getTokenUSDValue(pool?.token1.address),
     condition: pool?.isStable ? 'stable' : 'volatile',
-    fee: pool?.fees.poolFee || 0,
+    fee: 0,
     aero: 10,
     stakedAero: 300,
     availableAero: 4_090,
     primaryTitle: title ? title[0] : '',
     secondaryTitle: title ? title[1] : '',
     symbol: pool?.symbol.split('-')[1].replace('/', ' / ') || '',
-    volume: Number(pool?.volume.usd || 0),
+    volume: Number(formatEther(BigInt(pool?.totalVolumeUSD || 0))),
     tvl: Number(pool?.tvl || 0),
   };
 

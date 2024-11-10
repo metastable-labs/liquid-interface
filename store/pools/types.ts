@@ -23,45 +23,24 @@ export const defaultPoolResponse = {
 export type Pool = {
   address: Address;
   decimals: number;
-  emissions: {
-    rate: string;
-    tokenAddress: Address;
-  };
-  factory: Address;
-  fees: {
-    address: Address;
-    poolFee: number;
-    token0: string;
-    token1: string;
-    unstakedFee: number;
-  };
-  gauge: {
-    address: Address;
-    isAlive: boolean;
-    liquidity: string;
-  };
-  isStable: boolean;
   symbol: string;
+  apr: string;
+  tvl: string;
+  totalVolumeUSD: string;
+  isStable: boolean;
+  factory: Address;
   token0: {
     address: Address;
     logoUrl: string;
     price: string;
     reserve: string;
-    staked: string;
+    volume: string;
   };
   token1: {
     address: Address;
     logoUrl: string;
     price: string;
     reserve: string;
-    staked: string;
-  };
-  totalLiquidity: string;
-  tvl: string;
-  type: string;
-  volume: {
-    token0: string;
-    token1: string;
-    usd: string;
+    volume: string;
   };
 };

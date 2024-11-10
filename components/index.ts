@@ -13,6 +13,7 @@ import LQDLoadingStep from './loading-step';
 import EnterEmail from './enter-email';
 import VerifyEmail from './verify-email';
 import LQDKeyboardWrapper from './keyboard-wrapper';
+import SearchUI from './search-ui';
 
 export {
   LQDButton,
@@ -29,4 +30,5 @@ export {
   EnterEmail,
   VerifyEmail,
   LQDKeyboardWrapper,
+  SearchUI,
 };
