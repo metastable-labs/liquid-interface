@@ -5,14 +5,16 @@ import SearchSection from './sections';
 import { recents, explore } from './dummy';
 import RecentCard from './recent-card';
 import ExploreCard from './explore-card';
-import { LQDPoolPairPaper, LQDSearch } from '@/components';
+import LQDSearch from '../search';
+import LQDPoolPairPaper from '../pool-pair-paper';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
+import { usePoolActions } from '@/store/pools/actions';
 
 const SearchUI = () => {
   const { router, poolsState } = useSystemFunctions();
+  const { searchPools } = usePoolActions();
 
   const [showRecents, setShowRecents] = useState(true);
-  const [query, setQuery] = useState('');
 
   const pools = poolsState.trendingPools.data.slice(0, 10);
 
@@ -65,11 +67,15 @@ const SearchUI = () => {
     },
   ];
 
-  const sectionsToShow = query ? searchResultSection : showRecents ? sections : sections.slice(1);
+  const sectionsToShow = false ? searchResultSection : showRecents ? sections : sections.slice(1);
+
+  const handleQuery = (value: string) => {
+    searchPools(value);
+  };
 
   return (
     <>
-      <LQDSearch setQuery={setQuery} />
+      <LQDSearch setQuery={handleQuery} />
 
       <ScrollView style={styles.container} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         {sectionsToShow.map((section, index) => (

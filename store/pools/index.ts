@@ -8,9 +8,11 @@ export interface PoolsState {
   trendingPools: PoolResponse;
   hotPools: PoolResponse;
   topGainers: PoolResponse;
+  searchedPools: PoolResponse;
   selectedPool: Pool | undefined;
   loadingPools: boolean;
   refreshingPools: boolean;
+  searchingPools: boolean;
 }
 
 const initialState: PoolsState = {
@@ -18,9 +20,11 @@ const initialState: PoolsState = {
   trendingPools: defaultPoolResponse,
   hotPools: defaultPoolResponse,
   topGainers: defaultPoolResponse,
+  searchedPools: defaultPoolResponse,
   selectedPool: undefined,
   loadingPools: false,
   refreshingPools: false,
+  searchingPools: false,
 };
 
 export const poolReducer = createSlice({
@@ -33,6 +37,10 @@ export const poolReducer = createSlice({
 
     setLoadingPools: (state, action: PayloadAction<boolean>) => {
       state.loadingPools = action.payload;
+    },
+
+    setSearchingPools: (state, action: PayloadAction<boolean>) => {
+      state.searchingPools = action.payload;
     },
 
     setpools: (state, action: PayloadAction<PoolResponse | undefined>) => {
@@ -70,10 +78,27 @@ export const poolReducer = createSlice({
         state.trendingPools = defaultPoolResponse;
       }
     },
+
+    setSearchedPools: (state, action: PayloadAction<PoolResponse | undefined>) => {
+      if (action.payload) {
+        state.searchedPools = { ...action.payload };
+      } else {
+        state.searchedPools = defaultPoolResponse;
+      }
+    },
   },
 });
 
-export const { setLoadingPools, setpools, setTrendingPools, setHotPools, setTopGainers, setRefreshing, setSelectedPool } =
-  poolReducer.actions;
+export const {
+  setLoadingPools,
+  setpools,
+  setTrendingPools,
+  setHotPools,
+  setTopGainers,
+  setRefreshing,
+  setSelectedPool,
+  setSearchingPools,
+  setSearchedPools,
+} = poolReducer.actions;
 
 export default poolReducer.reducer;

@@ -10,10 +10,13 @@ import Section from './section';
 import { useAuth } from '@/providers';
 import { useSmartAccountActions } from '@/store/smartAccount/actions';
 import useAppActions from '@/store/app/actions';
+import { usePoolActions } from '@/store/pools/actions';
+import { useOnMount } from '@/hooks/useOnMount';
 
 const Home = () => {
   const { router, poolsState, smartAccountState, accountState, appState } = useSystemFunctions();
   const { getTokens, getPositions } = useAccountActions();
+  const { getPools } = usePoolActions();
   const { logout } = useSmartAccountActions();
   const { searchIsFocused: focusSearch, showSearch } = useAppActions();
 
@@ -123,6 +126,10 @@ const Home = () => {
     },
     [smartAccountState.address]
   );
+
+  useOnMount(function loadData() {
+    getPools();
+  });
 
   if (appState.showSearch) {
     return (
