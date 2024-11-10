@@ -65,6 +65,7 @@ class LiquidAPI {
   }
 
   async verifyAuthentication(
+    username: string,
     data: AuthenticationResponseJSON
   ): Promise<{ verified: boolean; userName: string; publicKey: string; userAddress: string }> {
     return this.fetchWithErrorHandling(`${this.apiBaseUrl}/authentication/verify`, {
@@ -72,7 +73,7 @@ class LiquidAPI {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify({ username, authenticationResponse: data }),
     });
   }
 

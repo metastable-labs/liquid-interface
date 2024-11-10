@@ -22,7 +22,7 @@ const LQDPoolPairPaper = ({ pool, navigationVariant = 'primary' }: PoolPairPaper
   const primaryIconURL = pool.token0.logoUrl;
   const secondaryIconURL = pool.token1.logoUrl;
   const symbol = pool.symbol.split('-')[1].replace('/', ' / ');
-  const apr = formatAmount(pool.emissions.rate, 2);
+  const apr = 10;
   const fees = pool.fees.poolFee;
   const volume = formatAmount(pool.volume.usd, 0);
   const isStable = pool.isStable;

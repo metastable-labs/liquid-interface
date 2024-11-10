@@ -27,6 +27,7 @@ export async function createSmartAccount(registrationOptions: PublicKeyCredentia
     if (!credential) {
       throw new FailedToCreatePasskeyCredentialError();
     }
+    console.log(credential, 'credential');
 
     const credentialId = credential.id;
     const { attestationObject, clientDataJSON, publicKey } = credential.response;
