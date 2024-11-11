@@ -1,5 +1,5 @@
 import { PoolResponse } from '@/store/pools/types';
-import { CreatePassKeyCredentialOptions, Address, PoolType, VerifyRegistration, AuthCredentialOptions } from './types';
+import { CreatePassKeyCredentialOptions, Address, PoolType, VerifyRegistration, AuthCredentialOptions, VerificationResult } from './types';
 import { AuthenticationResponseJSON } from 'react-native-passkeys/build/ReactNativePasskeys.types';
 
 import { apiKey, apiUrl } from '@/constants/env';
@@ -54,10 +54,7 @@ class LiquidAPI {
     });
   }
 
-  async verifyAuthentication(
-    username: string,
-    data: AuthenticationResponseJSON
-  ): Promise<{ verified: boolean; userName: string; publicKey: string; userAddress: string }> {
+  async verifyAuthentication(username: string, data: AuthenticationResponseJSON): Promise<VerificationResult> {
     return this.fetchWithErrorHandling(`${this.apiBaseUrl}/authentication/verify`, {
       method: 'POST',
       headers: {

@@ -55,6 +55,9 @@ export async function createSmartAccount(registrationOptions: PublicKeyCredentia
     const address = await smartAccount.getAddress();
     const username = registrationOptions.user.name;
 
+    console.log(address, 'address from creation');
+    console.log(publicKey, 'pub key from creation');
+
     const smartAccountInfo: VerifyRegistration = {
       username: registrationOptions.user.name,
       id: registrationResponse.credentialId,

@@ -64,6 +64,8 @@ export function usePoolActions() {
         dispatch(setRefreshing(true));
         const pools = await api.getPools(PoolType.trending);
 
+        console.log(pools, 'pools trending');
+
         return dispatch(setTrendingPools(pools));
       }
 

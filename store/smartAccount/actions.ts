@@ -83,10 +83,16 @@ export function useSmartAccountActions() {
 
       const verification = await api.verifyAuthentication(userName, authenticationResponse);
 
+      console.log(verification, 'verif data');
+
+      console.log(verification.data.publicKey, 'base 64');
+
+      console.log(getPublicKeyHex(verification.data.publicKey), 'pub key hex');
+
       const webAuthnAccount = toWebAuthnAccount({
         credential: {
           id: passkeyResult.id,
-          publicKey: getPublicKeyHex(verification.publicKey),
+          publicKey: getPublicKeyHex(verification.data.publicKey),
         },
         getFn,
         rpId,

@@ -88,6 +88,9 @@ export function base64ToBytes(base64String: string): Uint8Array {
 }
 
 export function getPublicKeyHex(publicKey: string): Hex {
+  const pubkeybuff = utf8StringToBuffer('UJ8_2cTDtiu4B3LvUMx4h_TTzXBP4rtUAw-4YIvxbVcazvTZvk-k7T2stTYZGsh9WxHdFUw_jZGFGFCy6j2qrg');
+
+  console.log(pubkeybuff, 'buff');
   const publicKeyBuffer = utf8StringToBuffer(publicKey);
   return `0x${Array.from(new Uint8Array(publicKeyBuffer))
     .map((byte) => byte.toString(16).padStart(2, '0'))

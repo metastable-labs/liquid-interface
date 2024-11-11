@@ -52,3 +52,12 @@ export type VerifyRegistration = {
   type: string;
   authenticatorAttachment: string;
 };
+
+export type VerificationResult = {
+  data: {
+    publicKey: string;
+    userAddress: string;
+    username: string;
+    verified: boolean;
+  };
+};
