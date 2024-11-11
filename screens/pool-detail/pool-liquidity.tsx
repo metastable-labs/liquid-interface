@@ -6,61 +6,61 @@ import ImageColors from 'react-native-image-colors';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 
 const PoolLiquidity = ({
-  primaryIconURL,
-  primaryBalance,
-  primaryTitle,
-  primaryUSDValue,
-  secondaryBalance,
-  secondaryIconURL,
-  secondaryTitle,
-  secondaryUSDValue,
+  tokenAIconURL,
+  tokenABalance,
+  tokenATitle,
+  tokenAUSDValue,
+  tokenBBalance,
+  tokenBIconURL,
+  tokenBTitle,
+  tokenBUSDValue,
 }: PoolDetails) => {
-  const [primaryColor, setPrimaryColor] = useState('#375DFB');
-  const [secondaryColor, setSecondaryColor] = useState('#F2AE40');
-  const [primaryProgress, setPrimaryProgress] = useState(0.5);
+  const [tokenAColor, settokenAColor] = useState('#375DFB');
+  const [tokenBColor, settokenBColor] = useState('#F2AE40');
+  const [tokenAProgress, settokenAProgress] = useState(0.5);
 
   const values = [
     {
-      iconURL: primaryIconURL,
-      primaryText: `${primaryBalance.toLocaleString()}`,
-      title: primaryTitle,
-      secondaryText: `${primaryUSDValue.toLocaleString()}`,
+      iconURL: tokenAIconURL,
+      tokenBalance: `${tokenABalance.toLocaleString()}`,
+      title: tokenATitle,
+      tokenUSDValue: `${tokenAUSDValue.toLocaleString()}`,
     },
     {
-      iconURL: secondaryIconURL,
-      primaryText: `${secondaryBalance.toLocaleString()}`,
-      title: secondaryTitle,
-      secondaryText: `${secondaryUSDValue.toLocaleString()}`,
+      iconURL: tokenBIconURL,
+      tokenBalance: `${tokenBBalance.toLocaleString()}`,
+      title: tokenBTitle,
+      tokenUSDValue: `${tokenBUSDValue.toLocaleString()}`,
     },
   ];
 
   const progressStyle = useAnimatedStyle(() => {
     return {
-      width: withTiming(`${primaryProgress * 100}%`, { duration: 500 }),
+      width: withTiming(`${tokenAProgress * 100}%`, { duration: 500 }),
     };
   });
 
   useEffect(() => {
     const extractColors = async () => {
-      const primaryColors = await ImageColors.getColors(primaryIconURL, {
+      const tokenAColors = await ImageColors.getColors(tokenAIconURL, {
         fallback: '#375DFB',
       });
-      const secondaryColors = await ImageColors.getColors(secondaryIconURL, {
+      const tokenBColors = await ImageColors.getColors(tokenBIconURL, {
         fallback: '#F2AE40',
       });
 
-      if (primaryColors.platform === 'android') setPrimaryColor(primaryColors.vibrant || '#375DFB');
-      if (primaryColors.platform === 'ios') setPrimaryColor(primaryColors.background || '#375DFB');
+      if (tokenAColors.platform === 'android') settokenAColor(tokenAColors.vibrant || '#375DFB');
+      if (tokenAColors.platform === 'ios') settokenAColor(tokenAColors.background || '#375DFB');
 
-      if (secondaryColors.platform === 'android') setSecondaryColor(secondaryColors.vibrant || '#F2AE40');
-      if (secondaryColors.platform === 'ios') setSecondaryColor(secondaryColors.background || '#F2AE40');
+      if (tokenBColors.platform === 'android') settokenBColor(tokenBColors.vibrant || '#F2AE40');
+      if (tokenBColors.platform === 'ios') settokenBColor(tokenBColors.background || '#F2AE40');
     };
 
     extractColors();
 
-    const totalBalance = primaryBalance + secondaryBalance;
-    setPrimaryProgress(primaryBalance / totalBalance);
-  }, [primaryIconURL, secondaryIconURL, primaryBalance, secondaryBalance]);
+    const totalBalance = tokenABalance + tokenBBalance;
+    settokenAProgress(tokenABalance / totalBalance);
+  }, [tokenAIconURL, tokenBIconURL, tokenABalance, tokenBBalance]);
 
   return (
     <View style={styles.root}>
@@ -68,25 +68,25 @@ const PoolLiquidity = ({
 
       <View style={styles.container}>
         <View style={styles.valueDistribution}>
-          {values.map(({ iconURL, primaryText, secondaryText, title }, index) => (
+          {values.map(({ iconURL, tokenBalance, tokenUSDValue, title }, index) => (
             <View key={index} style={styles.value}>
               <View style={styles.icon}>
                 <Image source={{ uri: iconURL }} style={{ width: 18, height: 18 }} />
               </View>
 
               <View style={styles.textContainer}>
-                <Text style={styles.primaryText}>
-                  {primaryText}
-                  <Text style={[styles.primaryText, styles.titleText]}> {title}</Text>
+                <Text style={styles.tokenAText}>
+                  {tokenBalance}
+                  <Text style={[styles.tokenAText, styles.titleText]}> {title}</Text>
                 </Text>
-                <Text style={styles.secondaryText}>{`($${secondaryText})`}</Text>
+                <Text style={styles.tokenBText}>{`($${tokenUSDValue})`}</Text>
               </View>
             </View>
           ))}
         </View>
 
-        <View style={[styles.progressBackground, { backgroundColor: secondaryColor }]}>
-          <Animated.View style={[styles.progress, progressStyle, { backgroundColor: primaryColor }]} />
+        <View style={[styles.progressBackground, { backgroundColor: tokenBColor }]}>
+          <Animated.View style={[styles.progress, progressStyle, { backgroundColor: tokenAColor }]} />
         </View>
       </View>
     </View>
@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
 
-  primaryText: {
+  tokenAText: {
     color: '#0A0D14',
     fontSize: adjustFontSizeForIOS(16, 2),
     lineHeight: 19.84,
@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
     color: '#868C98',
   },
 
-  secondaryText: {
+  tokenBText: {
     color: '#525866',
     fontSize: adjustFontSizeForIOS(14, 2),
     lineHeight: 18.48,

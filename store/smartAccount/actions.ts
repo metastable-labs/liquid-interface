@@ -67,7 +67,21 @@ export function useSmartAccountActions() {
       if (!passkeyResult) {
         throw new Error('No passkey found');
       }
-      const verification = await api.verifyAuthentication(passkeyResult);
+
+      const authenticationResponse: any = {
+        id: passkeyResult.id,
+        rawId: passkeyResult.rawId,
+        response: {
+          authenticatorData: passkeyResult.response.authenticatorData,
+          clientDataJSON: passkeyResult.response.clientDataJSON,
+          signature: passkeyResult.response.signature,
+          userHandle: passkeyResult.response.userHandle,
+        },
+        type: 'public-key',
+        authenticatorAttachment: 'platform',
+      };
+
+      const verification = await api.verifyAuthentication(userName, authenticationResponse);
 
       const webAuthnAccount = toWebAuthnAccount({
         credential: {

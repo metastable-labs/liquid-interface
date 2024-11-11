@@ -66,22 +66,6 @@ const Holdings = () => {
       },
       isEmpty: positions?.length === 0,
     },
-    {
-      variant: 'tertiary',
-      details: [{ title: 'Unclaimed in:', value: `${13} pools` }],
-      subtitle: `${(3104).toLocaleString()} AERO`,
-      title: `$${(5_643.44).toLocaleString()}`,
-      empty: emptyData.tertiary,
-      isEmpty: true,
-    },
-    {
-      variant: 'quaternary',
-      details: [{ title: 'Your Pools', value: `${13} pools` }],
-      subtitle: `$${(12_506).toLocaleString()}`,
-      title: `$${(12_506).toLocaleString()}`,
-      empty: emptyData.quaternary,
-      isEmpty: true,
-    },
   ];
 
   const nonEmptyItems = items.filter((item) => !item.isEmpty);

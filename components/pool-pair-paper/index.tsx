@@ -7,7 +7,7 @@ import { setSelectedPool } from '@/store/pools';
 import { PoolPairPaper } from './types';
 import { formatEther } from 'viem';
 
-const LQDPoolPairPaper = ({ pool, navigationVariant = 'primary' }: PoolPairPaper) => {
+const LQDPoolPairPaper = ({ pool, navigationVariant = 'primary', isHot }: PoolPairPaper) => {
   const { router, dispatch } = useSystemFunctions();
 
   const paths = {
@@ -25,7 +25,8 @@ const LQDPoolPairPaper = ({ pool, navigationVariant = 'primary' }: PoolPairPaper
   const symbol = pool.symbol.split('-')[1].replace('/', ' / ');
   const apr = formatAmount(pool.apr, 2);
   const fees = '';
-  const volume = formatAmount(formatEther(BigInt(pool.totalVolumeUSD)), 0);
+  const volume = Number(pool.totalVolumeUSD);
+  const tvl = pool.tvl;
   const isStable = pool.isStable;
 
   return (

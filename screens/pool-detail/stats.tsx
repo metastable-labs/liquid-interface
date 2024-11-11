@@ -36,7 +36,7 @@ const PoolStats = ({ volume, fee, tvl }: Stat) => {
           <View key={title} style={styles.stat}>
             <View style={styles.metricContainer}>
               {icon}
-              <Text style={styles.metric}>{title} (24hrs)</Text>
+              <Text style={styles.metric}>{title} </Text>
             </View>
             <Text style={styles.title}>{value}</Text>
           </View>
