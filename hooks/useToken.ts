@@ -40,7 +40,7 @@ export function useToken(publicClient: PublicClient) {
           balance: formatUnits(token.account_balance, token.decimals),
           isListed: token.listed,
           usdPrice: prices[index],
-          logoUrl: `https://assets.smold.app/api/token/8453/${token.token_address}/logo-64.png`,
+          logoUrl: `https://assets.smold.app/api/token/8453/${token.token_address}/logo-128.png`,
         };
       });
 
@@ -52,7 +52,7 @@ export function useToken(publicClient: PublicClient) {
         balance: formatUnits(ethBalance, 18),
         isListed: true,
         usdPrice: wethPrice[0],
-        logoUrl: `https://assets.smold.app/api/token/8453/${WETH_ADDRESS}/logo-32.png`, // Using WETH logo for ETH
+        logoUrl: `https://assets.smold.app/api/token/8453/${WETH_ADDRESS}/logo-128.png`, // Using WETH logo for ETH
       };
 
       allTokens = [ethToken, ...allTokens, ...tokensWithPrice];

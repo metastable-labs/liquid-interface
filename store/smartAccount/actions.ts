@@ -15,7 +15,6 @@ import { RegistrationOptionsNotAvailableError } from './errors';
 import { setLpBalance, setPositions, setTokenBalance, setTokens } from '../account';
 import api from '@/init/api';
 import { useAuth } from '@/providers';
-import { AuthenticationResponseJSON } from 'react-native-passkeys/build/ReactNativePasskeys.types';
 import { Hex } from 'viem';
 
 export function useSmartAccountActions() {
