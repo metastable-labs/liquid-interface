@@ -27,21 +27,18 @@ const PoolDetail = ({ poolId }: PoolID) => {
   };
 
   const POOL: PoolDetails = {
-    primaryIconURL: pool?.token0.logoUrl || '',
-    primaryBalance: getTokenBalance(pool?.token0.address),
-    primaryUSDValue: getTokenUSDValue(pool?.token0.address),
-    secondaryIconURL: pool?.token1.logoUrl || '',
-    secondaryBalance: getTokenBalance(pool?.token1.address),
-    secondaryUSDValue: getTokenUSDValue(pool?.token1.address),
+    tokenAIconURL: pool?.token0.logoUrl || '',
+    tokenABalance: getTokenBalance(pool?.token0.address),
+    tokenAUSDValue: getTokenUSDValue(pool?.token0.address),
+    tokenBIconURL: pool?.token1.logoUrl || '',
+    tokenBBalance: getTokenBalance(pool?.token1.address),
+    tokenBUSDValue: getTokenUSDValue(pool?.token1.address),
     condition: pool?.isStable ? 'stable' : 'volatile',
     fee: 0,
-    aero: 10,
-    stakedAero: 300,
-    availableAero: 4_090,
-    primaryTitle: title ? title[0] : '',
-    secondaryTitle: title ? title[1] : '',
+    tokenATitle: title ? title[0] : '',
+    tokenBTitle: title ? title[1] : '',
     symbol: pool?.symbol.split('-')[1].replace('/', ' / ') || '',
-    volume: Number(formatEther(BigInt(pool?.totalVolumeUSD || 0))),
+    volume: Number(pool?.totalVolumeUSD || 0),
     tvl: Number(pool?.tvl || 0),
   };
 

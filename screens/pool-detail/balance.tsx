@@ -2,15 +2,15 @@ import { View, StyleSheet, Text, Image } from 'react-native';
 
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 
-const Balance = ({ primaryBalance, primaryIconURL, primaryTitle, secondaryBalance, secondaryIconURL, secondaryTitle, aero }: IPool) => {
+const Balance = ({ tokenABalance, tokenAIconURL, tokenATitle, tokenBBalance, tokenBIconURL, tokenBTitle }: any) => {
   const values = [
     {
-      iconURL: primaryIconURL,
-      title: `${primaryBalance.toLocaleString()} ${primaryTitle}`,
+      iconURL: tokenAIconURL,
+      title: `${tokenABalance.toLocaleString()} ${tokenATitle}`,
     },
     {
-      iconURL: secondaryIconURL,
-      title: `${secondaryBalance.toLocaleString()} ${secondaryTitle}`,
+      iconURL: tokenBIconURL,
+      title: `${tokenBBalance.toLocaleString()} ${tokenBTitle}`,
     },
   ];
 
@@ -30,11 +30,6 @@ const Balance = ({ primaryBalance, primaryIconURL, primaryTitle, secondaryBalanc
           ))}
         </View>
       ),
-    },
-
-    {
-      title: 'Quantity',
-      children: <Text style={styles.title}>{aero.toLocaleString()} AERO-LP</Text>,
     },
   ];
 

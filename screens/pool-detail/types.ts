@@ -3,19 +3,16 @@ interface PoolID {
 }
 
 interface PoolDetails {
-  primaryIconURL: string;
-  secondaryIconURL: string;
-  primaryTitle: string;
-  secondaryTitle: string;
-  primaryBalance: number;
-  secondaryBalance: number;
-  primaryUSDValue: number;
-  secondaryUSDValue: number;
+  tokenAIconURL: string;
+  tokenBIconURL: string;
+  tokenATitle: string;
+  tokenBTitle: string;
+  tokenABalance: number;
+  tokenBBalance: number;
+  tokenAUSDValue: number;
+  tokenBUSDValue: number;
   condition: 'stable' | 'volatile';
   fee: number;
-  aero: number;
-  stakedAero: number;
-  availableAero: number;
   symbol: string;
   volume: number;
   tvl: number;
