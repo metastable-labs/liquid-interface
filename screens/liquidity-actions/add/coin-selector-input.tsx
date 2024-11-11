@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { View, Text, Image, TextInput, TouchableOpacity } from 'react-native';
 
 import { removeCommasFromNumber } from '@/utils/helpers';
@@ -12,7 +12,7 @@ const CoinSelectorInput = ({ onChange, selectedToken, value, disabled, address }
   const { accountState } = useSystemFunctions();
   const { tokens } = accountState;
 
-  const [token, setToken] = useState(tokens?.data.find((t) => t.address === address) || tokens?.data[0]);
+  const [token, setToken] = useState<TokenItem>();
   const [showBottomSheet, setShowBottomSheet] = useState(false);
 
   const invalidAmount = parseFloat(removeCommasFromNumber(value)) > Number(token?.balance || 0);
@@ -21,6 +21,16 @@ const CoinSelectorInput = ({ onChange, selectedToken, value, disabled, address }
     setToken(asset);
     selectedToken(asset.address);
   };
+
+  useEffect(
+    function initToken() {
+      if (!tokens?.data) return;
+
+      const initialToken = tokens?.data.find((t) => t.address === address) || tokens?.data[0];
+      setToken(initialToken);
+    },
+    [tokens]
+  );
 
   return (
     <>

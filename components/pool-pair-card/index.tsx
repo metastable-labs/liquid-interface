@@ -35,7 +35,7 @@ const LQDPoolPairCard = ({ pool, navigationVariant = 'primary' }: PoolPairCard) 
         <View style={styles.iconContainer}>
           {[primaryIconURL, secondaryIconURL].map((iconURL, index) => (
             <View key={index} style={[styles.icon, index === 0 && { position: 'relative', zIndex: 1 }]}>
-              <Image source={{ uri: iconURL }} style={{ width: 24, height: 24 }} />
+              <Image source={{ uri: iconURL }} style={styles.image} />
             </View>
           ))}
         </View>
@@ -112,5 +112,11 @@ const styles = StyleSheet.create({
     lineHeight: 13.64,
     fontWeight: '500',
     fontFamily: 'AeonikMedium',
+  },
+
+  image: {
+    width: 24,
+    height: 24,
+    borderRadius: 24,
   },
 });

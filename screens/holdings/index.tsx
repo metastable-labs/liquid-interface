@@ -38,7 +38,7 @@ const Holdings = () => {
   const items: Array<IItem> = [
     {
       variant: 'primary',
-      details: [{ title: 'Assets', value: `${tokensUserHas?.length} assets` }],
+      details: [{ title: 'Assets', value: `${tokensUserHas?.length || 0} assets` }],
       subtitle: '',
       title: `$${tokenBalance.toLocaleString()}`,
       empty: {
