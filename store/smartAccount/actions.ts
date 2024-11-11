@@ -16,10 +16,11 @@ import { setLpBalance, setPositions, setTokenBalance, setTokens } from '../accou
 import api from '@/init/api';
 import { useAuth } from '@/providers';
 import { AuthenticationResponseJSON } from 'react-native-passkeys/build/ReactNativePasskeys.types';
+import { Hex } from 'viem';
 
 export function useSmartAccountActions() {
   const { dispatch, router, smartAccountState } = useSystemFunctions();
-  const { setSession } = useAuth();
+  const { setSession, session } = useAuth();
 
   const updateRegistrationOptions = (options: CreatePassKeyCredentialOptions) => {
     dispatch(setRegistrationOptions(options.data));
@@ -110,6 +111,10 @@ export function useSmartAccountActions() {
     }
   };
 
+  const signTransaction = async (hash: Hex) => {
+    const signature = await session?.sign({ hash });
+    return signature;
+  };
   const logout = async () => {
     try {
       dispatch(setAddress(null));
@@ -131,5 +136,6 @@ export function useSmartAccountActions() {
     getSmartAccount,
     logout,
     login,
+    signTransaction,
   };
 }
