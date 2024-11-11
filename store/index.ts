@@ -25,7 +25,7 @@ const rootReducer = combineReducers({
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  whitelist: ['user', 'pools', 'smartAccount', 'account'],
+  whitelist: ['user', 'pools', 'smartAccount'],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

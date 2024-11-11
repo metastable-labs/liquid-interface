@@ -33,11 +33,12 @@ const Holdings = () => {
   ];
 
   const visibleActions = actions.filter((action) => !action.hide);
+  const tokensUserHas = tokens.data?.filter?.((token) => token.isListed && Number(token.balance) > 0);
 
   const items: Array<IItem> = [
     {
       variant: 'primary',
-      details: [{ title: 'Assets', value: `${tokens?.length} assets` }],
+      details: [{ title: 'Assets', value: `${tokensUserHas?.length} assets` }],
       subtitle: '',
       title: `$${tokenBalance.toLocaleString()}`,
       empty: {
@@ -47,7 +48,7 @@ const Holdings = () => {
           onPress: () => console.log('Deposit'),
         },
       },
-      isEmpty: tokens?.length === 0,
+      isEmpty: tokensUserHas?.length === 0,
     },
     {
       variant: 'secondary',

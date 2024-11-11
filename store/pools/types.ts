@@ -5,8 +5,7 @@ export type PoolResponse = {
   pagination: {
     limit: number;
     page: number;
-    total: number;
-    totalPages: number;
+    hasMore: boolean;
   };
 };
 
@@ -15,8 +14,7 @@ export const defaultPoolResponse = {
   pagination: {
     limit: 10,
     page: 0,
-    total: 0,
-    totalPages: 1,
+    hasMore: true,
   },
 };
 

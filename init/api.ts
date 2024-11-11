@@ -3,6 +3,7 @@ import { CreatePassKeyCredentialOptions, Address, PoolType, VerifyRegistration, 
 import { AuthenticationResponseJSON } from 'react-native-passkeys/build/ReactNativePasskeys.types';
 
 import { apiKey, apiUrl } from '@/constants/env';
+import { TokenResponse } from '@/store/account/types';
 
 class LiquidAPI {
   private apiBaseUrl: string;
@@ -95,8 +96,8 @@ class LiquidAPI {
     });
   }
 
-  async getTokens(query: string): Promise<PoolResponse> {
-    return this.fetchWithErrorHandling(`${this.apiBaseUrl}/tokens/${query || ''}`, {
+  async getTokens(query?: string): Promise<TokenResponse> {
+    return this.fetchWithErrorHandling(`${this.apiBaseUrl}/tokens${query || ''}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
