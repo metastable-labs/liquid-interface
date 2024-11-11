@@ -1,26 +1,14 @@
 import { PoolResponse } from '@/store/pools/types';
-import {
-  CreatePassKeyCredentialOptions,
-  Address,
-  PasskeyRegistrationResult,
-  PoolType,
-  VerifyRegistration,
-  AuthCredentialOptions,
-} from './types';
+import { CreatePassKeyCredentialOptions, Address, PoolType, VerifyRegistration, AuthCredentialOptions } from './types';
 import { AuthenticationResponseJSON } from 'react-native-passkeys/build/ReactNativePasskeys.types';
+
+import { apiKey, apiUrl } from '@/constants/env';
 
 class LiquidAPI {
   private apiBaseUrl: string;
   private apiKey: string;
 
   constructor() {
-    const apiUrl = process.env.EXPO_PUBLIC_X_API_URL;
-    const apiKey = process.env.EXPO_PUBLIC_X_API_KEY;
-
-    if (!apiUrl || !apiKey) {
-      throw new Error('EXPO_PUBLIC_API_URL or EXPO_PUBLIC_API_KEY is not set');
-    }
-
     this.apiBaseUrl = apiUrl;
     this.apiKey = apiKey;
   }
