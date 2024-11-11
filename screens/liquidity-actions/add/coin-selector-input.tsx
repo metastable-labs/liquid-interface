@@ -1,22 +1,36 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { View, Text, Image, TextInput, TouchableOpacity } from 'react-native';
 
-import { assets as tokens } from '@/screens/withdraw/dummy';
 import { removeCommasFromNumber } from '@/utils/helpers';
 import { LQDAssetSelection } from '@/components';
 import { CaretDownIcon } from '@/assets/icons';
+import useSystemFunctions from '@/hooks/useSystemFunctions';
+import { TokenItem } from '@/store/account/types';
 import { coinSelectorInputStyles as styles } from './styles';
 
-const CoinSelectorInput = ({ onChange, setTokenId, value, disabled, tokenId }: ICoinSelectorInput) => {
-  const [token, setToken] = useState(tokens.find((t) => t.id === tokenId) || tokens[0]);
+const CoinSelectorInput = ({ onChange, selectedToken, value, disabled, address }: ICoinSelectorInput) => {
+  const { accountState } = useSystemFunctions();
+  const { tokens } = accountState;
+
+  const [token, setToken] = useState<TokenItem>();
   const [showBottomSheet, setShowBottomSheet] = useState(false);
 
-  const invalidAmount = parseFloat(removeCommasFromNumber(value)) > token?.balance!;
+  const invalidAmount = parseFloat(removeCommasFromNumber(value)) > Number(token?.balance || 0);
 
-  const setAsset = (asset: IAsset) => {
+  const setAsset = (asset: TokenItem) => {
     setToken(asset);
-    setTokenId(asset.id);
+    selectedToken(asset.address);
   };
+
+  useEffect(
+    function initToken() {
+      if (!tokens?.data) return;
+
+      const initialToken = tokens?.data.find((t) => t.address === address) || tokens?.data[0];
+      setToken(initialToken);
+    },
+    [tokens]
+  );
 
   return (
     <>
@@ -27,12 +41,13 @@ const CoinSelectorInput = ({ onChange, setTokenId, value, disabled, tokenId }: I
           style={[styles.input, invalidAmount && styles.invalidText]}
           onChangeText={onChange}
           pointerEvents={disabled ? 'none' : 'auto'}
+          placeholder="0.0"
         />
 
         <View style={styles.tokenContainer}>
           <TouchableOpacity style={styles.tokenSelector} onPress={() => setShowBottomSheet(true)}>
             <View style={styles.icon}>
-              <Image source={{ uri: token?.iconUrl }} style={{ width: 20, height: 20 }} />
+              <Image source={{ uri: token?.logoUrl }} style={{ width: 20, height: 20 }} />
             </View>
 
             <Text style={styles.tokenText}>{token?.symbol}</Text>
@@ -49,16 +64,15 @@ const CoinSelectorInput = ({ onChange, setTokenId, value, disabled, tokenId }: I
             </Text>
           </View>
         </View>
-
-        <LQDAssetSelection
-          assets={tokens}
-          close={() => setShowBottomSheet(false)}
-          setAsset={setAsset}
-          show={showBottomSheet}
-          title="Select token"
-          asset={token}
-        />
       </View>
+
+      <LQDAssetSelection
+        close={() => setShowBottomSheet(false)}
+        setAsset={setAsset}
+        show={showBottomSheet}
+        title="Select token"
+        selectedAsset={token}
+      />
     </>
   );
 };

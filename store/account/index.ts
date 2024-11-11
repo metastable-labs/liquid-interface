@@ -1,7 +1,7 @@
 import { Position } from '@/hooks/types';
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import { defaultToken, TokenResponse } from './types';
+import { TokenResponse } from './types';
 
 export interface AccountState {
   tokens: TokenResponse;
@@ -13,7 +13,14 @@ export interface AccountState {
 }
 
 const initialState: AccountState = {
-  tokens: defaultToken,
+  tokens: {
+    data: [],
+    pagination: {
+      hasMore: true,
+      page: 0,
+      limit: 0,
+    },
+  },
   positions: [],
   lpBalance: 0,
   tokenBalance: 0,
@@ -42,11 +49,17 @@ export const accountReducer = createSlice({
     },
 
     setTokens: (state, action: PayloadAction<TokenResponse | undefined>) => {
-      console.log('bjjhjhdjhjhdjhjdhjhdjhjdhkdhkjhdkjhkjdhkjhdkjhkjdhkjgdhkjghdjkhkjdhkjhdkjhdkjhdjkhdkjhjdh');
       if (action.payload) {
         state.tokens = { ...action.payload };
       } else {
-        state.tokens = defaultToken;
+        state.tokens = {
+          data: [],
+          pagination: {
+            hasMore: true,
+            page: 0,
+            limit: 0,
+          },
+        };
       }
     },
 

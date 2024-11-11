@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import { BoxSearchIcon, SendIcon } from '@/assets/icons';
 
-const Header = ({ condition, fee, primaryIconURL, symbol, secondaryIconURL }: PoolDetails) => {
+const Header = ({ condition, fee, tokenAIconURL, symbol, tokenBIconURL }: PoolDetails) => {
   const flagColors = {
     stable: '#B47818',
     volatile: '#AF1D38',
@@ -24,9 +24,9 @@ const Header = ({ condition, fee, primaryIconURL, symbol, secondaryIconURL }: Po
     <View style={styles.container}>
       <View style={styles.leftContainer}>
         <View style={styles.iconContainer}>
-          {[primaryIconURL, secondaryIconURL].map((iconURL, index) => (
+          {[tokenAIconURL, tokenBIconURL].map((iconURL, index) => (
             <View key={index} style={[styles.icon, index === 0 && { position: 'relative', zIndex: 1 }]}>
-              <Image source={{ uri: iconURL }} style={{ width: 34.9, height: 34.9 }} />
+              <Image source={{ uri: iconURL }} style={styles.image} />
             </View>
           ))}
         </View>
@@ -155,5 +155,11 @@ const styles = StyleSheet.create({
     height: 24,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+
+  image: {
+    width: 34.9,
+    height: 34.9,
+    borderRadius: 34,
   },
 });

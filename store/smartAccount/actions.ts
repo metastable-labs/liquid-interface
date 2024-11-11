@@ -123,9 +123,9 @@ export function useSmartAccountActions() {
   const logout = async () => {
     try {
       dispatch(setAddress(null));
-      dispatch(setTokens([]));
+      dispatch(setTokens(undefined));
       dispatch(setTokenBalance(0));
-      dispatch(setPositions([]));
+      dispatch(setPositions(undefined));
       dispatch(setLpBalance(0));
       await clearPersistedSmartAccountInfo();
 

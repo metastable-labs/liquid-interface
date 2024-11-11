@@ -34,7 +34,7 @@ const LQDPoolPairPaper = ({ pool, navigationVariant = 'primary' }: PoolPairPaper
         <View style={styles.iconContainer}>
           {[primaryIconURL, secondaryIconURL].map((iconURL, index) => (
             <View key={index} style={[styles.icon, index === 0 && { position: 'relative', zIndex: 1 }]}>
-              <Image source={{ uri: iconURL }} style={{ width: 24, height: 24 }} />
+              <Image source={{ uri: iconURL }} style={styles.image} />
             </View>
           ))}
         </View>
@@ -174,5 +174,11 @@ const styles = StyleSheet.create({
     fontSize: adjustFontSizeForIOS(11, 2),
     textTransform: 'uppercase',
     fontFamily: 'AeonikRegular',
+  },
+
+  image: {
+    width: 24,
+    height: 24,
+    borderRadius: 24,
   },
 });

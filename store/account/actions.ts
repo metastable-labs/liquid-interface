@@ -1,16 +1,14 @@
 import { PublicClient } from 'viem';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
-import { useToken } from '@/hooks/useToken';
 import { publicClient } from '@/init/viem';
 import { setLoading, setLpBalance, setPositions, setRefreshing, setTokenBalance, setTokens } from '.';
-import { Position, Token } from '@/hooks/types';
+import { Position } from '@/hooks/types';
 import { usePool } from '@/hooks/usePool';
 import api from '@/init/api';
-import { TokenItem, TokenResponse } from './types';
+import { TokenResponse } from './types';
 
 export function useAccountActions() {
   const { dispatch, accountState } = useSystemFunctions();
-  const { fetchTokens } = useToken(publicClient as PublicClient);
   const { fetchPositions } = usePool(publicClient as PublicClient);
 
   const getTokens = async (refresh?: boolean) => {

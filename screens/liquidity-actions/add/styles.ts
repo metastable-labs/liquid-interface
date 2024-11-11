@@ -59,7 +59,6 @@ const styles = StyleSheet.create({
   bottomContainer: {
     paddingHorizontal: 8,
     paddingVertical: 12,
-    alignItems: 'stretch',
   },
 
   errorText: {
@@ -91,7 +90,7 @@ const coinSelectorInputStyles = StyleSheet.create({
     lineHeight: 26.88,
     letterSpacing: -0.6,
     fontWeight: '500',
-    maxWidth: '35%',
+    maxWidth: '40%',
     fontFamily: 'AeonikMedium',
   },
 
