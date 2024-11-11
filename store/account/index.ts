@@ -42,7 +42,6 @@ export const accountReducer = createSlice({
     },
 
     setTokens: (state, action: PayloadAction<TokenResponse | undefined>) => {
-      console.log('bjjhjhdjhjhdjhjdhjhdjhjdhkdhkjhdkjhkjdhkjhdkjhkjdhkjgdhkjghdjkhkjdhkjhdkjhdkjhdjkhdkjhjdh');
       if (action.payload) {
         state.tokens = { ...action.payload };
       } else {
