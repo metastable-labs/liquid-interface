@@ -27,26 +27,26 @@ const Card = ({ details, subtitle, title, variant }: IItem) => {
       label: 'LP balance',
       action: () => router.navigate('/(tabs)/holdings/pools'),
     },
-    tertiary: {
-      primaryColor: '#EEEBFF',
-      secondaryColor: '#2B1664',
-      label: 'Aero rewards',
-      action: () =>
-        router.navigate({
-          pathname: '/(tabs)/holdings/rewards',
-          params: { type: 'aero' },
-        }),
-    },
-    quaternary: {
-      primaryColor: '#EBFAFF',
-      secondaryColor: '#164564',
-      label: 'Fees earned',
-      action: () =>
-        router.navigate({
-          pathname: '/(tabs)/holdings/rewards',
-          params: { type: 'fees' },
-        }),
-    },
+    // tertiary: {
+    //   primaryColor: '#EEEBFF',
+    //   secondaryColor: '#2B1664',
+    //   label: 'Aero rewards',
+    //   action: () =>
+    //     router.navigate({
+    //       pathname: '/(tabs)/holdings/rewards',
+    //       params: { type: 'aero' },
+    //     }),
+    // },
+    // quaternary: {
+    //   primaryColor: '#EBFAFF',
+    //   secondaryColor: '#164564',
+    //   label: 'Fees earned',
+    //   action: () =>
+    //     router.navigate({
+    //       pathname: '/(tabs)/holdings/rewards',
+    //       params: { type: 'fees' },
+    //     }),
+    // },
   };
 
   return (
@@ -194,7 +194,6 @@ const styles = StyleSheet.create({
 
   titleAndSubtitle: {
     flexDirection: 'row',
-    justifyContent: 'center',
     alignItems: 'center',
     gap: 8,
   },

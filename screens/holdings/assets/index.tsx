@@ -31,7 +31,8 @@ const Assets = () => {
     },
   ];
 
-  const assets: IAssetPaper[] = tokens.map((token) => ({
+  const tokensUserHas = tokens.data?.filter?.((token) => token.isListed && Number(token.balance) > 0);
+  const assets: IAssetPaper[] = tokensUserHas?.map?.((token) => ({
     iconUrl: token.logoUrl,
     name: token.symbol,
     value: Number(token.balance),

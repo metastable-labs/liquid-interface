@@ -16,12 +16,12 @@ const PoolDetail = ({ poolId }: PoolID) => {
   const title = symbol?.split('/');
 
   const getTokenBalance = (address?: Address) => {
-    const balance = accountState.tokens.find((token) => token.address === address)?.balance || 0;
+    const balance = accountState.tokens?.data?.find((token) => token.address === address)?.balance || 0;
     return Number(balance);
   };
 
   const getTokenUSDValue = (address?: Address) => {
-    const token = accountState.tokens.find((token) => token.address === address);
+    const token = accountState.tokens?.data?.find((token) => token.address === address);
     const balance = Number(token?.balance || 0) * Number(token?.usdPrice || 0);
     return balance;
   };

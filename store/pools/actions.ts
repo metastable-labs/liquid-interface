@@ -37,7 +37,7 @@ export function usePoolActions() {
         return dispatch(setHotPools(pools));
       }
 
-      if (hotPools.pagination.page == hotPools.pagination.totalPages) return;
+      if (!hotPools.pagination.hasMore) return;
 
       dispatch(setLoadingPools(true));
 
@@ -67,7 +67,7 @@ export function usePoolActions() {
         return dispatch(setTrendingPools(pools));
       }
 
-      if (trendingPools.pagination.page == trendingPools.pagination.totalPages) return;
+      if (!trendingPools.pagination.hasMore) return;
 
       dispatch(setLoadingPools(true));
 
@@ -97,7 +97,7 @@ export function usePoolActions() {
         return dispatch(setTopGainers(pools));
       }
 
-      if (topGainers.pagination.page == topGainers.pagination.totalPages) return;
+      if (!topGainers.pagination.hasMore) return;
 
       dispatch(setLoadingPools(true));
 

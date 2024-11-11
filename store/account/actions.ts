@@ -6,9 +6,10 @@ import { setLoading, setLpBalance, setPositions, setRefreshing, setTokenBalance,
 import { Position, Token } from '@/hooks/types';
 import { usePool } from '@/hooks/usePool';
 import api from '@/init/api';
+import { TokenItem, TokenResponse } from './types';
 
 export function useAccountActions() {
-  const { dispatch } = useSystemFunctions();
+  const { dispatch, accountState } = useSystemFunctions();
   const { fetchTokens } = useToken(publicClient as PublicClient);
   const { fetchPositions } = usePool(publicClient as PublicClient);
 
@@ -16,15 +17,36 @@ export function useAccountActions() {
     try {
       if (refresh) {
         dispatch(setRefreshing(true));
-        const tokens = await fetchTokens(15, 0);
-        return _setValidTokens(tokens);
+        const tokens = await api.getTokens();
+
+        return dispatch(setTokens(tokens));
       }
 
-      dispatch(setLoading(true));
-      const tokens = await api.getTokens('');
-      // const tokens = await fetchTokens(15, 0);
+      const { tokens: currentTokens } = accountState;
 
-      // return _setValidTokens(tokens);
+      dispatch(setLoading(true));
+
+      let tokens: TokenResponse;
+
+      if (currentTokens === undefined || currentTokens.pagination.page === 0) {
+        tokens = await api.getTokens('');
+      } else {
+        if (!currentTokens.pagination.hasMore) return;
+
+        const nextPage = currentTokens?.pagination.page + 1;
+
+        const query = `?page=${nextPage}`;
+
+        tokens = await api.getTokens(query);
+
+        const newData = { ...currentTokens.data, ...tokens.data };
+        tokens.data = newData;
+      }
+
+      const totalBalance = tokens.data.reduce((acc, token) => acc + parseFloat(token.balance) * parseFloat(token.usdPrice), 0);
+
+      dispatch(setTokens(tokens));
+      dispatch(setTokenBalance(totalBalance));
     } catch (error: any) {
       //
     } finally {
@@ -51,14 +73,6 @@ export function useAccountActions() {
       dispatch(setLoading(false));
       dispatch(setRefreshing(false));
     }
-  };
-
-  const _setValidTokens = async (tokens: Token[]) => {
-    const validTokens = await tokens.filter((token) => token.isListed && token.balance !== '0');
-    const totalBalance = validTokens.reduce((acc, token) => acc + parseFloat(token.balance) * parseFloat(token.usdPrice), 0);
-
-    dispatch(setTokens(validTokens));
-    dispatch(setTokenBalance(totalBalance));
   };
 
   const _setValidPositions = async (positions: Position[]) => {

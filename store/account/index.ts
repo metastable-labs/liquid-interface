@@ -1,9 +1,10 @@
-import { Position, Token } from '@/hooks/types';
+import { Position } from '@/hooks/types';
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
+import { defaultToken, TokenResponse } from './types';
 
 export interface AccountState {
-  tokens: Token[];
+  tokens: TokenResponse;
   positions: Position[];
   lpBalance: number;
   tokenBalance: number;
@@ -12,7 +13,7 @@ export interface AccountState {
 }
 
 const initialState: AccountState = {
-  tokens: [],
+  tokens: defaultToken,
   positions: [],
   lpBalance: 0,
   tokenBalance: 0,
@@ -40,11 +41,12 @@ export const accountReducer = createSlice({
       }
     },
 
-    setTokens: (state, action: PayloadAction<Token[] | undefined>) => {
+    setTokens: (state, action: PayloadAction<TokenResponse | undefined>) => {
+      console.log('bjjhjhdjhjhdjhjdhjhdjhjdhkdhkjhdkjhkjdhkjhdkjhkjdhkjgdhkjghdjkhkjdhkjhdkjhdkjhdjkhdkjhjdh');
       if (action.payload) {
-        state.tokens = [...action.payload];
+        state.tokens = { ...action.payload };
       } else {
-        state.tokens = [];
+        state.tokens = defaultToken;
       }
     },
 
