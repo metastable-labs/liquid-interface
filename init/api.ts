@@ -94,6 +94,15 @@ class LiquidAPI {
       },
     });
   }
+
+  async getTokens(query: string): Promise<PoolResponse> {
+    return this.fetchWithErrorHandling(`${this.apiBaseUrl}/tokens/${query || ''}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  }
 }
 
 export default new LiquidAPI();

@@ -22,8 +22,6 @@ const Home = () => {
 
   const { trendingPools, hotPools, topGainers } = poolsState;
 
-  console.log(hotPools.data, 'hot pools');
-
   const { whole, decimal } = formatAmountWithWholeAndDecimal(accountState.tokenBalance.toFixed(2));
 
   const top10TrendingPools = trendingPools?.data.slice(0, 10);
