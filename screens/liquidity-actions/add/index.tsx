@@ -15,11 +15,11 @@ import { CircleAddIcon } from '@/assets/icons';
 
 const AddLiquidity = () => {
   const [method, setMethod] = useState<Method>('liquid');
-  const [primary, setPrimary] = useState<TokenValue>({
+  const [tokenA, setTokenA] = useState<TokenValue>({
     asset: assets[0],
     value: '0',
   });
-  const [secondary, setSecondary] = useState<TokenValue>({
+  const [tokenB, setTokenB] = useState<TokenValue>({
     asset: assets[1],
     value: '0',
   });
@@ -29,17 +29,17 @@ const AddLiquidity = () => {
 
   const errors: ErrorsArray = {
     primary: {
-      title: `Swap ${primary.asset?.symbol} to ${secondary.asset?.symbol}?`,
+      title: `Swap ${tokenA.asset?.symbol} to ${tokenB.asset?.symbol}?`,
       description: (
         <Text style={styles.errorText}>
           You don’t have enough cbBTC. We’d balance the pool by swapping half of the{' '}
-          <Text style={[styles.errorText, { fontFamily: 'AeonikMedium' }]}>{primary?.asset?.symbol}</Text> value to{' '}
-          <Text style={[styles.errorText, { fontFamily: 'AeonikMedium' }]}>{secondary?.asset?.symbol}</Text>.
+          <Text style={[styles.errorText, { fontFamily: 'AeonikMedium' }]}>{tokenA?.asset?.symbol}</Text> value to{' '}
+          <Text style={[styles.errorText, { fontFamily: 'AeonikMedium' }]}>{tokenB?.asset?.symbol}</Text>.
         </Text>
       ),
       swap: {
-        from: `(${1500}) ${primary?.asset?.symbol}`,
-        for: `(${0.1}) ${secondary?.asset?.symbol}`,
+        from: `(${1500}) ${tokenA?.asset?.symbol}`,
+        for: `(${0.1}) ${tokenB?.asset?.symbol}`,
       },
     },
 
@@ -52,8 +52,8 @@ const AddLiquidity = () => {
   const infos: Array<Info> = [
     {
       icon: 'primary',
-      title: `1 ${primary.asset?.symbol} to ${secondary.asset?.symbol}`,
-      value: `${0.805} ${secondary.asset?.symbol}`,
+      title: `1 ${tokenA.asset?.symbol} to ${tokenB.asset?.symbol}`,
+      value: `${0.805} ${tokenB.asset?.symbol}`,
     },
     {
       icon: 'secondary',
@@ -63,7 +63,7 @@ const AddLiquidity = () => {
     {
       icon: 'secondary',
       title: "You'll get:",
-      value: `${6000} ${primary.asset?.symbol}`,
+      value: `${6000} ${tokenA.asset?.symbol}`,
     },
     {
       icon: 'tertiary',
@@ -72,21 +72,21 @@ const AddLiquidity = () => {
     },
   ];
 
-  const disableButton = !parseFloat(removeCommasFromNumber(primary.value)) || !parseFloat(removeCommasFromNumber(secondary.value));
+  const disableButton = !parseFloat(removeCommasFromNumber(tokenA.value)) || !parseFloat(removeCommasFromNumber(secondary.value));
 
   const loadingViewStyle = useAnimatedStyle(() => ({
     opacity: withTiming(loading ? 1 : 0, { duration: 500 }),
   }));
 
-  const handleTokenChange = (id: string, token: 'primary' | 'secondary') => {
+  const handleTokenChange = (id: string, token: 'tokenA' | 'tokenB') => {
     const asset = assets.find((asset) => asset.id === id);
     if (asset) {
-      if (token === 'primary') setPrimary({ ...primary, asset });
-      if (token === 'secondary') setSecondary({ ...secondary, asset });
+      if (token === 'tokenA') setTokenA({ ...tokenA, asset });
+      if (token === 'tokenB') setTokenB({ ...tokenB, asset });
     }
   };
 
-  const handleValueChange = (value: string, token: 'primary' | 'secondary') => {
+  const handleValueChange = (value: string, token: 'tokenA' | 'tokenB') => {
     const sanitizedValue = removeCommasFromNumber(value);
     const numberValue = parseFloat(sanitizedValue);
     let newValue = numberValue.toLocaleString(undefined, {
@@ -95,26 +95,26 @@ const AddLiquidity = () => {
 
     if (isNaN(numberValue)) newValue = '';
 
-    if (token === 'primary') {
-      return setPrimary({ ...primary, value: newValue });
-    } else {
-      return setSecondary({ ...secondary, value: newValue });
+    if (token === 'tokenA') {
+      return setTokenA({ ...tokenA, value: newValue });
     }
+
+    return setTokenB({ ...tokenB, value: newValue });
   };
 
   const onSubmit = () => {
     setLoading(true);
-    console.log('Submitting liquidity request', { primary, secondary });
+    console.log('Submitting liquidity request', { tokenA, tokenB });
   };
 
   useEffect(() => {
-    const primaryIsInvalid = parseFloat(removeCommasFromNumber(primary.value)) > primary.asset?.balance!;
-    const secondaryIsInvalid = parseFloat(removeCommasFromNumber(secondary.value)) > secondary.asset?.balance!;
+    const primaryIsInvalid = parseFloat(removeCommasFromNumber(tokenA.value)) > tokenA.asset?.balance!;
+    const secondaryIsInvalid = parseFloat(removeCommasFromNumber(tokenB.value)) > tokenB.asset?.balance!;
 
     if (primaryIsInvalid && secondaryIsInvalid) return setError('secondary');
 
     if (secondaryIsInvalid) return setError('primary');
-  }, [primary.value, secondary.value, primary.asset?.balance, secondary.asset?.balance]);
+  }, [tokenA.value, tokenB.value, tokenA.asset?.balance, tokenB.asset?.balance]);
 
   return (
     <>
@@ -130,10 +130,10 @@ const AddLiquidity = () => {
 
             <View style={styles.inputs}>
               <CoinSelectorInput
-                tokenId={primary?.asset?.id}
-                setTokenId={(id) => handleTokenChange(id, 'primary')}
-                value={primary.value}
-                onChange={(value) => handleValueChange(value, 'primary')}
+                tokenId={tokenA?.asset?.id}
+                setTokenId={(id) => handleTokenChange(id, 'tokenA')}
+                value={tokenA.value}
+                onChange={(value) => handleValueChange(value, 'tokenA')}
               />
 
               <View style={styles.inputDivider}>
@@ -141,10 +141,10 @@ const AddLiquidity = () => {
               </View>
 
               <CoinSelectorInput
-                tokenId={secondary?.asset?.id}
-                setTokenId={(id) => handleTokenChange(id, 'secondary')}
-                value={secondary.value}
-                onChange={(value) => handleValueChange(value, 'secondary')}
+                tokenId={tokenB?.asset?.id}
+                setTokenId={(id) => handleTokenChange(id, 'tokenB')}
+                value={tokenB.value}
+                onChange={(value) => handleValueChange(value, 'tokenB')}
               />
             </View>
 
@@ -161,7 +161,7 @@ const AddLiquidity = () => {
 
       {loading && (
         <Animated.View style={[loadingViewStyle, styles.root, { flex: 1 }]}>
-          <Loading primaryTitle={primary.asset?.symbol!} secondaryTitle={secondary.asset?.symbol!} />
+          <Loading primaryTitle={tokenA.asset?.symbol!} secondaryTitle={tokenB.asset?.symbol!} />
         </Animated.View>
       )}
     </>

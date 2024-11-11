@@ -5,9 +5,8 @@ import { adjustFontSizeForIOS, formatAmount, formatNumberWithSuffix } from '@/ut
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { setSelectedPool } from '@/store/pools';
 import { PoolPairPaper } from './types';
-import { formatEther } from 'viem';
 
-const LQDPoolPairPaper = ({ pool, navigationVariant = 'primary', isHot }: PoolPairPaper) => {
+const LQDPoolPairPaper = ({ pool, navigationVariant = 'primary' }: PoolPairPaper) => {
   const { router, dispatch } = useSystemFunctions();
 
   const paths = {

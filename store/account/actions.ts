@@ -5,6 +5,7 @@ import { publicClient } from '@/init/viem';
 import { setLoading, setLpBalance, setPositions, setRefreshing, setTokenBalance, setTokens } from '.';
 import { Position, Token } from '@/hooks/types';
 import { usePool } from '@/hooks/usePool';
+import api from '@/init/api';
 
 export function useAccountActions() {
   const { dispatch } = useSystemFunctions();
@@ -20,9 +21,10 @@ export function useAccountActions() {
       }
 
       dispatch(setLoading(true));
-      const tokens = await fetchTokens(15, 0);
+      const tokens = await api.getTokens('');
+      // const tokens = await fetchTokens(15, 0);
 
-      return _setValidTokens(tokens);
+      // return _setValidTokens(tokens);
     } catch (error: any) {
       //
     } finally {
