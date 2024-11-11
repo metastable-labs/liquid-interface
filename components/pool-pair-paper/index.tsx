@@ -25,7 +25,7 @@ const LQDPoolPairPaper = ({ pool, navigationVariant = 'primary', isHot }: PoolPa
   const symbol = pool.symbol.split('-')[1].replace('/', ' / ');
   const apr = formatAmount(pool.apr, 2);
   const fees = '';
-  const volume = formatAmount(formatEther(BigInt(Number(pool.totalVolumeUSD))), 0);
+  const volume = Number(pool.totalVolumeUSD);
   const tvl = pool.tvl;
   const isStable = pool.isStable;
 

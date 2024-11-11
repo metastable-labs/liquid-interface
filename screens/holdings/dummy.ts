@@ -12,18 +12,6 @@ const emptyData: IEmptyData = {
     subtitle: 'Deposit Liquidity into a pool and your balances will show up here',
     actionIcon: 'right-caret',
   },
-
-  tertiary: {
-    icon: 'coins',
-    title: 'No AERO rewards yet',
-    subtitle: 'Stake your LP tokens to start earning AERO emissions',
-  },
-
-  quaternary: {
-    icon: 'dollar',
-    title: 'No Fees earned yet',
-    subtitle: 'Stake your LP tokens to start earning Fees',
-  },
 };
 
 export { emptyData };
