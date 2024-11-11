@@ -24,11 +24,9 @@ const Home = () => {
 
   const { whole, decimal } = formatAmountWithWholeAndDecimal(accountState.tokenBalance.toFixed(2));
 
-  const top10TrendingPools = trendingPools?.data.slice(0, 10);
-  const hotPoolsArray = Object.values(hotPools.data);
-  const top10HotPools = hotPoolsArray.slice(0, 10) ?? [];
-
-  const top7Gainers = topGainers.data.slice(0, 7);
+  const top10TrendingPools = trendingPools?.data?.slice(0, 10);
+  const top10HotPools = hotPools?.data?.slice(0, 10) ?? [];
+  const top7Gainers = topGainers?.data?.slice(0, 7);
 
   const focusInput = () => {
     focusSearch(true);
