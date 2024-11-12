@@ -1,12 +1,13 @@
 import { Address, formatUnits, PublicClient } from 'viem';
 import { AerodromePoolABI, LPSugarABI, OffchainOracleABI } from '@/constants/abis';
-import { USDC_ADDRESS, WETH_ADDRESS } from '@/constants/addresses';
+import { LP_SUGAR_ADDRESS, USDC_ADDRESS, WETH_ADDRESS } from '@/constants/addresses';
+import { publicClient } from '@/init/viem';
 
 const { LpSugar } = LPSugarABI;
 const { OffchainOracle } = OffchainOracleABI;
 
-export function useLpSugarContract(address: Address, publicClient: PublicClient) {
-  if (!LpSugar || !address || !publicClient) {
+export function useLpSugarContract() {
+  if (!LpSugar || !LP_SUGAR_ADDRESS || !publicClient) {
     throw new Error('Required parameters not provided to useLpSugarContract');
   }
 
@@ -18,25 +19,25 @@ export function useLpSugarContract(address: Address, publicClient: PublicClient)
       const safeBatchSize = Math.min(limit, SAFE_BATCH_SIZE);
 
       return await publicClient.readContract({
-        address,
+        address: LP_SUGAR_ADDRESS,
         abi: LpSugar.abi,
         functionName: 'all',
         args: [BigInt(safeBatchSize), BigInt(offset)],
       });
     },
 
-    async getPositions(limit: number, offset: number, account: Address) {
+    async getPositions(account: Address) {
       return publicClient.readContract({
-        address,
+        address: LP_SUGAR_ADDRESS,
         abi: LpSugar.abi,
         functionName: 'positions',
-        args: [BigInt(limit), BigInt(offset), account],
+        args: [BigInt(200), BigInt(0), account],
       });
     },
 
     async getTokens(limit: number, offset: number, account: Address, connectors: readonly Address[]): Promise<any> {
       return publicClient.readContract({
-        address,
+        address: LP_SUGAR_ADDRESS,
         abi: LpSugar.abi,
         functionName: 'tokens',
         args: [BigInt(limit), BigInt(offset), account, connectors],

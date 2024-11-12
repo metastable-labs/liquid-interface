@@ -8,6 +8,7 @@ import appReducer from './app';
 import smartAccountReducer from './smartAccount';
 import poolReducer from './pools';
 import accountReducer from './account';
+import positionReducer from './positions';
 
 export interface CallbackProps {
   onSuccess?: Function;
@@ -20,12 +21,13 @@ const rootReducer = combineReducers({
   smartAccount: smartAccountReducer,
   pools: poolReducer,
   account: accountReducer,
+  positions: positionReducer,
 });
 
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  whitelist: ['user', 'pools', 'smartAccount'],
+  whitelist: ['user', 'pools', 'smartAccount', 'positions'],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

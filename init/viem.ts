@@ -1,4 +1,4 @@
-import { createPublicClient, http } from 'viem';
+import { createPublicClient, http, PublicClient } from 'viem';
 import { createPaymasterClient } from 'viem/account-abstraction';
 import { estimateUserOperationGas, UserOperation, createBundlerClient } from 'permissionless';
 import { base } from 'viem/chains';

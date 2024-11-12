@@ -4,7 +4,6 @@ import { CONNECTORS_BASE, LP_SUGAR_ADDRESS, OFFCHAIN_ORACLE_ADDRESS, WETH_ADDRES
 import { useLpSugarContract, useOffchainOracleContract } from './useContract';
 import { LPSugarToken, LPSugarTokenResponse, Token } from './types';
 import useSystemFunctions from './useSystemFunctions';
-import { OffchainOracleABI } from '@/constants/abis';
 
 export function useToken(publicClient: PublicClient) {
   const { smartAccountState } = useSystemFunctions();
@@ -13,7 +12,7 @@ export function useToken(publicClient: PublicClient) {
   const [tokens, setTokens] = useState<Token[]>([]);
   const [tokenMap, setTokenMap] = useState<Map<string, Token>>(new Map());
 
-  const lpSugar = useLpSugarContract(LP_SUGAR_ADDRESS, publicClient);
+  const lpSugar = useLpSugarContract();
   const oracle = useOffchainOracleContract(OFFCHAIN_ORACLE_ADDRESS, publicClient);
 
   const fetchTokens = async (BATCH_SIZE: number, offset: number): Promise<Token[]> => {
