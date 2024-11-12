@@ -38,26 +38,6 @@ export async function createSmartAccount(registrationOptions: PublicKeyCredentia
       clientDataJSON,
     };
 
-    const webAuthnAccount = toWebAuthnAccount({
-      credential: {
-        id: registrationResponse.credentialId,
-        publicKey: getPublicKeyHex(publicKey),
-      },
-      getFn,
-      rpId,
-    });
-
-    const smartAccount = await toCoinbaseSmartAccount({
-      client: publicClient,
-      owners: [webAuthnAccount],
-    });
-
-    const address = await smartAccount.getAddress();
-    const username = registrationOptions.user.name;
-
-    console.log(address, 'address from creation');
-    console.log(publicKey, 'pub key from creation');
-
     const smartAccountInfo: VerifyRegistration = {
       username: registrationOptions.user.name,
       id: registrationResponse.credentialId,
@@ -70,7 +50,24 @@ export async function createSmartAccount(registrationOptions: PublicKeyCredentia
       authenticatorAttachment: 'platform',
     };
 
-    await api.verifyRegistration(smartAccountInfo);
+    const verificationResult = await api.verifyRegistration(smartAccountInfo);
+
+    const webAuthnAccount = toWebAuthnAccount({
+      credential: {
+        id: registrationResponse.credentialId,
+        publicKey: getPublicKeyHex(verificationResult.data.publicKey),
+      },
+      getFn,
+      rpId,
+    });
+
+    const smartAccount = await toCoinbaseSmartAccount({
+      client: publicClient,
+      owners: [webAuthnAccount],
+    });
+
+    const address = await smartAccount.getAddress();
+    const username = registrationOptions.user.name;
 
     const updateUserAddressResponse = await api.updateUserAddress(username, address);
     if (!updateUserAddressResponse.success) {

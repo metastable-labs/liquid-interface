@@ -53,11 +53,18 @@ export type VerifyRegistration = {
   authenticatorAttachment: string;
 };
 
-export type VerificationResult = {
+export type AuthVerificationResult = {
   data: {
     publicKey: string;
     userAddress: string;
     username: string;
+    verified: boolean;
+  };
+};
+
+export type RegistrationVerificationResult = {
+  data: {
+    publicKey: string;
     verified: boolean;
   };
 };
