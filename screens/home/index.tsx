@@ -15,7 +15,7 @@ import { useOnMount } from '@/hooks/useOnMount';
 
 const Home = () => {
   const { router, poolsState, smartAccountState, accountState, appState } = useSystemFunctions();
-  const { getTokens, getPositions } = useAccountActions();
+  const { getTokens } = useAccountActions();
   const { getPools } = usePoolActions();
   const { logout } = useSmartAccountActions();
   const { searchIsFocused: focusSearch, showSearch } = useAppActions();
@@ -124,7 +124,7 @@ const Home = () => {
   useEffect(
     function fetchBalances() {
       getTokens();
-      getPositions();
+      //getPositions();
     },
     [smartAccountState.address]
   );

@@ -2,6 +2,7 @@ import { View, Text, StyleSheet, ScrollView } from 'react-native';
 
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import PoolCard from './card';
+import useSystemFunctions from '@/hooks/useSystemFunctions';
 
 const Pools = () => {
   const pools: Array<IPoolCard> = [

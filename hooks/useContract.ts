@@ -6,7 +6,7 @@ import { publicClient } from '@/init/viem';
 const { LpSugar } = LPSugarABI;
 const { OffchainOracle } = OffchainOracleABI;
 
-export function useLpSugarContract() {
+export function useLpSugarContract(address: Address) {
   if (!LpSugar || !LP_SUGAR_ADDRESS || !publicClient) {
     throw new Error('Required parameters not provided to useLpSugarContract');
   }
@@ -19,7 +19,7 @@ export function useLpSugarContract() {
       const safeBatchSize = Math.min(limit, SAFE_BATCH_SIZE);
 
       return await publicClient.readContract({
-        address: LP_SUGAR_ADDRESS,
+        address,
         abi: LpSugar.abi,
         functionName: 'all',
         args: [BigInt(safeBatchSize), BigInt(offset)],
@@ -28,7 +28,7 @@ export function useLpSugarContract() {
 
     async getPositions(account: Address) {
       return publicClient.readContract({
-        address: LP_SUGAR_ADDRESS,
+        address,
         abi: LpSugar.abi,
         functionName: 'positions',
         args: [BigInt(200), BigInt(0), account],
@@ -37,7 +37,7 @@ export function useLpSugarContract() {
 
     async getTokens(limit: number, offset: number, account: Address, connectors: readonly Address[]): Promise<any> {
       return publicClient.readContract({
-        address: LP_SUGAR_ADDRESS,
+        address,
         abi: LpSugar.abi,
         functionName: 'tokens',
         args: [BigInt(limit), BigInt(offset), account, connectors],
