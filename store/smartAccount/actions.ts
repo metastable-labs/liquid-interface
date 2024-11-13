@@ -2,7 +2,7 @@ import { toCoinbaseSmartAccount, toWebAuthnAccount } from 'viem/account-abstract
 import * as Passkeys from 'react-native-passkeys';
 
 import { setAddress, setRegistrationOptions } from '@/store/smartAccount';
-import { CreatePassKeyCredentialOptions } from '@/init/types';
+import { CreatePassKeyCredentialOptions, VerifyAuthResponse } from '@/init/types';
 import { publicClient } from '@/init/viem';
 import { rpId } from '@/constants/env';
 import { getPublicKeyHex } from '@/utils/base64';
@@ -16,6 +16,7 @@ import { setLpBalance, setPositions, setTokenBalance, setTokens } from '../accou
 import api from '@/init/api';
 import { useAuth } from '@/providers';
 import { Hex } from 'viem';
+import { AuthenticationResponseJSON } from 'react-native-passkeys/build/ReactNativePasskeys.types';
 
 export function useSmartAccountActions() {
   const { dispatch, router, smartAccountState } = useSystemFunctions();
@@ -68,14 +69,14 @@ export function useSmartAccountActions() {
         throw new Error('No passkey found');
       }
 
-      const authenticationResponse: any = {
+      const authenticationResponse: VerifyAuthResponse = {
         id: passkeyResult.id,
         rawId: passkeyResult.rawId,
         response: {
           authenticatorData: passkeyResult.response.authenticatorData,
           clientDataJSON: passkeyResult.response.clientDataJSON,
           signature: passkeyResult.response.signature,
-          userHandle: passkeyResult.response.userHandle,
+          userHandle: passkeyResult.response.userHandle!,
         },
         type: 'public-key',
         authenticatorAttachment: 'platform',

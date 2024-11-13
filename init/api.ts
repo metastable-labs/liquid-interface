@@ -7,6 +7,7 @@ import {
   AuthCredentialOptions,
   AuthVerificationResult,
   RegistrationVerificationResult,
+  VerifyAuthResponse,
 } from './types';
 import { AuthenticationResponseJSON } from 'react-native-passkeys/build/ReactNativePasskeys.types';
 
@@ -62,7 +63,7 @@ class LiquidAPI {
     });
   }
 
-  async verifyAuthentication(username: string, data: AuthenticationResponseJSON): Promise<AuthVerificationResult> {
+  async verifyAuthentication(username: string, data: VerifyAuthResponse): Promise<AuthVerificationResult> {
     return this.fetchWithErrorHandling(`${this.apiBaseUrl}/authentication/verify`, {
       method: 'POST',
       headers: {

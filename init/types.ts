@@ -53,6 +53,19 @@ export type VerifyRegistration = {
   authenticatorAttachment: string;
 };
 
+export type VerifyAuthResponse = {
+  id: string;
+  rawId: string;
+  response: {
+    authenticatorData: string;
+    clientDataJSON: string;
+    signature: string;
+    userHandle: string;
+  };
+  type: string;
+  authenticatorAttachment: string;
+};
+
 export type AuthVerificationResult = {
   data: {
     publicKey: string;
