@@ -5,7 +5,7 @@ import { setLoading, setLpBalance, setPositions, setRefreshing, setTokenBalance,
 import { Position } from '@/hooks/types';
 import { usePool } from '@/hooks/usePool';
 import api from '@/init/api';
-import { TokenResponse } from './types';
+import { TokenItem } from './types';
 
 export function useAccountActions() {
   const { dispatch, accountState, smartAccountState } = useSystemFunctions();
@@ -15,33 +15,12 @@ export function useAccountActions() {
     try {
       dispatch(setLoading(true));
 
-      const tokens = await api.getTokens('');
+      const query = smartAccountState.address ? `?address=${smartAccountState.address}` : '';
+      const tokens = await api.getTokens(query);
 
-      const totalBalance = tokens.data.reduce((acc, token) => acc + parseFloat(token.balance) * parseFloat(token.usdPrice), 0);
+      const totalBalance = tokens.data.reduce((acc, token) => acc + parseFloat(token.usdBalance || '0'), 0);
       const sortedTokens = await _sortTokensByBalance(tokens.data);
-      console.log(sortedTokens.find((token) => token.symbol === 'USDC'));
-      tokens.data = [...sortedTokens];
 
-      dispatch(setTokens(tokens));
-      dispatch(setTokenBalance(totalBalance));
-    } catch (error: any) {
-      //
-    } finally {
-      dispatch(setLoading(false));
-    }
-  };
-
-  const getUserTokens = async () => {
-    try {
-      if (!smartAccountState.address) return;
-
-      dispatch(setLoading(true));
-
-      const tokens = await api.getUserTokens(smartAccountState.address);
-
-      const totalBalance = tokens.data.reduce((acc, token) => acc + parseFloat(token.balance) * parseFloat(token.usdPrice), 0);
-      const sortedTokens = await _sortTokensByBalance(tokens.data);
-      console.log(sortedTokens.find((token) => token.symbol === 'USDC'));
       tokens.data = [...sortedTokens];
 
       dispatch(setTokens(tokens));
@@ -57,7 +36,9 @@ export function useAccountActions() {
     try {
       if (refresh) {
         dispatch(setRefreshing(true));
-        const tokens = await api.getTokens();
+
+        const query = smartAccountState.address ? `?address=${smartAccountState.address}` : '';
+        const tokens = await api.getTokens(query);
 
         return dispatch(setTokens(tokens));
       }
@@ -70,7 +51,8 @@ export function useAccountActions() {
 
       const nextPage = currentTokens?.pagination.page + 1;
 
-      const query = `?page=${nextPage}`;
+      const addressQuery = smartAccountState.address ? `address=${smartAccountState.address}` : '';
+      const query = `?page=${nextPage}&address=${addressQuery}`;
 
       const tokens = await api.getTokens(query);
       const sortedTokens = await _sortTokensByBalance(tokens.data);

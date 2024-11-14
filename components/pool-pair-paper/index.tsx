@@ -19,12 +19,14 @@ const LQDPoolPairPaper = ({ pool, navigationVariant = 'primary' }: PoolPairPaper
     router.push(paths[navigationVariant]);
   };
 
+  const vol = Number(Number(pool.totalVolumeUSD).toFixed(4));
+
   const primaryIconURL = pool.token0.logoUrl;
   const secondaryIconURL = pool.token1.logoUrl;
   const symbol = pool.symbol.split('-')[1].replace('/', ' / ');
   const apr = formatAmount(pool.apr, 2);
-  const fees = '';
-  const volume = Number(pool.totalVolumeUSD);
+  const fees = '0';
+  const volume = formatNumberWithSuffix(vol);
   const tvl = pool.tvl;
   const isStable = pool.isStable;
 

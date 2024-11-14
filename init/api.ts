@@ -3,7 +3,7 @@ import { CreatePassKeyCredentialOptions, Address, PoolType, VerifyRegistration, 
 import { AuthenticationResponseJSON } from 'react-native-passkeys/build/ReactNativePasskeys.types';
 
 import { apiKey, apiUrl } from '@/constants/env';
-import { TokenResponse, UserTokenResponse } from '@/store/account/types';
+import { TokenResponse } from '@/store/account/types';
 
 class LiquidAPI {
   private apiBaseUrl: string;
@@ -87,8 +87,8 @@ class LiquidAPI {
     });
   }
 
-  async searchPools(query: string): Promise<PoolResponse> {
-    return this.fetchWithErrorHandling(`${this.apiBaseUrl}/pools/search?symbol=${query}`, {
+  async searchPools(searchQuery: string, paginationQuery?: string): Promise<PoolResponse> {
+    return this.fetchWithErrorHandling(`${this.apiBaseUrl}/pools/search?query=${searchQuery}${paginationQuery || ''}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -98,15 +98,6 @@ class LiquidAPI {
 
   async getTokens(query?: string): Promise<TokenResponse> {
     return this.fetchWithErrorHandling(`${this.apiBaseUrl}/tokens${query || ''}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-  }
-
-  async getUserTokens(address: string): Promise<UserTokenResponse> {
-    return this.fetchWithErrorHandling(`${this.apiBaseUrl}/tokens/b/${address}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

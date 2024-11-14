@@ -9,16 +9,9 @@ export type TokenResponse = {
   };
 };
 
-export type UserTokenResponse = {
-  data: TokenItem[];
-  pagination: {
-    limit: number;
-    page: number;
-    hasMore: boolean;
-  };
-};
-
 export type TokenItem = {
+  formattedBalance: string;
+  usdBalance: string;
   address: Address;
   symbol: string;
   decimals: number;
@@ -42,6 +35,8 @@ export const defaultToken: TokenResponse = {
       logoUrl: '',
       lastUpdated: '',
       createdAt: '',
+      formattedBalance: '0',
+      usdBalance: '0',
     },
   ],
   pagination: {

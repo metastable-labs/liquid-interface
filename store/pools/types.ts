@@ -25,6 +25,8 @@ export type Pool = {
   apr: string;
   tvl: string;
   totalVolumeUSD: string;
+  totalFeesUSD: string;
+  txCount: number | string;
   isStable: boolean;
   factory: Address;
   token0: {
