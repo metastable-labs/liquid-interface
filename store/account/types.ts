@@ -9,6 +9,15 @@ export type TokenResponse = {
   };
 };
 
+export type UserTokenResponse = {
+  data: TokenItem[];
+  pagination: {
+    limit: number;
+    page: number;
+    hasMore: boolean;
+  };
+};
+
 export type TokenItem = {
   address: Address;
   symbol: string;
