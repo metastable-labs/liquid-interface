@@ -6,7 +6,7 @@ import { PoolType } from '@/init/types';
 export function usePoolActions() {
   const { dispatch, poolsState } = useSystemFunctions();
 
-  const { hotPools, topGainers, trendingPools } = poolsState;
+  const { hotPools, topGainers, trendingPools, searchedPools } = poolsState;
 
   const getPools = async () => {
     try {
@@ -121,11 +121,13 @@ export function usePoolActions() {
     }
   };
 
-  const searchPools = async (query: string) => {
+  const searchPools = async (searchQuery: string) => {
     try {
+      if (!searchQuery) return dispatch(setSearchedPools(undefined));
+
       dispatch(setSearchingPools(true));
 
-      const pools = await api.searchPools(query);
+      const pools = await api.searchPools(encodeURIComponent(searchQuery));
 
       dispatch(setSearchedPools(pools));
     } catch (error: any) {
@@ -136,11 +138,35 @@ export function usePoolActions() {
     }
   };
 
+  const getPaginatedSearchPools = async (searchQuery: string) => {
+    try {
+      if (!searchedPools.pagination.hasMore || !searchQuery) return;
+
+      dispatch(setSearchingPools(true));
+
+      const nextPage = searchedPools.pagination.page + 1;
+
+      const query = `&page=${nextPage}`;
+
+      const pools = await api.searchPools(encodeURIComponent(searchQuery), query);
+
+      const newData = { ...topGainers.data, ...pools.data };
+      pools.data = newData;
+
+      dispatch(setSearchedPools(pools));
+    } catch (error: any) {
+      //
+    } finally {
+      dispatch(setSearchingPools(false));
+    }
+  };
+
   return {
     getPools,
     getPaginatedHotPools,
     getPaginatedTrendingPools,
     getPaginatedTopGainers,
     searchPools,
+    getPaginatedSearchPools,
   };
 }

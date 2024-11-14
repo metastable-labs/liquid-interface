@@ -36,7 +36,7 @@ const Assets = () => {
     iconUrl: token.logoUrl,
     name: token.symbol,
     value: Number(token.balance),
-    usdValue: Number(token.balance) * Number(token.usdPrice),
+    usdValue: Number(token.usdBalance),
   }));
 
   return (
