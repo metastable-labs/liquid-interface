@@ -12,7 +12,7 @@ import {
 import { AuthenticationResponseJSON } from 'react-native-passkeys/build/ReactNativePasskeys.types';
 
 import { apiKey, apiUrl } from '@/constants/env';
-import { TokenResponse } from '@/store/account/types';
+import { TokenResponse, UserTokenResponse } from '@/store/account/types';
 
 class LiquidAPI {
   private apiBaseUrl: string;
@@ -85,7 +85,7 @@ class LiquidAPI {
   }
 
   async getPools(type: PoolType, query?: string): Promise<PoolResponse> {
-    return this.fetchWithErrorHandling(`${this.apiBaseUrl}/pools/${type}${query || ''}`, {
+    return this.fetchWithErrorHandling(`${this.apiBaseUrl}/pools/${type}${query || '?page=0'}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -104,6 +104,15 @@ class LiquidAPI {
 
   async getTokens(query?: string): Promise<TokenResponse> {
     return this.fetchWithErrorHandling(`${this.apiBaseUrl}/tokens${query || ''}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  }
+
+  async getUserTokens(address: string): Promise<UserTokenResponse> {
+    return this.fetchWithErrorHandling(`${this.apiBaseUrl}/tokens/b/${address}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

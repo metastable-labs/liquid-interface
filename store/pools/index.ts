@@ -55,7 +55,7 @@ export const poolReducer = createSlice({
       if (action.payload) {
         state.hotPools = { ...action.payload };
       } else {
-        state.hotPools = defaultPoolResponse;
+        state.hotPools = { ...defaultPoolResponse };
       }
     },
 
@@ -67,7 +67,7 @@ export const poolReducer = createSlice({
       if (action.payload) {
         state.topGainers = { ...action.payload };
       } else {
-        state.topGainers = defaultPoolResponse;
+        state.topGainers = { ...defaultPoolResponse };
       }
     },
 
@@ -75,7 +75,7 @@ export const poolReducer = createSlice({
       if (action.payload) {
         state.trendingPools = { ...action.payload };
       } else {
-        state.trendingPools = defaultPoolResponse;
+        state.trendingPools = { ...defaultPoolResponse };
       }
     },
 
@@ -83,7 +83,7 @@ export const poolReducer = createSlice({
       if (action.payload) {
         state.searchedPools = { ...action.payload };
       } else {
-        state.searchedPools = defaultPoolResponse;
+        state.searchedPools = { ...defaultPoolResponse };
       }
     },
   },
