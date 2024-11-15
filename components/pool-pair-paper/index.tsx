@@ -59,7 +59,7 @@ const LQDPoolPairPaper = ({ pool, navigationVariant = 'primary' }: PoolPairPaper
       <View style={styles.volumeWrapper}>
         <Text style={styles.aprText}>APR: {apr.toLocaleString()}%</Text>
 
-        <Text style={styles.volumeText}>VOL: ${formatNumberWithSuffix(Number(volume))}</Text>
+        <Text style={styles.volumeText}>VOL: ${formatNumberWithSuffix(volume)}</Text>
       </View>
     </TouchableOpacity>
   );
