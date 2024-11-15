@@ -103,7 +103,7 @@ export function useSmartAccountActions() {
         owners: [webAuthnAccount],
       });
       const smartAccountInfo = {
-        publicKey: getPublicKeyHex(passkeyResult.response.signature),
+        publicKey: verification.data.publicKey,
         credentialID: passkeyResult.id,
       };
 
