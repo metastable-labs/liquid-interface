@@ -17,7 +17,7 @@ const SearchUI = () => {
 
   const [showRecents, setShowRecents] = useState(true);
 
-  const hotPools = poolsState.hotPools.data.slice(0, 10);
+  const trendingPools = poolsState.trendingPools.data.slice(0, 10);
   const searchedPools = poolsState.searchedPools.data;
 
   const sections: Array<Partial<ISearchSection>> = [
@@ -45,10 +45,10 @@ const SearchUI = () => {
     },
 
     {
-      title: 'Hot',
+      title: 'Trending Pools',
       children: (
         <View style={styles.mapContainer}>
-          {hotPools.map((pool, index) => (
+          {trendingPools.map((pool, index) => (
             <LQDPoolPairPaper key={index} pool={pool} />
           ))}
         </View>
