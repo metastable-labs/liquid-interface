@@ -14,6 +14,7 @@ import {
 } from './types';
 import { Call } from '@/utils/types';
 import { AerodromeConnectorABI } from '@/constants/abis';
+import useSystemFunctions from './useSystemFunctions';
 
 async function handleTransaction(client: PublicClient, { hash, waitForReceipt = true }: TransactionConfig) {
   if (!waitForReceipt) return { hash };
@@ -28,7 +29,11 @@ async function handleTransaction(client: PublicClient, { hash, waitForReceipt = 
   };
 }
 
-export function useLiquidity(publicClient: PublicClient, account: Address) {
+export function useLiquidity(publicClient: PublicClient) {
+  const { smartAccountState } = useSystemFunctions();
+
+  const account = smartAccountState.address as Address;
+
   const createPluginCall = useCallback(
     (connectorData: Hex, index: number) => {
       const pluginCalldata = encodePluginExecute(AERODROME_CONNECTOR, connectorData);

@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView } from 'rea
 import { useForm } from 'react-hook-form';
 
 import { CheckIcon } from '@/assets/icons';
-import { adjustFontSizeForIOS } from '@/utils/helpers';
+import { adjustFontSizeForIOS, formatAmount } from '@/utils/helpers';
 import LQDBottomSheet from '../bottom-sheet';
 import LQDInput from '../input';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
@@ -61,7 +61,7 @@ const LQDAssetSelection = ({ close, setAsset, show, title, selectedAsset }: Asse
                   <View style={styles.textContainer}>
                     <Text style={styles.primaryText}>{_asset?.symbol}</Text>
                     <Text style={styles.secondaryText}>
-                      {_asset.balance.toLocaleString()} {_asset?.symbol}
+                      {formatAmount(_asset.balance).toLocaleString()} {_asset?.symbol}
                     </Text>
                   </View>
                 </View>

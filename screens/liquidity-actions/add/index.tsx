@@ -1,23 +1,26 @@
 import { useEffect, useState } from 'react';
 import { View, Text, ScrollView } from 'react-native';
 import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated';
+import { publicClient } from '@/init/viem';
+import { PublicClient } from 'viem';
 
 import { LQDButton } from '@/components';
 import { removeCommasFromNumber } from '@/utils/helpers';
-import { assets } from '@/screens/withdraw/dummy';
+import { CircleAddIcon } from '@/assets/icons';
+import useSystemFunctions from '@/hooks/useSystemFunctions';
+import { defaultToken } from '@/store/account/types';
+import { AddLiquidityWithSwapParams, Token } from '@/hooks/types';
+import { useLiquidity } from '@/hooks/useLiquid';
 import PaymentMethodSelection from './method-selection';
 import CoinSelectorInput from './coin-selector-input';
-import ErrorMessage from './error';
 import Info from './info';
 import { styles } from './styles';
 import Loading from './loading';
-import { CircleAddIcon } from '@/assets/icons';
-import useSystemFunctions from '@/hooks/useSystemFunctions';
-import { defaultToken, TokenItem } from '@/store/account/types';
 
 const AddLiquidity = () => {
-  const { accountState } = useSystemFunctions();
-  const { tokens } = accountState;
+  const { accountState, smartAccountState } = useSystemFunctions();
+  // const { addLiquidity } = useLiquidity(publicClient as PublicClient);
+
   const [method, setMethod] = useState<Method>('liquid');
   const [tokenA, setTokenA] = useState<TokenValue>({
     asset: defaultToken.data[0],
@@ -30,6 +33,8 @@ const AddLiquidity = () => {
   const [error, setError] = useState<ErrorState>(undefined);
   const [showInfo, setShowInfo] = useState(true);
   const [loading, setLoading] = useState(false);
+
+  const { tokens } = accountState;
 
   const errors: ErrorsArray = {
     primary: {
@@ -107,8 +112,43 @@ const AddLiquidity = () => {
     return setTokenB({ ...tokenB, value: newValue });
   };
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
+    if (!smartAccountState.address) return;
+
+    const tokenAParams: Token = {
+      address: tokenA.asset?.address!,
+      balance: tokenA.asset?.balance!,
+      decimals: tokenA.asset?.decimals!,
+      isListed: tokenA.asset?.isListed!,
+      logoUrl: tokenA.asset?.logoUrl!,
+      symbol: tokenA.asset?.symbol!,
+      usdPrice: tokenA.asset?.usdPrice!,
+    };
+
+    const tokenBParams: Token = {
+      address: tokenB.asset?.address!,
+      balance: tokenB.asset?.balance!,
+      decimals: tokenB.asset?.decimals!,
+      isListed: tokenB.asset?.isListed!,
+      logoUrl: tokenB.asset?.logoUrl!,
+      symbol: tokenB.asset?.symbol!,
+      usdPrice: tokenB.asset?.usdPrice!,
+    };
+
+    const param: AddLiquidityWithSwapParams = {
+      tokenA: tokenAParams,
+      tokenB: tokenBParams,
+      amountAIn: tokenA.value,
+      amountBIn: tokenB.value,
+      deadline: BigInt(Math.floor(Date.now() / 1000) + 3600),
+      stable: true,
+      to: smartAccountState.address,
+    };
+
     setLoading(true);
+
+    // const response = await addLiquidity(param, { waitForReceipt: true });
+
     console.log('Submitting liquidity request', { tokenA, tokenB });
   };
 

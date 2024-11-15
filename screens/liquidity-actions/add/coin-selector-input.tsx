@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { View, Text, Image, TextInput, TouchableOpacity } from 'react-native';
 
-import { removeCommasFromNumber } from '@/utils/helpers';
+import { formatAmount, removeCommasFromNumber } from '@/utils/helpers';
 import { LQDAssetSelection } from '@/components';
 import { CaretDownIcon } from '@/assets/icons';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
@@ -60,7 +60,7 @@ const CoinSelectorInput = ({ onChange, selectedToken, value, disabled, address }
               {invalidAmount ? 'Not enough balance:' : 'Available:'}
             </Text>
             <Text style={[styles.balanceValue, invalidAmount && styles.invalidText]}>
-              {token?.balance.toLocaleString()} {token?.symbol}
+              {formatAmount(token?.balance).toLocaleString()} {token?.symbol}
             </Text>
           </View>
         </View>

@@ -16,11 +16,11 @@ export function usePoolActions() {
 
       dispatch(setHotPools(hotPools));
 
-      const trendingPools = await api.getPools(PoolType.trending);
-      dispatch(setTrendingPools(trendingPools));
-
       const topGainers = await api.getPools(PoolType.gainers);
       dispatch(setTopGainers(topGainers));
+
+      const trendingPools = await api.getPools(PoolType.trending);
+      dispatch(setTrendingPools(trendingPools));
     } catch (error: any) {
       //
     } finally {
