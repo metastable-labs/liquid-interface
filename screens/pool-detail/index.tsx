@@ -34,12 +34,13 @@ const PoolDetail = ({ poolId }: PoolID) => {
     tokenBBalance: getTokenBalance(pool?.token1.address),
     tokenBUSDValue: getTokenUSDValue(pool?.token1.address),
     condition: pool?.isStable ? 'stable' : 'volatile',
-    fee: 0,
+    fee: Number(pool?.totalFeesUSD).toFixed(2),
     tokenATitle: title ? title[0] : '',
     tokenBTitle: title ? title[1] : '',
     symbol: pool?.symbol.split('-')[1].replace('/', ' / ') || '',
     volume: Number(pool?.totalVolumeUSD || 0),
     tvl: Number(pool?.tvl || 0),
+    tx: Number(pool?.txCount),
   };
 
   if (!pool) return null;
@@ -59,7 +60,7 @@ const PoolDetail = ({ poolId }: PoolID) => {
           <PoolLiquidity {...POOL} />
         </View>
 
-        <PoolStats fee={POOL.fee} tvl={POOL.tvl} volume={POOL.volume} />
+        <PoolStats fee={POOL.fee} tvl={POOL.tvl} volume={POOL.volume} tx={POOL.tx} />
       </View>
     </ScrollView>
   );

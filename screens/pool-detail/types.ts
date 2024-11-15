@@ -12,16 +12,18 @@ interface PoolDetails {
   tokenAUSDValue: number;
   tokenBUSDValue: number;
   condition: 'stable' | 'volatile';
-  fee: number;
+  fee: number | string;
   symbol: string;
   volume: number;
   tvl: number;
+  tx: number;
 }
 
 interface Stat {
-  fee: number;
+  fee: number | string;
   volume: number;
   tvl: number;
+  tx: number;
 }
 
 type Metric = 'tvl' | 'volume' | 'fees';
