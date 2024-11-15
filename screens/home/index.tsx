@@ -110,13 +110,8 @@ const Home = () => {
 
       const signature = await session.signMessage({ message: JSON.stringify(messageToSign) });
 
-      console.log('Signature successful:', signature);
-
       Alert.alert('Signing Successful', 'Signature: ' + signature);
     } catch (error: any) {
-      console.log('Error signing message:', error);
-      console.log('Error cause:', error.cause);
-
       Alert.alert('Signing Failed', error.message + '\n' + error.cause);
     }
   };

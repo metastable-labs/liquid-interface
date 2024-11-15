@@ -24,7 +24,6 @@ class LiquidAPI {
   }
 
   private async fetchWithErrorHandling(url: string, options: RequestInit) {
-    console.log('fetchWithErrorHandling', url);
     const response = await fetch(url, options);
 
     if (!response.ok || response.status !== 200) {
