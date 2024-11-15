@@ -26,6 +26,7 @@ export type Pool = {
   tvl: string;
   totalVolumeUSD: string;
   totalFeesUSD: string;
+  poolFee: string;
   txCount: number | string;
   isStable: boolean;
   factory: Address;
@@ -34,6 +35,7 @@ export type Pool = {
     logoUrl: string;
     price: string;
     reserve: string;
+    reserveUSD: string;
     volume: string;
   };
   token1: {
@@ -41,6 +43,7 @@ export type Pool = {
     logoUrl: string;
     price: string;
     reserve: string;
+    reserveUSD: string;
     volume: string;
   };
 };

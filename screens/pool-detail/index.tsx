@@ -7,6 +7,7 @@ import PoolLiquidity from './pool-liquidity';
 import PoolStats from './stats';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { Address, formatEther } from 'viem';
+import { roundUp } from '@/utils/helpers';
 
 const PoolDetail = ({ poolId }: PoolID) => {
   const { poolsState, accountState } = useSystemFunctions();
@@ -35,12 +36,17 @@ const PoolDetail = ({ poolId }: PoolID) => {
     tokenBUSDValue: getTokenUSDValue(pool?.token1.address),
     condition: pool?.isStable ? 'stable' : 'volatile',
     fee: Number(pool?.totalFeesUSD).toFixed(2),
+    poolFee: roundUp(Number(pool?.poolFee)),
     tokenATitle: title ? title[0] : '',
     tokenBTitle: title ? title[1] : '',
     symbol: pool?.symbol.split('-')[1].replace('/', ' / ') || '',
     volume: Number(pool?.totalVolumeUSD || 0),
     tvl: Number(pool?.tvl || 0),
     tx: Number(pool?.txCount),
+    reserveA: Number(pool?.token0.reserve),
+    reserveB: Number(pool?.token1.reserve),
+    reserveAUSD: Number(pool?.token0.reserveUSD),
+    reserveBUSD: Number(pool?.token1.reserveUSD),
   };
 
   if (!pool) return null;

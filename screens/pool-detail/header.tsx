@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import { BoxSearchIcon, SendIcon } from '@/assets/icons';
 
-const Header = ({ condition, fee, tokenAIconURL, symbol, tokenBIconURL }: PoolDetails) => {
+const Header = ({ condition, poolFee, tokenAIconURL, symbol, tokenBIconURL }: PoolDetails) => {
   const flagColors = {
     stable: '#B47818',
     volatile: '#AF1D38',
@@ -41,7 +41,7 @@ const Header = ({ condition, fee, tokenAIconURL, symbol, tokenBIconURL }: PoolDe
               <View style={styles.separatorCircle} />
             </View>
 
-            <Text style={[styles.detailText, { color: '#64748B' }]}>{fee}% Fee</Text>
+            <Text style={[styles.detailText, { color: '#64748B' }]}>{poolFee}% Fee</Text>
           </View>
         </View>
       </View>

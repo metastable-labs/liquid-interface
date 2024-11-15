@@ -17,6 +17,11 @@ interface PoolDetails {
   volume: number;
   tvl: number;
   tx: number;
+  reserveA: number;
+  reserveB: number;
+  reserveAUSD: number;
+  reserveBUSD: number;
+  poolFee: number | string;
 }
 
 interface Stat {

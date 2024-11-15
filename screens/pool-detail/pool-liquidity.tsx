@@ -3,17 +3,17 @@ import { View, Text, StyleSheet, Image } from 'react-native';
 import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import ImageColors from 'react-native-image-colors';
 
-import { adjustFontSizeForIOS } from '@/utils/helpers';
+import { adjustFontSizeForIOS, formatNumberWithSuffix } from '@/utils/helpers';
 
 const PoolLiquidity = ({
   tokenAIconURL,
-  tokenABalance,
+  reserveA,
   tokenATitle,
-  tokenAUSDValue,
-  tokenBBalance,
+  reserveAUSD,
+  reserveB,
   tokenBIconURL,
   tokenBTitle,
-  tokenBUSDValue,
+  reserveBUSD,
 }: PoolDetails) => {
   const [tokenAColor, settokenAColor] = useState('#375DFB');
   const [tokenBColor, settokenBColor] = useState('#F2AE40');
@@ -22,15 +22,15 @@ const PoolLiquidity = ({
   const values = [
     {
       iconURL: tokenAIconURL,
-      tokenBalance: `${tokenABalance.toLocaleString()}`,
+      tokenBalance: `${formatNumberWithSuffix(reserveA)}`,
       title: tokenATitle,
-      tokenUSDValue: `${tokenAUSDValue.toLocaleString()}`,
+      tokenUSDValue: `${formatNumberWithSuffix(reserveAUSD)}`,
     },
     {
       iconURL: tokenBIconURL,
-      tokenBalance: `${tokenBBalance.toLocaleString()}`,
+      tokenBalance: `${formatNumberWithSuffix(reserveB)}`,
       title: tokenBTitle,
-      tokenUSDValue: `${tokenBUSDValue.toLocaleString()}`,
+      tokenUSDValue: `${formatNumberWithSuffix(reserveBUSD)}`,
     },
   ];
 
@@ -58,9 +58,9 @@ const PoolLiquidity = ({
 
     extractColors();
 
-    const totalBalance = tokenABalance + tokenBBalance;
-    settokenAProgress(tokenABalance / totalBalance);
-  }, [tokenAIconURL, tokenBIconURL, tokenABalance, tokenBBalance]);
+    const totalBalance = reserveAUSD! + reserveBUSD!;
+    settokenAProgress(reserveAUSD! / totalBalance);
+  }, [tokenAIconURL, tokenBIconURL, reserveA, reserveB]);
 
   return (
     <View style={styles.root}>
@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
 
   tokenAText: {
     color: '#0A0D14',
-    fontSize: adjustFontSizeForIOS(16, 2),
+    fontSize: adjustFontSizeForIOS(14, 2),
     lineHeight: 19.84,
     fontWeight: '500',
     fontFamily: 'AeonikMedium',
@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
 
   tokenBText: {
     color: '#525866',
-    fontSize: adjustFontSizeForIOS(14, 2),
+    fontSize: adjustFontSizeForIOS(10, 2),
     lineHeight: 18.48,
     textAlign: 'center',
   },

@@ -9,24 +9,33 @@ const formatAmount = (amount?: number | string, decimals = 4): number => {
   return truncatedValue;
 };
 
-const formatNumberWithSuffix = (num: number): string => {
+const formatNumberWithSuffix = (num: number | string | undefined): string => {
+  // Handle undefined, null, or invalid input
+  if (!num) return '0';
+
+  // Convert to number if it's a string or handle scientific notation
+  const numValue = typeof num === 'string' ? Number(num) : num;
+
+  // Check if valid number
+  if (isNaN(numValue)) return '0';
+
   const formatWithPrecision = (value: number) => {
     return value % 1 === 0 ? value.toFixed(0) : value.toFixed(2).replace(/\.?0+$/, '');
   };
 
-  if (num >= 1e12) {
-    return formatWithPrecision(num / 1e12) + 't';
+  if (numValue >= 1e12) {
+    return formatWithPrecision(numValue / 1e12) + 't';
   }
-  if (num >= 1e9) {
-    return formatWithPrecision(num / 1e9) + 'b';
+  if (numValue >= 1e9) {
+    return formatWithPrecision(numValue / 1e9) + 'b';
   }
-  if (num >= 1e6) {
-    return formatWithPrecision(num / 1e6) + 'm';
+  if (numValue >= 1e6) {
+    return formatWithPrecision(numValue / 1e6) + 'm';
   }
-  if (num >= 1e3) {
-    return formatWithPrecision(num / 1e3) + 'k';
+  if (numValue >= 1e3) {
+    return formatWithPrecision(numValue / 1e3) + 'k';
   }
-  return num?.toString();
+  return numValue.toFixed(2).toString();
 };
 
 const truncateDecimal = (amount?: number | string, decimals = 4): number => {
@@ -88,7 +97,17 @@ const truncate = (text: string, startChars = 5, endChars = 5) => {
   }
   return `${text.substring(0, startChars)}...${text.substring(text.length - endChars)}`;
 };
+const roundUp = (num: number, decimals: number = 1): number => {
+  if (num >= 1) {
+    return Math.ceil(num);
+  }
 
+  if (num <= 0) return 0;
+
+  // For decimals, find next significant value
+  if (num < 0.5) return 0.3;
+  return 1;
+};
 export {
   formatNumberWithSuffix,
   truncateDecimal,
@@ -103,4 +122,5 @@ export {
   formatAmount,
   emailIsValid,
   truncate,
+  roundUp,
 };
