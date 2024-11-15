@@ -20,6 +20,7 @@ export function usePoolActions() {
       dispatch(setTrendingPools(trendingPools));
 
       const topGainers = await api.getPools(PoolType.gainers);
+
       dispatch(setTopGainers(topGainers));
     } catch (error: any) {
       //
