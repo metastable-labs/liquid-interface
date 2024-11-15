@@ -22,6 +22,7 @@ interface PoolDetails {
   reserveAUSD: number;
   reserveBUSD: number;
   poolFee: number | string;
+  poolAddress: `0x${string}`;
 }
 
 interface Stat {

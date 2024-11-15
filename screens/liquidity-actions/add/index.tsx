@@ -64,16 +64,7 @@ const AddLiquidity = () => {
       title: `1 ${tokenA.asset?.symbol} to ${tokenB.asset?.symbol}`,
       value: `${0.805} ${tokenB.asset?.symbol}`,
     },
-    {
-      icon: 'secondary',
-      title: "You'll pay:",
-      value: `$${6000}`,
-    },
-    {
-      icon: 'secondary',
-      title: "You'll get:",
-      value: `${6000} ${tokenA.asset?.symbol}`,
-    },
+
     {
       icon: 'tertiary',
       title: 'Fees',

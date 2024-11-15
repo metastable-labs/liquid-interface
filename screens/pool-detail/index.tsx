@@ -47,6 +47,7 @@ const PoolDetail = ({ poolId }: PoolID) => {
     reserveB: Number(pool?.token1.reserve),
     reserveAUSD: Number(pool?.token0.reserveUSD),
     reserveBUSD: Number(pool?.token1.reserveUSD),
+    poolAddress: pool?.address!,
   };
 
   if (!pool) return null;
