@@ -5,8 +5,8 @@ import { BoxSearchIcon, SendIcon } from '@/assets/icons';
 
 const Header = ({ condition, poolFee, tokenAIconURL, symbol, tokenBIconURL }: PoolDetails) => {
   const flagColors = {
-    stable: '#B47818',
-    volatile: '#AF1D38',
+    stable: '#156146',
+    volatile: '#B47818',
   };
 
   const actions = [

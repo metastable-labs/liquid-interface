@@ -10,13 +10,10 @@ const formatAmount = (amount?: number | string, decimals = 4): number => {
 };
 
 const formatNumberWithSuffix = (num: number | string | undefined): string => {
-  // Handle undefined, null, or invalid input
   if (!num) return '0';
 
-  // Convert to number if it's a string or handle scientific notation
   const numValue = typeof num === 'string' ? Number(num) : num;
 
-  // Check if valid number
   if (isNaN(numValue)) return '0';
 
   const formatWithPrecision = (value: number) => {
