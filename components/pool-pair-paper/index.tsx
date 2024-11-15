@@ -109,6 +109,7 @@ const styles = StyleSheet.create({
     fontSize: adjustFontSizeForIOS(14, 2),
     lineHeight: 18.48,
     fontWeight: '500',
+    marginLeft: -6,
     fontFamily: 'AeonikMedium',
   },
 
@@ -127,14 +128,14 @@ const styles = StyleSheet.create({
   },
 
   basicTextVolatile: {
-    color: '#AF1D38',
+    color: '#B47818',
     fontSize: adjustFontSizeForIOS(11, 2),
     lineHeight: 13.64,
     fontFamily: 'AeonikRegular',
   },
 
   basicTextStable: {
-    color: '#B47818',
+    color: '#156146',
     fontSize: adjustFontSizeForIOS(11, 2),
     lineHeight: 13.64,
     fontFamily: 'AeonikRegular',

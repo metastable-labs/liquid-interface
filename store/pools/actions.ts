@@ -17,6 +17,7 @@ export function usePoolActions() {
       dispatch(setHotPools(hotPools));
 
       const topGainers = await api.getPools(PoolType.gainers);
+
       dispatch(setTopGainers(topGainers));
 
       const trendingPools = await api.getPools(PoolType.trending);
@@ -63,6 +64,8 @@ export function usePoolActions() {
       if (refresh) {
         dispatch(setRefreshing(true));
         const pools = await api.getPools(PoolType.trending);
+
+        console.log(pools, 'pools trending');
 
         return dispatch(setTrendingPools(pools));
       }

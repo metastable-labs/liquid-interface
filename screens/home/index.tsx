@@ -15,7 +15,7 @@ import { useOnMount } from '@/hooks/useOnMount';
 
 const Home = () => {
   const { router, poolsState, smartAccountState, accountState, appState } = useSystemFunctions();
-  const { getTokens, getPositions } = useAccountActions();
+  const { getTokens } = useAccountActions();
   const { getPools } = usePoolActions();
   const { logout } = useSmartAccountActions();
   const { searchIsFocused: focusSearch, showSearch } = useAppActions();
@@ -24,9 +24,13 @@ const Home = () => {
 
   const { whole, decimal } = formatAmountWithWholeAndDecimal(accountState.tokenBalance.toFixed(2));
 
-  const top10TrendingPools = trendingPools?.data?.slice(0, 10);
-  const top10HotPools = hotPools?.data?.slice(0, 10) ?? [];
-  const top7Gainers = topGainers?.data?.slice(0, 7);
+  const hotPoolsArray = Object.values(hotPools.data);
+  const trendingPoolsArray = Object.values(trendingPools.data);
+  const top7GainersArray = Object.values(topGainers.data);
+
+  const top10TrendingPools = trendingPoolsArray?.slice(0, 10);
+  const top10HotPools = hotPoolsArray.slice(0, 10) ?? [];
+  const top7Gainers = top7GainersArray.slice(0, 7);
 
   const focusInput = () => {
     focusSearch(true);
@@ -120,7 +124,7 @@ const Home = () => {
   useEffect(
     function fetchBalances() {
       getTokens();
-      getPositions();
+      //getPositions();
     },
     [smartAccountState.address]
   );
