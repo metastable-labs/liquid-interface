@@ -5,7 +5,7 @@ import { publicClient } from '@/init/viem';
 import { PublicClient } from 'viem';
 
 import { LQDButton } from '@/components';
-import { removeCommasFromNumber } from '@/utils/helpers';
+import { formatInputAmount, removeCommasFromNumber } from '@/utils/helpers';
 import { CircleAddIcon } from '@/assets/icons';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { defaultToken } from '@/store/account/types';
@@ -88,19 +88,13 @@ const AddLiquidity = () => {
   };
 
   const handleValueChange = (value: string, token: 'tokenA' | 'tokenB') => {
-    const sanitizedValue = removeCommasFromNumber(value);
-    const numberValue = parseFloat(sanitizedValue);
-    let newValue = numberValue.toLocaleString(undefined, {
-      maximumFractionDigits: 5,
-    });
-
-    if (isNaN(numberValue)) newValue = '';
+    const formatedValue = formatInputAmount(value);
 
     if (token === 'tokenA') {
-      return setTokenA({ ...tokenA, value: newValue });
+      return setTokenA({ ...tokenA, value: formatedValue });
     }
 
-    return setTokenB({ ...tokenB, value: newValue });
+    return setTokenB({ ...tokenB, value: formatedValue });
   };
 
   const onSubmit = async () => {

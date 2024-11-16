@@ -94,6 +94,7 @@ const truncate = (text: string, startChars = 5, endChars = 5) => {
   }
   return `${text.substring(0, startChars)}...${text.substring(text.length - endChars)}`;
 };
+
 const roundUp = (num: number, decimals: number = 1): number => {
   if (num >= 1) {
     return Math.ceil(num);
@@ -105,6 +106,33 @@ const roundUp = (num: number, decimals: number = 1): number => {
   if (num < 0.5) return 0.3;
   return 1;
 };
+
+const formatInputAmount = (value: string): string => {
+  let newValue = '';
+  const valueWithoutComma = value.replace(/,/g, '');
+
+  if (valueWithoutComma.length === 0) {
+    newValue = '';
+  } else {
+    // Check if the input is a valid number (including decimals)
+    const isMatch = valueWithoutComma.match(/^(\d+\.?\d*|\.\d+)$/);
+
+    if (!isMatch) return;
+
+    if (isNaN(Number(valueWithoutComma))) return;
+
+    // Format the number with local thousand separators
+    // Temporarily remove the decimal part to format the integer part
+    const parts = valueWithoutComma.split('.');
+    const integerFormatted = parseInt(parts[0]).toLocaleString();
+
+    // Reconstruct the number including the decimal part if it exists
+    newValue = parts.length > 1 ? `${integerFormatted}.${parts[1]}` : integerFormatted;
+  }
+
+  return newValue;
+};
+
 export {
   formatNumberWithSuffix,
   truncateDecimal,
@@ -120,4 +148,5 @@ export {
   emailIsValid,
   truncate,
   roundUp,
+  formatInputAmount,
 };
