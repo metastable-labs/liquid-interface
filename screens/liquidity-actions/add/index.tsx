@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { View, Text, ScrollView, SafeAreaView } from 'react-native';
+import { useEffect, useMemo, useState } from 'react';
+import { View, Text, ScrollView } from 'react-native';
 import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { publicClient } from '@/init/viem';
 import { PublicClient } from 'viem';
@@ -22,7 +22,7 @@ import { Pool } from '@/store/pools/types';
 
 const AddLiquidity = () => {
   const { accountState, smartAccountState, poolsState } = useSystemFunctions();
-  // const { addLiquidity } = useLiquidity(publicClient as PublicClient);
+  const { addLiquidity } = useLiquidity(publicClient as PublicClient);
 
   const [method, setMethod] = useState<Method>('liquid');
   const [defaultTokens, setDefaultTokens] = useState<{ tokenA: TokenItem; tokenB: TokenItem }>();
@@ -42,32 +42,34 @@ const AddLiquidity = () => {
   const { tokens } = accountState;
   const { selectedPool } = poolsState;
 
-  const errors: ErrorsArray = {
-    insufficientBalance: {
-      title: `Swap ${tokenA.asset?.symbol} to ${tokenB.asset?.symbol}?`,
-      description: (
-        <Text style={styles.errorText}>
-          You don’t have enough value. We’d balance the pool by swapping half of the{' '}
-          <Text style={[styles.errorText, { fontFamily: 'AeonikMedium' }]}>{tokenA?.asset?.symbol}</Text> value to{' '}
-          <Text style={[styles.errorText, { fontFamily: 'AeonikMedium' }]}>{tokenB?.asset?.symbol}</Text>.
-        </Text>
-      ),
-      swap: {
-        from: `(${1500}) ${tokenA?.asset?.symbol}`,
-        for: `(${0.1}) ${tokenB?.asset?.symbol}`,
+  const errors: ErrorsArray = useMemo(() => {
+    return {
+      insufficientBalance: {
+        title: `Swap ${tokenA.asset?.symbol} to ${tokenB.asset?.symbol}?`,
+        description: (
+          <Text style={styles.errorText}>
+            You don’t have enough value. We’d balance the pool by swapping half of the{' '}
+            <Text style={[styles.errorText, { fontFamily: 'AeonikMedium' }]}>{tokenA?.asset?.symbol}</Text> value to{' '}
+            <Text style={[styles.errorText, { fontFamily: 'AeonikMedium' }]}>{tokenB?.asset?.symbol}</Text>.
+          </Text>
+        ),
+        swap: {
+          from: `(${1500}) ${tokenA?.asset?.symbol}`,
+          for: `(${0.1}) ${tokenB?.asset?.symbol}`,
+        },
       },
-    },
 
-    insufficientLiquidBalance: {
-      title: 'Proceed with debit card?',
-      description: 'You don’t have enough balances in your Liquid account, you can proceed to pay with your debit card',
-    },
+      insufficientLiquidBalance: {
+        title: 'Proceed with debit card?',
+        description: 'You don’t have enough balances in your Liquid account, you can proceed to pay with your debit card',
+      },
 
-    noMatchingPools: {
-      title: 'No matching pools',
-      description: `There's no available pool for ${tokenA.asset?.symbol} / ${tokenB.asset?.symbol}. Try selecting ${tokenB.asset?.symbol} as the first token and ${tokenA.asset?.symbol} as the second.`,
-    },
-  };
+      noMatchingPools: {
+        title: 'No matching pools',
+        description: `There's no available pool for ${tokenA.asset?.symbol} / ${tokenB.asset?.symbol}. Try selecting ${tokenB.asset?.symbol} as the first token and ${tokenA.asset?.symbol} as the second.`,
+      },
+    };
+  }, []);
 
   const infos: Array<Info> = [
     {

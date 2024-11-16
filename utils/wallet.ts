@@ -1,8 +1,8 @@
 import { EntryPointABI, SmartWalletABI, SmartWalletFactoryABI } from '@/constants/abis';
-import { ACCOUNT_FACTORY_ADDRESS } from '@/constants/addresses';
+import { ACCOUNT_FACTORY_ADDRESS, ENTRYPOINT_V06_ADDRESS } from '@/constants/addresses';
 import { estimateUserOperationGas, UserOperation, BundlerClient } from 'permissionless';
 import { Address, Chain, encodeAbiParameters, encodeFunctionData, Hex, keccak256, PublicClient, Transport } from 'viem';
-import { entryPoint06Abi, entryPoint06Address, PaymasterClient } from 'viem/_types/account-abstraction';
+import { entryPoint06Abi, entryPoint06Address, PaymasterClient } from 'viem/account-abstraction';
 import { estimateFeesPerGas, getBytecode, readContract } from 'viem/actions';
 import { Call, PaymasterResult } from './types';
 
@@ -36,7 +36,7 @@ export async function buildUserOp(
   const callData = buildUserOperationCalldata({ calls });
   // Get the smart wallet's `nonce` by calling the `getNonce` method on the entrypoint contract
   const nonce = await readContract(client, {
-    address: entryPoint06Address,
+    address: ENTRYPOINT_V06_ADDRESS,
     abi: entryPoint06Abi,
     functionName: 'getNonce',
     args: [smartWalletAddress, 0n],
