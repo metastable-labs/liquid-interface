@@ -1,6 +1,5 @@
 import { useCallback } from 'react';
-import { Address, parseUnits, erc20Abi, Hex, PublicClient, WaitForTransactionReceiptParameters } from 'viem';
-import { makeCalls } from '@/utils/calls';
+import { Address, parseUnits, erc20Abi, Hex, PublicClient } from 'viem';
 import { encodePluginExecute, encodeAddLiquidity, encodeRemoveLiquidity, encodeSwap, encodeStake, encodeApprove } from '@/utils/encoders';
 import { AERODROME_CONNECTOR, AERODROME_FACTORY_ADDRESS, CONNECTOR_PLUGIN } from '@/constants/addresses';
 import {
@@ -15,6 +14,7 @@ import {
 import { Call } from '@/utils/types';
 import { AerodromeConnectorABI } from '@/constants/abis';
 import useSystemFunctions from './useSystemFunctions';
+import { useMakeCalls } from './useCalls';
 
 async function handleTransaction(client: PublicClient, { hash, waitForReceipt = true }: TransactionConfig) {
   if (!waitForReceipt) return { hash };
@@ -31,7 +31,7 @@ async function handleTransaction(client: PublicClient, { hash, waitForReceipt = 
 
 export function useLiquidity(publicClient: PublicClient) {
   const { smartAccountState } = useSystemFunctions();
-
+  const { makeCalls, buildUserOperationCalldata } = useMakeCalls();
   const account = smartAccountState.address as Address;
 
   const createPluginCall = useCallback(
@@ -52,10 +52,19 @@ export function useLiquidity(publicClient: PublicClient) {
       const calls: Call[] = [];
       let currentIndex = 0;
 
+      // Validate input amounts
+      if (!params.amountAIn || !params.amountBIn) {
+        throw new Error('Invalid input amounts');
+      }
+
       // Handle pre-swap if configured
       if (params.preSwap?.enabled) {
+        if (!params.preSwap.params.amountIn) {
+          throw new Error('Invalid swap amount');
+        }
+
         // Approve token for swap
-        const swapApproveAmount = parseUnits(params.preSwap.params.amountIn, params.preSwap.params.tokenA.decimals);
+        const swapApproveAmount = parseUnits(params.preSwap.params.amountIn.toString(), params.preSwap.params.tokenA.decimals);
 
         const approveSwapTokenData = encodeApprove({
           amount: swapApproveAmount,
@@ -82,32 +91,43 @@ export function useLiquidity(publicClient: PublicClient) {
         // Add swap call
         const swapData = encodeSwap({
           amountIn: swapApproveAmount,
-          minReturnAmount: parseUnits(params.preSwap.params.minReturnAmount, params.preSwap.params.tokenB.decimals),
+          minReturnAmount: parseUnits(params.preSwap.params.minReturnAmount?.toString() || '0', params.preSwap.params.tokenB.decimals),
           routes,
           to: params.preSwap.params.to,
           deadline: BigInt(Math.floor(Date.now() / 1000) + 3600),
+          caller: account,
         });
 
         calls.push(createPluginCall(swapData, currentIndex++));
       }
+
+      console.log('Add Liquidity Params:', {
+        tokenA: params.tokenA.address,
+        tokenB: params.tokenB.address,
+        decimalsA: params.tokenA.decimals,
+        decimalsB: params.tokenB.decimals,
+        amountAIn: params.amountAIn,
+        amountBIn: params.amountBIn,
+        stable: params.stable,
+      });
 
       // Get quotes for liquidity deposit
       const quotes = await quoteDepositLiquidity(
         params.tokenA.address,
         params.tokenB.address,
         params.stable,
-        parseUnits(params.amountAIn, params.tokenA.decimals),
-        parseUnits(params.amountBIn, params.tokenB.decimals)
+        parseUnits(params.amountAIn.toString(), params.tokenA.decimals),
+        parseUnits(params.amountBIn.toString(), params.tokenB.decimals)
       );
 
       // Add approvals for liquidity tokens
       const approveTokenAData = encodeApprove({
-        amount: parseUnits(params.amountAIn, params.tokenA.decimals),
+        amount: parseUnits(params.amountAIn.toString(), params.tokenA.decimals),
         spender: AERODROME_CONNECTOR,
       });
 
       const approveTokenBData = encodeApprove({
-        amount: parseUnits(params.amountBIn, params.tokenB.decimals),
+        amount: parseUnits(params.amountBIn.toString(), params.tokenB.decimals),
         spender: AERODROME_CONNECTOR,
       });
 
@@ -127,17 +147,20 @@ export function useLiquidity(publicClient: PublicClient) {
       );
 
       // Add liquidity call
-      const refactoredParams = {
-        ...params,
-        amountAIn: parseUnits(params.amountAIn, params.tokenA.decimals),
-        amountBIn: parseUnits(params.amountBIn, params.tokenB.decimals),
-        amountAMin: parseUnits(quotes.amountAOut, params.tokenA.decimals),
-        amountBMin: parseUnits(quotes.amountBOut, params.tokenB.decimals),
+      const addLiquidityData = encodeAddLiquidity({
+        tokenA: params.tokenA.address,
+        tokenB: params.tokenB.address,
+        stable: params.stable,
+        amountAIn: parseUnits(params.amountAIn.toString(), params.tokenA.decimals),
+        amountBIn: parseUnits(params.amountBIn.toString(), params.tokenB.decimals),
+        amountAMin: quotes?.amountAOut ?? 0n,
+        amountBMin: quotes?.amountBOut ?? 0n,
         balanceTokenRatio: false,
+        to: account,
         deadline: BigInt(Math.floor(Date.now() / 1000) + 3600),
-      };
+        caller: account,
+      });
 
-      const addLiquidityData = encodeAddLiquidity(refactoredParams);
       calls.push(createPluginCall(addLiquidityData, currentIndex));
 
       const { opHash } = await makeCalls({
@@ -150,19 +173,23 @@ export function useLiquidity(publicClient: PublicClient) {
         ...txConfig,
       });
     },
-    [publicClient, createPluginCall]
+    [publicClient, createPluginCall, account]
   );
 
   const removeLiquidity = useCallback(
     async (params: RemoveLiquidityParams, txConfig?: Partial<TransactionConfig>) => {
-      const refactoredParams = {
-        ...params,
+      const connectorData = encodeRemoveLiquidity({
+        tokenA: params.tokenA.address,
+        tokenB: params.tokenB.address,
+        stable: params.stable,
         liquidity: BigInt(params.liquidity),
         amountAMin: parseUnits(params.amountAMin.toString(), params.tokenA.decimals),
         amountBMin: parseUnits(params.amountBMin.toString(), params.tokenB.decimals),
+        to: account,
         deadline: BigInt(Math.floor(Date.now() / 1000) + 3600),
-      };
-      const connectorData = encodeRemoveLiquidity(refactoredParams);
+        caller: account,
+      });
+
       const call = createPluginCall(connectorData, 0);
 
       const { opHash } = await makeCalls({
@@ -175,7 +202,7 @@ export function useLiquidity(publicClient: PublicClient) {
         ...txConfig,
       });
     },
-    [publicClient, createPluginCall]
+    [publicClient, createPluginCall, account]
   );
 
   const swap = useCallback(
@@ -195,7 +222,9 @@ export function useLiquidity(publicClient: PublicClient) {
         routes,
         to: params.to,
         deadline: BigInt(Math.floor(Date.now() / 1000) + 3600),
+        caller: account,
       });
+
       const call = createPluginCall(connectorData, 0);
 
       const { opHash } = await makeCalls({
@@ -208,7 +237,7 @@ export function useLiquidity(publicClient: PublicClient) {
         ...txConfig,
       });
     },
-    [publicClient, createPluginCall]
+    [publicClient, createPluginCall, account]
   );
 
   const stake = useCallback(
@@ -216,7 +245,9 @@ export function useLiquidity(publicClient: PublicClient) {
       const connectorData = encodeStake({
         gaugeAddress: params.gauge.address,
         amount: parseUnits(params.amount.toString(), params.gauge.decimals),
+        caller: account,
       });
+
       const call = createPluginCall(connectorData, 0);
 
       const { opHash } = await makeCalls({
@@ -229,19 +260,50 @@ export function useLiquidity(publicClient: PublicClient) {
         ...txConfig,
       });
     },
-    [publicClient, createPluginCall]
+    [publicClient, createPluginCall, account]
   );
 
-  const quoteDepositLiquidity = async (tokenA: string, tokenB: Address, stable: boolean, amountA: bigint, amountB: bigint) => {
-    const balanceTokenRatio = stable;
-    const result: any = await publicClient.readContract({
-      address: AERODROME_CONNECTOR,
-      abi: AerodromeConnectorABI.abi,
-      functionName: 'quoteDepositLiquidity',
-      args: [tokenA, tokenB, stable, amountA, amountB, balanceTokenRatio],
-    });
+  const quoteDepositLiquidity: any = async (tokenA: Address, tokenB: Address, stable: boolean, amountA: bigint, amountB: bigint) => {
+    try {
+      console.log('Quote Deposit Params:', {
+        tokenA,
+        tokenB,
+        stable,
+        amountA: amountA.toString(),
+        amountB: amountB.toString(),
+        balanceTokenRatio: stable,
+      });
 
-    return result;
+      // Ensure amounts are not zero
+      if (amountA <= 0n || amountB <= 0n) {
+        throw new Error('Invalid amounts for quote');
+      }
+
+      const result = await publicClient.readContract({
+        address: AERODROME_CONNECTOR,
+        abi: AerodromeConnectorABI.abi,
+        functionName: 'quoteDepositLiquidity',
+        args: [tokenA, tokenB, stable, amountA, amountB, stable],
+      });
+
+      console.log('Quote Result:', result);
+
+      if (!result) {
+        return {
+          amountAOut: 0n,
+          amountBOut: 0n,
+        };
+      }
+
+      return result;
+    } catch (error) {
+      console.error('Quote Deposit Error:', error);
+      // Return minimum amounts as fallback
+      return {
+        amountAOut: (amountA * BigInt(95)) / BigInt(100), // 95% of input as minimum
+        amountBOut: (amountB * BigInt(95)) / BigInt(100),
+      };
+    }
   };
 
   return {

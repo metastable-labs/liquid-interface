@@ -142,14 +142,16 @@ const AddLiquidity = () => {
       amountAIn: tokenA.value,
       amountBIn: tokenB.value,
       deadline: BigInt(Math.floor(Date.now() / 1000) + 3600),
-      stable: true,
+      stable: selectedPool?.isStable!,
       to: smartAccountState.address,
     };
 
     setLoading(true);
 
     if (method === 'liquid') {
-      // const response = await addLiquidity(param, { waitForReceipt: true });
+      const response = await addLiquidity(param, { waitForReceipt: true });
+
+      console.log(selectedPool, 'selected pool');
 
       console.log('Submitting liquidity request', { tokenA, tokenB });
     }
