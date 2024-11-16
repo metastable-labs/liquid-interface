@@ -1,10 +1,11 @@
 import { Address, encodeFunctionData, Hex } from 'viem';
 import { buildUserOp, getPaymasterData, getUserOpHash } from './wallet';
 import { Call } from './types';
-import { entryPoint06Address } from 'viem/_types/account-abstraction';
+import { entryPoint06Address } from 'viem/account-abstraction';
 import { paymasterClient, bundlerClient } from '@/init/viem';
 import { useSmartAccountActions } from '@/store/smartAccount/actions';
 import { SmartWalletABI } from '@/constants/abis';
+import { ENTRYPOINT_V06_ADDRESS } from '@/constants/addresses';
 
 // Main function to execute calls
 export async function makeCalls({ calls, account }: { calls: Call[]; account: Address }) {

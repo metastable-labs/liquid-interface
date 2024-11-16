@@ -19,7 +19,7 @@ import Loading from './loading';
 
 const AddLiquidity = () => {
   const { accountState, smartAccountState } = useSystemFunctions();
-  // const { addLiquidity } = useLiquidity(publicClient as PublicClient);
+  const { addLiquidity } = useLiquidity(publicClient as PublicClient);
 
   const [method, setMethod] = useState<Method>('liquid');
   const [tokenA, setTokenA] = useState<TokenValue>({
@@ -132,7 +132,8 @@ const AddLiquidity = () => {
 
     setLoading(true);
 
-    // const response = await addLiquidity(param, { waitForReceipt: true });
+    const response = await addLiquidity(param, { waitForReceipt: true });
+    console.log(response, 'add liquidity response');
 
     console.log('Submitting liquidity request', { tokenA, tokenB });
   };
