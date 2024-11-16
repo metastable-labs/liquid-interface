@@ -24,11 +24,11 @@ export type PasskeyRegistrationResult = {
 };
 
 export enum PoolType {
-  v2 = 'v2',
-  hot = 'hot',
-  trending = 'trending',
-  gainers = 'gainers',
-  search = 'search',
+  v2 = '',
+  hot = '/hot',
+  trending = '/trending',
+  gainers = '/gainers',
+  search = '/search',
 }
 
 export type SmartAccount = ToCoinbaseSmartAccountReturnType;

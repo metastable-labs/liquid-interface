@@ -29,7 +29,7 @@ const CoinSelectorInput = ({ onChange, selectedToken, value, disabled, address }
       const initialToken = tokens?.data.find((t) => t.address === address) || tokens?.data[0];
       setToken(initialToken);
     },
-    [tokens]
+    [tokens, address]
   );
 
   return (

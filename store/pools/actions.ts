@@ -1,5 +1,14 @@
 import useSystemFunctions from '@/hooks/useSystemFunctions';
-import { setHotPools, setLoadingPools, setRefreshing, setSearchedPools, setSearchingPools, setTopGainers, setTrendingPools } from '.';
+import {
+  setHotPools,
+  setLoadingPools,
+  setpools,
+  setRefreshing,
+  setSearchedPools,
+  setSearchingPools,
+  setTopGainers,
+  setTrendingPools,
+} from '.';
 import api from '@/init/api';
 import { PoolType } from '@/init/types';
 
@@ -22,6 +31,9 @@ export function usePoolActions() {
 
       const trendingPools = await api.getPools(PoolType.trending);
       dispatch(setTrendingPools(trendingPools));
+
+      const allPools = await api.getPools(PoolType.v2);
+      dispatch(setpools(allPools));
     } catch (error: any) {
       //
     } finally {

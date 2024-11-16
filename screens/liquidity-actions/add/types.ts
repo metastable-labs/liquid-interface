@@ -24,7 +24,7 @@ type TokenValue = {
   value: string;
 };
 
-type ErrorState = undefined | 'primary' | 'secondary';
+type ErrorState = undefined | 'insufficientBalance' | 'insufficientLiquidBalance' | 'noMatchingPools';
 
 interface IErrorMessage {
   title: string;
@@ -36,8 +36,9 @@ interface IErrorMessage {
 }
 
 type ErrorsArray = {
-  primary: IErrorMessage;
-  secondary: IErrorMessage;
+  insufficientBalance: IErrorMessage;
+  insufficientLiquidBalance: IErrorMessage;
+  noMatchingPools: IErrorMessage;
 };
 
 type Info = {

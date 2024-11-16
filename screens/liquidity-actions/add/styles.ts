@@ -6,13 +6,13 @@ const styles = StyleSheet.create({
   root: {
     paddingHorizontal: 16,
     paddingTop: 70,
-    paddingBottom: 34,
     backgroundColor: '#FFF',
   },
 
   contentStyle: {
-    flex: 1,
+    flexGrow: 1,
     justifyContent: 'space-between',
+    paddingBottom: 130,
   },
 
   container: {
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
 
   bottomContainer: {
     paddingHorizontal: 8,
-    paddingVertical: 12,
+    paddingTop: 50,
   },
 
   errorText: {

@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { View, Text, ScrollView } from 'react-native';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { View, Text, ScrollView, SafeAreaView } from 'react-native';
 import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { publicClient } from '@/init/viem';
 import { PublicClient } from 'viem';
@@ -16,32 +16,38 @@ import CoinSelectorInput from './coin-selector-input';
 import Info from './info';
 import { styles } from './styles';
 import Loading from './loading';
+import ErrorMessage from './error';
+import SelectPool from './pool-selector';
+import { Pool } from '@/store/pools/types';
 
 const AddLiquidity = () => {
-  const { accountState, smartAccountState } = useSystemFunctions();
+  const { accountState, smartAccountState, poolsState } = useSystemFunctions();
   // const { addLiquidity } = useLiquidity(publicClient as PublicClient);
 
   const [method, setMethod] = useState<Method>('liquid');
+  const [defaultTokens, setDefaultTokens] = useState<{ tokenA: TokenItem; tokenB: TokenItem }>();
+
+  const [pools, setPools] = useState<Pool[]>([]);
   const [tokenA, setTokenA] = useState<TokenValue>({
-    asset: defaultToken.data[0],
+    asset: undefined,
     value: '',
   });
   const [tokenB, setTokenB] = useState<TokenValue>({
-    asset: defaultToken.data[1],
+    asset: undefined,
     value: '',
   });
   const [error, setError] = useState<ErrorState>(undefined);
-  const [showInfo, setShowInfo] = useState(true);
   const [loading, setLoading] = useState(false);
 
   const { tokens } = accountState;
+  const { selectedPool } = poolsState;
 
   const errors: ErrorsArray = {
-    primary: {
+    insufficientBalance: {
       title: `Swap ${tokenA.asset?.symbol} to ${tokenB.asset?.symbol}?`,
       description: (
         <Text style={styles.errorText}>
-          You don’t have enough cbBTC. We’d balance the pool by swapping half of the{' '}
+          You don’t have enough value. We’d balance the pool by swapping half of the{' '}
           <Text style={[styles.errorText, { fontFamily: 'AeonikMedium' }]}>{tokenA?.asset?.symbol}</Text> value to{' '}
           <Text style={[styles.errorText, { fontFamily: 'AeonikMedium' }]}>{tokenB?.asset?.symbol}</Text>.
         </Text>
@@ -52,9 +58,14 @@ const AddLiquidity = () => {
       },
     },
 
-    secondary: {
+    insufficientLiquidBalance: {
       title: 'Proceed with debit card?',
       description: 'You don’t have enough balances in your Liquid account, you can proceed to pay with your debit card',
+    },
+
+    noMatchingPools: {
+      title: 'No matching pools',
+      description: `There's no available pool for ${tokenA.asset?.symbol} / ${tokenB.asset?.symbol}. Try selecting ${tokenB.asset?.symbol} as the first token and ${tokenA.asset?.symbol} as the second.`,
     },
   };
 
@@ -64,7 +75,6 @@ const AddLiquidity = () => {
       title: `1 ${tokenA.asset?.symbol} to ${tokenB.asset?.symbol}`,
       value: `${0.805} ${tokenB.asset?.symbol}`,
     },
-
     {
       icon: 'tertiary',
       title: 'Fees',
@@ -78,7 +88,11 @@ const AddLiquidity = () => {
     opacity: withTiming(loading ? 1 : 0, { duration: 500 }),
   }));
 
-  const handleTokenChange = (address: string, token: 'tokenA' | 'tokenB') => {
+  const didUserChangeToken = !defaultToken
+    ? false
+    : tokenA.asset?.address !== defaultTokens?.tokenA?.address || tokenB.asset?.address !== defaultTokens?.tokenB?.address;
+
+  const handleTokenChange = async (address: string, token: 'tokenA' | 'tokenB') => {
     const asset = tokens?.data?.find((asset) => asset.address === address);
 
     if (!asset) return;
@@ -132,31 +146,72 @@ const AddLiquidity = () => {
 
     setLoading(true);
 
-    // const response = await addLiquidity(param, { waitForReceipt: true });
+    if (method === 'liquid') {
+      // const response = await addLiquidity(param, { waitForReceipt: true });
 
-    console.log('Submitting liquidity request', { tokenA, tokenB });
+      console.log('Submitting liquidity request', { tokenA, tokenB });
+    }
+
+    if (method === 'coinbase') {
+      console.log('Submitting coinbase request', { tokenA, tokenB });
+    }
+
+    if (method === 'debit') {
+      console.log('Submitting debit request', { tokenA, tokenB });
+    }
   };
 
   useEffect(
     function initializeTokenData() {
-      if (!tokens.data) return;
+      if (!tokens.data || !selectedPool) return;
 
-      const data = tokens.data;
+      const tokenAData = tokens.data.find((token) => token.address === selectedPool.token0.address);
+      const tokenBData = tokens.data.find((token) => token.address === selectedPool.token1.address);
 
-      setTokenA({ ...tokenA, asset: { ...tokenA.asset, ...data[0] } });
-      setTokenB({ ...tokenB, asset: { ...tokenB.asset, ...data[1] } });
+      if (!tokenAData || !tokenBData) return;
+
+      setTokenA({ ...tokenA, asset: { ...tokenAData } });
+      setTokenB({ ...tokenB, asset: { ...tokenBData } });
+
+      if (!defaultTokens) setDefaultTokens({ tokenA: { ...tokenAData }, tokenB: { ...tokenBData } });
     },
-    [tokens]
+    [tokens, selectedPool]
   );
 
-  useEffect(() => {
-    const primaryIsInvalid = parseFloat(removeCommasFromNumber(tokenA.value)) > Number(tokenA.asset?.balance)!;
-    const secondaryIsInvalid = parseFloat(removeCommasFromNumber(tokenB.value)) > Number(tokenB.asset?.balance)!;
+  useEffect(
+    function listenForErrors() {
+      const tokenAAmountInIsInvalid = parseFloat(removeCommasFromNumber(tokenA.value)) > Number(tokenA.asset?.balance)!;
+      const tokenBAmountInIsInvalid = parseFloat(removeCommasFromNumber(tokenB.value)) > Number(tokenB.asset?.balance)!;
 
-    if (primaryIsInvalid && secondaryIsInvalid) return setError('secondary');
+      if (tokenAAmountInIsInvalid && tokenBAmountInIsInvalid) return setError('insufficientLiquidBalance');
 
-    if (secondaryIsInvalid) return setError('primary');
-  }, [tokenA.value, tokenB.value, tokenA.asset?.balance, tokenB.asset?.balance]);
+      if (tokenBAmountInIsInvalid) return setError('insufficientBalance');
+
+      return setError(undefined);
+    },
+    [tokenA.value, tokenB.value, tokenA.asset?.balance, tokenB.asset?.balance]
+  );
+
+  useEffect(
+    function checkMatchingPools() {
+      if (!tokens.data) return setPools([]);
+
+      if (!tokenA.asset || !tokenB.asset || !didUserChangeToken) return setPools([]);
+
+      const response = poolsState.pools.data.filter((pool) => {
+        const tokenHasCl = pool.symbol.toLowerCase().includes('cl');
+        const tokenAAddress = tokenA.asset?.address;
+        const tokenBAddress = tokenB.asset?.address;
+
+        return pool.token0.address === tokenAAddress && pool.token1.address === tokenBAddress && !tokenHasCl;
+      });
+
+      if (response.length === 0) setError('noMatchingPools');
+
+      return setPools(response);
+    },
+    [tokenA.asset, tokenB.asset]
+  );
 
   if (loading) {
     return (
@@ -196,9 +251,11 @@ const AddLiquidity = () => {
           />
         </View>
 
-        {/* {error && <ErrorMessage title={errors[error].title} description={errors[error].description} swap={errors[error].swap} />} */}
+        {error && <ErrorMessage title={errors[error].title} description={errors[error].description} swap={errors[error].swap} />}
 
-        {showInfo && <Info infos={infos} />}
+        {<Info infos={infos} />}
+
+        {didUserChangeToken && pools.length > 0 && <SelectPool pools={pools} />}
       </View>
 
       <View style={styles.bottomContainer}>

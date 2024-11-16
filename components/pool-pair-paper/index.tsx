@@ -6,7 +6,23 @@ import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { setSelectedPool } from '@/store/pools';
 import { PoolPairPaper } from './types';
 
-const LQDPoolPairPaper = ({ pool, navigationVariant = 'primary' }: PoolPairPaper) => {
+const formatSymbol = (symbol: string, showFullSymbol?: boolean) => {
+  if (!showFullSymbol) {
+    return symbol.split('-')[1].replace('/', ' / ');
+  }
+
+  if (symbol.toLowerCase().includes('volatile')) {
+    return `vAMM - ${symbol.split('-')[1].replace('/', ' / ')}`;
+  }
+
+  if (symbol.toLowerCase().includes('stable')) {
+    return `sAMM - ${symbol.split('-')[1].replace('/', ' / ')}`;
+  }
+
+  return symbol;
+};
+
+const LQDPoolPairPaper = ({ pool, navigationVariant = 'primary', showFullSymbol }: PoolPairPaper) => {
   const { router, dispatch } = useSystemFunctions();
 
   const paths = {
@@ -23,9 +39,9 @@ const LQDPoolPairPaper = ({ pool, navigationVariant = 'primary' }: PoolPairPaper
 
   const primaryIconURL = pool.token0.logoUrl;
   const secondaryIconURL = pool.token1.logoUrl;
-  const symbol = pool.symbol.split('-')[1].replace('/', ' / ');
+  const symbol = formatSymbol(pool.symbol, showFullSymbol);
   const apr = formatAmount(pool.apr, 2);
-  const fees = roundUp(Number(pool.poolFee));
+  const fees = Number(pool.poolFee) > 1000 ? formatNumberWithSuffix(pool.poolFee) : roundUp(Number(pool.poolFee));
   const volume = formatNumberWithSuffix(vol);
   const tvl = pool.tvl;
   const isStable = pool.isStable;
@@ -80,6 +96,7 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     alignItems: 'center',
     gap: 10 + 6,
+    maxWidth: '70%',
   },
 
   iconContainer: {

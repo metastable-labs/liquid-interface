@@ -84,7 +84,7 @@ class LiquidAPI {
   }
 
   async getPools(type: PoolType, query?: string): Promise<PoolResponse> {
-    return this.fetchWithErrorHandling(`${this.apiBaseUrl}/pools/${type}${query || '?page=0'}`, {
+    return this.fetchWithErrorHandling(`${this.apiBaseUrl}/pools${type}${query || ''}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
