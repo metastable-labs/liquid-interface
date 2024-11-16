@@ -1,6 +1,6 @@
 import { PublicClient } from 'viem';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
-import { publicClient } from '@/init/viem';
+import { publicClient } from '@/init/client';
 import { setLoading, setLpBalance, setPositions, setRefreshing, setTokenBalance, setTokens } from '.';
 import { Position } from '@/hooks/types';
 import api from '@/init/api';

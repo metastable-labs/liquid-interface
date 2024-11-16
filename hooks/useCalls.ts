@@ -2,7 +2,7 @@ import { Address, encodeFunctionData, Hex } from 'viem';
 import { buildUserOp, getPaymasterData, getUserOpHash } from '@/utils/wallet';
 import { Call } from '@/utils/types';
 import { entryPoint06Address } from 'viem/account-abstraction';
-import { paymasterClient, bundlerClient } from '@/init/viem';
+import { useClients } from '@/init/useViem';
 import { useSmartAccountActions } from '@/store/smartAccount/actions';
 import { SmartWalletABI } from '@/constants/abis';
 import { ENTRYPOINT_V06_ADDRESS } from '@/constants/addresses';
@@ -10,11 +10,12 @@ import { useCallback } from 'react';
 
 export function useMakeCalls() {
   const { signTransaction } = useSmartAccountActions();
+  const { pimlicoClient, smartAccountClient } = useClients();
 
   const makeCalls = useCallback(
     async ({ calls, account }: { calls: Call[]; account: Address }) => {
       // Build the user operation
-      const op = await buildUserOp(account, bundlerClient, {
+      const op = await buildUserOp(account, smartAccountClient, {
         calls,
         paymasterAndData: '0x', // Initialize with empty paymaster data
       });
@@ -24,7 +25,7 @@ export function useMakeCalls() {
 
       // Get paymaster data
       const paymasterResult = await getPaymasterData({
-        paymasterClient: paymasterClient,
+        paymasterClient: pimlicoClient,
         callData: op.callData,
         sender: op.sender,
         nonce: op.nonce,
@@ -41,7 +42,19 @@ export function useMakeCalls() {
 
       // Get the operation hash
       const hash = getUserOpHash({
-        userOperation: op,
+        userOperation: {
+          sender: op.sender,
+          nonce: op.nonce,
+          initCode: op.initCode,
+          callData: op.callData,
+          callGasLimit: op.callGasLimit,
+          verificationGasLimit: op.verificationGasLimit,
+          preVerificationGas: op.preVerificationGas,
+          maxFeePerGas: op.maxFeePerGas,
+          maxPriorityFeePerGas: op.maxPriorityFeePerGas,
+          paymasterAndData: op.paymasterAndData,
+          signature: '0x',
+        },
         chainId: 8543n,
       });
 
@@ -50,7 +63,7 @@ export function useMakeCalls() {
       op.signature = signature!;
 
       // Send the user operation
-      const opHash = await bundlerClient.sendUserOperation({
+      const opHash = await smartAccountClient.sendUserOperation({
         userOperation: op,
         entryPoint: entryPoint06Address,
       });

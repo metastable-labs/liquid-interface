@@ -1,7 +1,7 @@
 import { Address, formatUnits, PublicClient } from 'viem';
 import { AerodromePoolABI, LPSugarABI, OffchainOracleABI } from '@/constants/abis';
 import { LP_SUGAR_ADDRESS, USDC_ADDRESS, WETH_ADDRESS } from '@/constants/addresses';
-import { publicClient } from '@/init/viem';
+import { publicClient } from '@/init/client';
 
 const { LpSugar } = LPSugarABI;
 const { OffchainOracle } = OffchainOracleABI;

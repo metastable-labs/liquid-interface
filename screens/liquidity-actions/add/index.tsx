@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { View, Text, ScrollView } from 'react-native';
 import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated';
-import { publicClient } from '@/init/viem';
+import { publicClient } from '@/init/client';
 import { PublicClient } from 'viem';
 
 import { LQDButton } from '@/components';

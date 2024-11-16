@@ -1,10 +1,10 @@
 import { EntryPointABI, SmartWalletABI, SmartWalletFactoryABI } from '@/constants/abis';
 import { ACCOUNT_FACTORY_ADDRESS, ENTRYPOINT_V06_ADDRESS } from '@/constants/addresses';
-import { estimateUserOperationGas, UserOperation, BundlerClient } from 'permissionless';
 import { Address, Chain, encodeAbiParameters, encodeFunctionData, Hex, keccak256, PublicClient, Transport } from 'viem';
-import { entryPoint06Abi, entryPoint06Address, PaymasterClient } from 'viem/account-abstraction';
-import { estimateFeesPerGas, getBytecode, readContract } from 'viem/actions';
+import { entryPoint06Abi, entryPoint06Address, estimateUserOperationGas, PaymasterClient, UserOperation } from 'viem/account-abstraction';
+import { estimateFeesPerGas, getBytecode, getCode, readContract } from 'viem/actions';
 import { Call, PaymasterResult } from './types';
+import { PimlicoClient } from 'permissionless/clients/pimlico';
 
 export const PASSKEY_OWNER_DUMMY_SIGNATURE: Hex =
   '0x0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000c0000000000000000000000000000000000000000000000000000000000000012000000000000000000000000000000000000000000000000000000000000000170000000000000000000000000000000000000000000000000000000000000001949fc7c88032b9fcb5f6efc7a7b8c63668eae9871b765e23123bb473ff57aa831a7c0d9276168ebcc29f2875a0239cffdf2a9cd1c2007c5c77c071db9264df1d000000000000000000000000000000000000000000000000000000000000002549960de5880e8c687434170f6476605b8fe4aeb9a28632c7995cf3ba831d97630500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008a7b2274797065223a22776562617574686e2e676574222c226368616c6c656e6765223a2273496a396e6164474850596759334b7156384f7a4a666c726275504b474f716d59576f4d57516869467773222c226f726967696e223a2268747470733a2f2f7369676e2e636f696e626173652e636f6d222c2263726f73734f726967696e223a66616c73657d00000000000000000000000000000000000000000000';
@@ -12,7 +12,7 @@ export const PASSKEY_OWNER_DUMMY_SIGNATURE: Hex =
 // https://github.com/wilsoncusack/scw-tx/blob/5ff88a10e928b5df9ec12bce2ef64caa0b35afcd/utils/smartWallet.ts#L10
 export async function buildUserOp(
   smartWalletAddress: Address,
-  client: BundlerClient,
+  client: PimlicoClient,
   {
     calls,
     // If you want to sponsor user operations with a paymaster, pass in the response of the `pm_sponsorUserOperation` RPC
@@ -24,9 +24,10 @@ export async function buildUserOp(
   }
 ) {
   let initCode: Hex = '0x';
+  console.log(initCode, 'got here');
   // `getBytecode` is imported from 'viem/actions'
   // Check if the smart wallet has been deployed by seeing if there's code at that address
-  const code = await getBytecode(client, { address: smartWalletAddress });
+  const code = await getCode(client, { address: smartWalletAddress });
   // If not, set `initCode` to deploy the smart wallet using the helpers above
   if (!code) {
     initCode = getInitCode({ owners: [smartWalletAddress], index: 0n });
@@ -60,8 +61,17 @@ export async function buildUserOp(
 
   // Update user op specific gas limits like `preVerificationGas` etc.
   const gasLimits = await estimateUserOperationGas(client, {
-    userOperation: { ...op },
-    entryPoint: entryPoint06Address,
+    sender: op.sender,
+    nonce: op.nonce,
+    initCode: op.initCode,
+    callData: op.callData,
+    paymasterAndData: op.paymasterAndData,
+    signature: op.signature,
+    preVerificationGas: op.preVerificationGas,
+    verificationGasLimit: op.verificationGasLimit,
+    callGasLimit: op.callGasLimit,
+    maxFeePerGas: op.maxFeePerGas,
+    maxPriorityFeePerGas: op.maxPriorityFeePerGas,
   });
 
   return {
@@ -121,14 +131,14 @@ export function getUserOpHash({ userOperation, chainId }: { userOperation: UserO
     [
       userOperation.sender,
       userOperation.nonce,
-      keccak256(userOperation.initCode),
+      keccak256(userOperation.initCode ?? '0x'),
       keccak256(userOperation.callData),
       userOperation.callGasLimit,
       userOperation.verificationGasLimit,
       userOperation.preVerificationGas,
       userOperation.maxFeePerGas,
       userOperation.maxPriorityFeePerGas,
-      keccak256(userOperation.paymasterAndData),
+      keccak256(userOperation.paymasterAndData ?? '0x'),
     ]
   );
   const hashedUserOp = keccak256(encodedUserOp);

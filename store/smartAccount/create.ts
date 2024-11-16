@@ -3,7 +3,7 @@ import * as Passkeys from 'react-native-passkeys';
 import { toCoinbaseSmartAccount, toWebAuthnAccount } from 'viem/account-abstraction';
 
 import api from '@/init/api';
-import { publicClient } from '@/init/viem';
+import { publicClient } from '@/init/client';
 import { isDev, rpId } from '@/constants/env';
 import { SmartAccount, Address, SmartAccountPersistedInfo, VerifyRegistration } from '@/init/types';
 import { getPublicKeyHex } from '@/utils/base64';

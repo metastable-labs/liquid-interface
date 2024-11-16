@@ -3,7 +3,7 @@ import * as Passkeys from 'react-native-passkeys';
 
 import { setAddress, setRegistrationOptions } from '@/store/smartAccount';
 import { CreatePassKeyCredentialOptions, VerifyAuthResponse } from '@/init/types';
-import { publicClient } from '@/init/viem';
+import { publicClient } from '@/init/client';
 import { rpId } from '@/constants/env';
 import { getPublicKeyHex } from '@/utils/base64';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
