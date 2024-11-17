@@ -1,4 +1,4 @@
-import { Address as EthereumAddress } from 'viem';
+import { Address as EthereumAddress, Hex } from 'viem';
 import { ToCoinbaseSmartAccountReturnType } from 'viem/account-abstraction';
 import {
   PublicKeyCredentialCreationOptionsJSON,
@@ -37,7 +37,7 @@ export type SmartAccount = ToCoinbaseSmartAccountReturnType;
  * Info about the smart account that is persisted to secure store, used to re-initialize the smart account
  */
 export type SmartAccountPersistedInfo = {
-  publicKey: string;
+  publicKey: string | Hex;
   credentialID: string;
 };
 

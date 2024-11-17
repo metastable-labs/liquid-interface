@@ -7,6 +7,8 @@ import { useSmartAccountActions } from '@/store/smartAccount/actions';
 import { SmartWalletABI } from '@/constants/abis';
 import { ENTRYPOINT_V06_ADDRESS } from '@/constants/addresses';
 import { useCallback } from 'react';
+import { getPersistedSmartAccountInfo } from '@/store/smartAccount/persist';
+import { getPublicKeyHex } from '@/utils/base64';
 
 export function useMakeCalls() {
   const { signTransaction } = useSmartAccountActions();
@@ -14,9 +16,12 @@ export function useMakeCalls() {
 
   const makeCalls = useCallback(
     async ({ calls, account }: { calls: Call[]; account: Address }) => {
+      const { publicKey, credentialID } = await getPersistedSmartAccountInfo();
+
       // Build the user operation
       const op = await buildUserOp(account, smartAccountClient!, {
         calls,
+        signers: [getPublicKeyHex(publicKey) as Hex],
         paymasterAndData: '0x', // Initialize with empty paymaster data
       });
 
@@ -60,7 +65,11 @@ export function useMakeCalls() {
 
       const signature = await signTransaction(hash);
 
-      op.signature = signature!;
+      // Create new operation object with signature
+      const signedOp = {
+        ...op,
+        signature: signature!,
+      };
 
       // Send the user operation
       const opHash = await smartAccountClient?.sendUserOperation({
@@ -74,7 +83,7 @@ export function useMakeCalls() {
         verificationGasLimit: op.verificationGasLimit,
         preVerificationGas: op.preVerificationGas,
         paymasterAndData: op.paymasterAndData,
-        signature: op.signature,
+        signature: signedOp.signature,
       });
 
       return {
