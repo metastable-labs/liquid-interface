@@ -3,27 +3,33 @@ import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView } from 'rea
 import { useForm } from 'react-hook-form';
 
 import { CheckIcon } from '@/assets/icons';
-import { adjustFontSizeForIOS } from '@/utils/helpers';
+import { adjustFontSizeForIOS, formatAmount } from '@/utils/helpers';
 import LQDBottomSheet from '../bottom-sheet';
 import LQDInput from '../input';
+import useSystemFunctions from '@/hooks/useSystemFunctions';
+import { AssetSelection } from './types';
+import { TokenItem } from '@/store/account/types';
 
-const LQDAssetSelection = ({ assets, close, setAsset, show, title, asset }: IAssetSelection) => {
+const LQDAssetSelection = ({ close, setAsset, show, title, selectedAsset }: AssetSelection) => {
+  const { accountState } = useSystemFunctions();
+  const { tokens } = accountState;
+
   const { control, watch } = useForm();
   const searchValue = watch('search', '');
 
   const searchedAssets = useMemo(() => {
-    if (!searchValue) return assets;
-    return assets.filter(
-      (asset) =>
-        asset.name.toLowerCase().includes(searchValue.toLowerCase()) || asset.symbol.toLowerCase().includes(searchValue.toLowerCase())
+    if (!searchValue) return tokens.data;
+
+    return tokens.data.filter(
+      (asset) => asset.symbol.toLowerCase().includes(searchValue.toLowerCase()) || asset.address.includes(searchValue.toLowerCase())
     );
   }, [searchValue]);
 
-  const action = (active: boolean, asset: IAsset) => {
-    if (!active) {
-      setAsset(asset);
-      close();
-    }
+  const action = (active: boolean, asset: TokenItem) => {
+    if (active) return;
+
+    setAsset(asset);
+    close();
   };
 
   return (
@@ -42,20 +48,20 @@ const LQDAssetSelection = ({ assets, close, setAsset, show, title, asset }: IAss
         />
 
         <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
-          {searchedAssets.map((asset_, index) => {
-            const active = asset?.id === asset_?.id;
+          {searchedAssets.map((_asset, index) => {
+            const active = selectedAsset?.address === _asset?.address;
 
             return (
-              <TouchableOpacity key={index} style={styles.selector} onPress={() => action(active, asset_)} disabled={active}>
+              <TouchableOpacity key={index} style={styles.selector} onPress={() => action(active, _asset)} disabled={active}>
                 <View style={styles.selectorContainer}>
                   <View style={styles.iconContainer}>
-                    <Image source={{ uri: asset_?.iconUrl }} style={styles.icon} />
+                    <Image source={{ uri: _asset?.logoUrl }} style={styles.icon} />
                   </View>
 
                   <View style={styles.textContainer}>
-                    <Text style={styles.primaryText}>{asset_?.name}</Text>
+                    <Text style={styles.primaryText}>{_asset?.symbol}</Text>
                     <Text style={styles.secondaryText}>
-                      {asset_.balance.toLocaleString()} {asset_?.symbol}
+                      {formatAmount(_asset.balance).toLocaleString()} {_asset?.symbol}
                     </Text>
                   </View>
                 </View>

@@ -5,8 +5,7 @@ export type PoolResponse = {
   pagination: {
     limit: number;
     page: number;
-    total: number;
-    totalPages: number;
+    hasMore: boolean;
   };
 };
 
@@ -15,8 +14,7 @@ export const defaultPoolResponse = {
   pagination: {
     limit: 10,
     page: 0,
-    total: 0,
-    totalPages: 1,
+    hasMore: true,
   },
 };
 
@@ -27,6 +25,9 @@ export type Pool = {
   apr: string;
   tvl: string;
   totalVolumeUSD: string;
+  totalFeesUSD: string;
+  poolFee: string;
+  txCount: number | string;
   isStable: boolean;
   factory: Address;
   token0: {
@@ -34,6 +35,7 @@ export type Pool = {
     logoUrl: string;
     price: string;
     reserve: string;
+    reserveUSD: string;
     volume: string;
   };
   token1: {
@@ -41,6 +43,7 @@ export type Pool = {
     logoUrl: string;
     price: string;
     reserve: string;
+    reserveUSD: string;
     volume: string;
   };
 };

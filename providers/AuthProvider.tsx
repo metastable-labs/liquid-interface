@@ -7,7 +7,7 @@ import { getPersistedSmartAccountInfo } from '@/store/smartAccount/persist';
 import { SmartAccountInfoNotPersistedError } from '@/store/smartAccount/errors';
 import { rpId } from '@/constants/env';
 import { toCoinbaseSmartAccount, toWebAuthnAccount } from 'viem/account-abstraction';
-import { publicClient } from '@/init/viem';
+import { publicClient } from '@/init/client';
 import { getPublicKeyHex } from '@/utils/base64';
 import { getFn } from '@/store/smartAccount/getFn';
 import useSystemFunctions from '@/hooks/useSystemFunctions';

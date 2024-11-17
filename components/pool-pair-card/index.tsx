@@ -26,8 +26,8 @@ const LQDPoolPairCard = ({ pool, navigationVariant = 'primary' }: PoolPairCard) 
   const primaryIconURL = pool.token0.logoUrl;
   const secondaryIconURL = pool.token1.logoUrl;
   const symbol = pool.symbol.split('-')[1].replace('/', ' / ');
-  const increased = pool.isStable;
-  const change = 2.3;
+  const increased = true;
+  const change = pool.apr;
 
   return (
     <TouchableOpacity onPress={handlePress} style={styles.container}>
@@ -35,7 +35,7 @@ const LQDPoolPairCard = ({ pool, navigationVariant = 'primary' }: PoolPairCard) 
         <View style={styles.iconContainer}>
           {[primaryIconURL, secondaryIconURL].map((iconURL, index) => (
             <View key={index} style={[styles.icon, index === 0 && { position: 'relative', zIndex: 1 }]}>
-              <Image source={{ uri: iconURL }} style={{ width: 24, height: 24 }} />
+              <Image source={{ uri: iconURL }} style={styles.image} />
             </View>
           ))}
         </View>
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     height: 24,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 9999,
+    borderRadius: 12,
     borderWidth: 1,
     borderColor: '#EAEEF4',
     marginRight: -6,
@@ -112,5 +112,11 @@ const styles = StyleSheet.create({
     lineHeight: 13.64,
     fontWeight: '500',
     fontFamily: 'AeonikMedium',
+  },
+
+  image: {
+    width: 24,
+    height: 24,
+    borderRadius: 24,
   },
 });

@@ -1,8 +1,18 @@
 import { PoolResponse } from '@/store/pools/types';
-import { CreatePassKeyCredentialOptions, Address, PoolType, VerifyRegistration, AuthCredentialOptions } from './types';
+import {
+  CreatePassKeyCredentialOptions,
+  Address,
+  PoolType,
+  VerifyRegistration,
+  AuthCredentialOptions,
+  AuthVerificationResult,
+  RegistrationVerificationResult,
+  VerifyAuthResponse,
+} from './types';
 import { AuthenticationResponseJSON } from 'react-native-passkeys/build/ReactNativePasskeys.types';
 
 import { apiKey, apiUrl } from '@/constants/env';
+import { TokenResponse } from '@/store/account/types';
 
 class LiquidAPI {
   private apiBaseUrl: string;
@@ -14,7 +24,6 @@ class LiquidAPI {
   }
 
   private async fetchWithErrorHandling(url: string, options: RequestInit) {
-    console.log('fetchWithErrorHandling', url);
     const response = await fetch(url, options);
 
     if (!response.ok || response.status !== 200) {
@@ -43,7 +52,7 @@ class LiquidAPI {
     });
   }
 
-  async verifyRegistration(data: VerifyRegistration): Promise<{ verified: boolean; publicKey: string }> {
+  async verifyRegistration(data: VerifyRegistration): Promise<RegistrationVerificationResult> {
     return this.fetchWithErrorHandling(`${this.apiBaseUrl}/registration/verify`, {
       method: 'POST',
       headers: {
@@ -53,15 +62,13 @@ class LiquidAPI {
     });
   }
 
-  async verifyAuthentication(
-    data: AuthenticationResponseJSON
-  ): Promise<{ verified: boolean; userName: string; publicKey: string; userAddress: string }> {
+  async verifyAuthentication(username: string, data: VerifyAuthResponse): Promise<AuthVerificationResult> {
     return this.fetchWithErrorHandling(`${this.apiBaseUrl}/authentication/verify`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify({ username, authenticationResponse: data }),
     });
   }
 
@@ -77,7 +84,7 @@ class LiquidAPI {
   }
 
   async getPools(type: PoolType, query?: string): Promise<PoolResponse> {
-    return this.fetchWithErrorHandling(`${this.apiBaseUrl}/pools/${type}${query || ''}`, {
+    return this.fetchWithErrorHandling(`${this.apiBaseUrl}/pools${type}${query || ''}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -85,8 +92,17 @@ class LiquidAPI {
     });
   }
 
-  async searchPools(query: string): Promise<PoolResponse> {
-    return this.fetchWithErrorHandling(`${this.apiBaseUrl}/pools/search?symbol=${query}`, {
+  async searchPools(searchQuery: string, paginationQuery?: string): Promise<PoolResponse> {
+    return this.fetchWithErrorHandling(`${this.apiBaseUrl}/pools/search?query=${searchQuery}${paginationQuery || ''}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  }
+
+  async getTokens(query?: string): Promise<TokenResponse> {
+    return this.fetchWithErrorHandling(`${this.apiBaseUrl}/tokens${query || ''}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

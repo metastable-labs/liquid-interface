@@ -2,8 +2,8 @@ import { toCoinbaseSmartAccount, toWebAuthnAccount } from 'viem/account-abstract
 import * as Passkeys from 'react-native-passkeys';
 
 import { setAddress, setRegistrationOptions } from '@/store/smartAccount';
-import { CreatePassKeyCredentialOptions } from '@/init/types';
-import { publicClient } from '@/init/viem';
+import { CreatePassKeyCredentialOptions, VerifyAuthResponse } from '@/init/types';
+import { publicClient } from '@/init/client';
 import { rpId } from '@/constants/env';
 import { getPublicKeyHex } from '@/utils/base64';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
@@ -16,6 +16,7 @@ import { setLpBalance, setPositions, setTokenBalance, setTokens } from '../accou
 import api from '@/init/api';
 import { useAuth } from '@/providers';
 import { Hex } from 'viem';
+import { AuthenticationResponseJSON } from 'react-native-passkeys/build/ReactNativePasskeys.types';
 
 export function useSmartAccountActions() {
   const { dispatch, router, smartAccountState } = useSystemFunctions();
@@ -67,12 +68,26 @@ export function useSmartAccountActions() {
       if (!passkeyResult) {
         throw new Error('No passkey found');
       }
-      const verification = await api.verifyAuthentication(passkeyResult);
+
+      const authenticationResponse: VerifyAuthResponse = {
+        id: passkeyResult.id,
+        rawId: passkeyResult.rawId,
+        response: {
+          authenticatorData: passkeyResult.response.authenticatorData,
+          clientDataJSON: passkeyResult.response.clientDataJSON,
+          signature: passkeyResult.response.signature,
+          userHandle: passkeyResult.response.userHandle!,
+        },
+        type: 'public-key',
+        authenticatorAttachment: 'platform',
+      };
+
+      const verification = await api.verifyAuthentication(userName, authenticationResponse);
 
       const webAuthnAccount = toWebAuthnAccount({
         credential: {
           id: passkeyResult.id,
-          publicKey: getPublicKeyHex(verification.publicKey),
+          publicKey: getPublicKeyHex(verification.data.publicKey),
         },
         getFn,
         rpId,
@@ -82,7 +97,7 @@ export function useSmartAccountActions() {
         owners: [webAuthnAccount],
       });
       const smartAccountInfo = {
-        publicKey: getPublicKeyHex(passkeyResult.response.signature),
+        publicKey: verification.data.publicKey,
         credentialID: passkeyResult.id,
       };
 
@@ -103,9 +118,9 @@ export function useSmartAccountActions() {
   const logout = async () => {
     try {
       dispatch(setAddress(null));
-      dispatch(setTokens([]));
+      dispatch(setTokens(undefined));
       dispatch(setTokenBalance(0));
-      dispatch(setPositions([]));
+      dispatch(setPositions(undefined));
       dispatch(setLpBalance(0));
       await clearPersistedSmartAccountInfo();
 

@@ -76,10 +76,10 @@ const LiquidityManagement = ({ id, type }: ILiquidityManagement) => {
 
   useEffect(() => {
     setPairDetails({
-      primaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
-      primaryTitle: 'USDC',
-      secondaryIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
-      secondaryTitle: 'ETH',
+      tokenAIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119033/is3tphz7tf06jpj5g7x3.png',
+      tokenATitle: 'USDC',
+      tokenBIconURL: 'https://res.cloudinary.com/dxnd4k222/image/upload/v1727119032/uwficdtvggd49apjfpt4.png',
+      tokenBTitle: 'ETH',
       condition: 'stable',
     });
   }, [id]);
@@ -119,7 +119,7 @@ const LiquidityManagement = ({ id, type }: ILiquidityManagement) => {
             <View style={styles.balanceContainer}>
               <View style={styles.pairContainer}>
                 <View style={styles.iconContainer}>
-                  {[pairDetails?.primaryIconURL, pairDetails?.secondaryIconURL]?.map((iconURL, index) => (
+                  {[pairDetails?.tokenAIconURL, pairDetails?.tokenBIconURL]?.map((iconURL, index) => (
                     <View key={index} style={[styles.icon, index === 0 && { position: 'relative', zIndex: 1 }]}>
                       <Image source={{ uri: iconURL || ICON_PLACEHOLDER }} style={{ width: 20, height: 20 }} />
                     </View>
@@ -127,7 +127,7 @@ const LiquidityManagement = ({ id, type }: ILiquidityManagement) => {
                 </View>
 
                 <Text style={styles.pairText}>
-                  {pairDetails?.condition.charAt(0)}AMM - {pairDetails?.primaryTitle} / {pairDetails?.secondaryTitle}
+                  {pairDetails?.condition.charAt(0)}AMM - {pairDetails?.tokenATitle} / {pairDetails?.tokenBTitle}
                 </Text>
               </View>
 

@@ -33,11 +33,12 @@ const Holdings = () => {
   ];
 
   const visibleActions = actions.filter((action) => !action.hide);
+  const tokensUserHas = tokens.data?.filter?.((token) => token.isListed && Number(token.balance) > 0);
 
   const items: Array<IItem> = [
     {
       variant: 'primary',
-      details: [{ title: 'Assets', value: `${tokens?.length} assets` }],
+      details: [{ title: 'Assets', value: `${tokensUserHas?.length || 0} assets` }],
       subtitle: '',
       title: `$${tokenBalance.toLocaleString()}`,
       empty: {
@@ -47,7 +48,7 @@ const Holdings = () => {
           onPress: () => console.log('Deposit'),
         },
       },
-      isEmpty: tokens?.length === 0,
+      isEmpty: tokensUserHas?.length === 0,
     },
     {
       variant: 'secondary',
@@ -65,22 +66,6 @@ const Holdings = () => {
         },
       },
       isEmpty: positions?.length === 0,
-    },
-    {
-      variant: 'tertiary',
-      details: [{ title: 'Unclaimed in:', value: `${13} pools` }],
-      subtitle: `${(3104).toLocaleString()} AERO`,
-      title: `$${(5_643.44).toLocaleString()}`,
-      empty: emptyData.tertiary,
-      isEmpty: true,
-    },
-    {
-      variant: 'quaternary',
-      details: [{ title: 'Your Pools', value: `${13} pools` }],
-      subtitle: `$${(12_506).toLocaleString()}`,
-      title: `$${(12_506).toLocaleString()}`,
-      empty: emptyData.quaternary,
-      isEmpty: true,
     },
   ];
 

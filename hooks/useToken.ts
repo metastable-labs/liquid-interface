@@ -4,7 +4,6 @@ import { CONNECTORS_BASE, LP_SUGAR_ADDRESS, OFFCHAIN_ORACLE_ADDRESS, WETH_ADDRES
 import { useLpSugarContract, useOffchainOracleContract } from './useContract';
 import { LPSugarToken, LPSugarTokenResponse, Token } from './types';
 import useSystemFunctions from './useSystemFunctions';
-import { OffchainOracleABI } from '@/constants/abis';
 
 export function useToken(publicClient: PublicClient) {
   const { smartAccountState } = useSystemFunctions();
@@ -13,7 +12,7 @@ export function useToken(publicClient: PublicClient) {
   const [tokens, setTokens] = useState<Token[]>([]);
   const [tokenMap, setTokenMap] = useState<Map<string, Token>>(new Map());
 
-  const lpSugar = useLpSugarContract(LP_SUGAR_ADDRESS, publicClient);
+  const lpSugar = useLpSugarContract(LP_SUGAR_ADDRESS);
   const oracle = useOffchainOracleContract(OFFCHAIN_ORACLE_ADDRESS, publicClient);
 
   const fetchTokens = async (BATCH_SIZE: number, offset: number): Promise<Token[]> => {
@@ -40,7 +39,7 @@ export function useToken(publicClient: PublicClient) {
           balance: formatUnits(token.account_balance, token.decimals),
           isListed: token.listed,
           usdPrice: prices[index],
-          logoUrl: `https://assets.smold.app/api/token/8453/${token.token_address}/logo-32.png`,
+          logoUrl: `https://assets.smold.app/api/token/8453/${token.token_address}/logo-128.png`,
         };
       });
 
@@ -52,7 +51,7 @@ export function useToken(publicClient: PublicClient) {
         balance: formatUnits(ethBalance, 18),
         isListed: true,
         usdPrice: wethPrice[0],
-        logoUrl: `https://assets.smold.app/api/token/8453/${WETH_ADDRESS}/logo-32.png`, // Using WETH logo for ETH
+        logoUrl: `https://assets.smold.app/api/token/8453/${WETH_ADDRESS}/logo-128.png`, // Using WETH logo for ETH
       };
 
       allTokens = [ethToken, ...allTokens, ...tokensWithPrice];

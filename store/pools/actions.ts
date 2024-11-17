@@ -1,12 +1,21 @@
 import useSystemFunctions from '@/hooks/useSystemFunctions';
-import { setHotPools, setLoadingPools, setRefreshing, setSearchedPools, setSearchingPools, setTopGainers, setTrendingPools } from '.';
+import {
+  setHotPools,
+  setLoadingPools,
+  setpools,
+  setRefreshing,
+  setSearchedPools,
+  setSearchingPools,
+  setTopGainers,
+  setTrendingPools,
+} from '.';
 import api from '@/init/api';
 import { PoolType } from '@/init/types';
 
 export function usePoolActions() {
   const { dispatch, poolsState } = useSystemFunctions();
 
-  const { hotPools, topGainers, trendingPools } = poolsState;
+  const { hotPools, topGainers, trendingPools, searchedPools } = poolsState;
 
   const getPools = async () => {
     try {
@@ -16,11 +25,15 @@ export function usePoolActions() {
 
       dispatch(setHotPools(hotPools));
 
+      const topGainers = await api.getPools(PoolType.gainers);
+
+      dispatch(setTopGainers(topGainers));
+
       const trendingPools = await api.getPools(PoolType.trending);
       dispatch(setTrendingPools(trendingPools));
 
-      const topGainers = await api.getPools(PoolType.gainers);
-      dispatch(setTopGainers(topGainers));
+      const allPools = await api.getPools(PoolType.v2);
+      dispatch(setpools(allPools));
     } catch (error: any) {
       //
     } finally {
@@ -37,7 +50,7 @@ export function usePoolActions() {
         return dispatch(setHotPools(pools));
       }
 
-      if (hotPools.pagination.page == hotPools.pagination.totalPages) return;
+      if (!hotPools.pagination.hasMore) return;
 
       dispatch(setLoadingPools(true));
 
@@ -67,7 +80,7 @@ export function usePoolActions() {
         return dispatch(setTrendingPools(pools));
       }
 
-      if (trendingPools.pagination.page == trendingPools.pagination.totalPages) return;
+      if (!trendingPools.pagination.hasMore) return;
 
       dispatch(setLoadingPools(true));
 
@@ -97,7 +110,7 @@ export function usePoolActions() {
         return dispatch(setTopGainers(pools));
       }
 
-      if (topGainers.pagination.page == topGainers.pagination.totalPages) return;
+      if (!topGainers.pagination.hasMore) return;
 
       dispatch(setLoadingPools(true));
 
@@ -119,11 +132,13 @@ export function usePoolActions() {
     }
   };
 
-  const searchPools = async (query: string) => {
+  const searchPools = async (searchQuery: string) => {
     try {
+      if (!searchQuery) return dispatch(setSearchedPools(undefined));
+
       dispatch(setSearchingPools(true));
 
-      const pools = await api.searchPools(query);
+      const pools = await api.searchPools(encodeURIComponent(searchQuery));
 
       dispatch(setSearchedPools(pools));
     } catch (error: any) {
@@ -134,11 +149,35 @@ export function usePoolActions() {
     }
   };
 
+  const getPaginatedSearchPools = async (searchQuery: string) => {
+    try {
+      if (!searchedPools.pagination.hasMore || !searchQuery) return;
+
+      dispatch(setSearchingPools(true));
+
+      const nextPage = searchedPools.pagination.page + 1;
+
+      const query = `&page=${nextPage}`;
+
+      const pools = await api.searchPools(encodeURIComponent(searchQuery), query);
+
+      const newData = { ...topGainers.data, ...pools.data };
+      pools.data = newData;
+
+      dispatch(setSearchedPools(pools));
+    } catch (error: any) {
+      //
+    } finally {
+      dispatch(setSearchingPools(false));
+    }
+  };
+
   return {
     getPools,
     getPaginatedHotPools,
     getPaginatedTrendingPools,
     getPaginatedTopGainers,
     searchPools,
+    getPaginatedSearchPools,
   };
 }

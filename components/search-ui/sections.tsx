@@ -47,6 +47,7 @@ const styles = StyleSheet.create({
   section: {
     alignSelf: 'stretch',
     gap: 20,
+    marginBottom: 24,
   },
 
   title: {

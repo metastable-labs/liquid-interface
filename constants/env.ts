@@ -3,6 +3,9 @@ export const isDev = !isProd;
 
 export const rpcUrl = process.env.EXPO_PUBLIC_BASE_RPC_URL;
 export const bundlerUrl = process.env.EXPO_PUBLIC_BUNDLER_RPC_URL;
+export const pimilcoApiKey = process.env.EXPO_PUBLIC_PIMILCO_API_KEY;
+
+export const pimilcoRPCURL = `https://api.pimlico.io/v2/8453/rpc?apikey=${pimilcoApiKey}`;
 
 export const rpId = 'api.useliquid.xyz';
 

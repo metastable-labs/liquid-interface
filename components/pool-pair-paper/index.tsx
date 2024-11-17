@@ -1,13 +1,28 @@
 import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native';
 import { Href } from 'expo-router';
 
-import { adjustFontSizeForIOS, formatAmount, formatNumberWithSuffix } from '@/utils/helpers';
+import { adjustFontSizeForIOS, formatAmount, formatNumberWithSuffix, roundUp } from '@/utils/helpers';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { setSelectedPool } from '@/store/pools';
 import { PoolPairPaper } from './types';
-import { formatEther } from 'viem';
 
-const LQDPoolPairPaper = ({ pool, navigationVariant = 'primary' }: PoolPairPaper) => {
+const formatSymbol = (symbol: string, showFullSymbol?: boolean) => {
+  if (!showFullSymbol) {
+    return symbol.split('-')[1].replace('/', ' / ');
+  }
+
+  if (symbol.toLowerCase().includes('volatile')) {
+    return `vAMM - ${symbol.split('-')[1].replace('/', ' / ')}`;
+  }
+
+  if (symbol.toLowerCase().includes('stable')) {
+    return `sAMM - ${symbol.split('-')[1].replace('/', ' / ')}`;
+  }
+
+  return symbol;
+};
+
+const LQDPoolPairPaper = ({ pool, navigationVariant = 'primary', showFullSymbol }: PoolPairPaper) => {
   const { router, dispatch } = useSystemFunctions();
 
   const paths = {
@@ -20,12 +35,15 @@ const LQDPoolPairPaper = ({ pool, navigationVariant = 'primary' }: PoolPairPaper
     router.push(paths[navigationVariant]);
   };
 
+  const vol = Number(Number(pool.totalVolumeUSD).toFixed(4));
+
   const primaryIconURL = pool.token0.logoUrl;
   const secondaryIconURL = pool.token1.logoUrl;
-  const symbol = pool.symbol.split('-')[1].replace('/', ' / ');
+  const symbol = formatSymbol(pool.symbol, showFullSymbol);
   const apr = formatAmount(pool.apr, 2);
-  const fees = '';
-  const volume = formatAmount(formatEther(BigInt(pool.totalVolumeUSD)), 0);
+  const fees = Number(pool.poolFee) > 1000 ? formatNumberWithSuffix(pool.poolFee) : roundUp(Number(pool.poolFee));
+  const volume = formatNumberWithSuffix(vol);
+  const tvl = pool.tvl;
   const isStable = pool.isStable;
 
   return (
@@ -34,7 +52,7 @@ const LQDPoolPairPaper = ({ pool, navigationVariant = 'primary' }: PoolPairPaper
         <View style={styles.iconContainer}>
           {[primaryIconURL, secondaryIconURL].map((iconURL, index) => (
             <View key={index} style={[styles.icon, index === 0 && { position: 'relative', zIndex: 1 }]}>
-              <Image source={{ uri: iconURL }} style={{ width: 24, height: 24 }} />
+              <Image source={{ uri: iconURL }} style={styles.image} />
             </View>
           ))}
         </View>
@@ -57,7 +75,7 @@ const LQDPoolPairPaper = ({ pool, navigationVariant = 'primary' }: PoolPairPaper
       <View style={styles.volumeWrapper}>
         <Text style={styles.aprText}>APR: {apr.toLocaleString()}%</Text>
 
-        <Text style={styles.volumeText}>VOL: ${formatNumberWithSuffix(volume)}</Text>
+        <Text style={styles.volumeText}>VOL: ${volume}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -78,6 +96,7 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     alignItems: 'center',
     gap: 10 + 6,
+    maxWidth: '70%',
   },
 
   iconContainer: {
@@ -107,6 +126,7 @@ const styles = StyleSheet.create({
     fontSize: adjustFontSizeForIOS(14, 2),
     lineHeight: 18.48,
     fontWeight: '500',
+    marginLeft: -6,
     fontFamily: 'AeonikMedium',
   },
 
@@ -125,14 +145,14 @@ const styles = StyleSheet.create({
   },
 
   basicTextVolatile: {
-    color: '#AF1D38',
+    color: '#B47818',
     fontSize: adjustFontSizeForIOS(11, 2),
     lineHeight: 13.64,
     fontFamily: 'AeonikRegular',
   },
 
   basicTextStable: {
-    color: '#B47818',
+    color: '#156146',
     fontSize: adjustFontSizeForIOS(11, 2),
     lineHeight: 13.64,
     fontFamily: 'AeonikRegular',
@@ -174,5 +194,11 @@ const styles = StyleSheet.create({
     fontSize: adjustFontSizeForIOS(11, 2),
     textTransform: 'uppercase',
     fontFamily: 'AeonikRegular',
+  },
+
+  image: {
+    width: 24,
+    height: 24,
+    borderRadius: 24,
   },
 });

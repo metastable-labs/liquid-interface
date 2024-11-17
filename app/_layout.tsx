@@ -3,7 +3,8 @@ import 'react-native-reanimated';
 import { Stack } from 'expo-router';
 
 // setup viem and api on app start
-import '@/init/viem';
+import '@/init/useViem';
+import '@/init/client';
 import '@/init/api';
 
 import { AllProviders } from '@/providers';

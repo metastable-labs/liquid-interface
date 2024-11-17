@@ -10,7 +10,7 @@ interface IEmpty {
   isLast?: boolean;
 }
 
-type Variants = 'primary' | 'secondary' | 'tertiary' | 'quaternary';
+type Variants = 'primary' | 'secondary';
 
 interface IItem {
   variant: Variants;

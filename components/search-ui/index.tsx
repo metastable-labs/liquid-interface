@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { View, StyleSheet, ScrollView } from 'react-native';
+import { View, StyleSheet, ScrollView, FlatList } from 'react-native';
 
 import SearchSection from './sections';
 import { recents, explore } from './dummy';
@@ -12,11 +12,13 @@ import { usePoolActions } from '@/store/pools/actions';
 
 const SearchUI = () => {
   const { router, poolsState } = useSystemFunctions();
-  const { searchPools } = usePoolActions();
+  const { searchPools, getPaginatedSearchPools } = usePoolActions();
+  const [searchText, setSearchText] = useState('');
 
   const [showRecents, setShowRecents] = useState(true);
 
-  const pools = poolsState.trendingPools.data.slice(0, 10);
+  const trendingPools = poolsState.trendingPools.data.slice(0, 10);
+  const searchedPools = poolsState.searchedPools.data;
 
   const sections: Array<Partial<ISearchSection>> = [
     {
@@ -43,10 +45,10 @@ const SearchUI = () => {
     },
 
     {
-      title: 'Trending',
+      title: 'Trending Pools',
       children: (
         <View style={styles.mapContainer}>
-          {pools.map((pool, index) => (
+          {trendingPools.map((pool, index) => (
             <LQDPoolPairPaper key={index} pool={pool} />
           ))}
         </View>
@@ -59,29 +61,47 @@ const SearchUI = () => {
       title: 'Results',
       children: (
         <View style={styles.mapContainer}>
-          {pools.map((pool, index) => (
-            <LQDPoolPairPaper key={index} pool={pool} />
-          ))}
+          <FlatList
+            data={searchedPools}
+            renderItem={({ item }) => <LQDPoolPairPaper pool={item} />}
+            keyExtractor={(_, index) => index.toString()}
+            contentContainerStyle={{ gap: 24 }}
+            onEndReached={() => getPaginatedSearchPools(searchText)}
+            onEndReachedThreshold={0.1}
+            bounces={true}
+            showsVerticalScrollIndicator={false}
+          />
         </View>
       ),
     },
   ];
 
-  const sectionsToShow = false ? searchResultSection : showRecents ? sections : sections.slice(1);
+  const sectionsToShow = searchedPools.length > 0 ? searchResultSection : showRecents ? sections : sections.slice(1);
 
   const handleQuery = (value: string) => {
     searchPools(value);
+    setSearchText(value);
   };
 
   return (
     <>
       <LQDSearch setQuery={handleQuery} />
 
-      <ScrollView style={styles.container} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-        {sectionsToShow.map((section, index) => (
-          <SearchSection key={section.title} {...(section as ISearchSection)} index={index} />
-        ))}
-      </ScrollView>
+      {searchedPools.length == 0 && (
+        <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+          {sectionsToShow.map((section, index) => (
+            <SearchSection key={section.title} {...(section as ISearchSection)} index={index} />
+          ))}
+        </ScrollView>
+      )}
+
+      {searchedPools.length > 0 && (
+        <View style={styles.container}>
+          {sectionsToShow.map((section, index) => (
+            <SearchSection key={section.title} {...(section as ISearchSection)} index={index} />
+          ))}
+        </View>
+      )}
     </>
   );
 };
@@ -93,9 +113,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     flex: 1,
     paddingHorizontal: 16,
-  },
-
-  content: {
     paddingTop: 34,
     paddingBottom: 68,
     gap: 40,
