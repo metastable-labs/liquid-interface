@@ -1,14 +1,17 @@
 import { useMemo } from 'react';
 import { Address, createPublicClient, http } from 'viem';
-import { createPaymasterClient, entryPoint06Address } from 'viem/account-abstraction';
-import { createPimlicoClient } from 'permissionless/clients/pimlico';
+import { createBundlerClient, createPaymasterClient, entryPoint06Address } from 'viem/account-abstraction';
 import { createSmartAccountClient } from 'permissionless';
 import { base } from 'viem/chains';
 import { rpcUrl, pimilcoRPCURL, bundlerUrl } from '@/constants/env';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
+import { useSmartAccountActions } from '@/store/smartAccount/actions';
+import { useAuth } from '@/providers';
 
 export function useClients() {
   const { smartAccountState } = useSystemFunctions();
+  const { session } = useAuth();
+
   const account = smartAccountState.address as Address;
 
   const publicClient = useMemo(
@@ -20,37 +23,23 @@ export function useClients() {
     []
   );
 
-  const pimlicoClient = useMemo(
-    () =>
-      createPimlicoClient({
-        transport: http(pimilcoRPCURL),
-        entryPoint: {
-          address: entryPoint06Address,
-          version: '0.6',
-        },
-      }),
-    []
-  );
+  const paymaster = createPaymasterClient({
+    transport: http(pimilcoRPCURL),
+  });
 
   const smartAccountClient = useMemo(() => {
     if (!account) return null;
-
     return createSmartAccountClient({
-      account,
+      account: session!,
       chain: base,
       bundlerTransport: http(pimilcoRPCURL),
-      paymaster: pimlicoClient,
-      userOperation: {
-        estimateFeesPerGas: async () => {
-          return (await pimlicoClient.getUserOperationGasPrice()).fast;
-        },
-      },
+      paymaster,
     });
-  }, [account, pimlicoClient]);
+  }, [account, paymaster]);
 
   return {
     publicClient,
-    pimlicoClient,
+    paymaster,
     smartAccountClient,
   };
 }

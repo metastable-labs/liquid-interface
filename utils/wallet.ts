@@ -1,10 +1,12 @@
-import { EntryPointABI, SmartWalletABI, SmartWalletFactoryABI } from '@/constants/abis';
+import { EntryPointABI, SmartWalletABI } from '@/constants/abis';
 import { ACCOUNT_FACTORY_ADDRESS, ENTRYPOINT_V06_ADDRESS } from '@/constants/addresses';
 import { Address, Chain, encodeAbiParameters, encodeFunctionData, Hex, keccak256, PublicClient, Transport } from 'viem';
 import { entryPoint06Abi, entryPoint06Address, estimateUserOperationGas, PaymasterClient, UserOperation } from 'viem/account-abstraction';
-import { estimateFeesPerGas, getBytecode, getCode, readContract } from 'viem/actions';
+import { estimateFeesPerGas, getCode, readContract } from 'viem/actions';
 import { Call, PaymasterResult } from './types';
-import { PimlicoClient } from 'permissionless/clients/pimlico';
+import { SmartAccountClient } from 'permissionless';
+import { publicClient } from '@/init/client';
+import { smartWalletFactoryAbi } from '@/constants/abis/SmartWalletFactory';
 
 export const PASSKEY_OWNER_DUMMY_SIGNATURE: Hex =
   '0x0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000c0000000000000000000000000000000000000000000000000000000000000012000000000000000000000000000000000000000000000000000000000000000170000000000000000000000000000000000000000000000000000000000000001949fc7c88032b9fcb5f6efc7a7b8c63668eae9871b765e23123bb473ff57aa831a7c0d9276168ebcc29f2875a0239cffdf2a9cd1c2007c5c77c071db9264df1d000000000000000000000000000000000000000000000000000000000000002549960de5880e8c687434170f6476605b8fe4aeb9a28632c7995cf3ba831d97630500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008a7b2274797065223a22776562617574686e2e676574222c226368616c6c656e6765223a2273496a396e6164474850596759334b7156384f7a4a666c726275504b474f716d59576f4d57516869467773222c226f726967696e223a2268747470733a2f2f7369676e2e636f696e626173652e636f6d222c2263726f73734f726967696e223a66616c73657d00000000000000000000000000000000000000000000';
@@ -12,7 +14,7 @@ export const PASSKEY_OWNER_DUMMY_SIGNATURE: Hex =
 // https://github.com/wilsoncusack/scw-tx/blob/5ff88a10e928b5df9ec12bce2ef64caa0b35afcd/utils/smartWallet.ts#L10
 export async function buildUserOp(
   smartWalletAddress: Address,
-  client: PimlicoClient,
+  client: SmartAccountClient,
   {
     calls,
     // If you want to sponsor user operations with a paymaster, pass in the response of the `pm_sponsorUserOperation` RPC
@@ -27,23 +29,38 @@ export async function buildUserOp(
   console.log(initCode, 'got here');
   // `getBytecode` is imported from 'viem/actions'
   // Check if the smart wallet has been deployed by seeing if there's code at that address
-  const code = await getCode(client, { address: smartWalletAddress });
+  const code = await getCode(publicClient, { address: smartWalletAddress });
+
   // If not, set `initCode` to deploy the smart wallet using the helpers above
-  if (!code) {
-    initCode = getInitCode({ owners: [smartWalletAddress], index: 0n });
+  if (!code || code === '0x') {
+    console.log('Wallet not deployed, generating initCode');
+
+    const owners = [smartWalletAddress]; // Log the owners being used
+    console.log('Owners:', owners);
+
+    initCode = getInitCode({ owners, index: 0n });
+    console.log('Generated initCode:', initCode);
+    console.log('Factory address used:', ACCOUNT_FACTORY_ADDRESS);
   }
 
   // Pass the transactions you want into the `buildUserOperationCalldata` helper from above to build the `callData` param for the user op
   const callData = buildUserOperationCalldata({ calls });
   // Get the smart wallet's `nonce` by calling the `getNonce` method on the entrypoint contract
-  const nonce = await readContract(client, {
+  const nonce = await readContract(publicClient, {
     address: ENTRYPOINT_V06_ADDRESS,
     abi: entryPoint06Abi,
     functionName: 'getNonce',
     args: [smartWalletAddress, 0n],
   });
   // Get the current gas fees from the network
-  let maxFeesPerGas = await estimateFeesPerGas(client);
+  let maxFeesPerGas = await estimateFeesPerGas(publicClient);
+  console.log('Max fees:', {
+    maxFeePerGas: maxFeesPerGas.maxFeePerGas.toString(),
+    maxPriorityFeePerGas: maxFeesPerGas.maxPriorityFeePerGas.toString(),
+  });
+  // Increase gas limits for deployment
+  const baseGasLimit = 1_000_000n;
+  const deploymentBuffer = !code ? 3n : 1n; // Double gas limits for deployment
 
   // Put all the fields together in a user op
   const op = {
@@ -53,9 +70,10 @@ export async function buildUserOp(
     callData,
     paymasterAndData,
     signature: PASSKEY_OWNER_DUMMY_SIGNATURE,
-    preVerificationGas: 1_000_000n,
-    verificationGasLimit: 1_000_000n,
-    callGasLimit: 1_000_000n,
+    preVerificationGas: baseGasLimit * deploymentBuffer,
+    verificationGasLimit: baseGasLimit * deploymentBuffer,
+    callGasLimit: baseGasLimit * deploymentBuffer,
+    entryPoint06Address,
     ...maxFeesPerGas,
   };
 
@@ -72,6 +90,7 @@ export async function buildUserOp(
     callGasLimit: op.callGasLimit,
     maxFeePerGas: op.maxFeePerGas,
     maxPriorityFeePerGas: op.maxPriorityFeePerGas,
+    entryPointAddress: entryPoint06Address,
   });
 
   return {
@@ -89,7 +108,7 @@ export function getInitCode({ owners, index }: { owners: Hex[]; index: bigint })
 
 export function createAccountCalldata({ owners, nonce }: { owners: Hex[]; nonce: bigint }) {
   return encodeFunctionData({
-    abi: SmartWalletFactoryABI,
+    abi: smartWalletFactoryAbi,
     functionName: 'createAccount',
     args: [owners, nonce],
   });
@@ -99,7 +118,7 @@ export function buildUserOperationCalldata({ calls }: { calls: Call[] }): Hex {
   // sort ascending order, 0 first
   const _calls = calls.sort((a, b) => a.index - b.index);
   return encodeFunctionData({
-    abi: SmartWalletABI,
+    abi: SmartWalletABI.smartWalletABI,
     functionName: 'executeBatch',
     args: [_calls],
   });

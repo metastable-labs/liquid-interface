@@ -167,9 +167,8 @@ export function useLiquidity(publicClient: PublicClient) {
         calls,
         account,
       });
-
       return handleTransaction(publicClient, {
-        hash: opHash,
+        hash: opHash as `0x${string}`,
         ...txConfig,
       });
     },
@@ -196,9 +195,8 @@ export function useLiquidity(publicClient: PublicClient) {
         calls: [call],
         account,
       });
-
       return handleTransaction(publicClient, {
-        hash: opHash,
+        hash: opHash as `0x${string}`,
         ...txConfig,
       });
     },
@@ -231,9 +229,8 @@ export function useLiquidity(publicClient: PublicClient) {
         calls: [call],
         account,
       });
-
       return handleTransaction(publicClient, {
-        hash: opHash,
+        hash: opHash as `0x${string}`,
         ...txConfig,
       });
     },
@@ -254,9 +251,8 @@ export function useLiquidity(publicClient: PublicClient) {
         calls: [call],
         account,
       });
-
       return handleTransaction(publicClient, {
-        hash: opHash,
+        hash: opHash as `0x${string}`,
         ...txConfig,
       });
     },

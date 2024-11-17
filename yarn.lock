@@ -7791,7 +7791,7 @@ peek-readable@^4.1.0:
   resolved "https://registry.yarnpkg.com/peek-readable/-/peek-readable-4.1.0.tgz#4ece1111bf5c2ad8867c314c81356847e8a62e72"
   integrity sha512-ZI3LnwUv5nOGbQzD9c2iDG6toheuXSZP5esSHBjopsXH4dg19soufvpUGA3uohi5anFtGb2lhAVdHzH6R/Evvg==
 
-permissionless@^0.2.0:
+permissionless@^0.2.17:
   version "0.2.17"
   resolved "https://registry.yarnpkg.com/permissionless/-/permissionless-0.2.17.tgz#fca70dededbd4a7006de08988003042c184dc6f3"
   integrity sha512-M2+8qXNWTo2mmiriBhCFtNUOKd8UDJ1AXNnLflJw9VePIv5PNR1QqkTa76wWb1mzoZyc1hVObmA0pi7puCBj3A==

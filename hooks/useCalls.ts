@@ -10,12 +10,12 @@ import { useCallback } from 'react';
 
 export function useMakeCalls() {
   const { signTransaction } = useSmartAccountActions();
-  const { pimlicoClient, smartAccountClient } = useClients();
+  const { paymaster, smartAccountClient } = useClients();
 
   const makeCalls = useCallback(
     async ({ calls, account }: { calls: Call[]; account: Address }) => {
       // Build the user operation
-      const op = await buildUserOp(account, smartAccountClient, {
+      const op = await buildUserOp(account, smartAccountClient!, {
         calls,
         paymasterAndData: '0x', // Initialize with empty paymaster data
       });
@@ -25,7 +25,7 @@ export function useMakeCalls() {
 
       // Get paymaster data
       const paymasterResult = await getPaymasterData({
-        paymasterClient: pimlicoClient,
+        paymasterClient: paymaster,
         callData: op.callData,
         sender: op.sender,
         nonce: op.nonce,
@@ -63,9 +63,18 @@ export function useMakeCalls() {
       op.signature = signature!;
 
       // Send the user operation
-      const opHash = await smartAccountClient.sendUserOperation({
-        userOperation: op,
-        entryPoint: entryPoint06Address,
+      const opHash = await smartAccountClient?.sendUserOperation({
+        account: smartAccountClient.account,
+        callData: op.callData,
+        initCode: op.initCode,
+        nonce: op.nonce,
+        maxFeePerGas: op.maxFeePerGas,
+        maxPriorityFeePerGas: op.maxPriorityFeePerGas,
+        callGasLimit: op.callGasLimit,
+        verificationGasLimit: op.verificationGasLimit,
+        preVerificationGas: op.preVerificationGas,
+        paymasterAndData: op.paymasterAndData,
+        signature: op.signature,
       });
 
       return {
@@ -80,7 +89,7 @@ export function useMakeCalls() {
     // sort ascending order, 0 first
     const _calls = calls.sort((a, b) => a.index - b.index);
     return encodeFunctionData({
-      abi: SmartWalletABI,
+      abi: SmartWalletABI.smartWalletABI,
       functionName: 'executeBatch',
       args: [_calls],
     });
