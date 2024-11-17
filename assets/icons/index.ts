@@ -44,6 +44,10 @@ import WalletMoneyIcon from './wallet-money-icon';
 import DollarCoinSMIcon from './dollar-coin-sm-icon';
 import FavoriteChartIcon from './favorite-chart-icon';
 import ChartSquareIcon from './chart-square-icon';
+import SettingsIcon from './settings-icon';
+import SignoutIcon from './sign-out-icon';
+import LegalIcon from './legal-icon';
+import SupportIcon from './support-icon';
 
 export {
   SwatchIcon,
@@ -92,4 +96,8 @@ export {
   DollarCoinSMIcon,
   FavoriteChartIcon,
   ChartSquareIcon,
+  SettingsIcon,
+  SignoutIcon,
+  LegalIcon,
+  SupportIcon,
 };

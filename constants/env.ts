@@ -24,3 +24,7 @@ export const apiKey = process.env.EXPO_PUBLIC_API_KEY as string;
 if (!apiUrl || !apiKey) {
   throw new Error('EXPO_PUBLIC_API_URL and EXPO_PUBLIC_API_KEY are required');
 }
+
+if (!pimilcoApiKey) {
+  throw new Error('EXPO_PUBLIC_PIMILCO_API_KEY is required');
+}
