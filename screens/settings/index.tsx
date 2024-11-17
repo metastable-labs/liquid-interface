@@ -1,11 +1,12 @@
-import { CaretRightIcon, LegalIcon, SignoutIcon, SupportIcon } from '@/assets/icons';
+import { useEffect, useState } from 'react';
+import { Alert, StyleSheet, Text, TouchableOpacity, View, Linking } from 'react-native';
+
+import { CaretRightIcon, DiscordIcon, LegalIcon, SignoutIcon, SupportIcon, XIcon } from '@/assets/icons';
 import { isDev } from '@/constants/env';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { useAuth } from '@/providers';
 import { useSmartAccountActions } from '@/store/smartAccount/actions';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
-import { useEffect, useState } from 'react';
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 const Settings = () => {
   const { router } = useSystemFunctions();
@@ -63,8 +64,18 @@ const Settings = () => {
     },
   ]);
 
+  const handleURLPress = async (url: string) => {
+    const supported = await Linking.canOpenURL(url);
+
+    if (supported) {
+      await Linking.openURL(url);
+    } else {
+      Alert.alert('Error', 'Unable to open the Twitter page.');
+    }
+  };
+
   useEffect(function addSignDebugOptionOnDev() {
-    if (isDev) {
+    if (isDev && actions.length < 4) {
       setActions([
         ...actions,
         {
@@ -90,6 +101,16 @@ const Settings = () => {
             {action.isNavigable && <CaretRightIcon fill="#0C0507" height={16} width={16} />}
           </TouchableOpacity>
         ))}
+      </View>
+
+      <View style={styles.socialsWrapper}>
+        <TouchableOpacity onPress={() => handleURLPress('https://x.com/getliquidapp')}>
+          <XIcon />
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => handleURLPress('https://discord.gg/getliquid')}>
+          <DiscordIcon />
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -123,5 +144,13 @@ const styles = StyleSheet.create({
     color: '#1E293B',
     fontWeight: '500',
     fontFamily: 'AeonikMedium',
+  },
+
+  socialsWrapper: {
+    flexDirection: 'row',
+    gap: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingBottom: 50,
   },
 });

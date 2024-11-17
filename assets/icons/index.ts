@@ -48,6 +48,8 @@ import SettingsIcon from './settings-icon';
 import SignoutIcon from './sign-out-icon';
 import LegalIcon from './legal-icon';
 import SupportIcon from './support-icon';
+import XIcon from './x-ixon';
+import DiscordIcon from './discord-icon';
 
 export {
   SwatchIcon,
@@ -100,4 +102,6 @@ export {
   SignoutIcon,
   LegalIcon,
   SupportIcon,
+  XIcon,
+  DiscordIcon,
 };
