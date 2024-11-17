@@ -13,7 +13,7 @@ const Step1 = () => {
       firstArc={arc}
       secondArc={arc1}
       title="DeFi made easy"
-      subtitle="Deposit Liquidity on Aerodrome pools in 3 seconds"
+      subtitle="Earn more with your money, securely"
       containerStyle={{ backgroundColor: '#4691FE' }}
       imageStyle={{ left: 6 }}
       firstArcStyle={styles.firstArc}
