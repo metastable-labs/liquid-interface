@@ -3,21 +3,18 @@ import { StyleSheet, View, Text, FlatList, ScrollView, TouchableOpacity, Alert, 
 
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { adjustFontSizeForIOS, formatAmountWithWholeAndDecimal } from '@/utils/helpers';
-import { LQDButton, LQDPoolPairCard, LQDPoolPairPaper, LQDSearch, SearchUI } from '@/components';
-import { CaretRightIcon, DirectUpIcon, DollarSquareIcon, SearchIcon, TrendUpIcon } from '@/assets/icons';
+import { LQDButton, LQDPoolPairCard, LQDPoolPairPaper, SearchUI } from '@/components';
+import { CaretRightIcon, DirectUpIcon, DollarSquareIcon, SearchIcon, SettingsIcon, TrendUpIcon } from '@/assets/icons';
 import { useAccountActions } from '@/store/account/actions';
-import Section from './section';
-import { useAuth } from '@/providers';
-import { useSmartAccountActions } from '@/store/smartAccount/actions';
 import useAppActions from '@/store/app/actions';
 import { usePoolActions } from '@/store/pools/actions';
 import { useOnMount } from '@/hooks/useOnMount';
+import Section from './section';
 
 const Home = () => {
   const { router, poolsState, smartAccountState, accountState, appState } = useSystemFunctions();
   const { getTokens } = useAccountActions();
-  const { getPools } = usePoolActions();
-  const { logout } = useSmartAccountActions();
+  const { getPools, getAllPools } = usePoolActions();
   const { searchIsFocused: focusSearch, showSearch } = useAppActions();
 
   const { trendingPools, hotPools, topGainers } = poolsState;
@@ -84,38 +81,6 @@ const Home = () => {
     },
   ];
 
-  const handleSignOut = () => {
-    Alert.alert('Sign out', 'Are you sure you want to sign out?', [
-      { text: 'Cancel', style: 'cancel' },
-      {
-        text: 'Sign out',
-        style: 'destructive',
-        onPress: logout,
-      },
-    ]);
-  };
-
-  const { session } = useAuth();
-
-  const handleSmartAccountSign = async () => {
-    if (!session) {
-      throw new Error('No smart account found');
-    }
-
-    try {
-      const messageToSign = {
-        message: 'Hello, world!',
-        timestamp: Date.now(),
-      };
-
-      const signature = await session.signMessage({ message: JSON.stringify(messageToSign) });
-
-      Alert.alert('Signing Successful', 'Signature: ' + signature);
-    } catch (error: any) {
-      Alert.alert('Signing Failed', error.message + '\n' + error.cause);
-    }
-  };
-
   useEffect(
     function fetchBalances() {
       getTokens();
@@ -126,6 +91,7 @@ const Home = () => {
 
   useOnMount(function loadData() {
     getPools();
+    getAllPools();
   });
 
   if (appState.showSearch) {
@@ -148,6 +114,10 @@ const Home = () => {
             </View>
           </TouchableOpacity>
         </View>
+
+        <TouchableOpacity onPress={() => router.navigate('/(settings)')}>
+          <SettingsIcon />
+        </TouchableOpacity>
       </View>
 
       <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer} showsVerticalScrollIndicator={false}>
@@ -172,9 +142,6 @@ const Home = () => {
             iconColor="#334155"
             style={{ alignSelf: 'stretch' }}
           />
-
-          <LQDButton title="Sign message" onPress={handleSmartAccountSign} variant="tertiaryOutline" />
-          <LQDButton title="Sign out" onPress={handleSignOut} variant="tertiaryOutline" />
         </View>
 
         {sections.map((section, index) => (
@@ -266,12 +233,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     paddingTop: Platform.OS === 'android' ? RNStatusBar.currentHeight : 20,
     paddingBottom: Platform.OS === 'android' ? -(RNStatusBar.currentHeight || 0) : -48,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 
   inputWrapper: {
     paddingHorizontal: 16,
     paddingVertical: 10,
     backgroundColor: '#fff',
+    width: '90%',
   },
 
   inputContainer: {

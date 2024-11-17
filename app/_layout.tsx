@@ -55,6 +55,32 @@ function RootStack() {
           headerShown: true,
         }}
       />
+      <Stack.Screen
+        name="(settings)/index"
+        options={{
+          header: (props) => <LQDStackHeader {...props} style={{ paddingTop: 80 }} hasTitle />,
+          headerTitle: 'Settings',
+          headerShown: true,
+        }}
+      />
+
+      <Stack.Screen
+        name="(settings)/legal-privacy"
+        options={{
+          header: (props) => <LQDStackHeader {...props} style={{ paddingTop: 80 }} hasTitle />,
+          headerTitle: 'Legal & Privacy',
+          headerShown: true,
+        }}
+      />
+
+      <Stack.Screen
+        name="(settings)/support"
+        options={{
+          header: (props) => <LQDStackHeader {...props} style={{ paddingTop: 80 }} hasTitle />,
+          headerTitle: 'Support',
+          headerShown: true,
+        }}
+      />
 
       {/* Common routes */}
       <Stack.Screen name="+not-found" options={{ headerShown: true }} />

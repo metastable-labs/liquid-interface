@@ -31,7 +31,15 @@ export function usePoolActions() {
 
       const trendingPools = await api.getPools(PoolType.trending);
       dispatch(setTrendingPools(trendingPools));
+    } catch (error: any) {
+      //
+    } finally {
+      dispatch(setLoadingPools(false));
+    }
+  };
 
+  const getAllPools = async () => {
+    try {
       const allPools = await api.getPools(PoolType.v2);
       dispatch(setpools(allPools));
     } catch (error: any) {
@@ -179,5 +187,6 @@ export function usePoolActions() {
     getPaginatedTopGainers,
     searchPools,
     getPaginatedSearchPools,
+    getAllPools,
   };
 }

@@ -35,13 +35,13 @@ const LQDPoolPairPaper = ({ pool, navigationVariant = 'primary', showFullSymbol 
     router.push(paths[navigationVariant]);
   };
 
-  const vol = Number(Number(pool.totalVolumeUSD).toFixed(4));
+  const vol = Number(pool.totalVolumeUSD.toFixed(4));
 
   const primaryIconURL = pool.token0.logoUrl;
   const secondaryIconURL = pool.token1.logoUrl;
   const symbol = formatSymbol(pool.symbol, showFullSymbol);
   const apr = formatAmount(pool.apr, 2);
-  const fees = Number(pool.poolFee) > 1000 ? formatNumberWithSuffix(pool.poolFee) : roundUp(Number(pool.poolFee));
+  const fees = pool.poolFee > 1000 ? formatNumberWithSuffix(pool.poolFee) : roundUp(pool.poolFee);
   const volume = formatNumberWithSuffix(vol);
   const tvl = pool.tvl;
   const isStable = pool.isStable;
