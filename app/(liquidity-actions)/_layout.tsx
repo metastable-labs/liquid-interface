@@ -4,7 +4,7 @@ import { StatusBar } from 'expo-status-bar';
 const LiquidityActionsStack = () => {
   return (
     <>
-      <StatusBar style="inverted" />
+      <StatusBar style="light" />
 
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="add" />

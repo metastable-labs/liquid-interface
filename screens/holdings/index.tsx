@@ -1,15 +1,16 @@
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Platform, StatusBar as RNStatusBar } from 'react-native';
 
 import useSystemFunctions from '@/hooks/useSystemFunctions';
-import { LQDButton } from '@/components';
+import { LQDButton, SearchUI } from '@/components';
 import { ILQDButton } from '@/components/button/types';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import Card from './card';
 import Empty from './empty';
 import { emptyData } from './dummy';
+import SearchPlaceholder from '@/components/search-ui/search-placeholder';
 
 const Holdings = () => {
-  const { router, accountState } = useSystemFunctions();
+  const { router, accountState, appState } = useSystemFunctions();
   const { tokens, tokenBalance, positions, lpBalance } = accountState;
 
   const actions: Array<ILQDButton & { hide?: boolean }> = [
@@ -73,37 +74,49 @@ const Holdings = () => {
 
   const emptyItems = items.filter((item) => item.isEmpty && item.empty).map((item) => item.empty);
 
-  return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer} showsVerticalScrollIndicator={false}>
-      <View style={styles.balanceAndActionsContainer}>
-        <View style={styles.balanceContainer}>
-          <Text style={styles.balanceText}>Total Holdings</Text>
-          <Text style={styles.balanceValue}>${(tokenBalance + lpBalance).toLocaleString()}</Text>
-        </View>
-
-        <View style={styles.actionsContainer}>
-          {visibleActions.map((action, index) => (
-            <LQDButton key={index} {...action} />
-          ))}
-        </View>
+  if (appState.showSearch) {
+    return (
+      <View style={styles.searchWrapper}>
+        <SearchUI />
       </View>
+    );
+  }
 
-      {Boolean(items.length) && (
-        <View style={styles.cardContainer}>
-          {nonEmptyItems.map((item, index) => (
-            <Card key={index} {...item} />
-          ))}
-        </View>
-      )}
+  return (
+    <>
+      <SearchPlaceholder />
 
-      {Boolean(emptyItems.length) && (
-        <View style={styles.emptyContainer}>
-          {emptyItems.map((item, index) => (
-            <Empty key={index} {...item!} isLast={index === emptyItems.length - 1} />
-          ))}
+      <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer} showsVerticalScrollIndicator={false}>
+        <View style={styles.balanceAndActionsContainer}>
+          <View style={styles.balanceContainer}>
+            <Text style={styles.balanceText}>Total Holdings</Text>
+            <Text style={styles.balanceValue}>${(tokenBalance + lpBalance).toLocaleString()}</Text>
+          </View>
+
+          <View style={styles.actionsContainer}>
+            {visibleActions.map((action, index) => (
+              <LQDButton key={index} {...action} />
+            ))}
+          </View>
         </View>
-      )}
-    </ScrollView>
+
+        {Boolean(items.length) && (
+          <View style={styles.cardContainer}>
+            {nonEmptyItems.map((item, index) => (
+              <Card key={index} {...item} />
+            ))}
+          </View>
+        )}
+
+        {Boolean(emptyItems.length) && (
+          <View style={styles.emptyContainer}>
+            {emptyItems.map((item, index) => (
+              <Empty key={index} {...item!} isLast={index === emptyItems.length - 1} />
+            ))}
+          </View>
+        )}
+      </ScrollView>
+    </>
   );
 };
 
@@ -162,5 +175,13 @@ const styles = StyleSheet.create({
 
   action: {
     flex: 1,
+  },
+
+  searchWrapper: {
+    flex: 1,
+    paddingHorizontal: 16,
+    backgroundColor: '#fff',
+    paddingTop: Platform.OS === 'android' ? RNStatusBar.currentHeight : 20,
+    paddingBottom: Platform.OS === 'android' ? -(RNStatusBar.currentHeight || 0) : -48,
   },
 });

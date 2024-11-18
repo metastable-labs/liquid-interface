@@ -94,7 +94,7 @@ const Setup = () => {
 
   return (
     <View style={styles.root}>
-      <StatusBar style="inverted" />
+      <StatusBar style="light" />
 
       <View style={styles.container}>
         <View style={styles.topContainer}>

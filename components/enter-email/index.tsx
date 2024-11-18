@@ -80,7 +80,7 @@ const EnterEmail = ({ isSignup }: Props) => {
 
   return (
     <View style={styles.root}>
-      <StatusBar style="inverted" />
+      <StatusBar style="light" />
 
       <LQDKeyboardWrapper>
         <View style={styles.container}>
