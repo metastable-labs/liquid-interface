@@ -122,14 +122,14 @@ const EnterEmail = ({ isSignup }: Props) => {
             <LQDButton title="Continue" onPress={onSubmit} variant="secondary" disabled={!isValid} loading={loading} />
 
             {isSignup && (
-              <TouchableOpacity onPress={() => router.push('/(login)')} style={styles.actionWrapper}>
+              <TouchableOpacity onPress={() => router.push('/(login)')} style={styles.actionWrapper} disabled={loading}>
                 <Text style={styles.actionText}>Have an account already? </Text>
                 <Text style={[styles.actionText, styles.actionTextBold]}>Log In</Text>
               </TouchableOpacity>
             )}
 
             {!isSignup && (
-              <TouchableOpacity onPress={() => router.push('/(signup)')} style={styles.actionWrapper}>
+              <TouchableOpacity onPress={() => router.push('/(signup)')} style={styles.actionWrapper} disabled={loading}>
                 <Text style={styles.actionText}>New to Liquid? </Text>
                 <Text style={[styles.actionText, styles.actionTextBold]}>Sign Up</Text>
               </TouchableOpacity>
