@@ -1,7 +1,4 @@
-// Privy polyfills
-import 'fast-text-encoding';
-import 'react-native-get-random-values';
-import '@ethersproject/shims';
+import '@/init/polyfills';
 
 import 'react-native-reanimated';
 import 'expo-router/entry';
