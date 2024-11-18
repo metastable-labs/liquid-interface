@@ -9,7 +9,7 @@ const LiquidityManagementScreen = () => {
 
   return (
     <>
-      <StatusBar style="light" />
+      <StatusBar style="dark" />
 
       <LiquidityManagement id={id as string} type={type as 'stake' | 'unstake'} />
     </>

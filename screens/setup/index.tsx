@@ -94,7 +94,7 @@ const Setup = () => {
 
   return (
     <View style={styles.root}>
-      <StatusBar style="light" />
+      <StatusBar style="dark" />
 
       <View style={styles.container}>
         <View style={styles.topContainer}>

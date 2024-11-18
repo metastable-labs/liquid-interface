@@ -83,7 +83,7 @@ const VerifyEmail = ({ email, isSignup }: { email: string; isSignup?: boolean })
 
   return (
     <View style={styles.root}>
-      <StatusBar style="light" />
+      <StatusBar style="dark" />
 
       <LQDKeyboardWrapper>
         <View style={styles.container}>
