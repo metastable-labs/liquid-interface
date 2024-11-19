@@ -11,7 +11,7 @@ export default function TabLayout() {
 
   return (
     <>
-      <StatusBar style="inverted" />
+      <StatusBar style="dark" />
       <View style={styles.container} />
 
       <Tabs

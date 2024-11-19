@@ -86,7 +86,7 @@ export default function OnboardingTabLayout() {
 
   return (
     <>
-      <StatusBar style="light" />
+      <StatusBar style="dark" />
       <View style={styles.indicator}>
         <LQDOnboardingIndicator
           timer={timer}
