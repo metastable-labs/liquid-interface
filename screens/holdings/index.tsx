@@ -46,7 +46,7 @@ const Holdings = () => {
         ...emptyData.primary,
         action: {
           title: 'Add money',
-          onPress: () => console.log('Deposit'),
+          onPress: () => router.navigate('/deposit/debit'),
         },
       },
       isEmpty: tokensUserHas?.length === 0,
@@ -63,7 +63,7 @@ const Holdings = () => {
         ...emptyData.secondary,
         action: {
           title: 'Explore pools',
-          onPress: () => console.log('explore'),
+          onPress: () => router.navigate('/(tabs)/home'),
         },
       },
       isEmpty: positions?.length === 0,
