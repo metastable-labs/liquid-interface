@@ -5,10 +5,10 @@ import { adjustFontSizeForIOS } from '@/utils/helpers';
 
 const LQDOnboardingIndicator = ({ currentStep, isPaused, timer, totalSteps, finished, togglePause }: ILQDOnboardingIndicator) => {
   const actions = [require('../../../assets/images/pause.png'), require('../../../assets/images/play.png')];
-  const [progressValues, setProgressValues] = useState<number[]>(new Array(totalSteps).fill(0)); // Track progress for each step
+  const [progressValues, setProgressValues] = useState<number[]>(new Array(totalSteps).fill(0));
 
   const animatedWidthStyle = (index: number) => {
-    const progress = useSharedValue(progressValues[index]); // Use the progress for the specific step
+    const progress = useSharedValue(progressValues[index]);
 
     useEffect(() => {
       if (index === currentStep && !isPaused) {

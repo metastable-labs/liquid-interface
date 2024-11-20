@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { StyleSheet, Dimensions, Platform, View, StatusBar as RNStatusBar, Text, Pressable } from 'react-native';
+import { StyleSheet, Dimensions, Platform, View, StatusBar as RNStatusBar, Pressable } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { StatusBar } from 'expo-status-bar';
 
