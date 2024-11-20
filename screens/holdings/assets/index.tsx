@@ -9,7 +9,7 @@ import { useAccountActions } from '@/store/account/actions';
 
 const Assets = () => {
   const { router, accountState } = useSystemFunctions();
-  const { getPositions } = useAccountActions();
+  const { getTokens } = useAccountActions();
   const { tokens, tokenBalance, refreshing } = accountState;
 
   const actions: Array<ILQDButton> = [
@@ -62,7 +62,7 @@ const Assets = () => {
         keyExtractor={(_, index) => index.toString()}
         contentContainerStyle={{ gap: 24 }}
         refreshing={refreshing}
-        onRefresh={() => getPositions(true)}
+        onRefresh={getTokens}
         bounces={true}
         showsVerticalScrollIndicator={false}
       />
