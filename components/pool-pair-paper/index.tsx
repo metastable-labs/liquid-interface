@@ -1,10 +1,11 @@
-import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { Href } from 'expo-router';
 
 import { adjustFontSizeForIOS, formatAmount, formatNumberWithSuffix, roundUp } from '@/utils/helpers';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { setSelectedPool } from '@/store/pools';
 import { PoolPairPaper } from './types';
+import LQDPoolImages from '../pool-images';
 
 const formatSymbol = (symbol: string, showFullSymbol?: boolean) => {
   if (!showFullSymbol) {
@@ -37,8 +38,8 @@ const LQDPoolPairPaper = ({ pool, navigationVariant = 'primary', showFullSymbol 
 
   const vol = Number(Number(pool.totalVolumeUSD).toFixed(4));
 
-  const primaryIconURL = pool.token0.logoUrl;
-  const secondaryIconURL = pool.token1.logoUrl;
+  const tokenAIconURL = pool.token0.logoUrl;
+  const tokenBIconURL = pool.token1.logoUrl;
   const symbol = formatSymbol(pool.symbol, showFullSymbol);
   const apr = formatAmount(pool.apr, 2);
   const fees = Number(pool.poolFee) > 1000 ? formatNumberWithSuffix(pool.poolFee) : roundUp(Number(pool.poolFee));
@@ -49,13 +50,7 @@ const LQDPoolPairPaper = ({ pool, navigationVariant = 'primary', showFullSymbol 
   return (
     <TouchableOpacity onPress={handlePress} style={styles.container}>
       <View style={styles.leftContainer}>
-        <View style={styles.iconContainer}>
-          {[primaryIconURL, secondaryIconURL].map((iconURL, index) => (
-            <View key={index} style={[styles.icon, index === 0 && { position: 'relative', zIndex: 1 }]}>
-              <Image source={{ uri: iconURL }} style={styles.image} />
-            </View>
-          ))}
-        </View>
+        <LQDPoolImages tokenAIconURL={tokenAIconURL} tokenBIconURL={tokenBIconURL} />
 
         <View style={styles.detailContainer}>
           <Text style={styles.detailHeader}>{symbol}</Text>
@@ -97,23 +92,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 10 + 6,
     maxWidth: '70%',
-  },
-
-  iconContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-
-  icon: {
-    width: 24,
-    height: 24,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 9999,
-    borderWidth: 1,
-    borderColor: '#EAEEF4',
-    marginRight: -6,
   },
 
   detailContainer: {
@@ -194,11 +172,5 @@ const styles = StyleSheet.create({
     fontSize: adjustFontSizeForIOS(11, 2),
     textTransform: 'uppercase',
     fontFamily: 'AeonikRegular',
-  },
-
-  image: {
-    width: 24,
-    height: 24,
-    borderRadius: 24,
   },
 });

@@ -1,14 +1,13 @@
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 
 import { adjustFontSizeForIOS } from '@/utils/helpers';
+import { LQDTokenImage } from '@/components';
 
 const AssetPaper = ({ iconUrl, name, usdValue, value }: IAssetPaper) => {
   return (
     <View style={styles.container}>
       <View style={styles.leftContainer}>
-        <View style={styles.iconWrapper}>
-          <Image source={{ uri: iconUrl }} style={{ width: 24, height: 24 }} />
-        </View>
+        <LQDTokenImage iconURL={iconUrl} />
 
         <View style={styles.nameAndValueContainer}>
           <Text style={styles.name}>{name}</Text>
@@ -39,16 +38,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
-  },
-
-  iconWrapper: {
-    width: 24,
-    height: 24,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 9999,
-    borderWidth: 1,
-    borderColor: '#EAEEF4',
   },
 
   nameAndValueContainer: {
