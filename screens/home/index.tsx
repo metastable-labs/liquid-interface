@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
-import { StyleSheet, View, Text, FlatList, ScrollView, TouchableOpacity, Alert, Platform, StatusBar as RNStatusBar } from 'react-native';
+import { StyleSheet, View, Text, FlatList, TouchableOpacity, Platform, StatusBar as RNStatusBar } from 'react-native';
 
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { adjustFontSizeForIOS, formatAmountWithWholeAndDecimal } from '@/utils/helpers';
-import { LQDButton, LQDPoolPairCard, LQDPoolPairPaper, LQShrimeLoader, SearchUI } from '@/components';
-import { CaretRightIcon, DirectUpIcon, DollarSquareIcon, SearchIcon, SettingsIcon, TrendUpIcon } from '@/assets/icons';
+import { LQDButton, LQDPoolPairCard, LQDPoolPairPaper, LQDScrollView, LQShrimeLoader, SearchUI } from '@/components';
+import { CaretRightIcon, DirectUpIcon, DollarSquareIcon, TrendUpIcon } from '@/assets/icons';
 import { useAccountActions } from '@/store/account/actions';
 import { usePoolActions } from '@/store/pools/actions';
 import { useOnMount } from '@/hooks/useOnMount';
@@ -101,7 +101,8 @@ const Home = () => {
   return (
     <>
       <SearchPlaceholder loading={globalLoading} />
-      <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer} showsVerticalScrollIndicator={false}>
+
+      <LQDScrollView refreshing={accountState.refreshing} onRefresh={() => getTokens(true)} style={styles.container}>
         <View style={styles.balanceAndActionContainer}>
           {!globalLoading && (
             <View style={styles.balanceContainer}>
@@ -134,7 +135,7 @@ const Home = () => {
         {sections.map((section, index) => (
           <Section key={index} {...section} loading={globalLoading} />
         ))}
-      </ScrollView>
+      </LQDScrollView>
     </>
   );
 };
@@ -147,11 +148,6 @@ const styles = StyleSheet.create({
     paddingTop: 34,
     paddingHorizontal: 16,
     backgroundColor: '#fff',
-  },
-
-  contentContainer: {
-    paddingBottom: 175,
-    gap: 40,
   },
 
   balanceAndActionContainer: {
