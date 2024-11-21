@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { useForm } from 'react-hook-form';
 
 import { CheckIcon } from '@/assets/icons';
@@ -9,6 +9,7 @@ import LQDInput from '../input';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { AssetSelection } from './types';
 import { TokenItem } from '@/store/account/types';
+import LQDTokenImage from '../pool-images/token-image';
 
 const LQDAssetSelection = ({ close, setAsset, show, title, selectedAsset }: AssetSelection) => {
   const { accountState } = useSystemFunctions();
@@ -54,9 +55,7 @@ const LQDAssetSelection = ({ close, setAsset, show, title, selectedAsset }: Asse
             return (
               <TouchableOpacity key={index} style={styles.selector} onPress={() => action(active, _asset)} disabled={active}>
                 <View style={styles.selectorContainer}>
-                  <View style={styles.iconContainer}>
-                    <Image source={{ uri: _asset?.logoUrl }} style={styles.icon} />
-                  </View>
+                  <LQDTokenImage iconURL={_asset?.logoUrl} />
 
                   <View style={styles.textContainer}>
                     <Text style={styles.primaryText}>{_asset?.symbol}</Text>
@@ -106,22 +105,6 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     alignItems: 'center',
     gap: 10,
-  },
-
-  iconContainer: {
-    width: 24,
-    height: 24,
-    borderWidth: 1,
-    borderColor: '#EAEEF4',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 9999,
-  },
-
-  icon: {
-    width: 24,
-    height: 24,
-    objectFit: 'contain',
   },
 
   textContainer: {

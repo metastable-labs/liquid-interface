@@ -14,6 +14,8 @@ import EnterEmail from './enter-email';
 import VerifyEmail from './verify-email';
 import LQDKeyboardWrapper from './keyboard-wrapper';
 import SearchUI from './search-ui';
+import LQDPoolImages from './pool-images';
+import LQDTokenImage from './pool-images/token-image';
 
 export {
   LQDButton,
@@ -31,4 +33,6 @@ export {
   VerifyEmail,
   LQDKeyboardWrapper,
   SearchUI,
+  LQDPoolImages,
+  LQDTokenImage,
 };
