@@ -32,5 +32,6 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     objectFit: 'contain',
+    borderRadius: 9999,
   },
 });

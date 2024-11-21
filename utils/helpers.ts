@@ -133,6 +133,22 @@ const formatInputAmount = (value: string): string => {
   return newValue;
 };
 
+export const formatSymbol = (symbol: string, showFullSymbol?: boolean) => {
+  if (!showFullSymbol) {
+    return symbol.split('-')[1].replace('/', ' / ');
+  }
+
+  if (symbol.toLowerCase().includes('volatile')) {
+    return `vAMM - ${symbol.split('-')[1].replace('/', ' / ')}`;
+  }
+
+  if (symbol.toLowerCase().includes('stable')) {
+    return `sAMM - ${symbol.split('-')[1].replace('/', ' / ')}`;
+  }
+
+  return symbol;
+};
+
 export {
   formatNumberWithSuffix,
   truncateDecimal,
@@ -149,4 +165,5 @@ export {
   truncate,
   roundUp,
   formatInputAmount,
+  formatSymbol,
 };

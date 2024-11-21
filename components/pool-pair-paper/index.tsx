@@ -1,27 +1,11 @@
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { Href } from 'expo-router';
 
-import { adjustFontSizeForIOS, formatAmount, formatNumberWithSuffix, roundUp } from '@/utils/helpers';
+import { adjustFontSizeForIOS, formatAmount, formatNumberWithSuffix, formatSymbol, roundUp } from '@/utils/helpers';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { setSelectedPool } from '@/store/pools';
 import { PoolPairPaper } from './types';
 import LQDPoolImages from '../pool-images';
-
-const formatSymbol = (symbol: string, showFullSymbol?: boolean) => {
-  if (!showFullSymbol) {
-    return symbol.split('-')[1].replace('/', ' / ');
-  }
-
-  if (symbol.toLowerCase().includes('volatile')) {
-    return `vAMM - ${symbol.split('-')[1].replace('/', ' / ')}`;
-  }
-
-  if (symbol.toLowerCase().includes('stable')) {
-    return `sAMM - ${symbol.split('-')[1].replace('/', ' / ')}`;
-  }
-
-  return symbol;
-};
 
 const LQDPoolPairPaper = ({ pool, navigationVariant = 'primary', showFullSymbol }: PoolPairPaper) => {
   const { router, dispatch } = useSystemFunctions();
