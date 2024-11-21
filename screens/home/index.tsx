@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react';
-import { StyleSheet, View, Text, FlatList, ScrollView, TouchableOpacity, Alert, Platform, StatusBar as RNStatusBar } from 'react-native';
+import { useEffect } from 'react';
+import { StyleSheet, View, Text, FlatList, TouchableOpacity, Platform, StatusBar as RNStatusBar } from 'react-native';
 
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { adjustFontSizeForIOS, formatAmountWithWholeAndDecimal } from '@/utils/helpers';
-import { LQDScrollView, LQDButton, LQDPoolPairCard, LQDPoolPairPaper, SearchUI } from '@/components';
-import { CaretRightIcon, DirectUpIcon, DollarSquareIcon, SearchIcon, SettingsIcon, TrendUpIcon } from '@/assets/icons';
+import { LQDButton, LQDPoolPairCard, LQDPoolPairPaper, LQDScrollView, SearchUI } from '@/components';
+import { CaretRightIcon, DirectUpIcon, DollarSquareIcon, TrendUpIcon } from '@/assets/icons';
 import { useAccountActions } from '@/store/account/actions';
 import { usePoolActions } from '@/store/pools/actions';
 import { useOnMount } from '@/hooks/useOnMount';
@@ -15,7 +15,6 @@ const Home = () => {
   const { router, poolsState, smartAccountState, accountState, appState } = useSystemFunctions();
   const { getTokens } = useAccountActions();
   const { getPools, getAllPools } = usePoolActions();
-  const [refreshing, setRefreshing] = useState(false);
 
   const { trendingPools, hotPools, topGainers } = poolsState;
 
@@ -97,20 +96,11 @@ const Home = () => {
     );
   }
 
-  const onRefresh = async () => {
-    setRefreshing(true);
-    await getTokens()
-      .then(() => setRefreshing(false))
-      .catch(() => {
-        setRefreshing(false);
-      });
-  };
-
   return (
     <>
       <SearchPlaceholder />
 
-      <LQDScrollView refreshing={refreshing} onRefresh={onRefresh} style={styles.container}>
+      <LQDScrollView refreshing={accountState.refreshing} onRefresh={() => getTokens(true)} style={styles.container}>
         <View style={styles.balanceAndActionContainer}>
           <View style={styles.balanceContainer}>
             <Text style={styles.balanceTitle}>Total Balance</Text>
@@ -150,11 +140,6 @@ const styles = StyleSheet.create({
     paddingTop: 34,
     paddingHorizontal: 16,
     backgroundColor: '#fff',
-  },
-
-  contentContainer: {
-    paddingBottom: 175,
-    gap: 40,
   },
 
   balanceAndActionContainer: {

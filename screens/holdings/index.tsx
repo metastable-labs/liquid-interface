@@ -14,8 +14,7 @@ import { useAccountActions } from '@/store/account/actions';
 const Holdings = () => {
   const { router, accountState, appState } = useSystemFunctions();
   const { getTokens } = useAccountActions();
-  const { tokens, tokenBalance, positions, lpBalance } = accountState;
-  const [refreshing, setRefreshing] = useState(false);
+  const { tokens, tokenBalance, positions, lpBalance, refreshing } = accountState;
 
   const actions: Array<ILQDButton & { hide?: boolean }> = [
     {
@@ -86,20 +85,11 @@ const Holdings = () => {
     );
   }
 
-  const onRefresh = async () => {
-    setRefreshing(true);
-    await getTokens()
-      .then(() => setRefreshing(false))
-      .catch(() => {
-        setRefreshing(false);
-      });
-  };
-
   return (
     <>
       <SearchPlaceholder />
 
-      <LQDScrollView refreshing={refreshing} onRefresh={onRefresh} style={styles.container}>
+      <LQDScrollView refreshing={refreshing} onRefresh={() => getTokens(true)} style={styles.container}>
         <View style={styles.balanceAndActionsContainer}>
           <View style={styles.balanceContainer}>
             <Text style={styles.balanceText}>Total Holdings</Text>

@@ -9,9 +9,13 @@ import { TokenItem } from './types';
 export function useAccountActions() {
   const { dispatch, accountState, smartAccountState } = useSystemFunctions();
 
-  const getTokens = async () => {
+  const getTokens = async (refresh?: boolean) => {
     try {
-      dispatch(setLoading(true));
+      if (refresh) {
+        dispatch(setRefreshing(true));
+      } else {
+        dispatch(setLoading(true));
+      }
 
       const query = smartAccountState.address ? `?address=${smartAccountState.address}` : '';
       const tokens = await api.getTokens(query);
@@ -27,6 +31,7 @@ export function useAccountActions() {
       //
     } finally {
       dispatch(setLoading(false));
+      dispatch(setRefreshing(false));
     }
   };
 
