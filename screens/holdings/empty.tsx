@@ -75,6 +75,7 @@ const styles = StyleSheet.create({
     fontSize: adjustFontSizeForIOS(14, 2),
     lineHeight: 18.48,
     textAlign: 'center',
+    width: '80%',
   },
 
   action: {
