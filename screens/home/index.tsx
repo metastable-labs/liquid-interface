@@ -1,9 +1,9 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, FlatList, ScrollView, TouchableOpacity, Alert, Platform, StatusBar as RNStatusBar } from 'react-native';
 
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { adjustFontSizeForIOS, formatAmountWithWholeAndDecimal } from '@/utils/helpers';
-import { LQDButton, LQDPoolPairCard, LQDPoolPairPaper, SearchUI } from '@/components';
+import { DCScrollView, LQDButton, LQDPoolPairCard, LQDPoolPairPaper, SearchUI } from '@/components';
 import { CaretRightIcon, DirectUpIcon, DollarSquareIcon, SearchIcon, SettingsIcon, TrendUpIcon } from '@/assets/icons';
 import { useAccountActions } from '@/store/account/actions';
 import { usePoolActions } from '@/store/pools/actions';
@@ -15,6 +15,7 @@ const Home = () => {
   const { router, poolsState, smartAccountState, accountState, appState } = useSystemFunctions();
   const { getTokens } = useAccountActions();
   const { getPools, getAllPools } = usePoolActions();
+  const [refreshing, setRefreshing] = useState(accountState.loading || false);
 
   const { trendingPools, hotPools, topGainers } = poolsState;
 
@@ -96,11 +97,20 @@ const Home = () => {
     );
   }
 
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await getTokens()
+      .then(() => setRefreshing(false))
+      .catch(() => {
+        setRefreshing(false);
+      });
+  };
+
   return (
     <>
       <SearchPlaceholder />
 
-      <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer} showsVerticalScrollIndicator={false}>
+      <DCScrollView refreshing={refreshing} onRefresh={onRefresh} style={styles.container}>
         <View style={styles.balanceAndActionContainer}>
           <View style={styles.balanceContainer}>
             <Text style={styles.balanceTitle}>Total Balance</Text>
@@ -127,7 +137,7 @@ const Home = () => {
         {sections.map((section, index) => (
           <Section key={index} {...section} />
         ))}
-      </ScrollView>
+      </DCScrollView>
     </>
   );
 };

@@ -1,17 +1,21 @@
 import { View, Text, StyleSheet, ScrollView, Platform, StatusBar as RNStatusBar } from 'react-native';
 
 import useSystemFunctions from '@/hooks/useSystemFunctions';
-import { LQDButton, SearchUI } from '@/components';
+import { DCScrollView, LQDButton, SearchUI } from '@/components';
 import { ILQDButton } from '@/components/button/types';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import Card from './card';
 import Empty from './empty';
 import { emptyData } from './dummy';
 import SearchPlaceholder from '@/components/search-ui/search-placeholder';
+import { useState } from 'react';
+import { useAccountActions } from '@/store/account/actions';
 
 const Holdings = () => {
   const { router, accountState, appState } = useSystemFunctions();
+  const { getTokens } = useAccountActions();
   const { tokens, tokenBalance, positions, lpBalance } = accountState;
+  const [refreshing, setRefreshing] = useState(accountState.loading || false);
 
   const actions: Array<ILQDButton & { hide?: boolean }> = [
     {
@@ -82,11 +86,20 @@ const Holdings = () => {
     );
   }
 
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await getTokens()
+      .then(() => setRefreshing(false))
+      .catch(() => {
+        setRefreshing(false);
+      });
+  };
+
   return (
     <>
       <SearchPlaceholder />
 
-      <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer} showsVerticalScrollIndicator={false}>
+      <DCScrollView refreshing={refreshing} onRefresh={onRefresh} style={styles.container}>
         <View style={styles.balanceAndActionsContainer}>
           <View style={styles.balanceContainer}>
             <Text style={styles.balanceText}>Total Holdings</Text>
@@ -115,7 +128,7 @@ const Holdings = () => {
             ))}
           </View>
         )}
-      </ScrollView>
+      </DCScrollView>
     </>
   );
 };
@@ -124,7 +137,6 @@ export default Holdings;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     paddingTop: 34,
     paddingHorizontal: 16,
     backgroundColor: '#fff',
