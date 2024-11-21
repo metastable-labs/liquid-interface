@@ -7,11 +7,12 @@ import { ArrowDownIcon, ArrowUpAltIcon } from '@/assets/icons';
 import { setSelectedPool } from '@/store/pools';
 import { PoolPairCard } from './types';
 import LQDPoolImages from '../pool-images';
+import LQShrimeLoader from '../loader';
 
 const backgroundColors = ['#FDEAEA', '#EFFAF6'];
 const textColors = ['#A4262C', '#156146'];
 
-const LQDPoolPairCard = ({ pool, navigationVariant = 'primary' }: PoolPairCard) => {
+const LQDPoolPairCard = ({ pool, navigationVariant = 'primary', loading = false }: PoolPairCard) => {
   const { router, dispatch } = useSystemFunctions();
 
   const paths = {
@@ -31,22 +32,28 @@ const LQDPoolPairCard = ({ pool, navigationVariant = 'primary' }: PoolPairCard) 
   const change = pool.apr;
 
   return (
-    <TouchableOpacity onPress={handlePress} style={styles.container}>
-      <View style={styles.topContainer}>
-        <LQDPoolImages tokenAIconURL={tokenAIconURL} tokenBIconURL={tokenBIconURL} />
+    <>
+      {!loading && (
+        <TouchableOpacity onPress={handlePress} style={styles.container}>
+          <View style={styles.topContainer}>
+            <LQDPoolImages tokenAIconURL={tokenAIconURL} tokenBIconURL={tokenBIconURL} />
 
-        <View style={[styles.changeContainer, { backgroundColor: backgroundColors[+increased] }]}>
-          {increased ? (
-            <ArrowUpAltIcon width={12} height={12} fill={textColors[+increased]} />
-          ) : (
-            <ArrowDownIcon width={12} height={12} fill={textColors[+increased]} />
-          )}
-          <Text style={[styles.change, { color: textColors[+increased] }]}>{change}%</Text>
-        </View>
-      </View>
+            <View style={[styles.changeContainer, { backgroundColor: backgroundColors[+increased] }]}>
+              {increased ? (
+                <ArrowUpAltIcon width={12} height={12} fill={textColors[+increased]} />
+              ) : (
+                <ArrowDownIcon width={12} height={12} fill={textColors[+increased]} />
+              )}
+              <Text style={[styles.change, { color: textColors[+increased] }]}>{change}%</Text>
+            </View>
+          </View>
 
-      <Text style={styles.title}>{symbol}</Text>
-    </TouchableOpacity>
+          <Text style={styles.title}>{symbol}</Text>
+        </TouchableOpacity>
+      )}
+
+      {loading && <LQShrimeLoader style={styles.loader} />}
+    </>
   );
 };
 
@@ -91,4 +98,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     fontFamily: 'AeonikMedium',
   },
+
+  // loader
+  loader: { height: 90, width: 140, borderRadius: 6 },
 });

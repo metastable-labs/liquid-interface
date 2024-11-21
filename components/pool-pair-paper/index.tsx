@@ -6,6 +6,7 @@ import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { setSelectedPool } from '@/store/pools';
 import { PoolPairPaper } from './types';
 import LQDPoolImages from '../pool-images';
+import LQShrimeLoader from '../loader';
 
 const formatSymbol = (symbol: string, showFullSymbol?: boolean) => {
   if (!showFullSymbol) {
@@ -23,7 +24,7 @@ const formatSymbol = (symbol: string, showFullSymbol?: boolean) => {
   return symbol;
 };
 
-const LQDPoolPairPaper = ({ pool, navigationVariant = 'primary', showFullSymbol }: PoolPairPaper) => {
+const LQDPoolPairPaper = ({ pool, navigationVariant = 'primary', showFullSymbol, loading = false }: PoolPairPaper) => {
   const { router, dispatch } = useSystemFunctions();
 
   const paths = {
@@ -48,31 +49,47 @@ const LQDPoolPairPaper = ({ pool, navigationVariant = 'primary', showFullSymbol 
   const isStable = pool.isStable;
 
   return (
-    <TouchableOpacity onPress={handlePress} style={styles.container}>
-      <View style={styles.leftContainer}>
-        <LQDPoolImages tokenAIconURL={tokenAIconURL} tokenBIconURL={tokenBIconURL} />
+    <>
+      {!loading && (
+        <TouchableOpacity onPress={handlePress} style={styles.container}>
+          <View style={styles.leftContainer}>
+            <LQDPoolImages tokenAIconURL={tokenAIconURL} tokenBIconURL={tokenBIconURL} />
 
-        <View style={styles.detailContainer}>
-          <Text style={styles.detailHeader}>{symbol}</Text>
+            <View style={styles.detailContainer}>
+              <Text style={styles.detailHeader}>{symbol}</Text>
 
-          <View style={styles.details}>
-            <Text style={isStable ? styles.basicTextStable : styles.basicTextVolatile}>{isStable ? 'Basic Stable' : 'Basic Volatile'}</Text>
+              <View style={styles.details}>
+                <Text style={isStable ? styles.basicTextStable : styles.basicTextVolatile}>
+                  {isStable ? 'Basic Stable' : 'Basic Volatile'}
+                </Text>
 
-            <View style={styles.separator}>
-              <View style={styles.separatorCircle} />
+                <View style={styles.separator}>
+                  <View style={styles.separatorCircle} />
+                </View>
+
+                <Text style={styles.detailText}>{fees}% Fee</Text>
+              </View>
             </View>
-
-            <Text style={styles.detailText}>{fees}% Fee</Text>
           </View>
+
+          <View style={styles.volumeWrapper}>
+            <Text style={styles.aprText}>APR: {apr.toLocaleString()}%</Text>
+
+            <Text style={styles.volumeText}>VOL: ${volume}</Text>
+          </View>
+        </TouchableOpacity>
+      )}
+      {loading && (
+        <View style={styles.loaderContainer}>
+          <LQShrimeLoader style={styles.loaderOne} />
+          <View style={styles.loaderCenterContainer}>
+            <LQShrimeLoader style={styles.loaderTwo} />
+            <LQShrimeLoader style={styles.loaderThree} />
+          </View>
+          <LQShrimeLoader style={styles.loaderFour} />
         </View>
-      </View>
-
-      <View style={styles.volumeWrapper}>
-        <Text style={styles.aprText}>APR: {apr.toLocaleString()}%</Text>
-
-        <Text style={styles.volumeText}>VOL: ${volume}</Text>
-      </View>
-    </TouchableOpacity>
+      )}
+    </>
   );
 };
 
@@ -173,4 +190,19 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
     fontFamily: 'AeonikRegular',
   },
+
+  // loader
+  loaderContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+
+  loaderCenterContainer: { flex: 1, gap: 5 },
+
+  loaderOne: { height: 45, width: 45, borderRadius: 100 },
+  loaderTwo: { height: 20, width: '40%', borderRadius: 6 },
+  loaderThree: { height: 20, width: '50%', borderRadius: 6 },
+  loaderFour: { height: 20, width: 56, borderRadius: 6 },
 });

@@ -16,9 +16,11 @@ import LQDKeyboardWrapper from './keyboard-wrapper';
 import SearchUI from './search-ui';
 import LQDPoolImages from './pool-images';
 import LQDTokenImage from './pool-images/token-image';
+import LQShrimeLoader from './loader';
 
 export {
   LQDButton,
+  LQShrimeLoader,
   LQDNavigation,
   LQDInput,
   LQDSearch,
