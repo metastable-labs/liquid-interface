@@ -2,7 +2,7 @@ import React from 'react';
 import { RefreshControl, ScrollView } from 'react-native';
 import { ILQDScrollView } from './types';
 
-const DCScrollView: React.FC<ILQDScrollView> = ({ children, onRefresh, refreshing, style }) => {
+const LQDScrollView: React.FC<ILQDScrollView> = ({ children, onRefresh, refreshing, style }) => {
   return (
     <ScrollView
       refreshControl={
@@ -25,4 +25,4 @@ const DCScrollView: React.FC<ILQDScrollView> = ({ children, onRefresh, refreshin
   );
 };
 
-export default DCScrollView;
+export default LQDScrollView;

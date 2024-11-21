@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, ScrollView, Platform, StatusBar as RNStatusBar } from 'react-native';
 
 import useSystemFunctions from '@/hooks/useSystemFunctions';
-import { DCScrollView, LQDButton, SearchUI } from '@/components';
+import { LQDScrollView, LQDButton, SearchUI } from '@/components';
 import { ILQDButton } from '@/components/button/types';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import Card from './card';
@@ -15,7 +15,7 @@ const Holdings = () => {
   const { router, accountState, appState } = useSystemFunctions();
   const { getTokens } = useAccountActions();
   const { tokens, tokenBalance, positions, lpBalance } = accountState;
-  const [refreshing, setRefreshing] = useState(accountState.loading || false);
+  const [refreshing, setRefreshing] = useState(false);
 
   const actions: Array<ILQDButton & { hide?: boolean }> = [
     {
@@ -99,7 +99,7 @@ const Holdings = () => {
     <>
       <SearchPlaceholder />
 
-      <DCScrollView refreshing={refreshing} onRefresh={onRefresh} style={styles.container}>
+      <LQDScrollView refreshing={refreshing} onRefresh={onRefresh} style={styles.container}>
         <View style={styles.balanceAndActionsContainer}>
           <View style={styles.balanceContainer}>
             <Text style={styles.balanceText}>Total Holdings</Text>
@@ -128,7 +128,7 @@ const Holdings = () => {
             ))}
           </View>
         )}
-      </DCScrollView>
+      </LQDScrollView>
     </>
   );
 };
