@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import Animated, { useSharedValue, withTiming, useAnimatedStyle, Easing } from 'react-native-reanimated';
+
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 
 const LQDOnboardingIndicator = ({ currentStep, isPaused, timer, totalSteps, finished, togglePause }: ILQDOnboardingIndicator) => {
   const actions = [require('../../../assets/images/pause.png'), require('../../../assets/images/play.png')];
-  const [progressValues, setProgressValues] = useState<number[]>(new Array(totalSteps).fill(0)); // Track progress for each step
 
   const animatedWidthStyle = (index: number) => {
-    const progress = useSharedValue(progressValues[index]); // Use the progress for the specific step
+    const progress = useSharedValue(0);
 
     useEffect(() => {
       if (index === currentStep && !isPaused) {
@@ -21,25 +21,21 @@ const LQDOnboardingIndicator = ({ currentStep, isPaused, timer, totalSteps, fini
           });
         }
       }
-
-      if (index === currentStep && progress.value !== progressValues[index]) {
-        setProgressValues((prevValues) => {
-          const newValues = [...prevValues];
-          newValues[index] = progress.value;
-          return newValues;
-        });
-      }
-
-      if (index < currentStep) {
-        progress.value = 1;
-      } else if (index > currentStep) {
-        progress.value = 0;
-      }
     }, [timer, isPaused, currentStep, finished]);
 
-    return useAnimatedStyle(() => ({
-      width: `${progress.value * 100}%`,
-    }));
+    return useAnimatedStyle(() => {
+      if (index === 0 && currentStep === 0) {
+        return { width: `${progress.value * 100}%` };
+      } else if (index === 0 && currentStep > 0) {
+        return { width: '100%' };
+      } else if (index === currentStep) {
+        return { width: `${progress.value * 100}%` };
+      } else if (index < currentStep) {
+        return { width: '100%' };
+      } else {
+        return { width: '0%' };
+      }
+    });
   };
 
   return (
