@@ -101,7 +101,6 @@ const Home = () => {
   return (
     <>
       <SearchPlaceholder loading={globalLoading} />
-
       <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer} showsVerticalScrollIndicator={false}>
         <View style={styles.balanceAndActionContainer}>
           {!globalLoading && (

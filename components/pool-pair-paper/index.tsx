@@ -32,48 +32,45 @@ const LQDPoolPairPaper = ({ pool, navigationVariant = 'primary', showFullSymbol,
   const tvl = pool.tvl;
   const isStable = pool.isStable;
 
-  return (
-    <>
-      {!loading && (
-        <TouchableOpacity onPress={handlePress} style={styles.container}>
-          <View style={styles.leftContainer}>
-            <LQDPoolImages tokenAIconURL={tokenAIconURL} tokenBIconURL={tokenBIconURL} />
-
-            <View style={styles.detailContainer}>
-              <Text style={styles.detailHeader}>{symbol}</Text>
-
-              <View style={styles.details}>
-                <Text style={isStable ? styles.basicTextStable : styles.basicTextVolatile}>
-                  {isStable ? 'Basic Stable' : 'Basic Volatile'}
-                </Text>
-
-                <View style={styles.separator}>
-                  <View style={styles.separatorCircle} />
-                </View>
-
-                <Text style={styles.detailText}>{fees}% Fee</Text>
-              </View>
-            </View>
-          </View>
-
-          <View style={styles.volumeWrapper}>
-            <Text style={styles.aprText}>APR: {apr.toLocaleString()}%</Text>
-
-            <Text style={styles.volumeText}>VOL: ${volume}</Text>
-          </View>
-        </TouchableOpacity>
-      )}
-      {loading && (
-        <View style={styles.loaderContainer}>
-          <LQShrimeLoader style={styles.loaderOne} />
-          <View style={styles.loaderCenterContainer}>
-            <LQShrimeLoader style={styles.loaderTwo} />
-            <LQShrimeLoader style={styles.loaderThree} />
-          </View>
-          <LQShrimeLoader style={styles.loaderFour} />
+  if (loading) {
+    return (
+      <View style={styles.loaderContainer}>
+        <LQShrimeLoader style={styles.loaderOne} />
+        <View style={styles.loaderCenterContainer}>
+          <LQShrimeLoader style={styles.loaderTwo} />
+          <LQShrimeLoader style={styles.loaderThree} />
         </View>
-      )}
-    </>
+        <LQShrimeLoader style={styles.loaderFour} />
+      </View>
+    );
+  }
+
+  return (
+    <TouchableOpacity onPress={handlePress} style={styles.container}>
+      <View style={styles.leftContainer}>
+        <LQDPoolImages tokenAIconURL={tokenAIconURL} tokenBIconURL={tokenBIconURL} />
+
+        <View style={styles.detailContainer}>
+          <Text style={styles.detailHeader}>{symbol}</Text>
+
+          <View style={styles.details}>
+            <Text style={isStable ? styles.basicTextStable : styles.basicTextVolatile}>{isStable ? 'Basic Stable' : 'Basic Volatile'}</Text>
+
+            <View style={styles.separator}>
+              <View style={styles.separatorCircle} />
+            </View>
+
+            <Text style={styles.detailText}>{fees}% Fee</Text>
+          </View>
+        </View>
+      </View>
+
+      <View style={styles.volumeWrapper}>
+        <Text style={styles.aprText}>APR: {apr.toLocaleString()}%</Text>
+
+        <Text style={styles.volumeText}>VOL: ${volume}</Text>
+      </View>
+    </TouchableOpacity>
   );
 };
 

@@ -31,29 +31,26 @@ const LQDPoolPairCard = ({ pool, navigationVariant = 'primary', loading = false 
   const increased = true;
   const change = pool.apr;
 
+  if (loading) {
+    return <LQShrimeLoader style={styles.loader} />;
+  }
+
   return (
-    <>
-      {!loading && (
-        <TouchableOpacity onPress={handlePress} style={styles.container}>
-          <View style={styles.topContainer}>
-            <LQDPoolImages tokenAIconURL={tokenAIconURL} tokenBIconURL={tokenBIconURL} />
+    <TouchableOpacity onPress={handlePress} style={styles.container}>
+      <View style={styles.topContainer}>
+        <LQDPoolImages tokenAIconURL={tokenAIconURL} tokenBIconURL={tokenBIconURL} />
 
-            <View style={[styles.changeContainer, { backgroundColor: backgroundColors[+increased] }]}>
-              {increased ? (
-                <ArrowUpAltIcon width={12} height={12} fill={textColors[+increased]} />
-              ) : (
-                <ArrowDownIcon width={12} height={12} fill={textColors[+increased]} />
-              )}
-              <Text style={[styles.change, { color: textColors[+increased] }]}>{change}%</Text>
-            </View>
-          </View>
-
-          <Text style={styles.title}>{symbol}</Text>
-        </TouchableOpacity>
-      )}
-
-      {loading && <LQShrimeLoader style={styles.loader} />}
-    </>
+        <View style={[styles.changeContainer, { backgroundColor: backgroundColors[+increased] }]}>
+          {increased ? (
+            <ArrowUpAltIcon width={12} height={12} fill={textColors[+increased]} />
+          ) : (
+            <ArrowDownIcon width={12} height={12} fill={textColors[+increased]} />
+          )}
+          <Text style={[styles.change, { color: textColors[+increased] }]}>{change}%</Text>
+        </View>
+      </View>
+      <Text style={styles.title}>{symbol}</Text>
+    </TouchableOpacity>
   );
 };
 
