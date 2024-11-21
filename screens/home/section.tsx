@@ -2,18 +2,24 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import { CaretRightAltIcon } from '@/assets/icons';
+import { LQShrimeLoader } from '@/components';
 
-const Section = ({ children, icon, subtitle, title, action, isShowingAll }: ISection) => {
+const Section = ({ children, icon, subtitle, title, action, isShowingAll, loading }: ISection) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <View style={styles.detail}>
-          {icon}
-          <Text style={styles.title}>{title}</Text>
-          <Text style={styles.subtitle}>{subtitle}</Text>
-        </View>
+        {!loading && (
+          <View style={styles.detail}>
+            {icon}
+            <Text style={styles.title}>{title}</Text>
+            <Text style={styles.subtitle}>{subtitle}</Text>
+          </View>
+        )}
 
-        {!isShowingAll && (
+        {loading && <LQShrimeLoader style={styles.loaderOne} />}
+        {loading && <LQShrimeLoader style={styles.loaderTwo} />}
+
+        {!isShowingAll && !loading && (
           <TouchableOpacity onPress={action} style={styles.action}>
             <Text style={styles.actionText}>See all</Text>
             <CaretRightAltIcon />
@@ -75,4 +81,9 @@ const styles = StyleSheet.create({
     lineHeight: 16.12,
     fontFamily: 'AeonikRegular',
   },
+
+  // loader
+
+  loaderOne: { height: 16, width: '40%', borderRadius: 6 },
+  loaderTwo: { height: 16, width: 56, borderRadius: 6 },
 });

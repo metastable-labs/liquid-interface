@@ -19,6 +19,7 @@ const SearchUI = () => {
 
   const trendingPools = poolsState.trendingPools.data.slice(0, 10);
   const searchedPools = poolsState.searchedPools.data;
+  const loading = poolsState.loadingPools;
 
   const sections: Array<Partial<ISearchSection>> = [
     {
@@ -49,7 +50,7 @@ const SearchUI = () => {
       children: (
         <View style={styles.mapContainer}>
           {trendingPools.map((pool, index) => (
-            <LQDPoolPairPaper key={index} pool={pool} />
+            <LQDPoolPairPaper loading={loading} key={index} pool={pool} />
           ))}
         </View>
       ),

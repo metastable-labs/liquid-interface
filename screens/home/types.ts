@@ -5,4 +5,5 @@ interface ISection {
   icon: React.ReactElement;
   action?: () => void;
   isShowingAll?: boolean;
+  loading?: boolean;
 }

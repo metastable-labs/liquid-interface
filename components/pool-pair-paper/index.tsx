@@ -6,8 +6,9 @@ import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { setSelectedPool } from '@/store/pools';
 import { PoolPairPaper } from './types';
 import LQDPoolImages from '../pool-images';
+import LQShrimeLoader from '../loader';
 
-const LQDPoolPairPaper = ({ pool, navigationVariant = 'primary', showFullSymbol }: PoolPairPaper) => {
+const LQDPoolPairPaper = ({ pool, navigationVariant = 'primary', showFullSymbol, loading = false }: PoolPairPaper) => {
   const { router, dispatch } = useSystemFunctions();
 
   const paths = {
@@ -30,6 +31,19 @@ const LQDPoolPairPaper = ({ pool, navigationVariant = 'primary', showFullSymbol 
   const volume = formatNumberWithSuffix(vol);
   const tvl = pool.tvl;
   const isStable = pool.isStable;
+
+  if (loading) {
+    return (
+      <View style={styles.loaderContainer}>
+        <LQShrimeLoader style={styles.loaderOne} />
+        <View style={styles.loaderCenterContainer}>
+          <LQShrimeLoader style={styles.loaderTwo} />
+          <LQShrimeLoader style={styles.loaderThree} />
+        </View>
+        <LQShrimeLoader style={styles.loaderFour} />
+      </View>
+    );
+  }
 
   return (
     <TouchableOpacity onPress={handlePress} style={styles.container}>
@@ -157,4 +171,19 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
     fontFamily: 'AeonikRegular',
   },
+
+  // loader
+  loaderContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+
+  loaderCenterContainer: { flex: 1, gap: 5 },
+
+  loaderOne: { height: 45, width: 45, borderRadius: 100 },
+  loaderTwo: { height: 20, width: '40%', borderRadius: 6 },
+  loaderThree: { height: 20, width: '50%', borderRadius: 6 },
+  loaderFour: { height: 20, width: 56, borderRadius: 6 },
 });
