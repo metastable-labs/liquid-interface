@@ -49,8 +49,6 @@ export async function createSmartAccount(registrationOptions: PublicKeyCredentia
       type: 'public-key',
       authenticatorAttachment: 'platform',
     };
-    console.log(credential.response.getPublicKey(), 'raw public keys');
-    console.log(base64URLStringToHex(credential.response.getPublicKey()), 'public key hex');
 
     await api.verifyRegistration(smartAccountInfo);
 
