@@ -72,7 +72,7 @@ class LiquidAPI {
     });
   }
 
-  async updateUserAddress(username: string, userAddress: Address): Promise<{ success: boolean }> {
+  async updateUserAddress(username: string, userAddress: Address,): Promise<{ success: boolean }> {
     return this.fetchWithErrorHandling(`${this.apiBaseUrl}/user/update`, {
       method: 'PUT',
       headers: {

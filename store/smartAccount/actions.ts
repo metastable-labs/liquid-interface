@@ -5,7 +5,6 @@ import { setAddress, setRegistrationOptions } from '@/store/smartAccount';
 import { CreatePassKeyCredentialOptions, VerifyAuthResponse } from '@/init/types';
 import { publicClient } from '@/init/client';
 import { rpId } from '@/constants/env';
-import { getPublicKeyHex } from '@/utils/base64';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 
 import { createSmartAccount } from './create';
@@ -17,6 +16,7 @@ import api from '@/init/api';
 import { useAuth } from '@/providers';
 import { Hex } from 'viem';
 import { AuthenticationResponseJSON } from 'react-native-passkeys/build/ReactNativePasskeys.types';
+import { base64URLStringToHex } from '@/utils/base64';
 
 export function useSmartAccountActions() {
   const { dispatch, router, smartAccountState } = useSystemFunctions();
@@ -46,7 +46,7 @@ export function useSmartAccountActions() {
     const webAuthnAccount = toWebAuthnAccount({
       credential: {
         id: credentialID,
-        publicKey: getPublicKeyHex(publicKey),
+        publicKey,
       },
       getFn,
       rpId,
@@ -84,10 +84,12 @@ export function useSmartAccountActions() {
 
       const verification = await api.verifyAuthentication(userName, authenticationResponse);
 
+      console.log(verification.data.publicKey, 'update');
+
       const webAuthnAccount = toWebAuthnAccount({
         credential: {
           id: passkeyResult.id,
-          publicKey: getPublicKeyHex(verification.data.publicKey),
+          publicKey: verification.data.publicKey as `0x${string}`,
         },
         getFn,
         rpId,
@@ -96,12 +98,11 @@ export function useSmartAccountActions() {
         client: publicClient,
         owners: [webAuthnAccount],
       });
-      const smartAccountInfo = {
-        publicKey: verification.data.publicKey,
-        credentialID: passkeyResult.id,
-      };
 
-      await persistSmartAccountInfo(smartAccountInfo);
+      await persistSmartAccountInfo({
+        publicKey: verification.data.publicKey as `0x${string}`,
+        credentialID: passkeyResult.id,
+      });
 
       setSession(smartAccount);
       dispatch(setAddress(smartAccount.address));

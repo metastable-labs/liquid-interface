@@ -37,12 +37,13 @@ export type SmartAccount = ToCoinbaseSmartAccountReturnType;
  * Info about the smart account that is persisted to secure store, used to re-initialize the smart account
  */
 export type SmartAccountPersistedInfo = {
-  publicKey: string | Hex;
+  publicKey: Hex;
   credentialID: string;
 };
 
 export type VerifyRegistration = {
   username: string;
+  pubKey: Hex | string;
   id: string;
   rawId: string;
   response: {
