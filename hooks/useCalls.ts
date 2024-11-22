@@ -8,7 +8,6 @@ import { SmartWalletABI } from '@/constants/abis';
 import { ENTRYPOINT_V06_ADDRESS } from '@/constants/addresses';
 import { useCallback } from 'react';
 import { getPersistedSmartAccountInfo } from '@/store/smartAccount/persist';
-import { getPublicKeyHex } from '@/utils/base64';
 
 export function useMakeCalls() {
   const { signTransaction } = useSmartAccountActions();
@@ -21,7 +20,7 @@ export function useMakeCalls() {
       // Build the user operation
       const op = await buildUserOp(account, smartAccountClient!, {
         calls,
-        signers: [getPublicKeyHex(publicKey) as Hex],
+        signers: [publicKey as Hex],
         paymasterAndData: '0x', // Initialize with empty paymaster data
       });
 

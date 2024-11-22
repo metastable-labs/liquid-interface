@@ -8,7 +8,6 @@ import { SmartAccountInfoNotPersistedError } from '@/store/smartAccount/errors';
 import { rpId } from '@/constants/env';
 import { toCoinbaseSmartAccount, toWebAuthnAccount } from 'viem/account-abstraction';
 import { publicClient } from '@/init/client';
-import { getPublicKeyHex } from '@/utils/base64';
 import { getFn } from '@/store/smartAccount/getFn';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { setAddress } from '@/store/smartAccount';
@@ -41,7 +40,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
       const webAuthnAccount = toWebAuthnAccount({
         credential: {
           id: credentialID,
-          publicKey: getPublicKeyHex(publicKey),
+          publicKey,
         },
         getFn,
         rpId,

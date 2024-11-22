@@ -6,7 +6,7 @@ import api from '@/init/api';
 import { publicClient } from '@/init/client';
 import { isDev, rpId } from '@/constants/env';
 import { SmartAccount, Address, SmartAccountPersistedInfo, VerifyRegistration } from '@/init/types';
-import { getPublicKeyHex } from '@/utils/base64';
+import { base64URLStringToHex } from '@/utils/base64';
 
 import { getFn } from './getFn';
 import { FailedToCreatePasskeyCredentialError, FailedToUpdateUserAddressError, PasskeyNotSupportedError } from './errors';
@@ -29,16 +29,17 @@ export async function createSmartAccount(registrationOptions: PublicKeyCredentia
     }
 
     const credentialId = credential.id;
-    const { attestationObject, clientDataJSON, publicKey } = credential.response;
+    const { attestationObject, clientDataJSON } = credential.response;
 
     const registrationResponse = {
       credentialId,
       attestationObject,
       clientDataJSON,
     };
-
+    const publicKeyHex = base64URLStringToHex(credential.response.getPublicKey());
     const smartAccountInfo: VerifyRegistration = {
       username: registrationOptions.user.name,
+      pubKey: publicKeyHex.toString(),
       id: registrationResponse.credentialId,
       rawId: registrationResponse.credentialId,
       response: {
@@ -49,12 +50,12 @@ export async function createSmartAccount(registrationOptions: PublicKeyCredentia
       authenticatorAttachment: 'platform',
     };
 
-    const verificationResult = await api.verifyRegistration(smartAccountInfo);
+    await api.verifyRegistration(smartAccountInfo);
 
     const webAuthnAccount = toWebAuthnAccount({
       credential: {
         id: registrationResponse.credentialId,
-        publicKey: getPublicKeyHex(verificationResult.data.publicKey),
+        publicKey: publicKeyHex,
       },
       getFn,
       rpId,
@@ -77,7 +78,7 @@ export async function createSmartAccount(registrationOptions: PublicKeyCredentia
       smartAccount,
       address,
       smartAccountInfo: {
-        publicKey,
+        publicKey: publicKeyHex,
         credentialID: smartAccountInfo.id,
       },
     };
