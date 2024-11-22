@@ -20,5 +20,5 @@ export default function AuthGate() {
     return <Step1 />;
   }
 
-  return !session ? <Redirect href="/(tabs)/home" /> : <Redirect href="/(onboarding)/step1" />;
+  return session ? <Redirect href="/(tabs)/home" /> : <Redirect href="/(onboarding)/step1" />;
 }
