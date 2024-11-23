@@ -7,12 +7,11 @@ import { ArrowDownIcon, ArrowUpAltIcon } from '@/assets/icons';
 import { setSelectedPool } from '@/store/pools';
 import { PoolPairCard } from './types';
 import LQDPoolImages from '../pool-images';
-import LQShrimeLoader from '../loader';
 
 const backgroundColors = ['#FDEAEA', '#EFFAF6'];
 const textColors = ['#A4262C', '#156146'];
 
-const LQDPoolPairCard = ({ pool, navigationVariant = 'primary', loading = false }: PoolPairCard) => {
+const LQDPoolPairCard = ({ pool, navigationVariant = 'primary' }: PoolPairCard) => {
   const { router, dispatch } = useSystemFunctions();
 
   const paths = {
@@ -30,10 +29,6 @@ const LQDPoolPairCard = ({ pool, navigationVariant = 'primary', loading = false 
   const symbol = pool.symbol.split('-')[1].replace('/', ' / ');
   const increased = true;
   const change = pool.apr;
-
-  if (loading) {
-    return <LQShrimeLoader style={styles.loader} />;
-  }
 
   return (
     <TouchableOpacity onPress={handlePress} style={styles.container}>
@@ -95,7 +90,4 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     fontFamily: 'AeonikMedium',
   },
-
-  // loader
-  loader: { height: 90, width: 140, borderRadius: 6 },
 });
