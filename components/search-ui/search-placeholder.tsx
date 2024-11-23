@@ -5,7 +5,7 @@ import { adjustFontSizeForIOS } from '@/utils/helpers';
 import { Platform, StyleSheet, Text, TouchableOpacity, View, StatusBar as RNStatusBar } from 'react-native';
 import LQShrimeLoader from '../loader';
 
-const SearchPlaceholder = ({ loading }: { loading?: boolean }) => {
+const SearchPlaceholder = () => {
   const { router } = useSystemFunctions();
   const { searchIsFocused: focusSearch, showSearch } = useAppActions();
 
@@ -13,16 +13,6 @@ const SearchPlaceholder = ({ loading }: { loading?: boolean }) => {
     focusSearch(true);
     showSearch(true);
   };
-
-  if (loading) {
-    return (
-      <View style={styles.searchLoader}>
-        <LQShrimeLoader style={styles.loaderOne} />
-        <LQShrimeLoader style={styles.loaderTwo} />
-        <LQShrimeLoader style={styles.loaderOne} />
-      </View>
-    );
-  }
 
   return (
     <View style={styles.searchInnerWrapper}>
@@ -86,15 +76,4 @@ const styles = StyleSheet.create({
     color: '#94A3B8',
     fontFamily: 'AeonikRegular',
   },
-  searchLoader: {
-    flexDirection: 'row',
-    gap: 30,
-    alignItems: 'center',
-    backgroundColor: '#fff',
-    paddingHorizontal: 16,
-    paddingTop: Platform.OS === 'android' ? RNStatusBar.currentHeight : 20,
-    paddingBottom: Platform.OS === 'android' ? -(RNStatusBar.currentHeight || 0) : -48,
-  },
-  loaderOne: { height: 24, width: 24, borderRadius: 16 },
-  loaderTwo: { height: 35, width: 50, borderRadius: 6, flex: 1 },
 });

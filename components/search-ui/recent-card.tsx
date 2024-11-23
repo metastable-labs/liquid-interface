@@ -3,28 +3,28 @@ import { View, StyleSheet, Text, Image, TouchableOpacity } from 'react-native';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import useAppActions from '@/store/app/actions';
+import { IRecentCard } from './types';
+import LQDPoolImages from '../pool-images';
 
-const RecentCard = ({ id, primaryIconURL, primaryTitle, secondaryIconURL, secondaryTitle }: IRecentCard) => {
+const RecentCard = ({ pool, navigationVariant = 'primary' }: IRecentCard) => {
   const { router, pathname } = useSystemFunctions();
   const { searchIsFocused } = useAppActions();
   const onPress = () => {
     searchIsFocused(false);
-    router.push(`/(tabs)/home/${id}`);
+    router.push(`/(tabs)/home/${pool.address}`);
   };
+
+  const tokenAIconURL = pool.token0.logoUrl;
+  const tokenBIconURL = pool.token1.logoUrl;
+  const symbol = pool.symbol.split('-')[1].replace('/', ' / ');
 
   return (
     <TouchableOpacity onPress={onPress} style={styles.container}>
       <View style={styles.iconContainer}>
-        {[primaryIconURL, secondaryIconURL].map((iconURL, index) => (
-          <View key={index} style={[styles.icon, index === 0 && { position: 'relative', zIndex: 1 }]}>
-            <Image source={{ uri: iconURL }} style={{ width: 24, height: 24 }} />
-          </View>
-        ))}
+        <LQDPoolImages tokenAIconURL={tokenAIconURL} tokenBIconURL={tokenBIconURL} />
       </View>
 
-      <Text style={styles.text}>
-        {primaryTitle} / {secondaryTitle}
-      </Text>
+      <Text style={styles.text}>{symbol}</Text>
     </TouchableOpacity>
   );
 };
@@ -44,6 +44,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#EAEEF4',
     backgroundColor: '#fff',
+    marginBottom: 20,
   },
 
   iconContainer: {

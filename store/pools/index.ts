@@ -13,6 +13,7 @@ export interface PoolsState {
   loadingPools: boolean;
   refreshingPools: boolean;
   searchingPools: boolean;
+  recentSearchedPools: Pool[];
 }
 
 const initialState: PoolsState = {
@@ -25,6 +26,7 @@ const initialState: PoolsState = {
   loadingPools: false,
   refreshingPools: false,
   searchingPools: false,
+  recentSearchedPools: [],
 };
 
 export const poolReducer = createSlice({
@@ -86,6 +88,22 @@ export const poolReducer = createSlice({
         state.searchedPools = { ...defaultPoolResponse };
       }
     },
+
+    setRecentSearchedPool: (state, action: PayloadAction<Pool>) => {
+      const newPool = action.payload;
+
+      if (!state.recentSearchedPools.some((pool) => pool.address === newPool.address)) {
+        state.recentSearchedPools = [newPool, ...state.recentSearchedPools];
+
+        if (state.recentSearchedPools.length > 10) {
+          state.recentSearchedPools.pop();
+        }
+      }
+    },
+
+    clearRecentSearchedPools: (state) => {
+      state.recentSearchedPools = [];
+    },
   },
 });
 
@@ -99,6 +117,8 @@ export const {
   setSelectedPool,
   setSearchingPools,
   setSearchedPools,
+  setRecentSearchedPool,
+  clearRecentSearchedPools,
 } = poolReducer.actions;
 
 export default poolReducer.reducer;

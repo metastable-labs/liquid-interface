@@ -1,6 +1,8 @@
+import { Pool } from '@/store/pools/types';
+
 type SectionQuery = 'vol' | 'fees' | 'tvl';
 
-interface ISearchSection {
+export interface ISearchSection {
   title: string;
   children: React.ReactElement;
   onClear?: () => void;
@@ -9,12 +11,9 @@ interface ISearchSection {
   index: number;
 }
 
-interface IRecentCard {
-  id: string;
-  primaryIconURL: string;
-  secondaryIconURL: string;
-  primaryTitle: string;
-  secondaryTitle: string;
+export interface IRecentCard {
+  pool: Pool;
+  navigationVariant?: 'primary' | 'secondary';
 }
 
 interface IExploreCard {

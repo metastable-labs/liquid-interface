@@ -149,6 +149,10 @@ export const formatSymbol = (symbol: string, showFullSymbol?: boolean) => {
   return symbol;
 };
 
+const createArrayWithIndexes = (length: number): number[] => {
+  return Array.from({ length }, (_, index) => index);
+};
+
 export {
   formatNumberWithSuffix,
   truncateDecimal,
@@ -166,4 +170,5 @@ export {
   roundUp,
   formatInputAmount,
   formatSymbol,
+  createArrayWithIndexes,
 };

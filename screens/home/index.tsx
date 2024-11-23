@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
-import { StyleSheet, View, Text, FlatList, TouchableOpacity, Platform, StatusBar as RNStatusBar } from 'react-native';
+import { StyleSheet, View, Text, FlatList, TouchableOpacity, Platform, StatusBar as RNStatusBar, ScrollView } from 'react-native';
 
 import useSystemFunctions from '@/hooks/useSystemFunctions';
-import { adjustFontSizeForIOS, formatAmountWithWholeAndDecimal } from '@/utils/helpers';
+import { adjustFontSizeForIOS, createArrayWithIndexes, formatAmountWithWholeAndDecimal } from '@/utils/helpers';
 import { LQDButton, LQDPoolPairCard, LQDPoolPairPaper, LQDScrollView, LQShrimeLoader, SearchUI } from '@/components';
 import { CaretRightIcon, DirectUpIcon, DollarSquareIcon, TrendUpIcon } from '@/assets/icons';
 import { useAccountActions } from '@/store/account/actions';
@@ -10,6 +10,7 @@ import { usePoolActions } from '@/store/pools/actions';
 import { useOnMount } from '@/hooks/useOnMount';
 import Section from './section';
 import SearchPlaceholder from '@/components/search-ui/search-placeholder';
+import Loader from './loader';
 
 const Home = () => {
   const { router, poolsState, smartAccountState, accountState, appState } = useSystemFunctions();
@@ -28,8 +29,9 @@ const Home = () => {
   const top10TrendingPools = trendingPoolsArray?.slice(0, 10);
   const top10HotPools = hotPoolsArray.slice(0, 10) ?? [];
   const top7Gainers = top7GainersArray.slice(0, 7);
-
   const globalLoading = loadingPools || loadingAccounts;
+  const emptyArryTopGainers = createArrayWithIndexes(3);
+  const emptyArryTrending = createArrayWithIndexes(5);
 
   const sections = [
     {
@@ -41,7 +43,7 @@ const Home = () => {
         <FlatList
           data={top7Gainers}
           horizontal
-          renderItem={({ item }) => <LQDPoolPairCard loading={globalLoading} pool={item} />}
+          renderItem={({ item }) => <LQDPoolPairCard pool={item} />}
           keyExtractor={(_, index) => index.toString()}
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={{ gap: 10 }}
@@ -57,7 +59,7 @@ const Home = () => {
       children: (
         <View style={styles.mapContainer}>
           {top10TrendingPools.map((pool, index) => (
-            <LQDPoolPairPaper loading={globalLoading} key={index} pool={pool} />
+            <LQDPoolPairPaper key={index} pool={pool} />
           ))}
         </View>
       ),
@@ -70,7 +72,7 @@ const Home = () => {
       children: (
         <View style={styles.mapContainer}>
           {top10HotPools.map((pool, index) => (
-            <LQDPoolPairPaper loading={globalLoading} key={index} pool={pool} />
+            <LQDPoolPairPaper key={index} pool={pool} />
           ))}
         </View>
       ),
@@ -97,43 +99,37 @@ const Home = () => {
       </View>
     );
   }
+  if (globalLoading) return <Loader />;
 
   return (
     <>
-      <SearchPlaceholder loading={globalLoading} />
+      <SearchPlaceholder />
 
       <LQDScrollView refreshing={accountState.refreshing} onRefresh={() => getTokens(true)} style={styles.container}>
         <View style={styles.balanceAndActionContainer}>
-          {!globalLoading && (
-            <View style={styles.balanceContainer}>
-              <Text style={styles.balanceTitle}>Total Balance</Text>
-              <TouchableOpacity onPress={() => router.push('/(tabs)/holdings')} style={styles.balanceValueContainer}>
-                <Text style={styles.balanceWholeValue}>
-                  ${whole}.<Text style={styles.balanceDecimalValue}>{decimal}</Text>
-                </Text>
+          <View style={styles.balanceContainer}>
+            <Text style={styles.balanceTitle}>Total Balance</Text>
+            <TouchableOpacity onPress={() => router.push('/(tabs)/holdings')} style={styles.balanceValueContainer}>
+              <Text style={styles.balanceWholeValue}>
+                ${whole}.<Text style={styles.balanceDecimalValue}>{decimal}</Text>
+              </Text>
 
-                <CaretRightIcon width={20} height={20} fill="#F8FAFC" />
-              </TouchableOpacity>
-            </View>
-          )}
-          {globalLoading && <LQShrimeLoader style={styles.loaderBalance} />}
+              <CaretRightIcon width={20} height={20} fill="#F8FAFC" />
+            </TouchableOpacity>
+          </View>
 
-          {!globalLoading && (
-            <LQDButton
-              title="Add money"
-              onPress={() => router.push('/deposit/debit')}
-              variant="tertiaryOutline"
-              icon="money"
-              iconColor="#334155"
-              style={{ alignSelf: 'stretch' }}
-            />
-          )}
-
-          {globalLoading && <LQShrimeLoader style={styles.loaderButton} />}
+          <LQDButton
+            title="Add money"
+            onPress={() => router.push('/deposit/debit')}
+            variant="tertiaryOutline"
+            icon="money"
+            iconColor="#334155"
+            style={{ alignSelf: 'stretch' }}
+          />
         </View>
 
         {sections.map((section, index) => (
-          <Section key={index} {...section} loading={globalLoading} />
+          <Section key={index} {...section} />
         ))}
       </LQDScrollView>
     </>
@@ -210,7 +206,4 @@ const styles = StyleSheet.create({
     paddingTop: Platform.OS === 'android' ? RNStatusBar.currentHeight : 20,
     paddingBottom: Platform.OS === 'android' ? -(RNStatusBar.currentHeight || 0) : -48,
   },
-
-  loaderButton: { height: 40, borderRadius: 16 },
-  loaderBalance: { height: 98, borderRadius: 16 },
 });
