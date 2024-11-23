@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import ImageColors from 'react-native-image-colors';
 
@@ -71,7 +72,14 @@ const PoolLiquidity = ({
           {values.map(({ iconURL, tokenBalance, tokenUSDValue, title }, index) => (
             <View key={index} style={styles.value}>
               <View style={styles.icon}>
-                <Image source={{ uri: iconURL }} style={{ width: 18, height: 18 }} />
+                <FastImage
+                  style={{ width: 18, height: 18 }}
+                  source={{
+                    uri: iconURL,
+                    priority: FastImage.priority.high,
+                  }}
+                  resizeMode={FastImage.resizeMode.contain}
+                />
               </View>
 
               <View style={styles.textContainer}>

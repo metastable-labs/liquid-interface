@@ -105,7 +105,12 @@ const Home = () => {
     <>
       <SearchPlaceholder />
 
-      <LQDScrollView refreshing={accountState.refreshing} onRefresh={() => getTokens(true)} style={styles.container}>
+      <LQDScrollView
+        refreshing={accountState.refreshing}
+        onRefresh={() => getTokens(true)}
+        style={styles.container}
+        contentStyle={styles.contentContainer}
+      >
         <View style={styles.balanceAndActionContainer}>
           <View style={styles.balanceContainer}>
             <Text style={styles.balanceTitle}>Total Balance</Text>
@@ -140,10 +145,15 @@ export default Home;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     paddingTop: 34,
     paddingHorizontal: 16,
     backgroundColor: '#fff',
+  },
+
+  contentContainer: {
+    flexGrow: 1,
+    justifyContent: 'space-between',
+    paddingBottom: 150,
   },
 
   balanceAndActionContainer: {

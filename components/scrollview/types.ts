@@ -5,6 +5,7 @@ interface ILQDScrollView {
   refreshing: boolean;
   onRefresh: () => void;
   style?: StyleProp<ViewStyle>;
+  contentStyle?: StyleProp<ViewStyle>;
 }
 
 export type { ILQDScrollView };

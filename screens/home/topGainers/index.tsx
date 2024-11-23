@@ -19,7 +19,7 @@ const TopGainers = () => {
           data={topGainers.data}
           renderItem={({ item }) => <LQDPoolPairPaper pool={item} />}
           keyExtractor={(_, index) => index.toString()}
-          contentContainerStyle={{ gap: 24 }}
+          contentContainerStyle={styles.content}
           onEndReached={() => getPaginatedTopGainers()}
           onEndReachedThreshold={0.1}
           refreshing={refreshingPools}
@@ -42,5 +42,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     backgroundColor: '#fff',
     gap: 46,
+  },
+
+  content: {
+    gap: 24,
+    flexGrow: 1,
+    paddingBottom: 170,
   },
 });

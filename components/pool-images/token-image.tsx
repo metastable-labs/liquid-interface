@@ -1,4 +1,5 @@
-import { Image, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import { useState } from 'react';
 
 const defaultIconUrl = 'https://res.cloudinary.com/djzeufu4j/image/upload/v1732105634/tokenBIcon_wscb3p.png';
@@ -10,7 +11,15 @@ const LQDTokenImage = ({ iconURL }: TokenImage) => {
 
   return (
     <View style={styles.iconContainer}>
-      <Image source={{ uri: icon }} style={styles.icon} onError={() => setIconError(true)} />
+      <FastImage
+        style={styles.icon}
+        source={{
+          uri: icon,
+          priority: FastImage.priority.high,
+        }}
+        resizeMode={FastImage.resizeMode.contain}
+        onError={() => setIconError(true)}
+      />
     </View>
   );
 };

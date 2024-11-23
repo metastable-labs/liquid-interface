@@ -1,4 +1,5 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import FastImage from 'react-native-fast-image';
 
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import { BoxSearchIcon, SendIcon } from '@/assets/icons';
@@ -26,7 +27,11 @@ const Header = ({ condition, poolFee, tokenAIconURL, symbol, tokenBIconURL }: Po
         <View style={styles.iconContainer}>
           {[tokenAIconURL, tokenBIconURL].map((iconURL, index) => (
             <View key={index} style={[styles.icon, index === 0 && { position: 'relative', zIndex: 1 }]}>
-              <Image source={{ uri: iconURL }} style={styles.image} />
+              <FastImage
+                source={{ uri: iconURL, priority: FastImage.priority.high }}
+                style={styles.image}
+                resizeMode={FastImage.resizeMode.contain}
+              />
             </View>
           ))}
         </View>
