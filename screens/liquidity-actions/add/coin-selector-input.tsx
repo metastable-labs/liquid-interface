@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { View, Text, Image, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity } from 'react-native';
+import FastImage from 'react-native-fast-image';
 
 import { formatAmount, removeCommasFromNumber } from '@/utils/helpers';
 import { LQDAssetSelection } from '@/components';
@@ -47,7 +48,11 @@ const CoinSelectorInput = ({ onChange, selectedToken, value, disabled, address }
         <View style={styles.tokenContainer}>
           <TouchableOpacity style={styles.tokenSelector} onPress={() => setShowBottomSheet(true)}>
             <View style={styles.icon}>
-              <Image source={{ uri: token?.logoUrl }} style={{ width: 20, height: 20 }} />
+              <FastImage
+                source={{ uri: token?.logoUrl, priority: FastImage.priority.high }}
+                style={{ width: 20, height: 20, borderRadius: 9999 }}
+                resizeMode={FastImage.resizeMode.contain}
+              />
             </View>
 
             <Text style={styles.tokenText}>{token?.symbol}</Text>

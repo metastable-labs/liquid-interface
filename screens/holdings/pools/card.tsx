@@ -1,4 +1,5 @@
-import { View, Text, StyleSheet, Image, Pressable } from 'react-native';
+import { View, Text, StyleSheet, Pressable } from 'react-native';
+import FastImage from 'react-native-fast-image';
 
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
@@ -33,7 +34,14 @@ const PoolCard = ({
           <View style={styles.iconContainer}>
             {[primaryIconURL, secondaryIconURL].map((iconURL, index) => (
               <View key={index} style={[styles.icon, index === 0 && { position: 'relative', zIndex: 1 }]}>
-                <Image source={{ uri: iconURL }} style={{ width: 24, height: 24 }} />
+                <FastImage
+                  style={{ width: 24, height: 24 }}
+                  source={{
+                    uri: iconURL,
+                    priority: FastImage.priority.normal,
+                  }}
+                  resizeMode={FastImage.resizeMode.contain}
+                />
               </View>
             ))}
           </View>

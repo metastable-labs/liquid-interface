@@ -1,4 +1,5 @@
-import { View, StyleSheet, Text, Image } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
+import FastImage from 'react-native-fast-image';
 
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 
@@ -22,7 +23,11 @@ const Balance = ({ tokenABalance, tokenAIconURL, tokenATitle, tokenBBalance, tok
           {values.map(({ iconURL, title }, index) => (
             <View key={index} style={styles.valueDetail}>
               <View style={styles.icon}>
-                <Image source={{ uri: iconURL }} style={{ width: 18, height: 18 }} />
+                <FastImage
+                  source={{ uri: iconURL, priority: FastImage.priority.normal }}
+                  style={{ width: 18, height: 18 }}
+                  resizeMode={FastImage.resizeMode.contain}
+                />
               </View>
 
               <Text style={styles.title}>{title}</Text>

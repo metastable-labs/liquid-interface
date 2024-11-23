@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, Image } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ScrollView } from 'react-native';
+import FastImage from 'react-native-fast-image';
 
 import { LQDButton } from '@/components';
 import { removeCommasFromNumber } from '@/utils/helpers';
@@ -121,7 +122,11 @@ const LiquidityManagement = ({ id, type }: ILiquidityManagement) => {
                 <View style={styles.iconContainer}>
                   {[pairDetails?.tokenAIconURL, pairDetails?.tokenBIconURL]?.map((iconURL, index) => (
                     <View key={index} style={[styles.icon, index === 0 && { position: 'relative', zIndex: 1 }]}>
-                      <Image source={{ uri: iconURL || ICON_PLACEHOLDER }} style={{ width: 20, height: 20 }} />
+                      <FastImage
+                        source={{ uri: iconURL || ICON_PLACEHOLDER, priority: FastImage.priority.high }}
+                        style={{ width: 20, height: 20 }}
+                        resizeMode={FastImage.resizeMode.contain}
+                      />
                     </View>
                   ))}
                 </View>

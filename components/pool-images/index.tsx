@@ -1,4 +1,5 @@
-import { Image, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import { useState } from 'react';
 
 const defaultAIconUrl = 'https://res.cloudinary.com/djzeufu4j/image/upload/v1732105634/tokenAIcon_jgy241.png';
@@ -16,9 +17,13 @@ const LQDPoolImages = ({ tokenAIconURL, tokenBIconURL }: PoolImages) => {
     <View style={styles.iconContainer}>
       {[iconA, iconB].map((iconURL, index) => (
         <View key={index} style={[styles.icon, index === 0 && { position: 'relative', zIndex: 1 }]}>
-          <Image
-            source={{ uri: iconURL }}
+          <FastImage
             style={styles.image}
+            source={{
+              uri: iconURL,
+              priority: FastImage.priority.normal,
+            }}
+            resizeMode={FastImage.resizeMode.contain}
             onError={() => (index === 0 ? setTokenAIconError(true) : setTokenBIconError(true))}
           />
         </View>
