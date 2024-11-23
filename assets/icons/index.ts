@@ -50,9 +50,11 @@ import LegalIcon from './legal-icon';
 import SupportIcon from './support-icon';
 import XIcon from './x-ixon';
 import DiscordIcon from './discord-icon';
+import SearchEmptyStateIcon from './search-empty-state-icon';
 
 export {
   SwatchIcon,
+  SearchEmptyStateIcon,
   ChartIcon,
   ShieldTickIcon,
   MoneysIcon,

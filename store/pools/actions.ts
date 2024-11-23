@@ -11,6 +11,7 @@ import {
 } from '.';
 import api from '@/init/api';
 import { PoolType } from '@/init/types';
+import { Pool } from './types';
 
 export function usePoolActions() {
   const { dispatch, poolsState } = useSystemFunctions();
