@@ -3,24 +3,21 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 import { adjustFontSizeForIOS, formatNumberWithSuffix } from '@/utils/helpers';
 import { LQDBarChart } from '@/components';
-import { generateData, metrics, periods } from './dummy';
+import { generateData } from './dummy';
 import { ArrowDownIcon } from '@/assets/icons';
+import useSystemFunctions from '@/hooks/useSystemFunctions';
 
 const adjustmentColors = ['#FF8896', '#88FF9C'];
 
 const Chart = () => {
-  const [metric, setMetric] = useState<Metric>('tvl');
-  const [period, setPeriod] = useState<Period>({
-    text: 'past month',
-    value: '1m',
-  });
-  const [data, setData] = useState(generateData(period.value));
+  const { poolsState } = useSystemFunctions();
+  const { selectedPool } = poolsState;
 
-  const value = 13_400_000;
-  const increased = false;
-  const change = 4.45;
+  const [data, setData] = useState(generateData(selectedPool));
 
-  useEffect(() => setData(generateData(period.value)), [period.value]);
+  const value = selectedPool?.tvl || 0;
+
+  useEffect(() => setData(generateData(selectedPool)), [selectedPool]);
 
   return (
     <View style={styles.root}>
@@ -29,46 +26,15 @@ const Chart = () => {
           <View style={styles.adjustmentContainer}>
             <Text style={styles.adjustmentValue}>${formatNumberWithSuffix(value)}</Text>
 
-            <View style={styles.adjustmentAndPeriod}>
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <View style={{ transform: [{ rotate: increased ? '180deg' : '0deg' }] }}>
-                  <ArrowDownIcon fill={adjustmentColors[+increased]} />
-                </View>
-
-                <Text style={[styles.adjustmentTexts, { color: adjustmentColors[+increased] }]}>{change.toFixed(2)}%</Text>
-              </View>
-
-              <Text style={[styles.adjustmentTexts, styles.periodText]}>{period.text}</Text>
-            </View>
-          </View>
-          <View style={styles.metrics}>
-            {metrics.map((m, index) => {
-              const active = metric === m;
-
-              return (
-                <TouchableOpacity key={index} style={[styles.metric, active && styles.activeMetric]} onPress={() => setMetric(m)}>
-                  <Text style={[styles.metricText, active && styles.activeMetricText, m === 'tvl' && { textTransform: 'uppercase' }]}>
-                    {m}
-                  </Text>
-                </TouchableOpacity>
-              );
-            })}
+            <Text style={[styles.adjustmentTexts, styles.periodText]}>TVL</Text>
           </View>
         </View>
 
-        <LQDBarChart data={data} period={period.value} />
+        <LQDBarChart data={data} period={'1d'} />
       </View>
 
       <View style={styles.periods}>
-        {periods.map(({ text, value }, index) => {
-          const active = period.value === value;
-
-          return (
-            <TouchableOpacity key={index} style={[styles.period, active && styles.activePeriod]} onPress={() => setPeriod({ text, value })}>
-              <Text style={[styles.periodValue, active && styles.activePeriodValue]}>{value}</Text>
-            </TouchableOpacity>
-          );
-        })}
+        <Text style={[styles.periodValue, styles.activePeriodValue]}>VOLUME</Text>
       </View>
     </View>
   );
@@ -80,7 +46,7 @@ const styles = StyleSheet.create({
   root: {
     alignSelf: 'stretch',
     alignItems: 'center',
-    gap: 20,
+    gap: 16,
   },
 
   container: {
@@ -122,7 +88,6 @@ const styles = StyleSheet.create({
 
   periodText: {
     color: '#64748B',
-    textTransform: 'capitalize',
   },
 
   metrics: {

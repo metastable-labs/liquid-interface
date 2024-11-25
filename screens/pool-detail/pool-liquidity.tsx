@@ -82,12 +82,15 @@ const PoolLiquidity = ({
                 />
               </View>
 
-              <View style={styles.textContainer}>
-                <Text style={styles.tokenAText}>
-                  {tokenBalance}
-                  <Text style={[styles.tokenAText, styles.titleText]}> {title}</Text>
-                </Text>
-                <Text style={styles.tokenBText}>{`($${tokenUSDValue})`}</Text>
+              <View style={styles.innerValue}>
+                <View style={styles.textContainer}>
+                  <Text style={styles.tokenAText}>
+                    {tokenBalance}
+                    <Text style={[styles.tokenAText, styles.titleText]}> {title}</Text>
+                  </Text>
+                </View>
+
+                <Text style={styles.tokenBText}>{`$${tokenUSDValue}`}</Text>
               </View>
             </View>
           ))}
@@ -131,7 +134,11 @@ const styles = StyleSheet.create({
 
   value: {
     flexDirection: 'row',
-    alignItems: 'center',
+    gap: 6,
+  },
+
+  innerValue: {
+    alignItems: 'flex-start',
     gap: 4,
   },
 
@@ -143,6 +150,7 @@ const styles = StyleSheet.create({
     borderRadius: 9999,
     borderWidth: 0.75,
     borderColor: '#EAEEF4',
+    paddingTop: 5,
   },
 
   textContainer: {

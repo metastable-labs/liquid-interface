@@ -39,7 +39,7 @@ const VerifyEmail = ({ email, isSignup }: { email: string; isSignup?: boolean })
   const [countdownTimer, setCountdownTimer] = useState(30);
   const [resendDisabled, setResendDisabled] = useState(true);
 
-  const disableButton = !otp || otp.length < 6;
+  const disableButton = !otp || otp.length < 6 || loading;
 
   const onSubmit = async () => {
     try {
@@ -47,7 +47,9 @@ const VerifyEmail = ({ email, isSignup }: { email: string; isSignup?: boolean })
 
       await loginWithCode({ code: otp, email: email as string });
     } catch (error) {
-      setError(true);
+      //
+    } finally {
+      setLoading(false);
     }
   };
 
