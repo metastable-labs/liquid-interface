@@ -47,7 +47,7 @@ const VerifyEmail = ({ email, isSignup }: { email: string; isSignup?: boolean })
 
       await loginWithCode({ code: otp, email: email as string });
     } catch (error) {
-      //
+      setLoading(false);
     } finally {
       setLoading(false);
     }
@@ -60,6 +60,8 @@ const VerifyEmail = ({ email, isSignup }: { email: string; isSignup?: boolean })
       await sendCode({ email });
     } catch (error) {
       Alert.alert('An error occurred. Please check your email and try again.');
+      setResendDisabled(false);
+    } finally {
       setResendDisabled(false);
     }
   };
