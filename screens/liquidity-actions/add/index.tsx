@@ -112,11 +112,13 @@ const AddLiquidity = () => {
   const handleValueChange = (value: string, token: 'tokenA' | 'tokenB') => {
     const formatedValue = formatInputAmount(value);
 
-    if (token === 'tokenA') {
-      return setTokenA({ ...tokenA, value: formatedValue });
+    if (token === 'tokenA' && tokenA.value !== formatedValue) {
+      setTokenA({ ...tokenA, value: formatedValue });
     }
 
-    return setTokenB({ ...tokenB, value: formatedValue });
+    if (token === 'tokenB' && tokenB.value !== formatedValue) {
+      setTokenB({ ...tokenB, value: formatedValue });
+    }
   };
 
   const onSubmit = async () => {
