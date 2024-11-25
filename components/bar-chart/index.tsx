@@ -66,7 +66,7 @@ const LQDBarChart = ({ data }: ILQDBarChart) => {
           data={data}
           x="date"
           y="value"
-          barWidth={16}
+          barWidth={40}
           style={{
             data: {
               fill: '#898B82',
