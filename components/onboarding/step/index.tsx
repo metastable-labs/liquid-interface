@@ -20,13 +20,11 @@ const LQDOnboardingStep = ({
 
       <Text style={styles.subtitle}>{subtitle}</Text>
 
-      <View style={[styles.image, imageStyle]}>
-        <Image source={image} resizeMode="contain" />
+      <Image source={image} style={[styles.image, imageStyle]} resizeMode="contain" />
 
-        <Image source={firstArc} style={[{ position: 'absolute', zIndex: -1 }, firstArcStyle]} resizeMode="contain" />
+      <Image source={firstArc} style={[{ position: 'absolute', zIndex: -1 }, firstArcStyle]} resizeMode="contain" />
 
-        <Image source={secondArc} style={[{ position: 'absolute', zIndex: -1 }, secondArcStyle]} resizeMode="contain" />
-      </View>
+      <Image source={secondArc} style={[{ position: 'absolute', zIndex: -1 }, secondArcStyle]} resizeMode="contain" />
     </View>
   );
 };
@@ -60,6 +58,6 @@ const styles = StyleSheet.create({
 
   image: {
     position: 'absolute',
-    bottom: '27%',
+    bottom: '25%',
   },
 });
