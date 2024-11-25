@@ -1,64 +1,42 @@
-const metrics: Array<Metric> = ['tvl', 'volume', 'fees'];
-const periods: Array<Period> = [
-  { text: 'past day', value: '1d' },
-  { text: 'past week', value: '1w' },
-  { text: 'past month', value: '1m' },
-  { text: 'past year', value: '1y' },
-];
+import { Pool } from '@/store/pools/types';
 
-const generateData = (period: PeriodValue): Array<BarData> => {
+type HistoricalData = 'm5' | 'h1' | 'h6' | 'h24';
+
+const generateData = (selectedPool?: Pool): Array<BarData> => {
+  if (!selectedPool?.historicalVolumeUSD) return [];
+
   const data: BarData[] = [];
-  const today = new Date();
-  let value = 1_200_000;
-  let startTime: Date;
-  let interval: number;
-  let totalIntervals: number;
+  const historicalData = selectedPool?.historicalVolumeUSD;
 
-  const varianceMap: Record<PeriodValue, number> = {
-    '1d': 100_000,
-    '1w': 200_000,
-    '1m': 500_000,
-    '1y': 1_000_000,
+  const now = new Date();
+
+  // Time intervals in milliseconds
+  const intervals = {
+    m5: 5 * 60 * 1000, // 5 minutes
+    h1: 1 * 60 * 60 * 1000, // 1 hour
+    h6: 6 * 60 * 60 * 1000, // 6 hours
+    h24: 24 * 60 * 60 * 1000, // 24 hours
   };
 
-  const variance = varianceMap[period];
+  Object.keys(historicalData).forEach((key) => {
+    const value = historicalData[key as HistoricalData];
+    const date = new Date(now.getTime() - intervals[key as HistoricalData]);
+    let dateFormat = '';
 
-  switch (period) {
-    case '1d':
-      startTime = new Date(today.getTime() - 24 * 60 * 60 * 1000);
-      interval = 60 * 60 * 1000;
-      totalIntervals = 10;
-      break;
-    case '1w':
-      startTime = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
-      interval = 24 * 60 * 60 * 1000;
-      totalIntervals = 7;
-      break;
-    case '1m':
-      startTime = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000);
-      interval = 7 * 24 * 60 * 60 * 1000;
-      totalIntervals = 5;
-      break;
-    case '1y':
-      startTime = new Date(today.getTime() - 365 * 24 * 60 * 60 * 1000);
-      interval = 30 * 24 * 60 * 60 * 1000;
-      totalIntervals = 12;
-      break;
-    default:
-      throw new Error("Invalid period. Choose from '1d', '1w', '1m', or '1y'");
-  }
+    if (key === 'm5') {
+      dateFormat = '5mins';
+    } else if (key === 'h1') {
+      dateFormat = '1hr';
+    } else if (key === 'h6') {
+      dateFormat = '6hrs';
+    } else if (key === 'h24') {
+      dateFormat = '24hrs';
+    }
 
-  for (let i = 0; i <= totalIntervals; i++) {
-    const date = new Date(startTime.getTime() + i * interval);
-    value += Math.random() * variance - variance / 2;
-
-    // Ensure value is never negative
-    value = Math.max(value, 0);
-
-    data.push({ date: date.toISOString(), value: Math.round(value) });
-  }
+    data.push({ date: date.toISOString(), value: Math.round(value), type: key as HistoricalData, dateFormat });
+  });
 
   return data;
 };
 
-export { metrics, periods, generateData };
+export { generateData, HistoricalData };
