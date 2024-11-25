@@ -10,7 +10,6 @@ const generateData = (selectedPool?: Pool): Array<BarData> => {
 
   const now = new Date();
 
-  // Time intervals in milliseconds
   const intervals = {
     m5: 5 * 60 * 1000, // 5 minutes
     h1: 1 * 60 * 60 * 1000, // 1 hour
