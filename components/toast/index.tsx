@@ -9,7 +9,13 @@ const LQToast = () => {
   const { hideToast } = useToastActions();
 
   const { title, description, variant, isVisible } = toast;
-  const icon = variant === 'success' ? <ToastVarintIcon variant="success" /> : <ToastVarintIcon variant="error" />;
+
+  const iconsMap = {
+    success: <ToastVarintIcon variant="success" />,
+    error: <ToastVarintIcon variant="error" />,
+  };
+
+  const icon = iconsMap[variant] || null;
 
   const slideAnim = useRef(new Animated.Value(-100)).current;
 
