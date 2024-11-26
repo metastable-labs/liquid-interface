@@ -51,10 +51,14 @@ import SupportIcon from './support-icon';
 import XIcon from './x-ixon';
 import DiscordIcon from './discord-icon';
 import SearchEmptyStateIcon from './search-empty-state-icon';
+import CloseToastIcon from './close-toast-icon';
+import ToastVarintIcon from './toast-varient-icon';
 
 export {
   SwatchIcon,
   SearchEmptyStateIcon,
+  CloseToastIcon,
+  ToastVarintIcon,
   ChartIcon,
   ShieldTickIcon,
   MoneysIcon,

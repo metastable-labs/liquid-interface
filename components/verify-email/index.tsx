@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Platform, StatusBar as RNStatusBar, ViewStyle, Alert, Touchable, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Platform, StatusBar as RNStatusBar, ViewStyle, TouchableOpacity } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { OtpInput } from 'react-native-otp-entry';
 import { useLoginWithEmail } from '@privy-io/expo';
@@ -9,16 +9,23 @@ import LQDKeyboardWrapper from '@/components/keyboard-wrapper';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import { useSmartAccountActions } from '@/store/smartAccount/actions';
+import { useToastActions } from '@/store/toast/actions';
 
 const VerifyEmail = ({ email, isSignup }: { email: string; isSignup?: boolean }) => {
   const { router } = useSystemFunctions();
   const { login } = useSmartAccountActions();
+  const { showToast } = useToastActions();
 
   const { loginWithCode, sendCode } = useLoginWithEmail({
     onError: (error) => {
       console.log('error', error.message);
       setLoading(false);
-      Alert.alert('An error occurred. Please check your email and try again.');
+
+      showToast({
+        title: 'Error',
+        description: 'An error occurred. Please check your email and try again.',
+        variant: 'error',
+      });
     },
     onLoginSuccess: async () => {
       if (isSignup) {
@@ -28,6 +35,11 @@ const VerifyEmail = ({ email, isSignup }: { email: string; isSignup?: boolean })
     },
     onSendCodeSuccess: () => {
       setResendDisabled(true);
+      showToast({
+        title: 'OTP sent.',
+        description: 'An OTP has been sent. Please check your email',
+        variant: 'success',
+      });
       setCountdownTimer(30);
       startCountdown();
     },
@@ -58,9 +70,12 @@ const VerifyEmail = ({ email, isSignup }: { email: string; isSignup?: boolean })
       if (countdownTimer > 0 || resendDisabled) return;
       setResendDisabled(true);
       await sendCode({ email });
-      Alert.alert('An OTP has been sent to your email. Please check your inbox.');
     } catch (error) {
-      Alert.alert('An error occurred. Please check your email and try again.');
+      showToast({
+        title: 'Error',
+        description: 'An error occurred. Please check your email and try again.',
+        variant: 'error',
+      });
     } finally {
       setResendDisabled(false);
     }
