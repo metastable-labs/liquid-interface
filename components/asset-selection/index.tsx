@@ -50,7 +50,7 @@ const LQDAssetSelection = ({ close, setAsset, show, title, selectedAsset }: Asse
         />
 
         <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
-          {searchedAssets.length === 0 && (
+          {searchedAssets.length === 0 && searchValue && (
             <LQNoResult
               title="Can’t find this token"
               description="We can’t find that token, make sure it’s not a typo or you can explore other token on Liquid"
