@@ -58,9 +58,9 @@ const VerifyEmail = ({ email, isSignup }: { email: string; isSignup?: boolean })
       if (countdownTimer > 0 || resendDisabled) return;
       setResendDisabled(true);
       await sendCode({ email });
+      Alert.alert('An OTP has been sent to your email. Please check your inbox.');
     } catch (error) {
       Alert.alert('An error occurred. Please check your email and try again.');
-      setResendDisabled(false);
     } finally {
       setResendDisabled(false);
     }
