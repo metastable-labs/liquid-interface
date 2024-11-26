@@ -1,4 +1,4 @@
-import { formatUnits } from 'viem';
+import { formatUnits, Hex } from 'viem';
 import { Platform } from 'react-native';
 
 const formatAmount = (amount?: number | string, decimals = 4): number => {
@@ -153,6 +153,22 @@ const createArrayWithIndexes = (length: number): number[] => {
   return Array.from({ length }, (_, index) => index);
 };
 
+function splitSignature(signature: string): { r: Hex; s: Hex } {
+  // Remove '0x' prefix if present
+  const cleanSignature = signature.startsWith('0x') ? signature.slice(2) : signature;
+
+  // Ensure the signature is 128 characters (64 bytes) long
+  if (cleanSignature.length !== 128) {
+    throw new Error('Invalid signature length. Expected 64 bytes (128 hex characters)');
+  }
+
+  // Split into r and s (each 32 bytes/64 chars)
+  const r = '0x' + cleanSignature.slice(0, 64);
+  const s = '0x' + cleanSignature.slice(64, 128);
+
+  return { r, s };
+}
+
 export {
   formatNumberWithSuffix,
   truncateDecimal,
@@ -171,4 +187,5 @@ export {
   formatInputAmount,
   formatSymbol,
   createArrayWithIndexes,
+  splitSignature,
 };

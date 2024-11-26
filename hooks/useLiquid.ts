@@ -161,7 +161,7 @@ export function useLiquidity(publicClient: PublicClient) {
         caller: account,
       });
 
-      calls.push(createPluginCall(addLiquidityData, currentIndex));
+      //calls.push(createPluginCall(addLiquidityData, currentIndex));
 
       const { opHash } = await makeCalls({
         calls,

@@ -7,8 +7,10 @@ import { Call, PaymasterResult } from './types';
 import { SmartAccountClient } from 'permissionless';
 import { bundlerClient, publicClient } from '@/init/client';
 import { smartWalletFactoryAbi } from '@/constants/abis/SmartWalletFactory';
+import { pimilcoRPCURL } from '@/constants/env';
 
-export const PASSKEY_OWNER_DUMMY_SIGNATURE: Hex = '0x';
+export const PASSKEY_OWNER_DUMMY_SIGNATURE: Hex =
+  '0x00000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000001e0000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000c0000000000000000000000000000000000000000000000000000000000000012000000000000000000000000000000000000000000000000000000000000000170000000000000000000000000000000000000000000000000000000000000001538223f0722e30a69dd3e58944c551e4b0a6c1c51019696dd542e3eea0d7586943182f5516f91a4d772f3df63f967003da12065b459869481da33039cd3d931e00000000000000000000000000000000000000000000000000000000000000259701e811892f03ca71d8cdd5299d2e584e4f7454be49957d4ce3c66012c82d371d0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000767b2274797065223a22776562617574686e2e676574222c226368616c6c656e6765223a225636774e5059585376337a787952375171635f5a43316a5159673570374b36484a5847544b44774b5f4a67222c226f726967696e223a2268747470733a2f2f6170692e7573656c69717569642e78797a227d00000000000000000000';
 
 // https://github.com/wilsoncusack/scw-tx/blob/5ff88a10e928b5df9ec12bce2ef64caa0b35afcd/utils/smartWallet.ts#L10
 export async function buildUserOp(
@@ -52,10 +54,7 @@ export async function buildUserOp(
   });
   // Get the current gas fees from the network
   let maxFeesPerGas = await estimateFeesPerGas(publicClient);
-  console.log('Max fees:', {
-    maxFeePerGas: maxFeesPerGas.maxFeePerGas.toString(),
-    maxPriorityFeePerGas: maxFeesPerGas.maxPriorityFeePerGas.toString(),
-  });
+
   // Increase gas limits for deployment
   const baseGasLimit = 1_000_000n;
   const deploymentBuffer = !code ? 3n : 1n; // Double gas limits for deployment
@@ -166,6 +165,63 @@ export function getUserOpHash({ userOperation, chainId }: { userOperation: UserO
   );
   return keccak256(encodedWithChainAndEntryPoint);
 }
+export const sponsorUserOperation = async (userOperation: {
+  callData: any;
+  sender: Address;
+  nonce: bigint;
+  initCode?: Hex;
+  maxFeePerGas: bigint;
+  maxPriorityFeePerGas: bigint;
+  callGasLimit: bigint;
+  verificationGasLimit: bigint;
+  preVerificationGas: any;
+  signature: Hex;
+}) => {
+  const userOperationData = {
+    sender: userOperation.sender,
+    nonce: `0x${BigInt(userOperation.nonce).toString(16)}`, // ensure hex
+    initCode: userOperation.initCode,
+    callData: userOperation.callData,
+    callGasLimit: `0x${BigInt(userOperation.callGasLimit).toString(16)}`, // ensure hex
+    verificationGasLimit: `0x${BigInt(userOperation.verificationGasLimit).toString(16)}`, // ensure hex
+    preVerificationGas: `0x${BigInt(userOperation.preVerificationGas).toString(16)}`, // ensure hex
+    maxPriorityFeePerGas: `0x${BigInt(userOperation.maxPriorityFeePerGas).toString(16)}`, // ensure hex
+    maxFeePerGas: `0x${BigInt(userOperation.maxFeePerGas).toString(16)}`, // ensure hex
+    signature: userOperation.signature,
+  };
+  const response = await fetch(pimilcoRPCURL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      jsonrpc: '2.0',
+      id: 1,
+      method: 'pm_sponsorUserOperation',
+      params: [
+        {
+          sender: userOperationData.sender,
+          nonce: userOperationData.nonce,
+          initCode: userOperationData.initCode,
+          callData: userOperationData.callData,
+          callGasLimit: userOperationData.callGasLimit, // Let Pimlico estimate
+          verificationGasLimit: userOperationData.verificationGasLimit, // Let Pimlico estimate
+          preVerificationGas: userOperationData.preVerificationGas, // Let Pimlico estimate
+          maxPriorityFeePerGas: userOperationData.maxPriorityFeePerGas,
+          maxFeePerGas: userOperationData.maxFeePerGas,
+          paymasterAndData: '0x',
+          signature: PASSKEY_OWNER_DUMMY_SIGNATURE,
+        },
+        ENTRYPOINT_V06_ADDRESS,
+      ],
+    }),
+  });
+
+  const sponsorResult = await response.json();
+  if (sponsorResult.error) {
+    throw new Error(`Sponsorship failed: ${sponsorResult.error.message}`);
+  }
+
+  return sponsorResult.result;
+};
 
 export async function getPaymasterData({
   paymasterClient,

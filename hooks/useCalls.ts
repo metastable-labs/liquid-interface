@@ -1,13 +1,17 @@
 import { Address, encodeFunctionData, Hex } from 'viem';
-import { buildUserOp, getPaymasterData, getUserOpHash } from '@/utils/wallet';
+import { buildUserOp, getPaymasterData, getUserOpHash, sponsorUserOperation } from '@/utils/wallet';
 import { Call } from '@/utils/types';
-import { entryPoint06Address } from 'viem/account-abstraction';
+import { entryPoint06Address, UserOperation } from 'viem/account-abstraction';
 import { useClients } from '@/init/useViem';
 import { useSmartAccountActions } from '@/store/smartAccount/actions';
 import { SmartWalletABI } from '@/constants/abis';
 import { ENTRYPOINT_V06_ADDRESS } from '@/constants/addresses';
 import { useCallback } from 'react';
 import { getPersistedSmartAccountInfo } from '@/store/smartAccount/persist';
+import { buildWebAuthnSignature } from '@/utils/signature';
+import { bufferToHex } from '@/utils/base64';
+import { splitSignature } from '@/utils/helpers';
+import { pimilcoRPCURL } from '@/constants/env';
 
 export function useMakeCalls() {
   const { signTransaction } = useSmartAccountActions();
@@ -24,12 +28,7 @@ export function useMakeCalls() {
         paymasterAndData: '0x', // Initialize with empty paymaster data
       });
 
-      // Set verification gas limit
-      op.verificationGasLimit = 800000n;
-
-      // Get paymaster data
-      const paymasterResult = await getPaymasterData({
-        paymasterClient: paymaster,
+      const sponsoredData = await sponsorUserOperation({
         callData: op.callData,
         sender: op.sender,
         nonce: op.nonce,
@@ -39,10 +38,11 @@ export function useMakeCalls() {
         callGasLimit: op.callGasLimit,
         verificationGasLimit: op.verificationGasLimit,
         preVerificationGas: op.preVerificationGas,
+        signature: '0x',
       });
 
       // Update operation with paymaster data
-      op.paymasterAndData = paymasterResult.paymasterAndData;
+      op.paymasterAndData = sponsoredData.paymasterAndData;
 
       // Get the operation hash
       const hash = getUserOpHash({
@@ -64,10 +64,20 @@ export function useMakeCalls() {
 
       const signature = await signTransaction(hash);
 
+      const { r, s } = splitSignature(signature.signature);
+
+      const webAuthnSignatureFormat = buildWebAuthnSignature({
+        ownerIndex: 0n,
+        authenticatorData: signature.webauthn.authenticatorData,
+        clientDataJSON: signature.webauthn.clientDataJSON,
+        r: BigInt(r),
+        s: BigInt(s),
+      });
+
       // Create new operation object with signature
       const signedOp = {
         ...op,
-        signature: signature!,
+        signature: webAuthnSignatureFormat!,
       };
 
       // Send the user operation

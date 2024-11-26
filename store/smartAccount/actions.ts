@@ -57,7 +57,7 @@ export function useSmartAccountActions() {
       owners: [webAuthnAccount],
     });
 
-    return smartAccount;
+    return { webAuthnAccount, smartAccount };
   };
 
   const login = async (userName: string) => {
@@ -113,8 +113,10 @@ export function useSmartAccountActions() {
   };
 
   const signTransaction = async (hash: Hex) => {
-    const signature = await session?.sign({ hash });
-    return signature;
+    const { webAuthnAccount } = await getSmartAccount();
+    const signatureData = await webAuthnAccount.sign({ hash });
+
+    return signatureData;
   };
   const logout = async () => {
     try {
