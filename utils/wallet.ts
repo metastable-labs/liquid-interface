@@ -1,13 +1,21 @@
 import { EntryPointABI, SmartWalletABI } from '@/constants/abis';
 import { ACCOUNT_FACTORY_ADDRESS, ENTRYPOINT_V06_ADDRESS } from '@/constants/addresses';
 import { Address, Chain, encodeAbiParameters, encodeFunctionData, Hex, keccak256, PublicClient, Transport } from 'viem';
-import { entryPoint06Abi, entryPoint06Address, estimateUserOperationGas, PaymasterClient, UserOperation } from 'viem/account-abstraction';
+import {
+  entryPoint06Abi,
+  entryPoint06Address,
+  estimateUserOperationGas,
+  getUserOperationHash,
+  PaymasterClient,
+  UserOperation,
+} from 'viem/account-abstraction';
 import { estimateFeesPerGas, getCode, readContract } from 'viem/actions';
 import { Call, PaymasterResult } from './types';
 import { SmartAccountClient } from 'permissionless';
 import { bundlerClient, publicClient } from '@/init/client';
 import { smartWalletFactoryAbi } from '@/constants/abis/SmartWalletFactory';
 import { pimilcoRPCURL } from '@/constants/env';
+import { smartWalletABI } from '@/constants/abis/SmartWallet';
 
 export const PASSKEY_OWNER_DUMMY_SIGNATURE: Hex =
   '0x00000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000001e0000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000c0000000000000000000000000000000000000000000000000000000000000012000000000000000000000000000000000000000000000000000000000000000170000000000000000000000000000000000000000000000000000000000000001538223f0722e30a69dd3e58944c551e4b0a6c1c51019696dd542e3eea0d7586943182f5516f91a4d772f3df63f967003da12065b459869481da33039cd3d931e00000000000000000000000000000000000000000000000000000000000000259701e811892f03ca71d8cdd5299d2e584e4f7454be49957d4ce3c66012c82d371d0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000767b2274797065223a22776562617574686e2e676574222c226368616c6c656e6765223a225636774e5059585376337a787952375171635f5a43316a5159673570374b36484a5847544b44774b5f4a67222c226f726967696e223a2268747470733a2f2f6170692e7573656c69717569642e78797a227d00000000000000000000';
@@ -250,7 +258,7 @@ export async function getPaymasterData({
 }): Promise<PaymasterResult> {
   try {
     const paymasterAndData = await paymasterClient.getPaymasterData({
-      chainId: 8543,
+      chainId: 8453,
       entryPointAddress: entryPoint06Address,
       callData,
       sender,
@@ -275,3 +283,30 @@ export async function getPaymasterData({
     throw error;
   }
 }
+
+export const getOwnerIndex = async (publicKey: string, smartwalletAddress: Hex): Promise<bigint> => {
+  const ownerCount = await readContract(publicClient, {
+    address: smartwalletAddress,
+    abi: smartWalletABI,
+    functionName: 'ownerCount',
+    args: [],
+  });
+
+  for (let i = 0n; i < ownerCount; i++) {
+    const ownerBytes = await readContract(publicClient, {
+      address: smartwalletAddress,
+      abi: smartWalletABI,
+      functionName: 'ownerAtIndex',
+      args: [i],
+    });
+    // For WebAuthn owners, check the public key matches
+    if (ownerBytes.length === 64) {
+      // Compare with your public key coordinates
+      if (ownerBytes === publicKey) {
+        return i;
+      }
+    }
+  }
+
+  throw new Error('Owner not found');
+};

@@ -1,11 +1,10 @@
 import { useMemo } from 'react';
 import { Address, createPublicClient, http } from 'viem';
-import { createBundlerClient, createPaymasterClient, entryPoint06Address, paymasterActions } from 'viem/account-abstraction';
+import { createPaymasterClient, paymasterActions } from 'viem/account-abstraction';
 import { createSmartAccountClient } from 'permissionless';
 import { base } from 'viem/chains';
 import { rpcUrl, pimilcoRPCURL, bundlerUrl } from '@/constants/env';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
-import { useSmartAccountActions } from '@/store/smartAccount/actions';
 import { useAuth } from '@/providers';
 
 export function useClients() {

@@ -1,7 +1,14 @@
 import { Address, encodeFunctionData, Hex } from 'viem';
-import { buildUserOp, getPaymasterData, getUserOpHash, sponsorUserOperation } from '@/utils/wallet';
+import {
+  buildUserOp,
+  getOwnerIndex,
+  getPaymasterData,
+  getUserOpHash,
+  PASSKEY_OWNER_DUMMY_SIGNATURE,
+  sponsorUserOperation,
+} from '@/utils/wallet';
 import { Call } from '@/utils/types';
-import { entryPoint06Address, UserOperation } from 'viem/account-abstraction';
+import { entryPoint06Abi, entryPoint06Address, getUserOperationHash, UserOperation } from 'viem/account-abstraction';
 import { useClients } from '@/init/useViem';
 import { useSmartAccountActions } from '@/store/smartAccount/actions';
 import { SmartWalletABI } from '@/constants/abis';
@@ -43,23 +50,23 @@ export function useMakeCalls() {
 
       // Update operation with paymaster data
       op.paymasterAndData = sponsoredData.paymasterAndData;
-
-      // Get the operation hash
-      const hash = getUserOpHash({
+      const hash = getUserOperationHash({
+        chainId: 8453,
+        entryPointAddress: entryPoint06Address,
+        entryPointVersion: '0.6',
         userOperation: {
-          sender: op.sender,
-          nonce: op.nonce,
-          initCode: op.initCode,
           callData: op.callData,
           callGasLimit: op.callGasLimit,
-          verificationGasLimit: op.verificationGasLimit,
-          preVerificationGas: op.preVerificationGas,
+          initCode: op.initCode,
           maxFeePerGas: op.maxFeePerGas,
           maxPriorityFeePerGas: op.maxPriorityFeePerGas,
+          nonce: op.nonce,
           paymasterAndData: op.paymasterAndData,
+          preVerificationGas: op.preVerificationGas,
+          sender: op.sender,
           signature: '0x',
+          verificationGasLimit: op.verificationGasLimit,
         },
-        chainId: 8543n,
       });
 
       const signature = await signTransaction(hash);
@@ -67,33 +74,39 @@ export function useMakeCalls() {
       const { r, s } = splitSignature(signature.signature);
 
       const webAuthnSignatureFormat = buildWebAuthnSignature({
-        ownerIndex: 0n,
+        ownerIndex: BigInt(0),
         authenticatorData: signature.webauthn.authenticatorData,
         clientDataJSON: signature.webauthn.clientDataJSON,
         r: BigInt(r),
         s: BigInt(s),
       });
 
+      console.log({
+        authenticatorData: signature.webauthn.authenticatorData,
+        clientDataJSON: signature.webauthn.clientDataJSON,
+        r,
+        s,
+        finalSignature: webAuthnSignatureFormat,
+      });
+
       // Create new operation object with signature
       const signedOp = {
-        ...op,
-        signature: webAuthnSignatureFormat!,
-      };
-
-      // Send the user operation
-      const opHash = await smartAccountClient?.sendUserOperation({
-        account: smartAccountClient.account,
-        callData: op.callData,
-        initCode: op.initCode,
+        sender: op.sender,
         nonce: op.nonce,
-        maxFeePerGas: op.maxFeePerGas,
-        maxPriorityFeePerGas: op.maxPriorityFeePerGas,
+        initCode: op.initCode,
+        callData: op.callData,
         callGasLimit: op.callGasLimit,
         verificationGasLimit: op.verificationGasLimit,
         preVerificationGas: op.preVerificationGas,
+        maxFeePerGas: op.maxFeePerGas,
+        maxPriorityFeePerGas: op.maxPriorityFeePerGas,
         paymasterAndData: op.paymasterAndData,
-        signature: signedOp.signature,
-      });
+        signature: webAuthnSignatureFormat,
+        entryPoint06Address,
+      };
+
+      // Send the user operation
+      const opHash = await smartAccountClient?.sendUserOperation(signedOp);
 
       return {
         opHash,
