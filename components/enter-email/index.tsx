@@ -9,9 +9,11 @@ import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { adjustFontSizeForIOS, emailIsValid } from '@/utils/helpers';
 import { useSmartAccountActions } from '@/store/smartAccount/actions';
 import api from '@/init/api';
+import { useToastActions } from '@/store/toast/actions';
 
 const EnterEmail = ({ isSignup }: Props) => {
   const { router } = useSystemFunctions();
+  const { showToast } = useToastActions();
   const { updateRegistrationOptions } = useSmartAccountActions();
   const { logout } = usePrivy();
   const { sendCode } = useLoginWithEmail({
@@ -119,7 +121,17 @@ const EnterEmail = ({ isSignup }: Props) => {
               </View>
             )}
 
-            <LQDButton title="Continue" onPress={onSubmit} variant="secondary" disabled={!isValid} loading={loading} />
+            <LQDButton
+              title="Continue ddd"
+              onPress={() =>
+                showToast({
+                  title: 'Success!',
+                  description: 'Your operation was successful.',
+                  variant: 'success',
+                })
+              }
+              variant="secondary"
+            />
 
             {isSignup && (
               <TouchableOpacity onPress={() => router.push('/(login)')} style={styles.actionWrapper}>
