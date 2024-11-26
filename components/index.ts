@@ -18,6 +18,7 @@ import SearchUI from './search-ui';
 import LQDPoolImages from './pool-images';
 import LQDTokenImage from './pool-images/token-image';
 import LQShrimeLoader from './loader';
+import LQNoResult from './no-result';
 
 export {
   LQDButton,
@@ -25,6 +26,7 @@ export {
   LQDNavigation,
   LQDInput,
   LQDSearch,
+  LQNoResult,
   LQDScrollView,
   LQDStackHeader,
   LQDPoolPairCard,
