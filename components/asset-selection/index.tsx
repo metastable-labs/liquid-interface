@@ -10,6 +10,7 @@ import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { AssetSelection } from './types';
 import { TokenItem } from '@/store/account/types';
 import LQDTokenImage from '../pool-images/token-image';
+import LQNoResult from '../no-result';
 
 const LQDAssetSelection = ({ close, setAsset, show, title, selectedAsset }: AssetSelection) => {
   const { accountState } = useSystemFunctions();
@@ -49,6 +50,12 @@ const LQDAssetSelection = ({ close, setAsset, show, title, selectedAsset }: Asse
         />
 
         <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
+          {searchedAssets.length === 0 && searchValue && (
+            <LQNoResult
+              title="Can’t find this token"
+              description="We can’t find that token, make sure it’s not a typo or you can explore other token on Liquid"
+            />
+          )}
           {searchedAssets.map((_asset, index) => {
             const active = selectedAsset?.address === _asset?.address;
 
