@@ -8,12 +8,14 @@ import '@/init/client';
 import '@/init/api';
 
 import { AllProviders } from '@/providers';
-import { LQDStackHeader } from '@/components';
+import { LQDStackHeader, LQToast } from '@/components';
+import { View } from 'react-native';
 
 export default function RootLayout() {
   return (
     <AllProviders>
       <RootStack />
+      <LQToast />
     </AllProviders>
   );
 }
