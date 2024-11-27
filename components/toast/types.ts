@@ -1,7 +1,7 @@
 interface ILQToast {
   title: string;
   description: string;
-  variant: 'error' | 'success';
+  variant: 'error' | 'success' | 'info';
 }
 
 export type { ILQToast };
