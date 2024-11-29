@@ -10,7 +10,7 @@ import {
   UserOperation,
 } from 'viem/account-abstraction';
 import { estimateFeesPerGas, getCode, readContract } from 'viem/actions';
-import { Call, PaymasterResult } from './types';
+import { Call, GasEstimateResponse, GasPriceResponse, PaymasterResult, UserOperationV6 } from './types';
 import { SmartAccountClient } from 'permissionless';
 import { bundlerClient, publicClient } from '@/init/client';
 import { smartWalletFactoryAbi } from '@/constants/abis/SmartWalletFactory';
@@ -18,7 +18,7 @@ import { pimilcoRPCURL } from '@/constants/env';
 import { smartWalletABI } from '@/constants/abis/SmartWallet';
 
 export const PASSKEY_OWNER_DUMMY_SIGNATURE: Hex =
-  '0x00000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000001e0000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000c0000000000000000000000000000000000000000000000000000000000000012000000000000000000000000000000000000000000000000000000000000000170000000000000000000000000000000000000000000000000000000000000001538223f0722e30a69dd3e58944c551e4b0a6c1c51019696dd542e3eea0d7586943182f5516f91a4d772f3df63f967003da12065b459869481da33039cd3d931e00000000000000000000000000000000000000000000000000000000000000259701e811892f03ca71d8cdd5299d2e584e4f7454be49957d4ce3c66012c82d371d0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000767b2274797065223a22776562617574686e2e676574222c226368616c6c656e6765223a225636774e5059585376337a787952375171635f5a43316a5159673570374b36484a5847544b44774b5f4a67222c226f726967696e223a2268747470733a2f2f6170692e7573656c69717569642e78797a227d00000000000000000000';
+  '0x0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000c0000000000000000000000000000000000000000000000000000000000000014000000000000000000000000000000000000000000000000000000000000000170000000000000000000000000000000000000000000000000000000000000001eef89a56cd6ebb7fa3650a467b2fb6609ff0741ee98c7db10e5199c5f32038ff56593ce0a1fd38f043ac2519b7e363720438b3c2433606098f36f5e99ef01c29000000000000000000000000000000000000000000000000000000000000004c30783937303165383131383932663033636137316438636464353239396432653538346534663734353462653439393537643463653363363630313263383264333731643030303030303030000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000767b2274797065223a22776562617574686e2e676574222c226368616c6c656e6765223a2257377a34326863705865626e326c656d4130375a4e723065706137627567466b534c74675f615a63743130222c226f726967696e223a2268747470733a2f2f6170692e7573656c69717569642e78797a227d00000000000000000000';
 
 // https://github.com/wilsoncusack/scw-tx/blob/5ff88a10e928b5df9ec12bce2ef64caa0b35afcd/utils/smartWallet.ts#L10
 export async function buildUserOp(
@@ -61,11 +61,12 @@ export async function buildUserOp(
     args: [smartWalletAddress, 0n],
   });
   // Get the current gas fees from the network
-  let maxFeesPerGas = await estimateFeesPerGas(publicClient);
+  // const maxFeePerGas = await estimateFeesPerGas(publicClient);
+  const maxFeePerGas = (await getUserOperationGasPrice()).fast;
 
   // Increase gas limits for deployment
   const baseGasLimit = 1_000_000n;
-  const deploymentBuffer = !code ? 3n : 1n; // Double gas limits for deployment
+  const deploymentBuffer = !code ? 3n : 2n; // Double gas limits for deployment
 
   // Put all the fields together in a user op
   const op = {
@@ -74,10 +75,10 @@ export async function buildUserOp(
     initCode,
     callData,
     paymasterAndData,
-    preVerificationGas: baseGasLimit * deploymentBuffer,
-    verificationGasLimit: baseGasLimit * deploymentBuffer,
-    callGasLimit: baseGasLimit * deploymentBuffer,
-    ...maxFeesPerGas,
+    preVerificationGas: baseGasLimit,
+    verificationGasLimit: baseGasLimit,
+    callGasLimit: baseGasLimit,
+    ...maxFeePerGas,
   };
 
   // Update user op specific gas limits like `preVerificationGas` etc.
@@ -90,8 +91,9 @@ export async function buildUserOp(
     preVerificationGas: op.preVerificationGas,
     verificationGasLimit: op.verificationGasLimit,
     callGasLimit: op.callGasLimit,
-    maxFeePerGas: op.maxFeePerGas,
-    maxPriorityFeePerGas: op.maxPriorityFeePerGas,
+    maxFeePerGas: BigInt(op.maxFeePerGas),
+    maxPriorityFeePerGas: BigInt(op.maxPriorityFeePerGas),
+    signature: PASSKEY_OWNER_DUMMY_SIGNATURE,
     entryPointAddress: entryPoint06Address,
   });
 
@@ -309,4 +311,95 @@ export const getOwnerIndex = async (publicKey: string, smartwalletAddress: Hex):
   }
 
   throw new Error('Owner not found');
+};
+
+export const sendUserOperation = async (userOperation: UserOperationV6) => {
+  const userOperationData = {
+    sender: userOperation.sender,
+    nonce: `0x${userOperation.nonce.toString(16)}`,
+    initCode: userOperation.initCode,
+    callData: userOperation.callData,
+    callGasLimit: `0x${userOperation.callGasLimit.toString(16)}`,
+    verificationGasLimit: `0x${userOperation.verificationGasLimit.toString(16)}`,
+    preVerificationGas: `0x${userOperation.preVerificationGas.toString(16)}`,
+    maxFeePerGas: `0x${userOperation.maxFeePerGas.toString(16)}`,
+    maxPriorityFeePerGas: `0x${userOperation.maxPriorityFeePerGas.toString(16)}`,
+    paymasterAndData: userOperation.paymasterAndData,
+    signature: userOperation.signature,
+  };
+
+  const response = await fetch(pimilcoRPCURL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      jsonrpc: '2.0',
+      id: 1,
+      method: 'eth_sendUserOperation',
+      params: [userOperationData, entryPoint06Address],
+    }),
+  });
+
+  const result = await response.json();
+  if (result.error) {
+    throw new Error(`Failed to send user operation: ${result.error.message}`);
+  }
+
+  return result.result as Hex;
+};
+
+export const getUserOperationGasPrice = async (): Promise<GasPriceResponse> => {
+  const response = await fetch(pimilcoRPCURL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      jsonrpc: '2.0',
+      method: 'pimlico_getUserOperationGasPrice',
+      params: [],
+      id: 1,
+    }),
+  });
+
+  const result = await response.json();
+  if (result.error) {
+    throw new Error(`Failed to get gas price: ${result.error.message}`);
+  }
+
+  return result.result as GasPriceResponse;
+};
+
+export const estimateUserOperationGasInternal = async (userOperation: UserOperation): Promise<GasEstimateResponse> => {
+  const formattedUserOp = {
+    sender: userOperation.sender,
+    nonce: `0x${userOperation.nonce.toString(16)}`,
+    initCode: userOperation.initCode,
+    callData: userOperation.callData,
+    callGasLimit: '0x0',
+    verificationGasLimit: '0x0',
+    preVerificationGas: '0x0',
+    maxFeePerGas: `0x${userOperation.maxFeePerGas.toString(16)}`,
+    maxPriorityFeePerGas: `0x${userOperation.maxPriorityFeePerGas.toString(16)}`,
+    paymasterAndData: userOperation.paymasterAndData,
+    signature:
+      '0x00000000fffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c',
+  };
+
+  const params = [formattedUserOp, entryPoint06Address];
+
+  const response = await fetch(pimilcoRPCURL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      jsonrpc: '2.0',
+      method: 'eth_estimateUserOperationGas',
+      params,
+      id: 1,
+    }),
+  });
+
+  const result = await response.json();
+  if (result.error) {
+    throw new Error(`Failed to estimate gas: ${result.error.message}`);
+  }
+
+  return result.result;
 };

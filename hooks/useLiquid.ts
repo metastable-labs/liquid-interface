@@ -23,6 +23,8 @@ async function handleTransaction(client: PublicClient, { hash, waitForReceipt = 
     hash,
   });
 
+  console.log(receipt, 'receipt here');
+
   return {
     hash,
     receipt,
