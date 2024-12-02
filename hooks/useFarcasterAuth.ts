@@ -2,7 +2,6 @@ import { useState, useCallback } from 'react';
 import { Alert } from 'react-native';
 import { WebViewNavigation } from 'react-native-webview';
 
-// Define the hook
 const useFarcasterAuth = () => {
   const [authToken, setAuthToken] = useState<string | null>(null);
   const [followersCount, setFollowersCount] = useState<number | null>(null);
@@ -23,7 +22,7 @@ const useFarcasterAuth = () => {
     }
   }, []);
 
-  // Fetch the OAuth token using the authorization code
+  // fetch token using the authorization code
   const fetchToken = async (code: string) => {
     try {
       const response = await fetch('https://farcaster-api-domain.com/oauth/token', {
@@ -40,7 +39,7 @@ const useFarcasterAuth = () => {
 
       const data = await response.json();
       if (data.access_token) {
-        setAuthToken(data.access_token);
+        setAuthToken(data.access_token); // Note i need to save this token to secure store
         Alert.alert('Success', 'You are now connected!');
         getFollowersCount(data.access_token);
       }
@@ -49,7 +48,7 @@ const useFarcasterAuth = () => {
     }
   };
 
-  // Step 4: Fetch the user's follower count
+  // fetch the user's follower count
   const getFollowersCount = async (accessToken: string) => {
     try {
       const response = await fetch('https://farcaster-api-domain.com/api/v1/me/followers', {
@@ -67,7 +66,7 @@ const useFarcasterAuth = () => {
     }
   };
 
-  // Step 5: Create a new post
+  // create a new post
   const createPost = async (content: string) => {
     if (!authToken) {
       Alert.alert('Error', 'You are not authenticated!');
