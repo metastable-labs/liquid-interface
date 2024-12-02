@@ -21,7 +21,7 @@ export function useMakeCalls() {
         const op = await buildUserOp(account, smartAccountClient!, {
           calls,
           signers: [publicKey as Hex],
-          paymasterAndData: '0x',
+          paymasterAndData: '0x', // Initialize with empty paymaster data
         });
 
         // Set the verification gas limit
@@ -57,9 +57,9 @@ export function useMakeCalls() {
             maxFeePerGas: op.maxFeePerGas,
             maxPriorityFeePerGas: op.maxPriorityFeePerGas,
             paymasterAndData: op.paymasterAndData,
-            signature: '0x',
+            signature: '0x', // Initialize with empty paymaster data
           },
-          chainId: 8543n, // Example chainId
+          chainId: 8543n,
         });
 
         // Sign the UserOp
@@ -96,6 +96,7 @@ export function useMakeCalls() {
   );
 
   const buildUserOperationCalldata = useCallback(({ calls }: { calls: Call[] }): Hex => {
+    // sort ascending order, 0 first
     const _calls = calls.sort((a, b) => a.index - b.index);
 
     return encodeFunctionData({
