@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, FlatList, TouchableOpacity, Platform, StatusBar
 
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { adjustFontSizeForIOS, createArrayWithIndexes, formatAmountWithWholeAndDecimal } from '@/utils/helpers';
-import { LQDButton, LQDPoolPairCard, LQDPoolPairPaper, LQDScrollView, LQShrimeLoader, SearchUI } from '@/components';
+import { LQDButton, LQDFeedCard, LQDPoolPairCard, LQDPoolPairPaper, LQDScrollView, LQShrimeLoader, SearchUI } from '@/components';
 import { CaretRightIcon, DirectUpIcon, DollarSquareIcon, TrendUpIcon } from '@/assets/icons';
 import { useAccountActions } from '@/store/account/actions';
 import { usePoolActions } from '@/store/pools/actions';
@@ -11,6 +11,7 @@ import { useOnMount } from '@/hooks/useOnMount';
 import Section from './section';
 import SearchPlaceholder from '@/components/search-ui/search-placeholder';
 import Loader from './loader';
+import Header from './header';
 
 const Home = () => {
   const { router, poolsState, smartAccountState, accountState, appState } = useSystemFunctions();
@@ -100,44 +101,21 @@ const Home = () => {
     );
   }
 
-  if (true) return <Loader />;
-
   return (
     <>
-      <SearchPlaceholder />
-
-      <LQDScrollView
-        refreshing={accountState.refreshing}
-        onRefresh={() => getTokens(true)}
-        style={styles.container}
-        contentStyle={styles.contentContainer}
-      >
-        <View style={styles.balanceAndActionContainer}>
-          <View style={styles.balanceContainer}>
-            <Text style={styles.balanceTitle}>Total Balance</Text>
-            <TouchableOpacity onPress={() => router.push('/(tabs)/holdings')} style={styles.balanceValueContainer}>
-              <Text style={styles.balanceWholeValue}>
-                ${whole}.<Text style={styles.balanceDecimalValue}>{decimal}</Text>
-              </Text>
-
-              <CaretRightIcon width={20} height={20} fill="#F8FAFC" />
-            </TouchableOpacity>
-          </View>
-
-          <LQDButton
-            title="Add money"
-            onPress={() => router.push('/deposit/debit')}
-            variant="tertiaryOutline"
-            icon="money"
-            iconColor="#334155"
-            style={{ alignSelf: 'stretch' }}
-          />
-        </View>
-
-        {sections.map((section, index) => (
-          <Section key={index} {...section} />
-        ))}
-      </LQDScrollView>
+      <Header amount={3333} />
+      {globalLoading && <Loader />}
+      {!globalLoading && (
+        <FlatList
+          refreshing={accountState.refreshing}
+          data={top7Gainers}
+          showsVerticalScrollIndicator={false}
+          renderItem={({ item }) => <LQDFeedCard feed={item} />}
+          keyExtractor={(_, index) => index.toString()}
+          showsHorizontalScrollIndicator={false}
+          style={{ backgroundColor: '#fff' }}
+        />
+      )}
     </>
   );
 };

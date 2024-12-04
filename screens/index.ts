@@ -3,6 +3,8 @@ import TopGainers from './home/topGainers';
 import Trending from './home/trending';
 import Hot from './home/hot';
 
+import Discover from './discover';
+
 import Setup from './setup';
 
 import Holdings from './holdings';
@@ -26,6 +28,7 @@ export {
   TopGainers,
   Trending,
   Hot,
+  Discover,
   Setup,
   Holdings,
   Assets,
