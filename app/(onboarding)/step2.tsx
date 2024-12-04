@@ -10,10 +10,10 @@ const Step2 = () => {
   return (
     <LQDOnboardingStep
       image={image}
-      title="Secured by smart accounts"
+      title="Start earning with one click"
       subtitle="Zero gas fees, one click transactions secured with your biometrics"
       containerStyle={{ backgroundColor: '#FF4C61' }}
-      imageStyle={{ left: '25%' }}
+      imageStyle={{ left: '24%' }}
       firstArc={arc}
       firstArcStyle={styles.firstArc}
       secondArc={arc1}
