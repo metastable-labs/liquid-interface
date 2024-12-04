@@ -12,7 +12,7 @@ const Step2 = () => {
       image={image}
       title="Start earning with one click"
       subtitle="Zero gas fees, one click transactions secured with your biometrics"
-      containerStyle={{ backgroundColor: '#FF4C61' }}
+      containerStyle={{ backgroundColor: '#FFF' }}
       imageStyle={{ left: '24%' }}
       firstArc={arc}
       firstArcStyle={styles.firstArc}

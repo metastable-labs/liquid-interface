@@ -12,7 +12,7 @@ const Step3 = () => {
       image={image}
       title="Monitor your positions "
       subtitle="One app, one account, multiple protocols."
-      containerStyle={{ backgroundColor: '#B14DFF' }}
+      containerStyle={{ backgroundColor: '#FFF' }}
       firstArc={arc}
       imageStyle={{ left: '24%' }}
       firstArcStyle={styles.firstArc}

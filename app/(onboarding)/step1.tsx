@@ -14,7 +14,7 @@ const Step1 = () => {
       secondArc={arc1}
       title="Discover DeFi strategies easily"
       subtitle="Earn more with your money, securely"
-      containerStyle={{ backgroundColor: '#fff' }}
+      containerStyle={{ backgroundColor: '#FFF' }}
       imageStyle={{ left: '24%' }}
       firstArcStyle={styles.firstArc}
       secondArcStyle={styles.secondArc}
