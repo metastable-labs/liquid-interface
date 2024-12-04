@@ -99,7 +99,8 @@ const Home = () => {
       </View>
     );
   }
-  if (globalLoading) return <Loader />;
+
+  if (true) return <Loader />;
 
   return (
     <>
