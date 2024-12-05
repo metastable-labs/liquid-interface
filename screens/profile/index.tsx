@@ -3,7 +3,7 @@ import React from 'react';
 
 const Profile = () => {
   return (
-    <View>
+    <View style={styles.container}>
       <Text>index Profile</Text>
     </View>
   );
@@ -11,4 +11,9 @@ const Profile = () => {
 
 export default Profile;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#FFF',
+  },
+});

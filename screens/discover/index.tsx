@@ -3,7 +3,7 @@ import React from 'react';
 
 const Discover = () => {
   return (
-    <View>
+    <View style={styles.container}>
       <Text>index Discover</Text>
     </View>
   );
@@ -11,4 +11,9 @@ const Discover = () => {
 
 export default Discover;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#FFF',
+  },
+});
