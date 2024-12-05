@@ -1,5 +1,6 @@
 interface FeedCard {
   feed: any;
+  showInvest?: boolean;
 }
 
 interface IFeedStep {

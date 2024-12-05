@@ -5,7 +5,7 @@ import { CommentIcon, FlashIcon, MoreIcon, ReTweetIcon, ShareIcon, SwatchIcon } 
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import FeedStep from './feed-step';
 
-const LQDFeedCard = ({ feed }: FeedCard) => {
+const LQDFeedCard = ({ feed, showInvest = true }: FeedCard) => {
   const { steps, photo, username, address, date, percentage, estimate, title, description, commentCount, shareCount, flashCount } = feed;
   return (
     <View style={styles.container}>
@@ -69,9 +69,12 @@ const LQDFeedCard = ({ feed }: FeedCard) => {
         {/* fouth */}
         <View style={styles.bottomActionContainer}>
           <View style={styles.bottomActionInnerContainer}>
-            <Pressable style={styles.investBtn}>
-              <Text style={styles.invest}>Invest</Text>
-            </Pressable>
+            {showInvest && (
+              <Pressable style={styles.investBtn}>
+                <Text style={styles.invest}>Invest</Text>
+              </Pressable>
+            )}
+
             <View style={styles.actionFlex}>
               <CommentIcon />
               <Text style={styles.actionText}>{commentCount}</Text>
