@@ -1,16 +1,8 @@
 import { StyleSheet, Text, View } from 'react-native';
-import React, { useState } from 'react';
-import Header from '../home/header';
-import { LQDBottomSheet } from '@/components';
+import React from 'react';
 
 const Profile = () => {
-  const [show, setShow] = useState(false);
-  return (
-    <View style={styles.container}>
-      <Header amount={3333} action={() => setShow((prev) => !prev)} />
-      <LQDBottomSheet show={show} title="Sort by" variant="primary" onClose={() => setShow((prev) => !prev)}></LQDBottomSheet>
-    </View>
-  );
+  return <View style={styles.container}></View>;
 };
 
 export default Profile;

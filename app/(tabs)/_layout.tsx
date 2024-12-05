@@ -4,15 +4,20 @@ import { StatusBar } from 'expo-status-bar';
 
 import { TabBarIcon } from '@/components/navigation/TabBarIcon';
 import { Colors } from '@/constants/Colors';
-import { LQDNavigation } from '@/components';
+import { LQDBottomSheet, LQDNavigation } from '@/components';
+import Header from '@/screens/home/header';
+import { useState } from 'react';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  const [show, setShow] = useState(false);
 
   return (
     <>
       <StatusBar style="dark" />
       <View style={styles.container} />
+      <Header amount={3333} action={() => setShow((prev) => !prev)} />
+      <LQDBottomSheet show={show} title="Sort by" variant="primary" onClose={() => setShow((prev) => !prev)}></LQDBottomSheet>
 
       <Tabs
         tabBar={(props) => <LQDNavigation {...props} />}

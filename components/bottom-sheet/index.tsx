@@ -1,4 +1,5 @@
-import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Modal, Pressable } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Pressable } from 'react-native';
+import Modal from 'react-native-modal';
 
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import { CloseIcon } from '@/assets/icons';
@@ -20,9 +21,8 @@ const LQDBottomSheet: React.FC<ILQDBottomSheet> = ({ title, variant = 'primary',
   };
 
   return (
-    <Modal statusBarTranslucent transparent visible={show} animationType="slide">
-      <Pressable style={styles.overlay} onPress={onClose} />
-
+    <Modal style={{ padding: 0, margin: 0 }} statusBarTranslucent isVisible={show} animationIn="slideInUp">
+      <Pressable style={styles.overlay} />
       <View
         style={{
           ...styles.bottomSheet,
@@ -46,8 +46,8 @@ const LQDBottomSheet: React.FC<ILQDBottomSheet> = ({ title, variant = 'primary',
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: '#2125506B',
     justifyContent: 'flex-end',
+    width: '100%',
   },
 
   bottomSheet: {

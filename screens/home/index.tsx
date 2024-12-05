@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { StyleSheet, Platform, StatusBar as RNStatusBar, Pressable } from 'react-native';
 
 import useSystemFunctions from '@/hooks/useSystemFunctions';
@@ -9,7 +9,6 @@ import { useAccountActions } from '@/store/account/actions';
 import { usePoolActions } from '@/store/pools/actions';
 import { useOnMount } from '@/hooks/useOnMount';
 import Loader from './loader';
-import Header from './header';
 const image = 'https://pics.craiyon.com/2023-08-02/7a951cac85bd4aa2b0e70dbaabb8404e.webp';
 
 const feeds: Array<any> = [
@@ -108,12 +107,10 @@ const Home = () => {
   const { router, poolsState, smartAccountState, accountState, appState } = useSystemFunctions();
   const { getTokens } = useAccountActions();
   const { getAllPools } = usePoolActions();
-  const [show, setShow] = useState(false);
 
   const { loadingPools } = poolsState;
   const { loading: loadingAccounts } = accountState;
   const globalLoading = loadingPools || loadingAccounts;
-  const emptyArry = createArrayWithIndexes(5);
 
   useEffect(
     function fetchBalances() {
@@ -128,7 +125,6 @@ const Home = () => {
 
   return (
     <>
-      <Header amount={3333} action={() => setShow((prev) => !prev)} />
       <Pressable style={styles.addIcon}>
         <PlusIcon />
       </Pressable>
@@ -145,7 +141,6 @@ const Home = () => {
           onRefresh={() => {}}
         />
       )}
-      <LQDBottomSheet show={show} title="Sort by" variant="primary" onClose={() => setShow((prev) => !prev)}></LQDBottomSheet>
     </>
   );
 };
