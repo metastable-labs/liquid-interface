@@ -1,7 +1,7 @@
 import { Stack } from 'expo-router';
 import { LQDStackHeader } from '@/components';
 
-const HoldingsStack = () => {
+const ProfileStack = () => {
   return (
     <Stack
       screenOptions={{
@@ -15,22 +15,8 @@ const HoldingsStack = () => {
           headerShown: false,
         }}
       />
-
-      <Stack.Screen
-        name="assets"
-        options={{
-          header: (props) => <LQDStackHeader {...props} style={{ paddingTop: 34 }} />,
-        }}
-      />
-
-      <Stack.Screen
-        name="[poolId]"
-        options={{
-          headerShown: false,
-        }}
-      />
     </Stack>
   );
 };
 
-export default HoldingsStack;
+export default ProfileStack;

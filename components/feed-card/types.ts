@@ -1,5 +1,5 @@
 interface FeedCard {
-  feed: any; // Fix when we start pulling feeds data;
+  feed: any;
 }
 
 interface IFeedStep {

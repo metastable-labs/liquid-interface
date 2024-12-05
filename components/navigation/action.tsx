@@ -10,7 +10,7 @@ const image = 'https://pics.craiyon.com/2023-08-02/7a951cac85bd4aa2b0e70dbaabb84
 const icon: any = {
   home: (props: any) => <HomeIcon {...props} />,
   discover: (props: any) => <DiscordTabIcon {...props} />,
-  holdings: () => <FastImage style={styles.image} source={{ uri: image }} />,
+  profile: () => <FastImage style={styles.image} source={{ uri: image }} />,
 };
 
 const LQDNavigationAction = ({ isFocused, label, onLongPress, onPress, routeName }: ILQDNavigationAction) => {

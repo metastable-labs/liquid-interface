@@ -32,7 +32,7 @@ const LQDBottomSheet: React.FC<ILQDBottomSheet> = ({ title, variant = 'primary',
       >
         <View style={styles.header}>
           <Text style={styles.title}>{title}</Text>
-          <TouchableOpacity onPress={onClose}>
+          <TouchableOpacity onPress={onClose} style={{ position: 'absolute', right: 0 }}>
             <CloseIcon />
           </TouchableOpacity>
         </View>
@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     zIndex: 30,
     width: '100%',
     paddingBottom: 62.45,
-    paddingTop: 27.55,
+    paddingTop: 17,
     paddingHorizontal: 16,
     backgroundColor: '#fff',
     borderTopLeftRadius: 20,
@@ -66,13 +66,13 @@ const styles = StyleSheet.create({
 
   header: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
   },
 
   title: {
     color: '#0F172A',
-    fontSize: adjustFontSizeForIOS(20, 3),
+    fontSize: adjustFontSizeForIOS(17, 3),
     lineHeight: 23.2,
     fontWeight: '500',
     fontFamily: 'AeonikMedium',

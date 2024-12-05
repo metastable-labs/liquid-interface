@@ -1,11 +1,6 @@
-import React, { ReactNode } from 'react';
-import { FlatList, FlatListProps, Text, View, ActivityIndicator, StyleSheet, ListRenderItem } from 'react-native';
-
-interface LQDFlatlistProps<T> extends FlatListProps<T> {
-  loader?: boolean;
-  ListEmptyComponent?: ReactNode;
-  ListFooterComponent?: ReactNode;
-}
+import React from 'react';
+import { FlatList, View, ActivityIndicator, StyleSheet, ListRenderItem, RefreshControl } from 'react-native';
+import { LQDFlatlistProps } from './types';
 
 const LQDFlatlist = <T,>({
   data = [],
@@ -25,19 +20,36 @@ const LQDFlatlist = <T,>({
 }: LQDFlatlistProps<T>) => {
   const DefaultFooterLoader = () => (
     <View style={styles.loaderContainer}>
-      <ActivityIndicator size="small" color="#09C37F" />
+      <ActivityIndicator size="small" color="#4691FE" />
     </View>
   );
+
+  const IsRefresh = () => {
+    if (onRefresh) {
+      return (
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+          progressBackgroundColor="white"
+          tintColor="#4691FE"
+          titleColor="#4691FE"
+        />
+      );
+    }
+
+    return null;
+  };
 
   return (
     <FlatList
       data={data}
-      renderItem={renderItem as ListRenderItem<T>} // Explicitly typing the renderItem function
+      renderItem={renderItem as ListRenderItem<T>}
       keyExtractor={keyExtractor}
       ListHeaderComponent={ListHeaderComponent}
       ListFooterComponent={loader ? <DefaultFooterLoader /> : ListFooterComponent}
       ListEmptyComponent={ListEmptyComponent}
       refreshing={refreshing}
+      refreshControl={<IsRefresh />}
       onRefresh={onRefresh}
       onEndReached={onEndReached}
       onEndReachedThreshold={onEndReachedThreshold}
@@ -59,11 +71,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
-  },
-  emptyText: {
-    fontSize: 16,
-    color: '#64748B',
-    textAlign: 'center',
   },
   loaderContainer: {
     paddingVertical: 16,

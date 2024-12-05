@@ -5,41 +5,8 @@ import { CommentIcon, FlashIcon, MoreIcon, ReTweetIcon, ShareIcon, SwatchIcon } 
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import FeedStep from './feed-step';
 
-const iconURL = 'https://res.cloudinary.com/djzeufu4j/image/upload/v1732105634/tokenBIcon_wscb3p.png';
-const setupSteps: Array<any> = [
-  {
-    variant: 'supply',
-    tokenA: 'cbBTC',
-    tokenB: 'moonWell',
-    tokenAIconURL: 'https://res.cloudinary.com/djzeufu4j/image/upload/v1732105634/tokenAIcon_jgy241.png',
-    tokenBIconURL: 'https://res.cloudinary.com/djzeufu4j/image/upload/v1732105634/tokenBIcon_wscb3p.png',
-  },
-  {
-    variant: 'deposit',
-    tokenA: 'Borrowed USDC',
-    tokenB: 'Morpho',
-    tokenAIconURL: 'https://res.cloudinary.com/djzeufu4j/image/upload/v1732105634/tokenAIcon_jgy241.png',
-    tokenBIconURL: 'https://res.cloudinary.com/djzeufu4j/image/upload/v1732105634/tokenBIcon_wscb3p.png',
-  },
-
-  {
-    variant: 'borrow',
-    tokenA: 'USDC',
-    tokenB: 'Base',
-    tokenAIconURL: 'https://res.cloudinary.com/djzeufu4j/image/upload/v1732105634/tokenAIcon_jgy241.png',
-    tokenBIconURL: 'https://res.cloudinary.com/djzeufu4j/image/upload/v1732105634/tokenBIcon_wscb3p.png',
-  },
-  {
-    isLast: true,
-    variant: 'stake',
-    tokenA: 'DAI',
-    tokenB: 'USDC',
-    tokenAIconURL: 'https://res.cloudinary.com/djzeufu4j/image/upload/v1732105634/tokenAIcon_jgy241.png',
-    tokenBIconURL: 'https://res.cloudinary.com/djzeufu4j/image/upload/v1732105634/tokenBIcon_wscb3p.png',
-  },
-];
-
 const LQDFeedCard = ({ feed }: FeedCard) => {
+  const { steps, photo, username, address, date, percentage, estimate, title, description, commentCount, shareCount, flashCount } = feed;
   return (
     <View style={styles.container}>
       <View>
@@ -48,21 +15,21 @@ const LQDFeedCard = ({ feed }: FeedCard) => {
           <FastImage
             style={styles.image}
             source={{
-              uri: iconURL,
+              uri: photo,
               priority: FastImage.priority.normal,
             }}
             resizeMode={FastImage.resizeMode.contain}
           />
           {/*  */}
           <View style={{ flex: 1 }}>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+            <View style={styles.rightContentFlex}>
               <View>
-                <View style={{ flexDirection: 'row', gap: 10, alignItems: 'center', marginBottom: 5 }}>
-                  <Text style={styles.username}>@Nurayyy.eth</Text>
-                  <Text style={styles.time}>2h</Text>
+                <View style={styles.usernameFlex}>
+                  <Text style={styles.username}>{username}</Text>
+                  <Text style={styles.time}>{date}</Text>
                 </View>
                 <Text style={styles.address} numberOfLines={1}>
-                  0xc61...87f7a
+                  {address}
                 </Text>
               </View>
               <MoreIcon />
@@ -72,14 +39,14 @@ const LQDFeedCard = ({ feed }: FeedCard) => {
         {/* top */}
         {/* second */}
         <View style={styles.feedStep}>
-          {setupSteps.map((step, index) => (
+          {steps.map((step: IFeedStep, index: number) => (
             <FeedStep
               key={index}
               variant={step.variant}
               tokenA={step.tokenA}
               tokenB={step.tokenB}
-              tokenAIconURL={step.tokenAIcon}
-              tokenBIconURL={step.tokenBIcon}
+              tokenAIconURL={step.tokenAIconURL}
+              tokenBIconURL={step.tokenBIconURL}
               title={step.title}
               isLast={step.isLast}
             />
@@ -88,34 +55,34 @@ const LQDFeedCard = ({ feed }: FeedCard) => {
         {/* second */}
         {/* third */}
         <View style={{ marginVertical: 20, gap: 15 }}>
-          <Text style={styles.title}>Moonwell - USDC</Text>
+          <Text style={styles.title}>{title}</Text>
           <View style={{ flexDirection: 'row', gap: 10 }}>
-            <Text style={styles.estimate}>Est. APY</Text>
-            <Text style={styles.percentage}>65.45%</Text>
+            <Text style={styles.estimate}>{estimate}</Text>
+            <Text style={styles.percentage}>{percentage}%</Text>
           </View>
-          <Text style={styles.description}>This strategy starts as an ease in for first and second quaterss of 2025</Text>
+          <Text style={styles.description}>{description}</Text>
           <Pressable>
             <Text style={styles.seeMore}>See more...</Text>
           </Pressable>
         </View>
         {/* third */}
         {/* fouth */}
-        <View style={{ flexDirection: 'row', gap: 20, alignItems: 'center' }}>
-          <View style={{ flex: 1, flexDirection: 'row', gap: 20 }}>
-            <Pressable style={{ backgroundColor: '#4691FE', paddingHorizontal: 15, borderRadius: 10, paddingVertical: 5 }}>
+        <View style={styles.bottomActionContainer}>
+          <View style={styles.bottomActionInnerContainer}>
+            <Pressable style={styles.investBtn}>
               <Text style={styles.invest}>Invest</Text>
             </Pressable>
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
+            <View style={styles.actionFlex}>
               <CommentIcon />
-              <Text style={styles.actionText}>26</Text>
+              <Text style={styles.actionText}>{commentCount}</Text>
             </View>
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
+            <View style={styles.actionFlex}>
               <ReTweetIcon />
-              <Text style={styles.actionText}>26</Text>
+              <Text style={styles.actionText}>{shareCount}</Text>
             </View>
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
+            <View style={styles.actionFlex}>
               <FlashIcon />
-              <Text style={styles.actionText}>26</Text>
+              <Text style={styles.actionText}>{flashCount}</Text>
             </View>
           </View>
           <ShareIcon />
@@ -223,4 +190,11 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     marginTop: 20,
   },
+
+  actionFlex: { flexDirection: 'row', alignItems: 'center', gap: 5 },
+  investBtn: { backgroundColor: '#4691FE', paddingHorizontal: 15, borderRadius: 10, paddingVertical: 5 },
+  bottomActionContainer: { flexDirection: 'row', gap: 20, alignItems: 'center' },
+  bottomActionInnerContainer: { flex: 1, flexDirection: 'row', gap: 20 },
+  rightContentFlex: { flexDirection: 'row', justifyContent: 'space-between' },
+  usernameFlex: { flexDirection: 'row', gap: 10, alignItems: 'center', marginBottom: 5 },
 });

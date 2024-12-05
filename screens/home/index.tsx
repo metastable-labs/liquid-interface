@@ -1,134 +1,151 @@
-import { useEffect } from 'react';
-import {
-  StyleSheet,
-  View,
-  Text,
-  FlatList,
-  TouchableOpacity,
-  Platform,
-  StatusBar as RNStatusBar,
-  ScrollView,
-  Pressable,
-} from 'react-native';
+import { useEffect, useState } from 'react';
+import { StyleSheet, Platform, StatusBar as RNStatusBar, Pressable } from 'react-native';
 
 import useSystemFunctions from '@/hooks/useSystemFunctions';
-import { adjustFontSizeForIOS, createArrayWithIndexes, formatAmountWithWholeAndDecimal } from '@/utils/helpers';
-import { LQDButton, LQDFeedCard, LQDPoolPairCard, LQDPoolPairPaper, LQDScrollView, LQShrimeLoader, SearchUI } from '@/components';
-import { CaretRightIcon, DirectUpIcon, DollarSquareIcon, PlusIcon, TrendUpIcon } from '@/assets/icons';
+import { adjustFontSizeForIOS, createArrayWithIndexes } from '@/utils/helpers';
+import { LQDBottomSheet, LQDFeedCard, LQDFlatlist, LQDPoolPairCard } from '@/components';
+import { PlusIcon } from '@/assets/icons';
 import { useAccountActions } from '@/store/account/actions';
 import { usePoolActions } from '@/store/pools/actions';
 import { useOnMount } from '@/hooks/useOnMount';
-import Section from './section';
-import SearchPlaceholder from '@/components/search-ui/search-placeholder';
 import Loader from './loader';
 import Header from './header';
+const image = 'https://pics.craiyon.com/2023-08-02/7a951cac85bd4aa2b0e70dbaabb8404e.webp';
+
+const feeds: Array<any> = [
+  {
+    photo: image,
+    username: '@Nurayyy.eth',
+    address: '0xc61...87f7a',
+    date: '2h',
+    percentage: '65.45',
+    estimate: 'Est. APY',
+    title: 'Moonwell - USDC',
+    commentCount: 26,
+    shareCount: 26,
+    flashCount: 26,
+    description: 'This strategy starts as an ease in for first and second quaterss of 2025',
+    steps: [
+      {
+        variant: 'supply',
+        tokenA: 'cbBTC',
+        tokenB: 'moonWell',
+        tokenAIconURL: 'https://res.cloudinary.com/djzeufu4j/image/upload/v1732105634/tokenAIcon_jgy241.png',
+        tokenBIconURL: 'https://res.cloudinary.com/djzeufu4j/image/upload/v1732105634/tokenBIcon_wscb3p.png',
+      },
+
+      {
+        variant: 'deposit',
+        tokenA: 'Borrowed USDC',
+        tokenB: 'Morpho',
+        tokenAIconURL: 'https://res.cloudinary.com/djzeufu4j/image/upload/v1732105634/tokenAIcon_jgy241.png',
+        tokenBIconURL: 'https://res.cloudinary.com/djzeufu4j/image/upload/v1732105634/tokenBIcon_wscb3p.png',
+      },
+      {
+        variant: 'borrow',
+        tokenA: 'USDC',
+        tokenB: 'Base',
+        tokenAIconURL: 'https://res.cloudinary.com/djzeufu4j/image/upload/v1732105634/tokenAIcon_jgy241.png',
+        tokenBIconURL: 'https://res.cloudinary.com/djzeufu4j/image/upload/v1732105634/tokenBIcon_wscb3p.png',
+      },
+      {
+        isLast: true,
+        variant: 'stake',
+        tokenA: 'DAI',
+        tokenB: 'USDC',
+        tokenAIconURL: 'https://res.cloudinary.com/djzeufu4j/image/upload/v1732105634/tokenAIcon_jgy241.png',
+        tokenBIconURL: 'https://res.cloudinary.com/djzeufu4j/image/upload/v1732105634/tokenBIcon_wscb3p.png',
+      },
+    ],
+  },
+  {
+    photo: image,
+    username: '@Gabby.eth',
+    address: '0xc61...87f7a',
+    date: '2h',
+    percentage: '65.45',
+    estimate: 'Est. APY',
+    title: 'Moonwell - USDC',
+    commentCount: 26,
+    shareCount: 26,
+    flashCount: 26,
+    description: 'This strategy starts as an ease in for first and second quaterss of 2025',
+    steps: [
+      {
+        variant: 'deposit',
+        tokenA: 'Borrowed USDC',
+        tokenB: 'Morpho',
+        tokenAIconURL: 'https://res.cloudinary.com/djzeufu4j/image/upload/v1732105634/tokenAIcon_jgy241.png',
+        tokenBIconURL: 'https://res.cloudinary.com/djzeufu4j/image/upload/v1732105634/tokenBIcon_wscb3p.png',
+      },
+      {
+        variant: 'supply',
+        tokenA: 'cbBTC',
+        tokenB: 'moonWell',
+        tokenAIconURL: 'https://res.cloudinary.com/djzeufu4j/image/upload/v1732105634/tokenAIcon_jgy241.png',
+        tokenBIconURL: 'https://res.cloudinary.com/djzeufu4j/image/upload/v1732105634/tokenBIcon_wscb3p.png',
+      },
+      {
+        variant: 'borrow',
+        tokenA: 'USDC',
+        tokenB: 'Base',
+        tokenAIconURL: 'https://res.cloudinary.com/djzeufu4j/image/upload/v1732105634/tokenAIcon_jgy241.png',
+        tokenBIconURL: 'https://res.cloudinary.com/djzeufu4j/image/upload/v1732105634/tokenBIcon_wscb3p.png',
+      },
+      {
+        isLast: true,
+        variant: 'stake',
+        tokenA: 'DAI',
+        tokenB: 'USDC',
+        tokenAIconURL: 'https://res.cloudinary.com/djzeufu4j/image/upload/v1732105634/tokenAIcon_jgy241.png',
+        tokenBIconURL: 'https://res.cloudinary.com/djzeufu4j/image/upload/v1732105634/tokenBIcon_wscb3p.png',
+      },
+    ],
+  },
+];
 
 const Home = () => {
   const { router, poolsState, smartAccountState, accountState, appState } = useSystemFunctions();
   const { getTokens } = useAccountActions();
-  const { getPools, getAllPools } = usePoolActions();
+  const { getAllPools } = usePoolActions();
+  const [show, setShow] = useState(false);
 
-  const { trendingPools, hotPools, topGainers, loadingPools } = poolsState;
+  const { loadingPools } = poolsState;
   const { loading: loadingAccounts } = accountState;
-
-  const { whole, decimal } = formatAmountWithWholeAndDecimal(accountState.tokenBalance.toFixed(2));
-
-  const hotPoolsArray = Object.values(hotPools.data);
-  const trendingPoolsArray = Object.values(trendingPools.data);
-  const top7GainersArray = Object.values(topGainers.data);
-
-  const top10TrendingPools = trendingPoolsArray?.slice(0, 10);
-  const top10HotPools = hotPoolsArray.slice(0, 10) ?? [];
-  const top7Gainers = top7GainersArray.slice(0, 7);
   const globalLoading = loadingPools || loadingAccounts;
-  const emptyArryTopGainers = createArrayWithIndexes(3);
-  const emptyArryTrending = createArrayWithIndexes(5);
-
-  const sections = [
-    {
-      title: 'Top gainers',
-      subtitle: 'by APR',
-      icon: <TrendUpIcon />,
-      action: () => router.push('/(tabs)/home/top'),
-      children: (
-        <FlatList
-          data={top7Gainers}
-          horizontal
-          renderItem={({ item }) => <LQDPoolPairCard pool={item} />}
-          keyExtractor={(_, index) => index.toString()}
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={{ gap: 10 }}
-        />
-      ),
-    },
-
-    {
-      title: 'Trending',
-      subtitle: 'by Volume',
-      icon: <DirectUpIcon />,
-      action: () => router.push('/(tabs)/home/trending'),
-      children: (
-        <View style={styles.mapContainer}>
-          {top10TrendingPools.map((pool, index) => (
-            <LQDPoolPairPaper key={index} pool={pool} />
-          ))}
-        </View>
-      ),
-    },
-    {
-      title: 'Hot',
-      subtitle: 'by TVL',
-      icon: <DollarSquareIcon />,
-      action: () => router.push('/(tabs)/home/hot'),
-      children: (
-        <View style={styles.mapContainer}>
-          {top10HotPools.map((pool, index) => (
-            <LQDPoolPairPaper key={index} pool={pool} />
-          ))}
-        </View>
-      ),
-    },
-  ];
+  const emptyArry = createArrayWithIndexes(5);
 
   useEffect(
     function fetchBalances() {
       getTokens();
-      //getPositions();
     },
     [smartAccountState.address]
   );
 
   useOnMount(function loadData() {
-    getPools();
     getAllPools();
   });
 
-  if (appState.showSearch) {
-    return (
-      <View style={styles.searchWrapper}>
-        <SearchUI />
-      </View>
-    );
-  }
-
   return (
     <>
-      <Header amount={3333} />
+      <Header amount={3333} action={() => setShow((prev) => !prev)} />
       <Pressable style={styles.addIcon}>
         <PlusIcon />
       </Pressable>
       {globalLoading && <Loader />}
       {!globalLoading && (
-        <FlatList
+        <LQDFlatlist
           refreshing={accountState.refreshing}
-          data={top7Gainers}
+          data={feeds}
           showsVerticalScrollIndicator={false}
           renderItem={({ item }) => <LQDFeedCard feed={item} />}
           keyExtractor={(_, index) => index.toString()}
           showsHorizontalScrollIndicator={false}
           style={{ backgroundColor: '#fff' }}
+          onRefresh={() => {}}
         />
       )}
+      <LQDBottomSheet show={show} title="Sort by" variant="primary" onClose={() => setShow((prev) => !prev)}></LQDBottomSheet>
     </>
   );
 };

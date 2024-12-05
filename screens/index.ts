@@ -5,13 +5,9 @@ import Hot from './home/hot';
 
 import Discover from './discover';
 
+import Profile from './profile';
+
 import Setup from './setup';
-
-import Holdings from './holdings';
-import Assets from './holdings/assets';
-import Pools from './holdings/pools';
-import Rewards from './holdings/rewards';
-
 import CryptoDeposit from './deposit/crypto';
 import DebitDeposit from './deposit/debit';
 
@@ -29,11 +25,8 @@ export {
   Trending,
   Hot,
   Discover,
+  Profile,
   Setup,
-  Holdings,
-  Assets,
-  Pools,
-  Rewards,
   LiquidityManagement,
   CryptoDeposit,
   DebitDeposit,
