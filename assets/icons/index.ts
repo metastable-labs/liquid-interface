@@ -51,10 +51,42 @@ import SupportIcon from './support-icon';
 import XIcon from './x-ixon';
 import DiscordIcon from './discord-icon';
 import SearchEmptyStateIcon from './search-empty-state-icon';
+import CloseToastIcon from './close-toast-icon';
+import ToastVarintIcon from './toast-varient-icon';
+import HeaderMenuIcon from './header-menu-icon';
+import HeaderWalletIcon from './header-wallet-icon';
+import MoreIcon from './more-icon';
+import ReTweetIcon from './re-tweet-icon';
+import CommentIcon from './comment-icon';
+import FlashIcon from './flash-icon';
+import ShareIcon from './share-icon';
+import ConnectorIcon from './connector-icon';
+import BorrowIcon from './borrow-icon';
+import StakeIcon from './stake-icon';
+import DepositIcon from './deposit-icon';
+import SupplyIcon from './supply-icon';
+import PlusIcon from './plus-icon';
+import DiscordTabIcon from './discover-tab-icon';
 
 export {
   SwatchIcon,
+  ConnectorIcon,
+  PlusIcon,
+  DiscordTabIcon,
+  MoreIcon,
+  HeaderMenuIcon,
+  HeaderWalletIcon,
   SearchEmptyStateIcon,
+  BorrowIcon,
+  StakeIcon,
+  DepositIcon,
+  SupplyIcon,
+  CloseToastIcon,
+  ShareIcon,
+  ToastVarintIcon,
+  ReTweetIcon,
+  CommentIcon,
+  FlashIcon,
   ChartIcon,
   ShieldTickIcon,
   MoneysIcon,

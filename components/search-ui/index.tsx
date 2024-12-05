@@ -12,6 +12,7 @@ import { ISearchSection } from './types';
 import LQShrimeLoader from '../loader';
 import { createArrayWithIndexes } from '@/utils/helpers';
 import { clearRecentSearchedPools } from '@/store/pools';
+import LQNoResult from '../no-result';
 
 const SearchUI = () => {
   const { router, poolsState, dispatch } = useSystemFunctions();
@@ -86,16 +87,6 @@ const SearchUI = () => {
     setSearchText(value);
   };
 
-  const EmptyState = () => (
-    <View style={styles.emptyContainer}>
-      <SearchEmptyStateIcon />
-      <Text style={styles.emptyTitle}>Can’t find this pool</Text>
-      <Text style={styles.emptyDescription}>
-        We can’t find that pool, make sure it’s not a typo or you can explore other pools on Liquid
-      </Text>
-    </View>
-  );
-
   const Loader = () =>
     emptysearch.map((_, index) => (
       <View key={index} style={styles.loaderContainer}>
@@ -114,7 +105,12 @@ const SearchUI = () => {
 
       {loading && <Loader />}
 
-      {searchedPools.length === 0 && searchText && !loading && <EmptyState />}
+      {searchedPools.length === 0 && searchText && !loading && (
+        <LQNoResult
+          title="Can’t find this pool"
+          description="We can’t find that pool, make sure it’s not a typo or you can explore other pools on Liquid"
+        />
+      )}
 
       {searchedPools.length === 0 && !searchText && !loading && (
         <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
@@ -145,28 +141,6 @@ const styles = StyleSheet.create({
     paddingTop: 34,
     paddingBottom: 68,
     gap: 40,
-  },
-
-  emptyContainer: {
-    paddingHorizontal: 16,
-    paddingTop: 34,
-    alignItems: 'center',
-    gap: 10,
-  },
-
-  emptyTitle: {
-    textAlign: 'center',
-    color: '#334155',
-    fontSize: 17,
-    fontFamily: 'AeonikBold',
-    fontWeight: '700',
-    marginTop: 10,
-  },
-  emptyDescription: {
-    textAlign: 'center',
-    color: '#64748B',
-    fontSize: 15,
-    fontFamily: 'AeonikRegular',
   },
 
   mapContainer: {

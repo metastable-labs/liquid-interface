@@ -49,12 +49,12 @@ const styles = StyleSheet.create({
     borderRadius: 9999,
     borderWidth: 1,
     borderColor: '#EAEEF4',
-    marginRight: -6,
+    marginRight: -12,
   },
 
   image: {
-    width: 24,
-    height: 24,
+    width: 16,
+    height: 16,
     borderRadius: 9999,
   },
 });

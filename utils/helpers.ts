@@ -53,6 +53,9 @@ const formatAmountWithWholeAndDecimal = (amount?: number | string, decimals = 4)
 };
 
 function removeCommasFromNumber(text: string): string {
+  if (typeof text !== 'string') {
+    text = String(text);
+  }
   return text.replace(/,/g, '');
 }
 

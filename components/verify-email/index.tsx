@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Platform, StatusBar as RNStatusBar, ViewStyle, Alert, Touchable, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Platform, StatusBar as RNStatusBar, ViewStyle, TouchableOpacity } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { OtpInput } from 'react-native-otp-entry';
 import { useLoginWithEmail } from '@privy-io/expo';
@@ -9,16 +9,23 @@ import LQDKeyboardWrapper from '@/components/keyboard-wrapper';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import { useSmartAccountActions } from '@/store/smartAccount/actions';
+import { useToastActions } from '@/store/toast/actions';
 
 const VerifyEmail = ({ email, isSignup }: { email: string; isSignup?: boolean }) => {
   const { router } = useSystemFunctions();
   const { login } = useSmartAccountActions();
+  const { showToast } = useToastActions();
 
   const { loginWithCode, sendCode } = useLoginWithEmail({
     onError: (error) => {
       console.log('error', error.message);
       setLoading(false);
-      Alert.alert('An error occurred. Please check your email and try again.');
+
+      showToast({
+        title: 'Error',
+        description: 'An error occurred. Please check your email and try again.',
+        variant: 'error',
+      });
     },
     onLoginSuccess: async () => {
       if (isSignup) {
@@ -28,6 +35,11 @@ const VerifyEmail = ({ email, isSignup }: { email: string; isSignup?: boolean })
     },
     onSendCodeSuccess: () => {
       setResendDisabled(true);
+      showToast({
+        title: 'OTP sent.',
+        description: 'An OTP has been sent. Please check your email',
+        variant: 'success',
+      });
       setCountdownTimer(30);
       startCountdown();
     },
@@ -39,7 +51,7 @@ const VerifyEmail = ({ email, isSignup }: { email: string; isSignup?: boolean })
   const [countdownTimer, setCountdownTimer] = useState(30);
   const [resendDisabled, setResendDisabled] = useState(true);
 
-  const disableButton = !otp || otp.length < 6;
+  const disableButton = !otp || otp.length < 6 || loading;
 
   const onSubmit = async () => {
     try {
@@ -47,7 +59,9 @@ const VerifyEmail = ({ email, isSignup }: { email: string; isSignup?: boolean })
 
       await loginWithCode({ code: otp, email: email as string });
     } catch (error) {
-      setError(true);
+      setLoading(false);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -57,7 +71,12 @@ const VerifyEmail = ({ email, isSignup }: { email: string; isSignup?: boolean })
       setResendDisabled(true);
       await sendCode({ email });
     } catch (error) {
-      Alert.alert('An error occurred. Please check your email and try again.');
+      showToast({
+        title: 'Error',
+        description: 'An error occurred. Please check your email and try again.',
+        variant: 'error',
+      });
+    } finally {
       setResendDisabled(false);
     }
   };

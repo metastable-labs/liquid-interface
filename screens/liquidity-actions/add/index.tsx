@@ -69,7 +69,7 @@ const AddLiquidity = () => {
         description: `There's no available pool for ${tokenA.asset?.symbol} / ${tokenB.asset?.symbol}. Try selecting ${tokenB.asset?.symbol} as the first token and ${tokenA.asset?.symbol} as the second.`,
       },
     };
-  }, []);
+  }, [tokenA.asset, tokenB.asset]);
 
   const infos: Array<Info> = [
     {
@@ -84,7 +84,9 @@ const AddLiquidity = () => {
     },
   ];
 
-  const disableButton = !parseFloat(removeCommasFromNumber(tokenA.value)) || !parseFloat(removeCommasFromNumber(tokenB.value));
+  const disableButton = useMemo(() => {
+    return !parseFloat(removeCommasFromNumber(tokenA.value)) || !parseFloat(removeCommasFromNumber(tokenB.value));
+  }, [tokenA.value, tokenB.value]);
 
   const loadingViewStyle = useAnimatedStyle(() => ({
     opacity: withTiming(loading ? 1 : 0, { duration: 500 }),
@@ -99,18 +101,24 @@ const AddLiquidity = () => {
 
     if (!asset) return;
 
-    if (token === 'tokenA') setTokenA({ ...tokenA, asset: { ...tokenA.asset, ...asset } });
-    if (token === 'tokenB') setTokenB({ ...tokenB, asset: { ...tokenB.asset, ...asset } });
+    if (token === 'tokenA' && tokenA.asset?.address !== asset.address) {
+      setTokenA({ ...tokenA, asset: { ...asset } });
+    }
+    if (token === 'tokenB' && tokenB.asset?.address !== asset.address) {
+      setTokenB({ ...tokenB, asset: { ...asset } });
+    }
   };
 
   const handleValueChange = (value: string, token: 'tokenA' | 'tokenB') => {
     const formatedValue = formatInputAmount(value);
 
-    if (token === 'tokenA') {
-      return setTokenA({ ...tokenA, value: formatedValue });
+    if (token === 'tokenA' && tokenA.value !== formatedValue) {
+      setTokenA({ ...tokenA, value: formatedValue });
     }
 
-    return setTokenB({ ...tokenB, value: formatedValue });
+    if (token === 'tokenB' && tokenB.value !== formatedValue) {
+      setTokenB({ ...tokenB, value: formatedValue });
+    }
   };
 
   const onSubmit = async () => {
@@ -214,7 +222,7 @@ const AddLiquidity = () => {
 
       return setPools(response);
     },
-    [tokenA.asset, tokenB.asset]
+    [tokenA.asset, tokenB.asset, didUserChangeToken, poolsState.pools.data]
   );
 
   if (loading) {
