@@ -2,7 +2,11 @@ import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 
 const Profile = () => {
-  return <View style={styles.container}></View>;
+  return (
+    <View style={styles.container}>
+      <Text>Profile Screen</Text>
+    </View>
+  );
 };
 
 export default Profile;
