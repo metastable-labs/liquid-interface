@@ -10,7 +10,7 @@ const image = 'https://pics.craiyon.com/2023-08-02/7a951cac85bd4aa2b0e70dbaabb84
 const icon: any = {
   home: (props: any) => <HomeIcon {...props} />,
   discover: (props: any) => <DiscordTabIcon {...props} />,
-  profile: () => <FastImage style={styles.image} source={{ uri: image }} />,
+  profile: (props: any) => <FastImage style={[styles.image, { borderWidth: props.focus ? 1 : 0 }]} source={{ uri: image }} />,
 };
 
 const LQDNavigationAction = ({ isFocused, label, onLongPress, onPress, routeName }: ILQDNavigationAction) => {
@@ -33,6 +33,7 @@ const LQDNavigationAction = ({ isFocused, label, onLongPress, onPress, routeName
         fill: isFocused ? '#020617' : '#64748B',
         width: 24,
         height: 24,
+        focus: isFocused,
       })}
 
       {label && <Animated.Text style={[animatedTextStyle, styles.text, isFocused && { fontWeight: '700' }]}>{label}</Animated.Text>}
@@ -60,5 +61,6 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     borderRadius: 100,
+    borderColor: '#000',
   },
 });
