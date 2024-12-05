@@ -110,7 +110,7 @@ export function useMakeCalls() {
       const opHash = await sendUserOperation(signedOp);
 
       const receipt = await smartAccountClient?.waitForUserOperationReceipt({ hash: opHash, timeout: 1000000 });
-
+      console.log(receipt, 'receipt');
       return {
         opHash,
         userOpHash: hash,
