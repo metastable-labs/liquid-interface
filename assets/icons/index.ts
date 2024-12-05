@@ -65,10 +65,14 @@ import BorrowIcon from './borrow-icon';
 import StakeIcon from './stake-icon';
 import DepositIcon from './deposit-icon';
 import SupplyIcon from './supply-icon';
+import PlusIcon from './plus-icon';
+import DiscordTabIcon from './discover-tab-icon';
 
 export {
   SwatchIcon,
   ConnectorIcon,
+  PlusIcon,
+  DiscordTabIcon,
   MoreIcon,
   HeaderMenuIcon,
   HeaderWalletIcon,

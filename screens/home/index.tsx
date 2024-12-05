@@ -1,10 +1,20 @@
 import { useEffect } from 'react';
-import { StyleSheet, View, Text, FlatList, TouchableOpacity, Platform, StatusBar as RNStatusBar, ScrollView } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  Platform,
+  StatusBar as RNStatusBar,
+  ScrollView,
+  Pressable,
+} from 'react-native';
 
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { adjustFontSizeForIOS, createArrayWithIndexes, formatAmountWithWholeAndDecimal } from '@/utils/helpers';
 import { LQDButton, LQDFeedCard, LQDPoolPairCard, LQDPoolPairPaper, LQDScrollView, LQShrimeLoader, SearchUI } from '@/components';
-import { CaretRightIcon, DirectUpIcon, DollarSquareIcon, TrendUpIcon } from '@/assets/icons';
+import { CaretRightIcon, DirectUpIcon, DollarSquareIcon, PlusIcon, TrendUpIcon } from '@/assets/icons';
 import { useAccountActions } from '@/store/account/actions';
 import { usePoolActions } from '@/store/pools/actions';
 import { useOnMount } from '@/hooks/useOnMount';
@@ -104,6 +114,9 @@ const Home = () => {
   return (
     <>
       <Header amount={3333} />
+      <Pressable style={styles.addIcon}>
+        <PlusIcon />
+      </Pressable>
       {globalLoading && <Loader />}
       {!globalLoading && (
         <FlatList
@@ -194,5 +207,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     paddingTop: Platform.OS === 'android' ? RNStatusBar.currentHeight : 20,
     paddingBottom: Platform.OS === 'android' ? -(RNStatusBar.currentHeight || 0) : -48,
+  },
+  addIcon: {
+    backgroundColor: '#4691FE',
+    height: 50,
+    width: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 100,
+    position: 'absolute',
+    bottom: '12%',
+    right: 15,
+    zIndex: 2,
   },
 });
