@@ -20,13 +20,17 @@ import LQDTokenImage from './pool-images/token-image';
 import LQShrimeLoader from './loader';
 import LQToast from './toast';
 import LQNoResult from './no-result';
+import LQDFeedCard from './feed-card';
+import LQDFlatlist from './flatlist';
 
 export {
   LQDButton,
   LQShrimeLoader,
+  LQDFlatlist,
   LQDNavigation,
   LQDInput,
   LQDSearch,
+  LQDFeedCard,
   LQToast,
   LQNoResult,
   LQDScrollView,
