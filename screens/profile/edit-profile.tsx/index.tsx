@@ -2,7 +2,7 @@ import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import React, { useState } from 'react';
 import { LQDButton, LQDImage } from '@/components';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
-import { FamcasterIcon, UserOctagonIcon, XIcon } from '@/assets/icons';
+import { FamcasterIcon, XIcon } from '@/assets/icons';
 
 const EditProfile = () => {
   const [username, setUsername] = useState('');
@@ -32,7 +32,6 @@ const EditProfile = () => {
             autoCorrect={false}
             autoCapitalize="none"
             spellCheck={false}
-            autoFocus={true}
             inputMode="email"
           />
         </View>

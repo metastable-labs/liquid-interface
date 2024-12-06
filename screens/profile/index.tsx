@@ -11,7 +11,7 @@ const Profile = () => {
   const { CustomTabView } = useCustomTabView();
   const { router } = useSystemFunctions();
 
-  const FirstRoute = () => {
+  const StrategyRoute = () => {
     return (
       <LQDFlatlist
         data={feeds}
@@ -24,7 +24,8 @@ const Profile = () => {
       />
     );
   };
-  const SecondRoute = () => {
+
+  const DepositRoute = () => {
     return (
       <LQDFlatlist
         data={feeds}
@@ -37,7 +38,8 @@ const Profile = () => {
       />
     );
   };
-  const ThirdRoute = () => {
+
+  const LikesRoute = () => {
     return (
       <LQDFlatlist
         data={feeds}
@@ -52,15 +54,15 @@ const Profile = () => {
   };
 
   const renderScene = SceneMap({
-    first: FirstRoute,
-    second: SecondRoute,
-    third: ThirdRoute,
+    strategy: StrategyRoute,
+    deposit: DepositRoute,
+    like: LikesRoute,
   });
 
   const [routes] = React.useState([
-    { key: 'first', title: 'My Strategies' },
-    { key: 'second', title: 'Deposits' },
-    { key: 'third', title: 'Likes' },
+    { key: 'strategy', title: 'My Strategies' },
+    { key: 'deposit', title: 'Deposits' },
+    { key: 'like', title: 'Likes' },
   ]);
 
   return (
