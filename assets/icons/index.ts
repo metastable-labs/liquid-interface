@@ -67,9 +67,19 @@ import DepositIcon from './deposit-icon';
 import SupplyIcon from './supply-icon';
 import PlusIcon from './plus-icon';
 import DiscordTabIcon from './discover-tab-icon';
+import EditProfileIcon from './edit-profile-icon';
+import UserOctagonIcon from './user-octagon-icon';
+import LinkIcon from './link-icon';
+import FamcasterIcon from './farcaster-icon';
+import FillCheckIcon from './fill-check-icon';
 
 export {
   SwatchIcon,
+  FillCheckIcon,
+  FamcasterIcon,
+  UserOctagonIcon,
+  LinkIcon,
+  EditProfileIcon,
   ConnectorIcon,
   PlusIcon,
   DiscordTabIcon,

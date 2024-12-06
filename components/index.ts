@@ -22,9 +22,11 @@ import LQToast from './toast';
 import LQNoResult from './no-result';
 import LQDFeedCard from './feed-card';
 import LQDFlatlist from './flatlist';
+import LQDImage from './image';
 
 export {
   LQDButton,
+  LQDImage,
   LQShrimeLoader,
   LQDFlatlist,
   LQDNavigation,

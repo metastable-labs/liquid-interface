@@ -11,7 +11,7 @@ const LQDFeedCard = ({ feed, showInvest = true }: FeedCard) => {
     <View style={styles.container}>
       <View>
         {/* top */}
-        <View style={{ flexDirection: 'row', gap: 10 }}>
+        <View style={{ flexDirection: 'row', gap: 5 }}>
           <FastImage
             style={styles.image}
             source={{
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
     borderColor: '#F1F5F9',
   },
   username: {
-    fontSize: adjustFontSizeForIOS(14, 3),
+    fontSize: adjustFontSizeForIOS(13, 3),
     fontFamily: 'ClashDisplayBold',
     fontWeight: '500',
     color: '#1E293B',
@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
   },
   address: {
     color: '#64748B',
-    fontSize: adjustFontSizeForIOS(12, 3),
+    fontSize: adjustFontSizeForIOS(11, 3),
     fontFamily: 'AeonikRegular',
     fontWeight: '400',
     lineHeight: 16.8,
@@ -199,5 +199,5 @@ const styles = StyleSheet.create({
   bottomActionContainer: { flexDirection: 'row', gap: 20, alignItems: 'center' },
   bottomActionInnerContainer: { flex: 1, flexDirection: 'row', gap: 20 },
   rightContentFlex: { flexDirection: 'row', justifyContent: 'space-between' },
-  usernameFlex: { flexDirection: 'row', gap: 10, alignItems: 'center', marginBottom: 5 },
+  usernameFlex: { flexDirection: 'row', gap: 9, alignItems: 'center', marginBottom: 5 },
 });

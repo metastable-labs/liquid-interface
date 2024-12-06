@@ -11,7 +11,7 @@ import { useOnMount } from '@/hooks/useOnMount';
 import Loader from './loader';
 const image = 'https://pics.craiyon.com/2023-08-02/7a951cac85bd4aa2b0e70dbaabb8404e.webp';
 
-const feeds: Array<any> = [
+export const feeds: Array<any> = [
   {
     photo: image,
     username: '@Nurayyy.eth',
