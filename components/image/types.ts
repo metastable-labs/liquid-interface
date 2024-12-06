@@ -7,4 +7,5 @@ export interface LQDImageProps extends Omit<FastImageProps, 'onError'> {
   width?: number;
   edit?: boolean;
   onError?: () => void;
+  action?: () => void;
 }

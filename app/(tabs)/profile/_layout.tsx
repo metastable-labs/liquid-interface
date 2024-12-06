@@ -15,6 +15,14 @@ const ProfileStack = () => {
           headerShown: false,
         }}
       />
+
+      <Stack.Screen
+        name="edit-profile"
+        options={{
+          header: (props) => <LQDStackHeader {...props} style={{ paddingTop: 14 }} />,
+          headerShown: false, // fix header issue on this screen
+        }}
+      />
     </Stack>
   );
 };

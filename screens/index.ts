@@ -6,6 +6,7 @@ import Hot from './home/hot';
 import Discover from './discover';
 
 import Profile from './profile';
+import EditProfile from './profile/edit-profile.tsx';
 
 import Setup from './setup';
 import CryptoDeposit from './deposit/crypto';
@@ -26,6 +27,7 @@ export {
   Hot,
   Discover,
   Profile,
+  EditProfile,
   Setup,
   LiquidityManagement,
   CryptoDeposit,

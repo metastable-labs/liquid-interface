@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import FastImage from 'react-native-fast-image';
-import { StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import { LQDImageProps } from './types';
 import { EditProfileIcon } from '@/assets/icons';
 const fallbackImage = 'https://pics.craiyon.com/2023-08-02/7a951cac85bd4aa2b0e70dbaabb8404e.webp';
@@ -11,6 +11,7 @@ const LQDImage = ({
   height = 40,
   width = 40,
   edit,
+  action,
   onError,
   ...rest
 }: LQDImageProps) => {
@@ -33,7 +34,7 @@ const LQDImage = ({
   }
 
   return (
-    <View style={[styles.container, { width }]}>
+    <Pressable onPress={action} style={[styles.container, { width }]}>
       <FastImage
         style={[style, { height, width, borderRadius }]}
         source={{ uri: src || fallbackImage, priority: FastImage.priority.high }}
@@ -46,7 +47,7 @@ const LQDImage = ({
           <EditProfileIcon />
         </View>
       )}
-    </View>
+    </Pressable>
   );
 };
 

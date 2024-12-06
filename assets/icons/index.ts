@@ -70,9 +70,11 @@ import DiscordTabIcon from './discover-tab-icon';
 import EditProfileIcon from './edit-profile-icon';
 import UserOctagonIcon from './user-octagon-icon';
 import LinkIcon from './link-icon';
+import FamcasterIcon from './farcaster-icon';
 
 export {
   SwatchIcon,
+  FamcasterIcon,
   UserOctagonIcon,
   LinkIcon,
   EditProfileIcon,

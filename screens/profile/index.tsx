@@ -1,14 +1,15 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { LQDFeedCard, LQDFlatlist, LQDImage } from '@/components';
-import { CopyIcon, LinkIcon, UserOctagonIcon, XIcon } from '@/assets/icons';
+import { CopyIcon, FamcasterIcon, LinkIcon, UserOctagonIcon, XIcon } from '@/assets/icons';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import { SceneMap } from 'react-native-tab-view';
 import useCustomTabView from '@/hooks/useCustomTabview';
 import { feeds } from '../home';
-const image = 'https://pics.craiyon.com/2023-08-02/7a951cac85bd4aa2b0e70dbaabb8404e.webp';
+import useSystemFunctions from '@/hooks/useSystemFunctions';
 const Profile = () => {
   const { CustomTabView } = useCustomTabView();
+  const { router } = useSystemFunctions();
 
   const FirstRoute = () => {
     return (
@@ -64,8 +65,8 @@ const Profile = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.topView}>
-        <LQDImage edit height={56} width={56} src={image} />
+      <View style={styles.topWrapper}>
+        <LQDImage action={() => router.push(`/(tabs)/profile/edit-profile`)} edit height={56} width={56} />
         <Text style={styles.username}>@jeffing.eth</Text>
         <View style={{ flexDirection: 'row', gap: 7 }}>
           <Text style={styles.address}>0xc57...13d4f</Text>
@@ -80,7 +81,7 @@ const Profile = () => {
             <XIcon height={19} width={18} />
           </Pressable>
           <Pressable style={styles.actionBtn}>
-            <CopyIcon fill="#64748B" />
+            <FamcasterIcon />
           </Pressable>
           <Pressable style={styles.actionBtn}>
             <LinkIcon />
@@ -100,10 +101,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFF',
   },
-  topView: {
+  topWrapper: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 48,
+    marginTop: 40,
   },
   actionBtn: {
     flexDirection: 'row',
