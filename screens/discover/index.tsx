@@ -1,8 +1,12 @@
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import React from 'react';
 
 const Discover = () => {
-  return <View style={styles.container}></View>;
+  return (
+    <View style={styles.container}>
+      <Text>Discover</Text>
+    </View>
+  );
 };
 
 export default Discover;
