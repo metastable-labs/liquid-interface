@@ -1,7 +1,7 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 import { LQDFeedCard, LQDFlatlist, LQDImage } from '@/components';
-import { CopyIcon, FamcasterIcon, LinkIcon, UserOctagonIcon, XIcon } from '@/assets/icons';
+import { CheckIcon, CopyIcon, FamcasterIcon, FillCheckIcon, LinkIcon, UserOctagonIcon, XIcon } from '@/assets/icons';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import { SceneMap } from 'react-native-tab-view';
 import useCustomTabView from '@/hooks/useCustomTabview';
@@ -10,6 +10,15 @@ import useSystemFunctions from '@/hooks/useSystemFunctions';
 const Profile = () => {
   const { CustomTabView } = useCustomTabView();
   const { router } = useSystemFunctions();
+  const [copyProfileLink, setCopyProfileLink] = useState(false);
+
+  const handleCopyPL = () => {
+    setCopyProfileLink((prev) => !prev);
+
+    setTimeout(() => {
+      setCopyProfileLink(false);
+    }, 3000);
+  };
 
   const StrategyRoute = () => {
     return (
@@ -85,8 +94,8 @@ const Profile = () => {
           <Pressable style={styles.actionBtn}>
             <FamcasterIcon />
           </Pressable>
-          <Pressable style={styles.actionBtn}>
-            <LinkIcon />
+          <Pressable onPress={handleCopyPL} style={styles.actionBtn}>
+            {copyProfileLink ? <FillCheckIcon /> : <LinkIcon />}
           </Pressable>
         </View>
       </View>
