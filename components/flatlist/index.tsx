@@ -54,7 +54,7 @@ const LQDFlatlist = <T,>({
       onEndReached={onEndReached}
       onEndReachedThreshold={onEndReachedThreshold}
       showsVerticalScrollIndicator={showsVerticalScrollIndicator}
-      contentContainerStyle={[{ flexGrow: 1, paddingBottom: loader ? 16 : 0 }, contentContainerStyle]}
+      contentContainerStyle={[{ flexGrow: 1, paddingBottom: 100 }, contentContainerStyle]}
       style={[styles.list, style]}
     />
   );
