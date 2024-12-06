@@ -79,11 +79,11 @@ const Profile = () => {
       <View style={styles.topWrapper}>
         <LQDImage action={() => router.push(`/(tabs)/profile/edit-profile`)} edit height={56} width={56} />
         <Text style={styles.username}>@jeffing.eth</Text>
-        <View style={{ flexDirection: 'row', gap: 7 }}>
+        <View style={styles.addressWrapper}>
           <Text style={styles.address}>0xc57...13d4f</Text>
           <CopyIcon fill="#64748B" />
         </View>
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 9, marginTop: 15, marginBottom: 20 }}>
+        <View style={styles.actionBtnWrapper}>
           <Pressable style={styles.actionBtn}>
             <UserOctagonIcon />
             <Text style={styles.joinDate}>Joined NOV 2024</Text>
@@ -127,6 +127,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: 'center',
   },
+  actionBtnWrapper: { flexDirection: 'row', alignItems: 'center', gap: 9, marginTop: 15, marginBottom: 20 },
+  addressWrapper: { flexDirection: 'row', gap: 7 },
   username: {
     fontSize: adjustFontSizeForIOS(16, 1),
     fontFamily: 'ClashDisplayBold',

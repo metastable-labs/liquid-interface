@@ -3,7 +3,9 @@ import FastImage from 'react-native-fast-image';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { LQDImageProps } from './types';
 import { EditProfileIcon } from '@/assets/icons';
+
 const fallbackImage = 'https://pics.craiyon.com/2023-08-02/7a951cac85bd4aa2b0e70dbaabb8404e.webp';
+
 const LQDImage = ({
   style,
   resizeMode = FastImage.resizeMode.contain,
