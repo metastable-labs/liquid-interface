@@ -12,19 +12,19 @@ type Methods = {
 };
 
 interface ICoinSelectorInput {
-  tokenId?: string;
-  setTokenId: (tokenId: string) => void;
+  address?: string;
+  selectedToken: (address: string) => void;
   value: string;
   onChange: (value: string) => void;
   disabled?: boolean;
 }
 
 type TokenValue = {
-  asset?: IAsset;
+  asset?: TokenItem;
   value: string;
 };
 
-type ErrorState = undefined | 'primary' | 'secondary';
+type ErrorState = undefined | 'insufficientBalance' | 'insufficientLiquidBalance' | 'noMatchingPools';
 
 interface IErrorMessage {
   title: string;
@@ -36,8 +36,9 @@ interface IErrorMessage {
 }
 
 type ErrorsArray = {
-  primary: IErrorMessage;
-  secondary: IErrorMessage;
+  insufficientBalance: IErrorMessage;
+  insufficientLiquidBalance: IErrorMessage;
+  noMatchingPools: IErrorMessage;
 };
 
 type Info = {
@@ -54,3 +55,15 @@ interface ILoading {
   primaryTitle: string;
   secondaryTitle: string;
 }
+
+type TokenItem = {
+  address: `0x${string}`;
+  symbol: string;
+  decimals: number;
+  balance: string;
+  isListed: boolean;
+  usdPrice: string;
+  logoUrl: string;
+  lastUpdated: string;
+  createdAt: string;
+};

@@ -1,4 +1,4 @@
-import { Image, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Href } from 'expo-router';
 
 import useSystemFunctions from '@/hooks/useSystemFunctions';
@@ -6,6 +6,7 @@ import { adjustFontSizeForIOS } from '@/utils/helpers';
 import { ArrowDownIcon, ArrowUpAltIcon } from '@/assets/icons';
 import { setSelectedPool } from '@/store/pools';
 import { PoolPairCard } from './types';
+import LQDPoolImages from '../pool-images';
 
 const backgroundColors = ['#FDEAEA', '#EFFAF6'];
 const textColors = ['#A4262C', '#156146'];
@@ -23,22 +24,16 @@ const LQDPoolPairCard = ({ pool, navigationVariant = 'primary' }: PoolPairCard) 
     router.push(paths[navigationVariant]);
   };
 
-  const primaryIconURL = pool.token0.logoUrl;
-  const secondaryIconURL = pool.token1.logoUrl;
+  const tokenAIconURL = pool.token0.logoUrl;
+  const tokenBIconURL = pool.token1.logoUrl;
   const symbol = pool.symbol.split('-')[1].replace('/', ' / ');
-  const increased = pool.gauge.isAlive;
-  const change = 2.3;
+  const increased = true;
+  const change = pool.apr;
 
   return (
     <TouchableOpacity onPress={handlePress} style={styles.container}>
       <View style={styles.topContainer}>
-        <View style={styles.iconContainer}>
-          {[primaryIconURL, secondaryIconURL].map((iconURL, index) => (
-            <View key={index} style={[styles.icon, index === 0 && { position: 'relative', zIndex: 1 }]}>
-              <Image source={{ uri: iconURL }} style={{ width: 24, height: 24 }} />
-            </View>
-          ))}
-        </View>
+        <LQDPoolImages tokenAIconURL={tokenAIconURL} tokenBIconURL={tokenBIconURL} />
 
         <View style={[styles.changeContainer, { backgroundColor: backgroundColors[+increased] }]}>
           {increased ? (
@@ -49,7 +44,6 @@ const LQDPoolPairCard = ({ pool, navigationVariant = 'primary' }: PoolPairCard) 
           <Text style={[styles.change, { color: textColors[+increased] }]}>{change}%</Text>
         </View>
       </View>
-
       <Text style={styles.title}>{symbol}</Text>
     </TouchableOpacity>
   );
@@ -71,23 +65,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 18 + 6,
-  },
-
-  iconContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-
-  icon: {
-    width: 24,
-    height: 24,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 9999,
-    borderWidth: 1,
-    borderColor: '#EAEEF4',
-    marginRight: -6,
   },
 
   title: {

@@ -1,12 +1,14 @@
-import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { Href } from 'expo-router';
 
-import { adjustFontSizeForIOS, formatAmount, formatNumberWithSuffix } from '@/utils/helpers';
+import { adjustFontSizeForIOS, formatAmount, formatNumberWithSuffix, formatSymbol, roundUp } from '@/utils/helpers';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
-import { setSelectedPool } from '@/store/pools';
+import { setRecentSearchedPool, setSelectedPool } from '@/store/pools';
 import { PoolPairPaper } from './types';
+import LQDPoolImages from '../pool-images';
+import LQShrimeLoader from '../loader';
 
-const LQDPoolPairPaper = ({ pool, navigationVariant = 'primary' }: PoolPairPaper) => {
+const LQDPoolPairPaper = ({ pool, navigationVariant = 'primary', showFullSymbol }: PoolPairPaper) => {
   const { router, dispatch } = useSystemFunctions();
 
   const paths = {
@@ -16,27 +18,25 @@ const LQDPoolPairPaper = ({ pool, navigationVariant = 'primary' }: PoolPairPaper
 
   const handlePress = () => {
     dispatch(setSelectedPool(pool));
+    dispatch(setRecentSearchedPool(pool));
     router.push(paths[navigationVariant]);
   };
 
-  const primaryIconURL = pool.token0.logoUrl;
-  const secondaryIconURL = pool.token1.logoUrl;
-  const symbol = pool.symbol.split('-')[1].replace('/', ' / ');
-  const apr = formatAmount(pool.emissions.rate, 2);
-  const fees = pool.fees.poolFee;
-  const volume = formatAmount(pool.volume.usd, 0);
+  const vol = Number(Number(pool.totalVolumeUSD).toFixed(4));
+
+  const tokenAIconURL = pool.token0.logoUrl;
+  const tokenBIconURL = pool.token1.logoUrl;
+  const symbol = formatSymbol(pool.symbol, showFullSymbol);
+  const apr = formatAmount(pool.apr, 2);
+  const fees = Number(pool.poolFee) > 1000 ? formatNumberWithSuffix(pool.poolFee) : roundUp(Number(pool.poolFee));
+  const volume = formatNumberWithSuffix(vol);
+  const tvl = pool.tvl;
   const isStable = pool.isStable;
 
   return (
     <TouchableOpacity onPress={handlePress} style={styles.container}>
       <View style={styles.leftContainer}>
-        <View style={styles.iconContainer}>
-          {[primaryIconURL, secondaryIconURL].map((iconURL, index) => (
-            <View key={index} style={[styles.icon, index === 0 && { position: 'relative', zIndex: 1 }]}>
-              <Image source={{ uri: iconURL }} style={{ width: 24, height: 24 }} />
-            </View>
-          ))}
-        </View>
+        <LQDPoolImages tokenAIconURL={tokenAIconURL} tokenBIconURL={tokenBIconURL} />
 
         <View style={styles.detailContainer}>
           <Text style={styles.detailHeader}>{symbol}</Text>
@@ -56,7 +56,7 @@ const LQDPoolPairPaper = ({ pool, navigationVariant = 'primary' }: PoolPairPaper
       <View style={styles.volumeWrapper}>
         <Text style={styles.aprText}>APR: {apr.toLocaleString()}%</Text>
 
-        <Text style={styles.volumeText}>VOL: ${formatNumberWithSuffix(volume)}</Text>
+        <Text style={styles.volumeText}>VOL: ${volume}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -77,23 +77,7 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     alignItems: 'center',
     gap: 10 + 6,
-  },
-
-  iconContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-
-  icon: {
-    width: 24,
-    height: 24,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 9999,
-    borderWidth: 1,
-    borderColor: '#EAEEF4',
-    marginRight: -6,
+    maxWidth: '70%',
   },
 
   detailContainer: {
@@ -106,6 +90,7 @@ const styles = StyleSheet.create({
     fontSize: adjustFontSizeForIOS(14, 2),
     lineHeight: 18.48,
     fontWeight: '500',
+    marginLeft: -6,
     fontFamily: 'AeonikMedium',
   },
 
@@ -124,14 +109,14 @@ const styles = StyleSheet.create({
   },
 
   basicTextVolatile: {
-    color: '#AF1D38',
+    color: '#B47818',
     fontSize: adjustFontSizeForIOS(11, 2),
     lineHeight: 13.64,
     fontFamily: 'AeonikRegular',
   },
 
   basicTextStable: {
-    color: '#B47818',
+    color: '#156146',
     fontSize: adjustFontSizeForIOS(11, 2),
     lineHeight: 13.64,
     fontFamily: 'AeonikRegular',

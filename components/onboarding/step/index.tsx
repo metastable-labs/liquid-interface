@@ -58,6 +58,6 @@ const styles = StyleSheet.create({
 
   image: {
     position: 'absolute',
-    bottom: 136,
+    bottom: '25%',
   },
 });
