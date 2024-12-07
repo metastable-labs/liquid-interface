@@ -14,7 +14,9 @@ const LQDFlatlist = <T,>({
   onEndReached,
   onEndReachedThreshold = 0.1,
   showsVerticalScrollIndicator = false,
+  showsHorizontalScrollIndicator = false,
   contentContainerStyle,
+  horizontal = false,
   style,
   loader = false,
 }: LQDFlatlistProps<T>) => {
@@ -54,8 +56,10 @@ const LQDFlatlist = <T,>({
       onEndReached={onEndReached}
       onEndReachedThreshold={onEndReachedThreshold}
       showsVerticalScrollIndicator={showsVerticalScrollIndicator}
-      contentContainerStyle={[{ flexGrow: 1, paddingBottom: 100 }, contentContainerStyle]}
-      style={[styles.list, style]}
+      contentContainerStyle={[{ paddingBottom: 100 }, contentContainerStyle]}
+      style={[style]}
+      horizontal={horizontal}
+      showsHorizontalScrollIndicator={showsHorizontalScrollIndicator}
     />
   );
 };
@@ -63,9 +67,6 @@ const LQDFlatlist = <T,>({
 export default LQDFlatlist;
 
 const styles = StyleSheet.create({
-  list: {
-    flex: 1,
-  },
   emptyContainer: {
     flex: 1,
     justifyContent: 'center',
