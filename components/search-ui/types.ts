@@ -11,8 +11,8 @@ export interface ISearchSection {
   index: number;
 }
 
-export interface IRecentCard {
-  pool: Pool;
+export interface IPopularAssetCard {
+  pool: any;
   navigationVariant?: 'primary' | 'secondary';
 }
 

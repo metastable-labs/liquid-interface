@@ -23,9 +23,11 @@ import LQNoResult from './no-result';
 import LQDFeedCard from './feed-card';
 import LQDFlatlist from './flatlist';
 import LQDImage from './image';
+import LQDStrategyCard from './strategy-card';
 
 export {
   LQDButton,
+  LQDStrategyCard,
   LQDImage,
   LQShrimeLoader,
   LQDFlatlist,

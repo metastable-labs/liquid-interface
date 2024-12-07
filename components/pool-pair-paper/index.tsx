@@ -7,8 +7,10 @@ import { setRecentSearchedPool, setSelectedPool } from '@/store/pools';
 import { PoolPairPaper } from './types';
 import LQDPoolImages from '../pool-images';
 import LQShrimeLoader from '../loader';
+import LQDImage from '../image';
+import { CheckIcon, FillCheckIcon } from '@/assets/icons';
 
-const LQDPoolPairPaper = ({ pool, navigationVariant = 'primary', showFullSymbol }: PoolPairPaper) => {
+const LQDPoolPairPaper = ({ pool, navigationVariant = 'primary', showFullSymbol, selected }: PoolPairPaper) => {
   const { router, dispatch } = useSystemFunctions();
 
   const paths = {
@@ -22,42 +24,27 @@ const LQDPoolPairPaper = ({ pool, navigationVariant = 'primary', showFullSymbol 
     router.push(paths[navigationVariant]);
   };
 
-  const vol = Number(Number(pool.totalVolumeUSD).toFixed(4));
-
-  const tokenAIconURL = pool.token0.logoUrl;
-  const tokenBIconURL = pool.token1.logoUrl;
-  const symbol = formatSymbol(pool.symbol, showFullSymbol);
-  const apr = formatAmount(pool.apr, 2);
-  const fees = Number(pool.poolFee) > 1000 ? formatNumberWithSuffix(pool.poolFee) : roundUp(Number(pool.poolFee));
-  const volume = formatNumberWithSuffix(vol);
-  const tvl = pool.tvl;
-  const isStable = pool.isStable;
+  const tokenIconURL = pool.token0.logoUrl;
+  const title = pool.symbol;
+  const subTitle = '4,506 USDC';
 
   return (
     <TouchableOpacity onPress={handlePress} style={styles.container}>
       <View style={styles.leftContainer}>
-        <LQDPoolImages tokenAIconURL={tokenAIconURL} tokenBIconURL={tokenBIconURL} />
+        <LQDImage height={24} width={24} src={tokenIconURL} />
 
         <View style={styles.detailContainer}>
-          <Text style={styles.detailHeader}>{symbol}</Text>
+          <Text style={styles.detailHeader}>{title}</Text>
 
-          <View style={styles.details}>
-            <Text style={isStable ? styles.basicTextStable : styles.basicTextVolatile}>{isStable ? 'Basic Stable' : 'Basic Volatile'}</Text>
-
-            <View style={styles.separator}>
-              <View style={styles.separatorCircle} />
+          {subTitle && (
+            <View style={styles.details}>
+              <Text style={styles.detailText}>{subTitle}</Text>
             </View>
-
-            <Text style={styles.detailText}>{fees}% Fee</Text>
-          </View>
+          )}
         </View>
       </View>
 
-      <View style={styles.volumeWrapper}>
-        <Text style={styles.aprText}>APR: {apr.toLocaleString()}%</Text>
-
-        <Text style={styles.volumeText}>VOL: ${volume}</Text>
-      </View>
+      <View style={styles.volumeWrapper}>{selected && <FillCheckIcon />}</View>
     </TouchableOpacity>
   );
 };

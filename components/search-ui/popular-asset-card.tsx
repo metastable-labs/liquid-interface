@@ -1,35 +1,34 @@
-import { View, StyleSheet, Text, Image, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import useAppActions from '@/store/app/actions';
-import { IRecentCard } from './types';
-import LQDPoolImages from '../pool-images';
+import { IPopularAssetCard } from './types';
+import LQDImage from '../image';
 
-const RecentCard = ({ pool, navigationVariant = 'primary' }: IRecentCard) => {
+const PopularAssetCard = ({ pool, navigationVariant = 'primary' }: IPopularAssetCard) => {
   const { router, pathname } = useSystemFunctions();
-  const { searchIsFocused } = useAppActions();
+  const { searchIsFocused, showSearch } = useAppActions();
   const onPress = () => {
     searchIsFocused(false);
-    router.push(`/(tabs)/home/${pool.address}`);
+    showSearch(true);
   };
 
-  const tokenAIconURL = pool.token0.logoUrl;
-  const tokenBIconURL = pool.token1.logoUrl;
-  const symbol = pool.symbol.split('-')[1].replace('/', ' / ');
+  const tokenIconURL = pool.token0.logoUrl;
+  const title = 'USDC';
 
   return (
     <TouchableOpacity onPress={onPress} style={styles.container}>
       <View style={styles.iconContainer}>
-        <LQDPoolImages tokenAIconURL={tokenAIconURL} tokenBIconURL={tokenBIconURL} />
+        <LQDImage height={24} width={24} src={tokenIconURL} />
       </View>
 
-      <Text style={styles.text}>{symbol}</Text>
+      <Text style={styles.text}>{title}</Text>
     </TouchableOpacity>
   );
 };
 
-export default RecentCard;
+export default PopularAssetCard;
 
 const styles = StyleSheet.create({
   container: {
@@ -38,8 +37,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8 + 6,
-    paddingHorizontal: 8,
-    paddingVertical: 12,
+    paddingHorizontal: 14,
+    paddingVertical: 8,
     borderRadius: 10,
     borderWidth: 1,
     borderColor: '#EAEEF4',
