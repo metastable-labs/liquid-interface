@@ -72,10 +72,12 @@ import UserOctagonIcon from './user-octagon-icon';
 import LinkIcon from './link-icon';
 import FamcasterIcon from './farcaster-icon';
 import FillCheckIcon from './fill-check-icon';
+import ArrowCircleDownIcon from './arrow-circle-down-icon';
 
 export {
   SwatchIcon,
   FillCheckIcon,
+  ArrowCircleDownIcon,
   FamcasterIcon,
   UserOctagonIcon,
   LinkIcon,

@@ -44,7 +44,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#EAEEF4',
     backgroundColor: '#fff',
-    marginBottom: 20,
   },
 
   iconContainer: {
