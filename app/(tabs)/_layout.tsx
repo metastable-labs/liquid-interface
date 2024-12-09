@@ -16,7 +16,8 @@ export default function TabLayout() {
     <>
       <StatusBar style="dark" />
       <View style={styles.container} />
-      {/* <Header amount={3333} action={() => setShow((prev) => !prev)} /> */}
+      {/* fix this header showing on all screens */}
+      <Header amount={3333} action={() => setShow((prev) => !prev)} />
       <LQDBottomSheet show={show} title="Sort by" variant="primary" onClose={() => setShow((prev) => !prev)}></LQDBottomSheet>
 
       <Tabs
