@@ -16,15 +16,14 @@ const LQDOnboardingStep = ({
 }: ILQDOnboardingStep) => {
   return (
     <View style={[styles.container, containerStyle]}>
-      <Text style={styles.title}>{title}</Text>
-
-      <Text style={styles.subtitle}>{subtitle}</Text>
+      {/* <Text style={styles.subtitle}>{subtitle}</Text> */}
 
       <Image source={image} style={[styles.image, imageStyle]} resizeMode="contain" />
 
       <Image source={firstArc} style={[{ position: 'absolute', zIndex: -1 }, firstArcStyle]} resizeMode="contain" />
 
       <Image source={secondArc} style={[{ position: 'absolute', zIndex: -1 }, secondArcStyle]} resizeMode="contain" />
+      <Text style={styles.title}>{title}</Text>
     </View>
   );
 };
@@ -36,16 +35,20 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 136,
     gap: 22,
+    alignItems: 'center',
   },
 
   title: {
     fontFamily: 'QuantaGroteskProBold',
-    fontSize: adjustFontSizeForIOS(48, 5),
+    fontSize: adjustFontSizeForIOS(40, 5),
     fontWeight: '700',
-    lineHeight: 53,
+    lineHeight: 50,
     letterSpacing: -0.96,
-    paddingHorizontal: 16,
-    color: '#FFF',
+    paddingHorizontal: 15,
+    color: '#0F172A',
+    position: 'absolute',
+    bottom: '17%',
+    textAlign: 'center',
   },
 
   subtitle: {
@@ -58,6 +61,10 @@ const styles = StyleSheet.create({
 
   image: {
     position: 'absolute',
-    bottom: '25%',
+    top: '30%',
+    height: 317,
+    width: 210,
+    right: 0,
+    left: 0,
   },
 });
