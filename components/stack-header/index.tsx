@@ -1,10 +1,9 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import { CaretLeftIcon, CloseIcon, LampIcon } from '@/assets/icons';
 import { ILQDStackHeader } from './types';
 
-const LQDStackHeader = ({ navigation, options, hasTitle, leftIcon = 'close', rightIcon = '', style }: ILQDStackHeader) => {
+const LQDStackHeader = ({ navigation, options, hasTitle, leftIcon = 'back', rightIcon = '', style }: ILQDStackHeader) => {
   const lIcon = {
     close: <CloseIcon />,
     back: <CaretLeftIcon />,

@@ -92,6 +92,15 @@ function RootStack() {
         }}
       />
 
+      <Stack.Screen
+        name="new-action"
+        options={{
+          header: (props) => <LQDStackHeader {...props} style={{ paddingTop: 60 }} hasTitle rightIcon="bulb" />,
+          headerTitle: 'New Action',
+          headerShown: true,
+        }}
+      />
+
       {/* Common routes */}
       <Stack.Screen name="+not-found" options={{ headerShown: true }} />
     </Stack>

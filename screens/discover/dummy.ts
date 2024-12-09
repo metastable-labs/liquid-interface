@@ -16,6 +16,25 @@ export const protocolList = [
     title: 'Morpho',
   },
 ];
+
+export const actionList = [
+  {
+    id: '1',
+    icon: 'deposit',
+    title: 'Deposit',
+  },
+  {
+    id: '2',
+    icon: 'stake',
+    title: 'Stake',
+  },
+  {
+    id: '3',
+    icon: 'borrow',
+    title: 'Borrow',
+  },
+];
+
 export const strategyies: Array<any> = [
   {
     id: '1',

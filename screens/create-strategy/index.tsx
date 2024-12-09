@@ -5,10 +5,12 @@ import { useForm } from 'react-hook-form';
 import useAppActions from '@/store/app/actions';
 import Actions from './actions';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
+import useSystemFunctions from '@/hooks/useSystemFunctions';
 
 const CreateStrategy = () => {
   const { control, watch } = useForm();
   const { searchIsFocused: focusSearch, showSearch } = useAppActions();
+  const { router } = useSystemFunctions();
   const focusInput = () => {
     focusSearch(true);
   };
@@ -16,12 +18,16 @@ const CreateStrategy = () => {
   const blurInput = () => {
     focusSearch(false);
   };
+
+  const navigateNewAction = () => {
+    router.push('/new-action');
+  };
   return (
     <View style={styles.container}>
       <View style={{ flex: 1 }}>
         <LQDInput
           control={control}
-          name="strategy-name"
+          name="strategyNname"
           rules={{ required: true }}
           label="Strategy Name"
           inputProps={{
@@ -53,7 +59,7 @@ const CreateStrategy = () => {
         </View>
 
         <View style={{ marginTop: 20 }}>
-          <Actions />
+          <Actions addAction={navigateNewAction} />
         </View>
       </View>
 

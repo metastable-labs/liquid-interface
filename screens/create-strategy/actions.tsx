@@ -31,12 +31,8 @@ const ActionItem = ({ text, onAdd }: { text: string; onAdd: () => void }) => {
   );
 };
 
-const Actions = () => {
+const Actions = ({ addAction }) => {
   const [actions, setActions] = useState([{ id: Date.now(), text: 'Add new action' }]);
-
-  const addAction = () => {
-    setActions((prevActions) => [...prevActions, { id: Date.now(), text: 'Add new action' }]);
-  };
 
   return (
     <View style={styles.container}>

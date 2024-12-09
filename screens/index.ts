@@ -5,6 +5,7 @@ import Hot from './home/hot';
 
 import Discover from './discover';
 import CreateStrategy from './create-strategy';
+import NewAction from './create-strategy/new-action';
 
 import Profile from './profile';
 import EditProfile from './profile/edit-profile.tsx';
@@ -38,4 +39,5 @@ export {
   AddLiquidty,
   RemoveLiquidity,
   CreateStrategy,
+  NewAction,
 };
