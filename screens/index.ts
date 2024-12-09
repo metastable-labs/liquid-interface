@@ -3,13 +3,12 @@ import TopGainers from './home/topGainers';
 import Trending from './home/trending';
 import Hot from './home/hot';
 
+import Discover from './discover';
+
+import Profile from './profile';
+import EditProfile from './profile/edit-profile.tsx';
+
 import Setup from './setup';
-
-import Holdings from './holdings';
-import Assets from './holdings/assets';
-import Pools from './holdings/pools';
-import Rewards from './holdings/rewards';
-
 import CryptoDeposit from './deposit/crypto';
 import DebitDeposit from './deposit/debit';
 
@@ -26,11 +25,10 @@ export {
   TopGainers,
   Trending,
   Hot,
+  Discover,
+  Profile,
+  EditProfile,
   Setup,
-  Holdings,
-  Assets,
-  Pools,
-  Rewards,
   LiquidityManagement,
   CryptoDeposit,
   DebitDeposit,
