@@ -4,21 +4,21 @@ import { StatusBar } from 'expo-status-bar';
 
 import { TabBarIcon } from '@/components/navigation/TabBarIcon';
 import { Colors } from '@/constants/Colors';
-import { LQDNavigation, LQDSearch } from '@/components';
-import useSystemFunctions from '@/hooks/useSystemFunctions';
+import { LQDBottomSheet, LQDNavigation } from '@/components';
+import Header from '@/screens/home/header';
+import { useState } from 'react';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
-  const { appState } = useSystemFunctions();
+  const [show, setShow] = useState(false);
 
   return (
     <>
-      <StatusBar style="inverted" />
-      {!appState.hideSearch && (
-        <View style={styles.shortcut}>
-          <LQDSearch />
-        </View>
-      )}
+      <StatusBar style="dark" />
+      <View style={styles.container} />
+      {/* fix this header showing on all screens */}
+      <Header amount={3333} action={() => setShow((prev) => !prev)} />
+      <LQDBottomSheet show={show} title="Sort by" variant="primary" onClose={() => setShow((prev) => !prev)}></LQDBottomSheet>
 
       <Tabs
         tabBar={(props) => <LQDNavigation {...props} />}
@@ -30,15 +30,23 @@ export default function TabLayout() {
         <Tabs.Screen
           name="home"
           options={{
-            title: 'Home',
+            title: '',
             tabBarIcon: ({ color, focused }) => <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color} />,
           }}
         />
 
         <Tabs.Screen
-          name="holdings"
+          name="discover"
           options={{
-            title: 'Holdings',
+            title: '',
+            tabBarIcon: ({ color, focused }) => <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />,
+          }}
+        />
+
+        <Tabs.Screen
+          name="profile"
+          options={{
+            title: '',
             tabBarIcon: ({ color, focused }) => <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />,
           }}
         />
@@ -48,15 +56,8 @@ export default function TabLayout() {
 }
 
 const styles = StyleSheet.create({
-  shortcut: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    gap: 12,
-    paddingHorizontal: 21,
-    paddingBottom: 10,
-    paddingTop: Platform.OS === 'android' ? RNStatusBar.currentHeight : 54,
-    zIndex: 10,
+  container: {
+    paddingTop: Platform.OS === 'android' ? RNStatusBar.currentHeight : 48,
     backgroundColor: '#fff',
   },
 });

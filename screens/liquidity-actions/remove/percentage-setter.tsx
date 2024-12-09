@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Slider from '@react-native-community/slider';
 
 import { adjustFontSizeForIOS } from '@/utils/helpers';
+const icon = require('../../../assets/images/slider-dot-icon.png');
 
 const PercentageSetter = ({ setPercentage }: IPercentageSetter) => {
   const [percentage, setInternalPercentage] = useState(25);
@@ -43,9 +44,9 @@ const PercentageSetter = ({ setPercentage }: IPercentageSetter) => {
             onValueChange={handleSliderChange}
             minimumTrackTintColor="#4691FE"
             maximumTrackTintColor="#CBD5E1"
-            thumbTintColor="#4691FE"
             tapToSeek
             lowerLimit={1}
+            thumbImage={icon}
           />
         </View>
       </View>

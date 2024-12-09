@@ -3,10 +3,10 @@ import { View, Text, StyleSheet } from 'react-native';
 import { adjustFontSizeForIOS, formatNumberWithSuffix } from '@/utils/helpers';
 import { Chart2AltIcon, CoinsLGIcon, MoneyTickIcon, SwapHorizontalIcon } from '@/assets/icons';
 
-const PoolStats = ({ volume, fee, tvl }: Stat) => {
+const PoolStats = ({ volume, fee, tvl, tx }: Stat) => {
   const stats = [
     {
-      title: 'Volume',
+      title: 'Volume (24hrs)',
       value: `$${formatNumberWithSuffix(volume)}`,
       icon: <Chart2AltIcon />,
     },
@@ -17,12 +17,12 @@ const PoolStats = ({ volume, fee, tvl }: Stat) => {
     },
     {
       title: 'Fees',
-      value: `$${formatNumberWithSuffix(fee)}`,
+      value: `$${formatNumberWithSuffix(Number(fee))}`,
       icon: <CoinsLGIcon width={20} height={20} />,
     },
     {
       title: 'Transactions',
-      value: `${(194).toLocaleString()} TX`,
+      value: `${tx.toLocaleString()} TX`,
       icon: <SwapHorizontalIcon />,
     },
   ];
@@ -36,7 +36,7 @@ const PoolStats = ({ volume, fee, tvl }: Stat) => {
           <View key={title} style={styles.stat}>
             <View style={styles.metricContainer}>
               {icon}
-              <Text style={styles.metric}>{title} (24hrs)</Text>
+              <Text style={styles.metric}>{title} </Text>
             </View>
             <Text style={styles.title}>{value}</Text>
           </View>

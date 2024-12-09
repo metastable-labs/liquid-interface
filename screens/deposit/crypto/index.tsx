@@ -4,30 +4,31 @@ import QRCode from 'react-native-qrcode-svg';
 
 import useTruncateText from '@/hooks/useTruncateText';
 import useCopy from '@/hooks/useCopy';
-import { adjustFontSizeForIOS } from '@/utils/helpers';
+import { adjustFontSizeForIOS, truncate } from '@/utils/helpers';
 import { CaretDownIcon, CoinsIcon, CopyIcon } from '@/assets/icons';
 import PaymentMethodSelection from '../method-selection';
 import sharedStyles from '../styles';
+import useSystemFunctions from '@/hooks/useSystemFunctions';
 
 const CryptoDeposit = () => {
-  const [address, setAddress] = useState('0x4b3a9d4f3e5f2e3c4e6f3a9d4f3e5f2e3c4e6f3a');
+  const { smartAccountState } = useSystemFunctions();
   const [showBottomSheet, setShowBottomSheet] = useState(false);
   const { handleCopy, hasCopied } = useCopy();
 
-  const { truncatedText: truncatedAddress } = useTruncateText(address, 7, 4);
+  const address = truncate(smartAccountState?.address || '');
   const tokensImage = require('../../../assets/images/tokens.png');
 
   return (
     <>
       <View style={styles.root}>
         <View style={styles.container}>
-          <QRCode value={address} size={206} color="#4691FE" />
+          <QRCode value={smartAccountState?.address || ''} size={206} color="#4691FE" />
 
           <View style={styles.addressContainer}>
             <View style={styles.addressWrapper}>
-              <Text style={[styles.text, { fontWeight: '500' }]}>{truncatedAddress}</Text>
+              <Text style={[styles.text, { fontWeight: '500' }]}>{address}</Text>
             </View>
-            <TouchableOpacity style={styles.copyContainer} onPress={() => handleCopy(address)}>
+            <TouchableOpacity style={styles.copyContainer} onPress={() => handleCopy(smartAccountState?.address || '')}>
               <CopyIcon />
               <Text style={styles.copyText}>{hasCopied ? 'Copied' : 'Copy'}</Text>
             </TouchableOpacity>
@@ -41,7 +42,7 @@ const CryptoDeposit = () => {
         </View>
         <View style={styles.infoContainer}>
           <Image source={tokensImage} style={styles.infoImage} />
-          <Text style={styles.text}>For now you can only receive USDC on Base</Text>
+          <Text style={styles.text}>Send USDC, ETH or any ERC20 token on Base</Text>
         </View>
       </View>
 

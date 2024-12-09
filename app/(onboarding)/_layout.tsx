@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { StyleSheet, Dimensions, Platform, View, StatusBar as RNStatusBar } from 'react-native';
+import { StyleSheet, Dimensions, Platform, View, StatusBar as RNStatusBar, Pressable } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { StatusBar } from 'expo-status-bar';
 
@@ -56,6 +56,17 @@ export default function OnboardingTabLayout() {
     }
   };
 
+  const navigateToPreviousScreen = () => {
+    switch (pathname) {
+      case '/step2':
+        router.push('/(onboarding)/step1');
+        break;
+      case '/step3':
+        router.push('/(onboarding)/step2');
+        break;
+    }
+  };
+
   useEffect(() => {
     if (!isPaused) {
       intervalRef.current = setInterval(() => {
@@ -86,7 +97,7 @@ export default function OnboardingTabLayout() {
 
   return (
     <>
-      <StatusBar style="light" />
+      <StatusBar style="dark" />
       <View style={styles.indicator}>
         <LQDOnboardingIndicator
           timer={timer}
@@ -130,6 +141,23 @@ export default function OnboardingTabLayout() {
         />
       </Tab.Navigator>
 
+      <Pressable
+        onPress={() => {
+          if (currentStep > 0) {
+            navigateToPreviousScreen();
+          }
+        }}
+        style={styles.prev}
+      />
+      <Pressable
+        onPress={() => {
+          if (currentStep < 2) {
+            navigateToNextScreen();
+          }
+        }}
+        style={styles.next}
+      />
+
       <View style={styles.action}>
         <LQDButton onPress={() => router.replace('/(signup)')} title="Let's go!" />
       </View>
@@ -154,5 +182,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     paddingBottom: Platform.OS === 'ios' ? 33 : 16,
     width: Dimensions.get('window').width,
+  },
+  prev: {
+    flex: 1,
+    position: 'absolute',
+    height: Dimensions.get('window').height,
+    left: 0,
+    width: 65,
+  },
+  next: {
+    flex: 1,
+    position: 'absolute',
+    height: Dimensions.get('window').height,
+    right: 0,
+    width: 65,
   },
 });

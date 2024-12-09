@@ -1,66 +1,68 @@
-import { useState, useEffect } from 'react';
-import { StyleSheet, View, FlatList, Text } from 'react-native';
+import { useEffect } from 'react';
+import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { useForm } from 'react-hook-form';
-import debounce from 'lodash/debounce';
-import Animated, { useSharedValue, withTiming, useAnimatedStyle } from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
 
-import { adjustFontSizeForIOS } from '@/utils/helpers';
+import { CloseIcon } from '@/assets/icons';
+import useAppActions from '@/store/app/actions';
 import LQDInput from '../input';
+import { useDebouncedEffect } from '@/hooks/useDebouncedEffect';
+import { adjustFontSizeForIOS } from '@/utils/helpers';
 
-const LQDSearch = () => {
+const LQDSearch = ({ setQuery }: { setQuery?: (val: string) => void }) => {
   const { control, watch } = useForm();
-  const [results, setResults] = useState<string[]>([]);
-  const [query, setQuery] = useState('');
-  const searchBoxHeight = useSharedValue(0);
+  const { searchIsFocused: focusSearch, showSearch } = useAppActions();
 
-  const debouncedSearch = debounce((text: string) => {
-    if (text.length >= 2) {
-      setResults([`Result for "${text}"`, `Another result for "${text}"`]);
-      searchBoxHeight.value = withTiming(200, { duration: 300 });
-    } else {
-      setResults([]);
-      searchBoxHeight.value = withTiming(0, { duration: 300 });
-    }
-  }, 300);
+  const focusInput = () => {
+    focusSearch(true);
+  };
+
+  const blurInput = () => {
+    focusSearch(false);
+  };
+
+  const closeSearch = () => {
+    setQuery && setQuery('');
+    blurInput();
+    showSearch(false);
+  };
+
+  const searchValue = watch('search');
 
   useEffect(() => {
-    const subscription = watch((value) => {
-      const searchText = value.search || '';
-      setQuery(searchText);
-      debouncedSearch(searchText);
-    });
-    return () => subscription.unsubscribe();
-  }, [watch]);
+    return () => {
+      blurInput();
+    };
+  }, []);
 
-  const animatedStyle = useAnimatedStyle(() => ({
-    height: searchBoxHeight.value,
-    opacity: searchBoxHeight.value > 0 ? withTiming(1) : withTiming(0),
-  }));
+  useDebouncedEffect(
+    function setSearchValue() {
+      setQuery && setQuery(searchValue);
+    },
+    [searchValue],
+    300
+  );
 
   return (
     <View style={styles.container}>
-      <LQDInput
-        control={control}
-        name="search"
-        rules={{ required: true }}
-        inputProps={{
-          keyboardType: 'default',
-          autoCapitalize: 'none',
-          placeholder: 'Search...',
-        }}
-        variant="search"
-      />
+      <TouchableOpacity onPress={closeSearch}>
+        <CloseIcon />
+      </TouchableOpacity>
 
-      <Animated.View style={[styles.resultBox, animatedStyle]}>
-        {results.length > 0 ? (
-          <FlatList
-            data={results}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item }) => <Text style={styles.resultText}>{item}</Text>}
-          />
-        ) : (
-          <Text style={styles.noResultText}>No results found</Text>
-        )}
+      <Animated.View style={{ flex: 1 }}>
+        <LQDInput
+          control={control}
+          name="search"
+          rules={{ required: true }}
+          inputProps={{
+            keyboardType: 'default',
+            autoCapitalize: 'none',
+            placeholder: 'Search',
+            onBlur: blurInput,
+            onFocus: focusInput,
+          }}
+          variant="search"
+        />
       </Animated.View>
     </View>
   );
@@ -70,38 +72,35 @@ export default LQDSearch;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     zIndex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
   },
 
-  resultBox: {
-    position: 'absolute',
-    zIndex: 10,
-    top: '100%',
-    left: 0,
-    marginTop: 10,
-    width: '100%',
-    overflow: 'hidden',
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    borderWidth: 1,
+  inputContainer: {
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 8,
+    borderRadius: 13,
     borderColor: '#EAEEF4',
+    borderWidth: 1,
     shadowColor: 'rgba(15, 23, 42, 0.04)',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 1,
-    shadowRadius: 6,
-    elevation: 4,
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
+    elevation: 1,
+    backgroundColor: '#fff',
   },
-  resultText: {
-    padding: 10,
-    fontSize: adjustFontSizeForIOS(16, 2),
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee',
-  },
-  noResultText: {
-    padding: 10,
-    fontSize: adjustFontSizeForIOS(16, 2),
-    textAlign: 'center',
-    color: '#999',
+
+  inputPlaceholderText: {
+    flex: 1,
+    fontSize: adjustFontSizeForIOS(14, 2),
+    lineHeight: 18.48,
+    color: '#94A3B8',
+    fontFamily: 'AeonikRegular',
   },
 });

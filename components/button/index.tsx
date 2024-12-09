@@ -1,4 +1,4 @@
-import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 
 import { ArrowUpIcon, DollarCoinIcon } from '@/assets/icons';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
@@ -33,8 +33,8 @@ const LQDButton = ({
           disabled || loading ? styles.disabledStyle : null,
         ]}
       >
-        <Text style={styles[`${variant}Text`]}>{title}</Text>
-
+        {loading && <ActivityIndicator color="#000" />}
+        {!loading && <Text style={styles[`${variant}Text`]}>{title}</Text>}
         {icon && icons[icon](iconColor)}
       </View>
     </TouchableOpacity>

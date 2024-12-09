@@ -27,7 +27,6 @@ const getMaxWidth = (amount: string) => {
 
 const DebitDeposit = () => {
   const [amount, setAmount] = useState('');
-  const [balance, setBalance] = useState(999);
   const [showCursor, setShowCursor] = useState(true);
   const [showBottomSheet, setShowBottomSheet] = useState(false);
 
@@ -67,8 +66,6 @@ const DebitDeposit = () => {
           <View style={styles.container}>
             <View style={styles.inputAndPayment}>
               <View style={styles.balanceAndInput}>
-                <Text style={styles.balanceText}>Bal: ${balance.toLocaleString()}</Text>
-
                 <View style={styles.inputContainer}>
                   {amount && (
                     <Text
