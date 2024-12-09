@@ -1,5 +1,5 @@
-import { StyleSheet, View, Text, StatusBar as RNStatusBar, Pressable, Platform } from 'react-native';
-import React, { useCallback, useState } from 'react';
+import { StyleSheet, View, Text, StatusBar as RNStatusBar, Pressable, Platform, Animated } from 'react-native';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { LQDBottomSheet, LQDButton, LQDFlatlist, LQDImage, LQDInput, LQDStrategyCard, SearchUI } from '@/components';
 import { SearchBar } from 'react-native-screens';
 import { ArrowCircleDownIcon, SearchIcon } from '@/assets/icons';
@@ -21,6 +21,47 @@ const Discover = () => {
   const recentSearch = poolsState.recentSearchedPools;
   const { control, watch } = useForm();
 
+  const animationValue = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    Animated.timing(animationValue, {
+      toValue: search ? 1 : 0,
+      duration: 300,
+      useNativeDriver: true,
+    }).start();
+  }, [search]);
+
+  // Animated styles
+  const discoverStyle = {
+    opacity: animationValue.interpolate({
+      inputRange: [0, 1],
+      outputRange: [1, 0], // Fully visible when search is false
+    }),
+    transform: [
+      {
+        translateY: animationValue.interpolate({
+          inputRange: [0, 1],
+          outputRange: [0, -20], // Slide up when transitioning
+        }),
+      },
+    ],
+  };
+
+  const searchStyle = {
+    opacity: animationValue.interpolate({
+      inputRange: [0, 1],
+      outputRange: [0, 1], // Fully visible when search is true
+    }),
+    transform: [
+      {
+        translateY: animationValue.interpolate({
+          inputRange: [0, 1],
+          outputRange: [20, 0], // Slide down when transitioning
+        }),
+      },
+    ],
+  };
+
   const closeInput = () => {
     setSearch((prev) => !prev);
   };
@@ -39,8 +80,9 @@ const Discover = () => {
 
   return (
     <View style={styles.container}>
+      {/* Discover Section */}
       {!search && (
-        <View style={styles.discoverTopWrapper}>
+        <Animated.View style={[styles.discoverTopWrapper, discoverStyle]}>
           <Text style={styles.topText}>Discover</Text>
           <View style={styles.topIconWrapper}>
             <View style={styles.relativeWrapper}>
@@ -61,14 +103,16 @@ const Discover = () => {
                 <ArrowCircleDownIcon />
               </View>
             </Pressable>
-            <Pressable onPress={closeInput}>
+            <Pressable onPress={() => setSearch(true)}>
               <SearchIcon />
             </Pressable>
           </View>
-        </View>
+        </Animated.View>
       )}
+
+      {/* Search Section */}
       {search && (
-        <View style={styles.searchModalWrapper}>
+        <Animated.View style={[styles.searchModalWrapper, searchStyle]}>
           <LQDInput
             control={control}
             name="search"
@@ -79,9 +123,9 @@ const Discover = () => {
               placeholder: '',
             }}
             variant="close"
-            iconAction={closeInput}
+            iconAction={() => setSearch(false)}
           />
-        </View>
+        </Animated.View>
       )}
 
       <View>
