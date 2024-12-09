@@ -16,19 +16,6 @@ import { AerodromeConnectorABI } from '@/constants/abis';
 import useSystemFunctions from './useSystemFunctions';
 import { useMakeCalls } from './useCalls';
 
-async function handleTransaction(client: PublicClient, { hash, waitForReceipt = true }: TransactionConfig) {
-  if (!waitForReceipt) return { hash };
-
-  const receipt = await client.waitForTransactionReceipt({
-    hash,
-  });
-
-  return {
-    hash,
-    receipt,
-  };
-}
-
 export function useLiquidity(publicClient: PublicClient) {
   const { smartAccountState } = useSystemFunctions();
   const { makeCalls, buildUserOperationCalldata } = useMakeCalls();
@@ -161,16 +148,13 @@ export function useLiquidity(publicClient: PublicClient) {
         caller: account,
       });
 
-      calls.push(createPluginCall(addLiquidityData, currentIndex));
+      //calls.push(createPluginCall(addLiquidityData, currentIndex));
 
-      const { opHash } = await makeCalls({
+      const { opHash, receipt } = await makeCalls({
         calls,
         account,
       });
-      return handleTransaction(publicClient, {
-        hash: opHash as `0x${string}`,
-        ...txConfig,
-      });
+      return { opHash, receipt };
     },
     [publicClient, createPluginCall, account]
   );
@@ -191,14 +175,11 @@ export function useLiquidity(publicClient: PublicClient) {
 
       const call = createPluginCall(connectorData, 0);
 
-      const { opHash } = await makeCalls({
+      const { opHash, receipt } = await makeCalls({
         calls: [call],
         account,
       });
-      return handleTransaction(publicClient, {
-        hash: opHash as `0x${string}`,
-        ...txConfig,
-      });
+      return { opHash, receipt };
     },
     [publicClient, createPluginCall, account]
   );
@@ -225,14 +206,11 @@ export function useLiquidity(publicClient: PublicClient) {
 
       const call = createPluginCall(connectorData, 0);
 
-      const { opHash } = await makeCalls({
+      const { opHash, receipt } = await makeCalls({
         calls: [call],
         account,
       });
-      return handleTransaction(publicClient, {
-        hash: opHash as `0x${string}`,
-        ...txConfig,
-      });
+      return { opHash, receipt };
     },
     [publicClient, createPluginCall, account]
   );
@@ -247,14 +225,11 @@ export function useLiquidity(publicClient: PublicClient) {
 
       const call = createPluginCall(connectorData, 0);
 
-      const { opHash } = await makeCalls({
+      const { opHash, receipt } = await makeCalls({
         calls: [call],
         account,
       });
-      return handleTransaction(publicClient, {
-        hash: opHash as `0x${string}`,
-        ...txConfig,
-      });
+      return { opHash, receipt };
     },
     [publicClient, createPluginCall, account]
   );
