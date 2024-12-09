@@ -1,4 +1,4 @@
-import { formatUnits } from 'viem';
+import { decodeAbiParameters, formatUnits, Hex, hexToBigInt } from 'viem';
 import { Platform } from 'react-native';
 
 const formatAmount = (amount?: number | string, decimals = 4): number => {
@@ -156,6 +156,25 @@ const createArrayWithIndexes = (length: number): number[] => {
   return Array.from({ length }, (_, index) => index);
 };
 
+function splitSignature(signature: string): { r: bigint; s: bigint } {
+  console.log(signature, 'from splitting');
+  let [r, s] = decodeAbiParameters([{ type: 'uint256' }, { type: 'uint256' }], signature as Hex);
+  const n = hexToBigInt('0xffffffff00000000ffffffffffffffffbce6faada7179e84f3b9cac2fc632551');
+  if (s > n / 2n) {
+    s = n - s;
+  }
+  return { r, s };
+}
+
+export const findQuoteIndices = (input: string): { beforeType: bigint; beforeChallenge: bigint } => {
+  const beforeTypeIndex = BigInt(input.lastIndexOf('"type":"webauthn.get"'));
+  const beforeChallengeIndex = BigInt(input.indexOf('"challenge'));
+  return {
+    beforeType: beforeTypeIndex,
+    beforeChallenge: beforeChallengeIndex,
+  };
+};
+
 export {
   formatNumberWithSuffix,
   truncateDecimal,
@@ -174,4 +193,5 @@ export {
   formatInputAmount,
   formatSymbol,
   createArrayWithIndexes,
+  splitSignature,
 };

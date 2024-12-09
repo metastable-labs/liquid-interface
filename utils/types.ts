@@ -58,3 +58,35 @@ export interface PaymasterResult {
   paymasterVerificationGasLimit: bigint;
   paymasterPostOpGasLimit: bigint;
 }
+
+export interface UserOperationV6 {
+  sender: Address;
+  nonce: bigint;
+  initCode: Hex;
+  callData: Hex;
+  callGasLimit: bigint;
+  verificationGasLimit: bigint;
+  preVerificationGas: bigint;
+  maxFeePerGas: bigint;
+  maxPriorityFeePerGas: bigint;
+  paymasterAndData: Hex;
+  signature: Hex;
+}
+
+export interface GasPrice {
+  maxFeePerGas: string;
+  maxPriorityFeePerGas: string;
+}
+
+export interface GasPriceResponse {
+  slow: GasPrice;
+  standard: GasPrice;
+  fast: GasPrice;
+}
+
+export interface GasEstimateResponse {
+  preVerificationGas: string;
+  verificationGas: string;
+  verificationGasLimit: string;
+  callGasLimit: string;
+}

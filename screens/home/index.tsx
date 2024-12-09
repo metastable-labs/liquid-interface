@@ -9,6 +9,7 @@ import { useAccountActions } from '@/store/account/actions';
 import { usePoolActions } from '@/store/pools/actions';
 import { useOnMount } from '@/hooks/useOnMount';
 import Loader from './loader';
+import { useWriteFeed } from '@/services/feeds/queries';
 const image = 'https://pics.craiyon.com/2023-08-02/7a951cac85bd4aa2b0e70dbaabb8404e.webp';
 
 export const feeds: Array<any> = [
@@ -107,6 +108,7 @@ const Home = () => {
   const { router, poolsState, smartAccountState, accountState, appState } = useSystemFunctions();
   const { getTokens } = useAccountActions();
   const { getAllPools } = usePoolActions();
+  const { postStrategy } = useWriteFeed();
 
   const { loadingPools } = poolsState;
   const { loading: loadingAccounts } = accountState;
@@ -122,6 +124,15 @@ const Home = () => {
   useOnMount(function loadData() {
     getAllPools();
   });
+
+  useEffect(
+    function a() {
+      if (!smartAccountState.address) return;
+
+      // postStrategy();
+    },
+    [smartAccountState.address]
+  );
 
   return (
     <>
