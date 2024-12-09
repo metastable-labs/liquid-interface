@@ -1,17 +1,35 @@
 import React from 'react';
 import { Controller, FieldValues } from 'react-hook-form';
-import { TextInput, Text, View, StyleSheet } from 'react-native';
+import { TextInput, Text, View, StyleSheet, Pressable } from 'react-native';
 
-import { SearchIcon } from '@/assets/icons';
+import { CloseIcon, SearchIcon } from '@/assets/icons';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import { ILQDInput } from './types';
 
-const LQDInput = <T extends FieldValues>({ control, name, inputProps, label, placeholder, rules, variant = 'primary' }: ILQDInput<T>) => {
+const LQDInput = <T extends FieldValues>({
+  control,
+  name,
+  inputProps,
+  label,
+  placeholder,
+  rules,
+  variant = 'primary',
+  iconAction,
+}: ILQDInput<T>) => {
+  const iconsMap = {
+    search: <SearchIcon />,
+    close: <CloseIcon fill="#94A3B8" />,
+    primary: null,
+    secondary: null,
+  };
+
+  const icon = iconsMap[variant] || null;
+
   return (
     <View style={styles.container}>
       {label && <Text style={styles.label}>{label}</Text>}
       <View style={styles.inputContainer}>
-        {variant === 'search' && <SearchIcon />}
+        <Pressable onPress={iconAction}>{icon}</Pressable>
 
         <Controller
           control={control}

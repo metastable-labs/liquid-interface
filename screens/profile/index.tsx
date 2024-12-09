@@ -5,8 +5,8 @@ import { CheckIcon, CopyIcon, FamcasterIcon, FillCheckIcon, LinkIcon, UserOctago
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import { SceneMap } from 'react-native-tab-view';
 import useCustomTabView from '@/hooks/useCustomTabview';
-import { feeds } from '../home';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
+import { feeds } from './dummy';
 const Profile = () => {
   const { CustomTabView } = useCustomTabView();
   const { router } = useSystemFunctions();
@@ -25,7 +25,7 @@ const Profile = () => {
       <LQDFlatlist
         data={feeds}
         showsVerticalScrollIndicator={false}
-        renderItem={({ item }) => <LQDFeedCard feed={item} />}
+        renderItem={({ item }) => <LQDFeedCard showInvest={false} feed={item} />}
         keyExtractor={(_, index) => index.toString()}
         showsHorizontalScrollIndicator={false}
         style={{ backgroundColor: '#fff' }}
