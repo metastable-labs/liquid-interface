@@ -1,6 +1,14 @@
 import { useCallback } from 'react';
 import { Address, parseUnits, erc20Abi, Hex, PublicClient } from 'viem';
-import { encodePluginExecute, encodeAddLiquidity, encodeRemoveLiquidity, encodeSwap, encodeStake, encodeApprove } from '@/utils/encoders';
+import {
+  encodePluginExecute,
+  encodeAddLiquidity,
+  encodeRemoveLiquidity,
+  encodeSwap,
+  encodeStake,
+  encodeApprove,
+  encodeCreateStrategy,
+} from '@/utils/encoders';
 import { AERODROME_CONNECTOR, AERODROME_FACTORY_ADDRESS, CONNECTOR_PLUGIN } from '@/constants/addresses';
 import {
   AddLiquidityParams,
@@ -277,10 +285,26 @@ export function useLiquidity(publicClient: PublicClient) {
     }
   };
 
+  const createStrategy = useCallback(
+    async (params: StrategyBody, txConfig?: Partial<TransactionConfig>) => {
+      const connectorData = encodeCreateStrategy(params);
+
+      const call = createPluginCall(connectorData, 0);
+
+      const { opHash, receipt } = await makeCalls({
+        calls: [call],
+        account,
+      });
+      return { opHash, receipt };
+    },
+    [publicClient, createPluginCall, account]
+  );
+
   return {
     addLiquidity,
     removeLiquidity,
     swap,
     stake,
+    createStrategy,
   };
 }
