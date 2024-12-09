@@ -1,6 +1,24 @@
 const image = 'https://pics.craiyon.com/2023-08-02/7a951cac85bd4aa2b0e70dbaabb8404e.webp';
+export const protocolList = [
+  {
+    id: '1',
+    icon: image,
+    title: 'Moonwell',
+  },
+  {
+    id: '2',
+    icon: image,
+    title: 'Aerodrome',
+  },
+  {
+    id: '3',
+    icon: image,
+    title: 'Morpho',
+  },
+];
 export const strategyies: Array<any> = [
   {
+    id: '1',
     photo: image,
     username: '@Nurayyy.eth',
     tvl: '2.4m',
@@ -38,6 +56,7 @@ export const strategyies: Array<any> = [
     ],
   },
   {
+    id: '2',
     photo: image,
     username: '@Nurayyy.eth',
     tvl: '2.4m',
@@ -75,6 +94,7 @@ export const strategyies: Array<any> = [
     ],
   },
   {
+    id: '3',
     photo: image,
     username: '@Nurayyy.eth',
     tvl: '2.4m',
@@ -112,6 +132,7 @@ export const strategyies: Array<any> = [
     ],
   },
   {
+    id: '4',
     photo: image,
     username: '@Nurayyy.eth',
     tvl: '2.4m',
@@ -149,6 +170,7 @@ export const strategyies: Array<any> = [
     ],
   },
   {
+    id: '5',
     photo: image,
     username: '@Nurayyy.eth',
     tvl: '2.4m',
@@ -186,6 +208,7 @@ export const strategyies: Array<any> = [
     ],
   },
   {
+    id: '6',
     photo: image,
     username: '@Nurayyy.eth',
     tvl: '2.4m',
@@ -223,6 +246,7 @@ export const strategyies: Array<any> = [
     ],
   },
   {
+    id: '7',
     photo: image,
     username: '@Nurayyy.eth',
     tvl: '2.4m',
@@ -260,6 +284,7 @@ export const strategyies: Array<any> = [
     ],
   },
   {
+    id: '8',
     photo: image,
     username: '@Nurayyy.eth',
     tvl: '2.4m',
@@ -297,6 +322,7 @@ export const strategyies: Array<any> = [
     ],
   },
   {
+    id: '9',
     photo: image,
     username: '@Nurayyy.eth',
     tvl: '2.4m',
@@ -334,6 +360,7 @@ export const strategyies: Array<any> = [
     ],
   },
   {
+    id: '10',
     photo: image,
     username: '@Nurayyy.eth',
     tvl: '2.4m',
@@ -371,6 +398,7 @@ export const strategyies: Array<any> = [
     ],
   },
   {
+    id: '11',
     photo: image,
     username: '@Nurayyy.eth',
     tvl: '2.4m',
@@ -408,6 +436,7 @@ export const strategyies: Array<any> = [
     ],
   },
   {
+    id: '12',
     photo: image,
     username: '@Nurayyy.eth',
     tvl: '2.4m',

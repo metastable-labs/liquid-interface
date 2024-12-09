@@ -24,9 +24,11 @@ import LQDFeedCard from './feed-card';
 import LQDFlatlist from './flatlist';
 import LQDImage from './image';
 import LQDStrategyCard from './strategy-card';
+import LQDProtocolCard from './protocol-card';
 
 export {
   LQDButton,
+  LQDProtocolCard,
   LQDStrategyCard,
   LQDImage,
   LQShrimeLoader,

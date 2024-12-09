@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     zIndex: 30,
     width: '100%',
-    paddingBottom: 62.45,
+
     paddingTop: 17,
     paddingHorizontal: 16,
     backgroundColor: '#fff',

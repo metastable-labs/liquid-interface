@@ -1,21 +1,24 @@
 import { StyleSheet, View, Text, StatusBar as RNStatusBar, Pressable, Platform, Animated } from 'react-native';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { LQDBottomSheet, LQDButton, LQDFlatlist, LQDImage, LQDInput, LQDStrategyCard, SearchUI } from '@/components';
+import { LQDBottomSheet, LQDButton, LQDFlatlist, LQDImage, LQDInput, LQDProtocolCard, LQDStrategyCard, SearchUI } from '@/components';
 import { SearchBar } from 'react-native-screens';
-import { ArrowCircleDownIcon, SearchIcon } from '@/assets/icons';
+import { ArrowCircleDownIcon, DiscoverTVLIcon, SearchIcon, DiscoverUSDIcon, DiscoverAerodromeIcon } from '@/assets/icons';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import RecentCard from '@/components/search-ui/popular-asset-card';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
-import { strategyies } from './dummy';
+import { protocolList, strategyies } from './dummy';
 import { useForm } from 'react-hook-form';
 import PercentageSetter from '../liquidity-actions/remove/percentage-setter';
 import useAppActions from '@/store/app/actions';
 
 const Discover = () => {
   const { router, poolsState, dispatch, appState } = useSystemFunctions();
+  const { searchIsFocused, showSearch } = useAppActions();
   const [search, setSearch] = useState(false);
   const [showTvl, setShowTvl] = useState(false);
+  const [protocal, setProtocal] = useState(false);
   const [percentage, setPercentage] = useState(25);
+  const [selected, setSelected] = useState('');
 
   const stableSetPercentage = useCallback((value: number) => setPercentage(value), []);
   const recentSearch = poolsState.recentSearchedPools;
@@ -70,6 +73,15 @@ const Discover = () => {
     setShowTvl((prev) => !prev);
   };
 
+  const openProtocal = () => {
+    setProtocal((prev) => !prev);
+  };
+
+  const openAssets = () => {
+    searchIsFocused(false);
+    showSearch(true);
+  };
+
   if (appState.showSearch) {
     return (
       <View style={styles.searchWrapper}>
@@ -85,20 +97,20 @@ const Discover = () => {
         <Animated.View style={[styles.discoverTopWrapper, discoverStyle]}>
           <Text style={styles.topText}>Discover</Text>
           <View style={styles.topIconWrapper}>
-            <View style={styles.relativeWrapper}>
-              <LQDImage height={30} width={30} />
+            <Pressable onPress={openTvl} style={styles.relativeWrapper}>
+              <DiscoverTVLIcon />
               <View style={styles.dropIcon}>
                 <ArrowCircleDownIcon />
               </View>
-            </View>
-            <View style={styles.relativeWrapper}>
-              <LQDImage height={30} width={30} />
+            </Pressable>
+            <Pressable onPress={openAssets} style={styles.relativeWrapper}>
+              <DiscoverUSDIcon />
               <View style={styles.dropIcon}>
                 <ArrowCircleDownIcon />
               </View>
-            </View>
-            <Pressable style={styles.relativeWrapper}>
-              <LQDImage height={30} width={30} />
+            </Pressable>
+            <Pressable onPress={openProtocal} style={styles.relativeWrapper}>
+              <DiscoverAerodromeIcon />
               <View style={styles.dropIcon}>
                 <ArrowCircleDownIcon />
               </View>
@@ -127,23 +139,10 @@ const Discover = () => {
           />
         </Animated.View>
       )}
-
-      <View>
-        <LQDFlatlist
-          data={recentSearch}
-          horizontal
-          showsVerticalScrollIndicator={false}
-          renderItem={({ item }) => <RecentCard pool={item} />}
-          keyExtractor={(_, index) => index.toString()}
-          showsHorizontalScrollIndicator={false}
-          style={{ marginTop: 20, marginBottom: 10 }}
-          contentContainerStyle={styles.recentContainerStyle}
-        />
-      </View>
       <LQDFlatlist
         data={strategyies}
         showsVerticalScrollIndicator={false}
-        renderItem={({ item }) => <LQDStrategyCard strategy={item} actionTvl={openTvl} />}
+        renderItem={({ item }) => <LQDStrategyCard strategy={item} />}
         keyExtractor={(_, index) => index.toString()}
         showsHorizontalScrollIndicator={false}
         style={{ paddingTop: 15 }}
@@ -151,11 +150,23 @@ const Discover = () => {
       />
 
       <LQDBottomSheet show={showTvl} title="TVL" variant="primary" onClose={openTvl}>
-        <View style={styles.percentageSetterContainer}>
-          <PercentageSetter setPercentage={stableSetPercentage} />
-        </View>
+        <View style={{ paddingBottom: 50 }}>
+          <View style={styles.percentageSetterContainer}>
+            <PercentageSetter setPercentage={stableSetPercentage} />
+          </View>
 
-        <LQDButton variant="secondary" title="Continue" />
+          <LQDButton variant="secondary" title="Continue" />
+        </View>
+      </LQDBottomSheet>
+      <LQDBottomSheet show={protocal} title="" variant="primary" onClose={openProtocal}>
+        <LQDFlatlist
+          data={protocolList}
+          showsVerticalScrollIndicator={false}
+          renderItem={({ item }) => <LQDProtocolCard selected={selected === item.id} protocol={item} action={() => setSelected(item.id)} />}
+          keyExtractor={(_, index) => index.toString()}
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.protocalContainerStyle}
+        />
       </LQDBottomSheet>
     </View>
   );
@@ -202,6 +213,7 @@ const styles = StyleSheet.create({
     paddingBottom: Platform.OS === 'android' ? -(RNStatusBar.currentHeight || 0) : -48,
   },
   strategyContainerStyle: { gap: 20, paddingBottom: 120, paddingHorizontal: 12 },
+  protocalContainerStyle: { gap: 20, paddingBottom: 50 },
   recentContainerStyle: { gap: 10, paddingBottom: 0, paddingHorizontal: 12 },
   searchModalWrapper: { paddingHorizontal: 12 },
   discoverTopWrapper: { flexDirection: 'row', alignItems: 'center', marginHorizontal: 16, paddingVertical: 10 },

@@ -73,9 +73,15 @@ import LinkIcon from './link-icon';
 import FamcasterIcon from './farcaster-icon';
 import FillCheckIcon from './fill-check-icon';
 import ArrowCircleDownIcon from './arrow-circle-down-icon';
+import DiscoverTVLIcon from './discover-tvl-iocn';
+import DiscoverUSDIcon from './discover-usd-icon';
+import DiscoverAerodromeIcon from './discover-aerodrome-icon';
 
 export {
   SwatchIcon,
+  DiscoverTVLIcon,
+  DiscoverUSDIcon,
+  DiscoverAerodromeIcon,
   FillCheckIcon,
   ArrowCircleDownIcon,
   FamcasterIcon,

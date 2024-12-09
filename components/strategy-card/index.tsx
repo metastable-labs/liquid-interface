@@ -7,12 +7,13 @@ import LQDImage from '../image';
 import { IStrategyCard } from './types';
 import { MoneysIcon } from '@/assets/icons';
 
-const LQDStrategyCard = ({ strategy, actionTvl, navigationVariant = 'primary' }: IStrategyCard) => {
+const LQDStrategyCard = ({ strategy, navigationVariant = 'primary' }: IStrategyCard) => {
   const { router, pathname } = useSystemFunctions();
   const { searchIsFocused } = useAppActions();
+  const { id } = strategy;
   const onPress = () => {
     searchIsFocused(false);
-    // router.push(`/(tabs)/home/`);
+    router.push(`/(tabs)/home/${id}`);
   };
 
   const avatar = strategy.image;
@@ -39,10 +40,10 @@ const LQDStrategyCard = ({ strategy, actionTvl, navigationVariant = 'primary' }:
         <Text style={styles.key}>Est. APY</Text>
         <Text style={styles.value}>{estimate}</Text>
       </View>
-      <Pressable onPress={actionTvl} style={styles.iconContainer}>
+      <View style={styles.iconContainer}>
         <Text style={styles.key}>TVL</Text>
         <Text style={styles.value}>{tvl}</Text>
-      </Pressable>
+      </View>
     </TouchableOpacity>
   );
 };
