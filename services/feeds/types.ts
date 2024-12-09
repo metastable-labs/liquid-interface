@@ -84,3 +84,30 @@ type LikeStrategyResponse = {
     likeCount: number;
   };
 };
+
+type StrategyBody = {
+  name: string;
+  description: string;
+  minDeposit: number;
+  maxTvl: number;
+  performanceFee: number;
+  steps: {
+    connector: string;
+    actionType: ActionType;
+    assetsIn: string;
+    assetsOut: string;
+    amountRatio: number;
+    data?: any;
+  }[];
+};
+
+enum ActionType {
+  SUPPLY, // Supply assets
+  WITHDRAW, // Withdraw assets
+  BORROW, // Borrow assets
+  REPAY, // Repay debt
+  STAKE, // Stake assets
+  UNSTAKE, // Unstake assets
+  SWAP, // Swap assets
+  CLAIM, // Claim rewards
+}
