@@ -12,15 +12,6 @@ const SearchSection = ({ children, title, onClear, query, setQuery }: ISearchSec
   <View style={styles.section}>
     <View style={styles.header}>
       <Text style={styles.title}>{title}</Text>
-      {onClear && (
-        <TouchableOpacity style={styles.clear} onPress={onClear}>
-          <Text style={styles.clearText}>Clear</Text>
-          <View style={{ transform: [{ scale: 0.55 }] }}>
-            <CloseIcon />
-          </View>
-        </TouchableOpacity>
-      )}
-
       {query && setQuery && (
         <View style={styles.queryContainer}>
           {queries.map((item) => (
@@ -52,7 +43,7 @@ const styles = StyleSheet.create({
 
   title: {
     color: '#0F172A',
-    fontSize: 20,
+    fontSize: 16,
     lineHeight: 23.2,
     fontWeight: '500',
     fontFamily: 'AeonikMedium',

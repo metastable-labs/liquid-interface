@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { View, StyleSheet, ScrollView, FlatList, Text } from 'react-native';
+import { View, StyleSheet, ScrollView, FlatList, Text, Pressable } from 'react-native';
 
 import SearchSection from './sections';
-import RecentCard from './recent-card';
+import RecentCard from './popular-asset-card';
 import LQDSearch from '../search';
 import LQDPoolPairPaper from '../pool-pair-paper';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
@@ -13,6 +13,7 @@ import LQShrimeLoader from '../loader';
 import { createArrayWithIndexes } from '@/utils/helpers';
 import { clearRecentSearchedPools } from '@/store/pools';
 import LQNoResult from '../no-result';
+import Modal from 'react-native-modal';
 
 const SearchUI = () => {
   const { router, poolsState, dispatch } = useSystemFunctions();
@@ -25,6 +26,7 @@ const SearchUI = () => {
   const recentSearch = poolsState.recentSearchedPools;
 
   const [showRecents, setShowRecents] = useState(true);
+  const [selectedAsset, setSelectedAsset] = useState(null);
 
   const emptysearch = createArrayWithIndexes(10);
 
@@ -38,7 +40,7 @@ const SearchUI = () => {
 
   const sections: Array<Partial<ISearchSection>> = [
     {
-      title: 'Recents',
+      title: 'Popular',
       children: (
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 10 }}>
           {recentSearch.map((recent, index) => {
@@ -49,11 +51,11 @@ const SearchUI = () => {
       onClear: () => dispatch(clearRecentSearchedPools()),
     },
     {
-      title: 'Trending Pools',
+      title: 'All assets',
       children: (
         <View style={styles.mapContainer}>
           {trendingPools.map((pool, index) => (
-            <LQDPoolPairPaper key={index} pool={pool} />
+            <LQDPoolPairPaper selected={selectedAsset === pool.address} key={index} pool={pool} />
           ))}
         </View>
       ),
@@ -67,7 +69,10 @@ const SearchUI = () => {
         <View style={styles.mapContainer}>
           <FlatList
             data={searchedPools}
-            renderItem={({ item }) => <LQDPoolPairPaper pool={item} />}
+            renderItem={({ item }) => {
+              console.log(item.address);
+              return <LQDPoolPairPaper selected={selectedAsset === item.address} pool={item} />;
+            }}
             keyExtractor={(_, index) => index.toString()}
             contentContainerStyle={{ gap: 24 }}
             onEndReached={() => getPaginatedSearchPools(searchText)}
@@ -100,34 +105,43 @@ const SearchUI = () => {
     ));
 
   return (
-    <>
-      <LQDSearch setQuery={handleQuery} />
-
-      {loading && <Loader />}
-
-      {searchedPools.length === 0 && searchText && !loading && (
-        <LQNoResult
-          title="Can’t find this pool"
-          description="We can’t find that pool, make sure it’s not a typo or you can explore other pools on Liquid"
-        />
-      )}
-
-      {searchedPools.length === 0 && !searchText && !loading && (
-        <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-          {sectionsToShow.map((section, index) => (
-            <SearchSection key={section.title} {...(section as ISearchSection)} index={index} />
-          ))}
-        </ScrollView>
-      )}
-
-      {searchedPools.length > 0 && !loading && (
-        <View style={styles.container}>
-          {sectionsToShow.map((section, index) => (
-            <SearchSection key={section.title} {...(section as ISearchSection)} index={index} />
-          ))}
+    <Modal style={{ padding: 0, margin: 0 }} statusBarTranslucent isVisible={true} animationIn="slideInUp" animationOut="slideOutDown">
+      <Pressable style={styles.overlay} />
+      <View
+        style={{
+          ...styles.bottomSheet,
+        }}
+      >
+        <View style={{ paddingHorizontal: 16 }}>
+          <LQDSearch setQuery={handleQuery} />
         </View>
-      )}
-    </>
+
+        {loading && <Loader />}
+
+        {searchedPools.length === 0 && searchText && !loading && (
+          <LQNoResult
+            title="Can’t find this pool"
+            description="We can’t find that pool, make sure it’s not a typo or you can explore other pools on Liquid"
+          />
+        )}
+
+        {searchedPools.length === 0 && !searchText && !loading && (
+          <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+            {sectionsToShow.map((section, index) => (
+              <SearchSection key={section.title} {...(section as ISearchSection)} index={index} />
+            ))}
+          </ScrollView>
+        )}
+
+        {searchedPools.length > 0 && !loading && (
+          <View style={styles.container}>
+            {sectionsToShow.map((section, index) => (
+              <SearchSection key={section.title} {...(section as ISearchSection)} index={index} />
+            ))}
+          </View>
+        )}
+      </View>
+    </Modal>
   );
 };
 
@@ -138,9 +152,28 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     flex: 1,
     paddingHorizontal: 16,
-    paddingTop: 34,
     paddingBottom: 68,
-    gap: 40,
+  },
+
+  overlay: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    width: '100%',
+  },
+
+  bottomSheet: {
+    position: 'absolute',
+    bottom: 0,
+    zIndex: 30,
+    width: '100%',
+    paddingBottom: 10,
+    paddingTop: 17,
+    backgroundColor: '#fff',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    gap: 33,
+    maxHeight: '90%',
+    height: '90%',
   },
 
   mapContainer: {
