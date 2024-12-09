@@ -215,6 +215,6 @@ const styles = StyleSheet.create({
   strategyContainerStyle: { gap: 20, paddingBottom: 120, paddingHorizontal: 12 },
   protocalContainerStyle: { gap: 20, paddingBottom: 50 },
   recentContainerStyle: { gap: 10, paddingBottom: 0, paddingHorizontal: 12 },
-  searchModalWrapper: { paddingHorizontal: 12 },
+  searchModalWrapper: { paddingHorizontal: 12, paddingBottom: 10 },
   discoverTopWrapper: { flexDirection: 'row', alignItems: 'center', marginHorizontal: 16, paddingVertical: 10 },
 });

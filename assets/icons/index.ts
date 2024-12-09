@@ -75,10 +75,14 @@ import FillCheckIcon from './fill-check-icon';
 import ArrowCircleDownIcon from './arrow-circle-down-icon';
 import DiscoverTVLIcon from './discover-tvl-iocn';
 import DiscoverUSDIcon from './discover-usd-icon';
+import LampIcon from './lamp-icon';
 import DiscoverAerodromeIcon from './discover-aerodrome-icon';
+import DragHandleIcon from './drag-handle-icon';
 
 export {
+  LampIcon,
   SwatchIcon,
+  DragHandleIcon,
   DiscoverTVLIcon,
   DiscoverUSDIcon,
   DiscoverAerodromeIcon,

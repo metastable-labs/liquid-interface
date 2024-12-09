@@ -1,0 +1,92 @@
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import { LQDButton, LQDInput } from '@/components';
+import { useForm } from 'react-hook-form';
+import useAppActions from '@/store/app/actions';
+import Actions from './actions';
+import { adjustFontSizeForIOS } from '@/utils/helpers';
+
+const CreateStrategy = () => {
+  const { control, watch } = useForm();
+  const { searchIsFocused: focusSearch, showSearch } = useAppActions();
+  const focusInput = () => {
+    focusSearch(true);
+  };
+
+  const blurInput = () => {
+    focusSearch(false);
+  };
+  return (
+    <View style={styles.container}>
+      <View style={{ flex: 1 }}>
+        <LQDInput
+          control={control}
+          name="strategy-name"
+          rules={{ required: true }}
+          label="Strategy Name"
+          inputProps={{
+            keyboardType: 'default',
+            autoCapitalize: 'none',
+            placeholder: 'Search',
+            onBlur: blurInput,
+            onFocus: focusInput,
+          }}
+          variant="primary"
+        />
+        <View style={{ marginTop: 20 }}>
+          <LQDInput
+            control={control}
+            name="description"
+            rules={{ required: true }}
+            label="description"
+            isTextarea
+            numberOfLines={10}
+            inputProps={{
+              keyboardType: 'default',
+              autoCapitalize: 'none',
+              placeholder: 'Search',
+              onBlur: blurInput,
+              onFocus: focusInput,
+            }}
+            variant="primary"
+          />
+        </View>
+
+        <View style={{ marginTop: 20 }}>
+          <Actions />
+        </View>
+      </View>
+
+      <View style={styles.btnBottomWrapper}>
+        <LQDButton title="Save" variant="secondary" />
+        <Pressable>
+          <Text style={styles.cancel}>Cancel</Text>
+        </Pressable>
+      </View>
+    </View>
+  );
+};
+
+export default CreateStrategy;
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: '#fff',
+    flex: 1,
+    paddingTop: 20,
+    paddingHorizontal: 16,
+  },
+  cancel: {
+    fontSize: adjustFontSizeForIOS(16, 2),
+    lineHeight: 16,
+    color: '#64748B',
+    fontFamily: 'QuantaGroteskProSemiBold',
+    fontWeight: '600',
+    alignSelf: 'center',
+    marginTop: 20,
+  },
+  btnBottomWrapper: {
+    justifyContent: 'flex-end',
+    marginBottom: 25,
+  },
+});
