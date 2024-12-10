@@ -13,6 +13,13 @@ const RreviewStrategy = () => {
     return <Loader />;
   }
 
+  const openModal = () => {
+    setLoading((prev) => !prev);
+    setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+  };
+
   return (
     <View style={styles.container}>
       <View style={{ flex: 1 }}>
@@ -43,7 +50,7 @@ const RreviewStrategy = () => {
       </View>
 
       <View style={{ paddingBottom: 40 }}>
-        <LQDButton title="Publish" variant="secondary" />
+        <LQDButton title="Publish" variant="secondary" onPress={openModal} />
       </View>
     </View>
   );

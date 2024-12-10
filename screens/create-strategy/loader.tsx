@@ -6,7 +6,9 @@ const Loader = () => {
   return (
     <Modal style={styles.container} transparent>
       <View style={styles.innerWrapper}>
-        <Image style={styles.image} source={require('../../assets/images/lottie-loader.png')} resizeMode="contain" />
+        <View style={styles.image}>
+          <LottieView autoPlay loop source={require('../../assets/json/liquid loader animation.json')} />
+        </View>
       </View>
     </Modal>
   );
@@ -25,6 +27,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   image: {
-    width: 72,
+    width: 100,
+    height: 130,
   },
 });
