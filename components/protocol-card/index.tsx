@@ -1,18 +1,22 @@
 import React, { useEffect, useRef } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import { FillCheckIcon } from '@/assets/icons';
+import { AerodromeIcon, BorrowIcon, DepositIcon, FillCheckIcon, MoonWellIcon, MorphoIcon } from '@/assets/icons';
 import { IProtocolCard } from './types';
-import LQDImage from '../image';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 
-const image = 'https://pics.craiyon.com/2023-08-02/7a951cac85bd4aa2b0e70dbaabb8404e.webp';
-const LQDProtocolCard = ({ selected, action, protocol }: IProtocolCard) => {
+const LQDProtocolCard = ({ selected, action, variant, protocol }: IProtocolCard) => {
   const { title, icon } = protocol;
+
+  const icons = {
+    aerodrome: <AerodromeIcon height={24} width={24} />,
+    moonwell: <MoonWellIcon height={24} width={24} />,
+    morpho: <MorphoIcon height={24} width={24} />,
+  };
 
   return (
     <TouchableOpacity style={styles.container} activeOpacity={0.7} onPress={action}>
       <View style={styles.innerWrapper}>
-        <LQDImage src={icon || image} width={30} height={30} />
+        {icons[variant]}
         <Text style={styles.title}>{title}</Text>
       </View>
       <View style={styles.volumeWrapper}>{selected && <FillCheckIcon />}</View>

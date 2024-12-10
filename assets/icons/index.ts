@@ -76,16 +76,22 @@ import ArrowCircleDownIcon from './arrow-circle-down-icon';
 import DiscoverTVLIcon from './discover-tvl-iocn';
 import DiscoverUSDIcon from './discover-usd-icon';
 import LampIcon from './lamp-icon';
-import DiscoverAerodromeIcon from './discover-aerodrome-icon';
+import AerodromeIcon from './aerodrome-icon';
 import DragHandleIcon from './drag-handle-icon';
+import MoonWellIcon from './moonwell-icon';
+import MorphoIcon from './morpho-icon';
+import ArrowDropdownDownIcon from './arrow-dropdown-icon';
 
 export {
   LampIcon,
+  ArrowDropdownDownIcon,
+  MorphoIcon,
   SwatchIcon,
+  MoonWellIcon,
   DragHandleIcon,
   DiscoverTVLIcon,
   DiscoverUSDIcon,
-  DiscoverAerodromeIcon,
+  AerodromeIcon,
   FillCheckIcon,
   ArrowCircleDownIcon,
   FamcasterIcon,
