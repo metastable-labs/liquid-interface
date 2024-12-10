@@ -11,7 +11,7 @@ import {
   MorphoIcon,
   PlusIcon,
   StakeIcon,
-} from '@/assets/icons'; // Replace these with your icon components
+} from '@/assets/icons';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 
 const ActionItem = ({ title, action }: IActionItem) => {

@@ -1,13 +1,20 @@
-import { Image, Modal, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import React from 'react';
 import LottieView from 'lottie-react-native';
+import Modal from 'react-native-modal';
 
-const Loader = () => {
+const Loader = ({
+  visible = true,
+  backgroundColor = 'rgba(87, 87, 87, 0.73)',
+  animationSource = require('../../assets/json/liquid loader animation.json'),
+}) => {
+  if (!visible) return null;
+
   return (
-    <Modal style={styles.container} transparent>
-      <View style={styles.innerWrapper}>
+    <Modal style={{ padding: 0, margin: 0 }} statusBarTranslucent isVisible={visible} animationIn="fadeIn">
+      <View style={[styles.innerWrapper, { backgroundColor }]}>
         <View style={styles.image}>
-          <LottieView autoPlay loop source={require('../../assets/json/liquid loader animation.json')} />
+          <LottieView autoPlay loop source={animationSource} />
         </View>
       </View>
     </Modal>
@@ -17,11 +24,7 @@ const Loader = () => {
 export default Loader;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   innerWrapper: {
-    backgroundColor: 'rgba(87, 87, 87, 0.73)',
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
