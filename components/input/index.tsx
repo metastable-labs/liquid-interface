@@ -15,6 +15,8 @@ const LQDInput = <T extends FieldValues>({
   rules,
   variant = 'primary',
   iconAction,
+  isTextarea = false, // New prop to enable textarea
+  numberOfLines = 4, // Default lines for textarea
 }: ILQDInput<T>) => {
   const iconsMap = {
     search: <SearchIcon />,
@@ -28,7 +30,7 @@ const LQDInput = <T extends FieldValues>({
   return (
     <View style={styles.container}>
       {label && <Text style={styles.label}>{label}</Text>}
-      <View style={styles.inputContainer}>
+      <View style={[styles.inputContainer, isTextarea && styles.textareaContainer]}>
         <Pressable onPress={iconAction}>{icon}</Pressable>
 
         <Controller
@@ -37,11 +39,14 @@ const LQDInput = <T extends FieldValues>({
           rules={rules}
           render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
-              style={styles.input}
+              style={[styles.input, isTextarea && styles.textarea]}
               placeholder={variant === 'search' ? 'Search' : placeholder}
               onBlur={onBlur}
               onChangeText={onChange}
               value={value}
+              multiline={isTextarea} // Enable multiline for textarea
+              numberOfLines={isTextarea ? numberOfLines : 1} // Set number of lines
+              textAlignVertical={isTextarea ? 'top' : 'center'} // Align text for textarea
               {...inputProps}
             />
           )}
@@ -72,16 +77,27 @@ const styles = StyleSheet.create({
     elevation: 1,
     backgroundColor: '#fff',
   },
+  textareaContainer: {
+    alignItems: 'flex-start', // Align items at the top for textarea
+    paddingVertical: 8,
+  },
   label: {
     marginBottom: 8,
-    fontSize: adjustFontSizeForIOS(16, 2),
-    fontWeight: 'bold',
+    fontSize: adjustFontSizeForIOS(13, 2),
+    fontWeight: '500',
+    fontFamily: 'AeonikMedium',
   },
   input: {
     flex: 1,
     fontSize: adjustFontSizeForIOS(14, 2),
     lineHeight: 18.48,
     color: '#94A3B8',
-    fontFamily: 'AeonikRegular',
+    fontWeight: 400,
+    fontFamily: 'Aeonik',
+  },
+  textarea: {
+    textAlignVertical: 'top', // Ensure text aligns to the top for textarea
+    paddingTop: 8,
+    height: 80, // Default height for textarea
   },
 });

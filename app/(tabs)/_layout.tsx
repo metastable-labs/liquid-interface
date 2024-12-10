@@ -17,14 +17,15 @@ export default function TabLayout() {
       <StatusBar style="dark" />
       <View style={styles.container} />
       {/* fix this header showing on all screens */}
-      <Header amount={3333} action={() => setShow((prev) => !prev)} />
+
       <LQDBottomSheet show={show} title="Sort by" variant="primary" onClose={() => setShow((prev) => !prev)}></LQDBottomSheet>
 
       <Tabs
         tabBar={(props) => <LQDNavigation {...props} />}
         screenOptions={{
           tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-          headerShown: false,
+          headerShown: true,
+          header: () => <Header amount={3333} action={() => setShow((prev) => !prev)} />,
         }}
       >
         <Tabs.Screen
@@ -40,6 +41,7 @@ export default function TabLayout() {
           options={{
             title: '',
             tabBarIcon: ({ color, focused }) => <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />,
+            headerShown: false,
           }}
         />
 

@@ -6,6 +6,8 @@ interface ILQDInput<T extends FieldValues> {
   name: Path<T>;
   rules?: Omit<RegisterOptions<T>, 'setValueAs' | 'disabled' | 'valueAsNumber' | 'valueAsDate'>;
   label?: string;
+  isTextarea?: boolean;
+  numberOfLines?: number;
   placeholder?: string;
   variant?: 'primary' | 'secondary' | 'search' | 'close';
   inputProps?: TextInputProps;

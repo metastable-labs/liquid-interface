@@ -34,7 +34,7 @@ const Home = () => {
 
   return (
     <>
-      <Pressable style={styles.addIcon}>
+      <Pressable onPress={() => router.push('/create-strategy')} style={styles.addIcon}>
         <PlusIcon />
       </Pressable>
       {globalLoading && <Loader />}

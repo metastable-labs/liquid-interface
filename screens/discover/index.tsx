@@ -2,7 +2,7 @@ import { StyleSheet, View, Text, StatusBar as RNStatusBar, Pressable, Platform, 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { LQDBottomSheet, LQDButton, LQDFlatlist, LQDImage, LQDInput, LQDProtocolCard, LQDStrategyCard, SearchUI } from '@/components';
 import { SearchBar } from 'react-native-screens';
-import { ArrowCircleDownIcon, DiscoverTVLIcon, SearchIcon, DiscoverUSDIcon, DiscoverAerodromeIcon } from '@/assets/icons';
+import { ArrowCircleDownIcon, DiscoverTVLIcon, SearchIcon, DiscoverUSDIcon, AerodromeIcon } from '@/assets/icons';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import RecentCard from '@/components/search-ui/popular-asset-card';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
@@ -10,6 +10,7 @@ import { protocolList, strategyies } from './dummy';
 import { useForm } from 'react-hook-form';
 import PercentageSetter from '../liquidity-actions/remove/percentage-setter';
 import useAppActions from '@/store/app/actions';
+import { IProtocolIconVariant } from '@/components/protocol-card/types';
 
 const Discover = () => {
   const { router, poolsState, dispatch, appState } = useSystemFunctions();
@@ -110,7 +111,7 @@ const Discover = () => {
               </View>
             </Pressable>
             <Pressable onPress={openProtocal} style={styles.relativeWrapper}>
-              <DiscoverAerodromeIcon />
+              <AerodromeIcon />
               <View style={styles.dropIcon}>
                 <ArrowCircleDownIcon />
               </View>
@@ -162,7 +163,14 @@ const Discover = () => {
         <LQDFlatlist
           data={protocolList}
           showsVerticalScrollIndicator={false}
-          renderItem={({ item }) => <LQDProtocolCard selected={selected === item.id} protocol={item} action={() => setSelected(item.id)} />}
+          renderItem={({ item }) => (
+            <LQDProtocolCard
+              variant={item.icon as IProtocolIconVariant}
+              selected={selected === item.id}
+              protocol={item}
+              action={() => setSelected(item.id)}
+            />
+          )}
           keyExtractor={(_, index) => index.toString()}
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.protocalContainerStyle}
@@ -215,6 +223,6 @@ const styles = StyleSheet.create({
   strategyContainerStyle: { gap: 20, paddingBottom: 120, paddingHorizontal: 12 },
   protocalContainerStyle: { gap: 20, paddingBottom: 50 },
   recentContainerStyle: { gap: 10, paddingBottom: 0, paddingHorizontal: 12 },
-  searchModalWrapper: { paddingHorizontal: 12 },
+  searchModalWrapper: { paddingHorizontal: 12, paddingBottom: 10 },
   discoverTopWrapper: { flexDirection: 'row', alignItems: 'center', marginHorizontal: 16, paddingVertical: 10 },
 });

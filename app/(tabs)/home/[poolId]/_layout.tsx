@@ -25,7 +25,7 @@ const PoolDetailLayout = () => {
     <>
       <Stack
         screenOptions={{
-          header: (props) => <LQDStackHeader {...props} style={{ paddingTop: 50 }} />,
+          header: (props) => <LQDStackHeader {...props} style={{ paddingTop: 0 }} />,
           headerShown: true,
         }}
       ></Stack>
