@@ -1,13 +1,12 @@
 import { Image, Modal, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
-import { LQDImage } from '@/components';
-import FastImage from 'react-native-fast-image';
+import LottieView from 'lottie-react-native';
 
 const Loader = () => {
   return (
     <Modal style={styles.container} transparent>
       <View style={styles.innerWrapper}>
-        <Image style={styles.image} source={require('../../assets/images/lottie-loader.png')} resizeMode={FastImage.resizeMode.contain} />
+        <Image style={styles.image} source={require('../../assets/images/lottie-loader.png')} resizeMode="contain" />
       </View>
     </Modal>
   );

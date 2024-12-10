@@ -1,7 +1,17 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import DraggableFlatList, { ScaleDecorator } from 'react-native-draggable-flatlist';
-import { BorrowIcon, DepositIcon, DragHandleIcon, EditProfileIcon, PlusIcon, StakeIcon } from '@/assets/icons'; // Replace these with your icon components
+import {
+  AerodromeIcon,
+  BorrowIcon,
+  DepositIcon,
+  DragHandleIcon,
+  EditProfileIcon,
+  MoonWellIcon,
+  MorphoIcon,
+  PlusIcon,
+  StakeIcon,
+} from '@/assets/icons'; // Replace these with your icon components
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 
 const ActionItem = ({ title, action }: IActionItem) => {
@@ -27,6 +37,10 @@ const Actions = ({ action }: IActions) => {
     { id: '1', title: 'Stake', icon: 'stake' },
     { id: '2', title: 'Deposit', icon: 'deposit' },
   ]);
+
+  const actions = () => {
+    setActionList((prevData) => [...prevData, { id: '1', title: 'Stake', icon: 'stake' }]);
+  };
 
   const icons = {
     stake: <StakeIcon fill="#1E293B" height={24} width={24} />,
@@ -63,6 +77,7 @@ const Actions = ({ action }: IActions) => {
       <Text style={styles.title}>Actions</Text>
       <DraggableFlatList
         data={actionList}
+        scrollEnabled={false}
         onDragEnd={({ data }) => setActionList(data)}
         keyExtractor={(item) => item.id}
         renderItem={renderItem}

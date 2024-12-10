@@ -32,7 +32,7 @@ const CreateStrategy = () => {
       <View style={{ flex: 1 }}>
         <LQDInput
           control={control}
-          name="strategyNname"
+          name="strategy-name"
           rules={{ required: true }}
           label="Strategy Name"
           inputProps={{
@@ -69,7 +69,7 @@ const CreateStrategy = () => {
       </View>
 
       <View style={styles.btnBottomWrapper}>
-        <LQDButton onPress={navigateToPreview} title="Save" variant="secondary" />
+        <LQDButton onPress={navigateToPreview} title="Continue" variant="secondary" />
         <Pressable>
           <Text style={styles.cancel}>Cancel</Text>
         </Pressable>

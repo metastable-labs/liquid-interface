@@ -1,7 +1,17 @@
 import { Platform, StyleSheet, StatusBar as RNStatusBar, Text, TouchableOpacity, View } from 'react-native';
 import React, { useState } from 'react';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
-import { ArrowDropdownDownIcon, PlusIcon } from '@/assets/icons';
+import {
+  AerodromeIcon,
+  ArrowDropdownDownIcon,
+  BorrowIcon,
+  DepositIcon,
+  MoonWellIcon,
+  MorphoIcon,
+  PlusIcon,
+  StakeIcon,
+  SupplyIcon,
+} from '@/assets/icons';
 import { LQDActionCard, LQDBottomSheet, LQDButton, LQDFlatlist, LQDImage, LQDProtocolCard, SearchUI } from '@/components';
 import { actionList, protocolList } from '../discover/dummy';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
@@ -9,13 +19,22 @@ import useAppActions from '@/store/app/actions';
 import { IActionIconVariant } from '@/components/action-card/types';
 import { IProtocolIconVariant } from '@/components/protocol-card/types';
 
-const ActionItem = ({ title = '', label = '', action }: IActionItem) => {
+const ActionItem = ({ title = '', label = '', icon = '', action }: IActionItem) => {
+  const icons = {
+    aerodrome: <AerodromeIcon height={24} width={24} />,
+    moonwell: <MoonWellIcon height={24} width={24} />,
+    morpho: <MorphoIcon height={24} width={24} />,
+    stake: <StakeIcon fill="#1E293B" height={24} width={24} />,
+    deposit: <DepositIcon fill="#1E293B" height={24} width={24} />,
+    borrow: <BorrowIcon fill="#1E293B" height={24} width={24} />,
+    supply: <SupplyIcon />,
+  };
   return (
     <View>
       <Text style={styles.label}>{label}</Text>
       <View style={styles.actionItem}>
         <View style={styles.iconFlex}>
-          <LQDImage height={20} width={20} />
+          {icons[icon]}
           <Text style={styles.actionText}>{title}</Text>
         </View>
         <TouchableOpacity onPress={action} style={styles.addButton}>
@@ -27,35 +46,11 @@ const ActionItem = ({ title = '', label = '', action }: IActionItem) => {
 };
 
 const NewAction = () => {
-  const newActionList = [
-    {
-      id: '1',
-      icon: 'deposit',
-      label: 'Protocol',
-      title: 'Deposit',
-      action: () => openProtocal(),
-    },
-    {
-      id: '2',
-      icon: 'stake',
-      label: 'Actions',
-      title: 'Stake',
-      action: () => openActions(),
-    },
-    {
-      id: '3',
-      icon: 'borrow',
-      label: 'Assets',
-      title: 'Borrow',
-      action: () => openAssets(),
-    },
-  ];
-
   const { router, appState } = useSystemFunctions();
   const { searchIsFocused, showSearch } = useAppActions();
-  const [selectedProtocal, setSelectedProtocal] = useState('');
-  const [selectedAction, setSelectedAction] = useState('');
-  const [selectedAsset, setSelectedAsset] = useState('');
+  const [selectedProtocal, setSelectedProtocal]: any = useState(protocolList[0]);
+  const [selectedAction, setSelectedAction]: any = useState(actionList[0]);
+  const [selectedAsset, setSelectedAsset] = useState(protocolList[2]);
 
   const [showProtocal, setShowProtocal] = useState(false);
   const [showActions, setShowActions] = useState(false);
@@ -87,9 +82,9 @@ const NewAction = () => {
       <Text style={styles.username}>Njoku’s Aerodrome wealth builder</Text>
 
       <View style={styles.itemWrapper}>
-        {newActionList.map((item, index) => (
-          <ActionItem action={item.action} title={item.title} label={item.label} key={index} />
-        ))}
+        <ActionItem icon={selectedProtocal.icon} title={selectedProtocal.title} label="Protocol" action={openProtocal} />
+        <ActionItem icon={selectedAction.icon} title={selectedAction.title} label="Actions" action={openActions} />
+        <ActionItem icon={selectedAsset.icon} title={selectedAsset.title} label="Assets" action={openAssets} />
       </View>
 
       <View style={styles.bottomWrapper}>
@@ -103,9 +98,9 @@ const NewAction = () => {
           renderItem={({ item }) => (
             <LQDProtocolCard
               variant={item.icon as IProtocolIconVariant}
-              selected={selectedProtocal === item.id}
+              selected={selectedProtocal.id === item.id}
               protocol={item}
-              action={() => setSelectedProtocal(item.id)}
+              action={() => setSelectedProtocal(item)}
             />
           )}
           keyExtractor={(_, index) => index.toString()}
@@ -120,9 +115,9 @@ const NewAction = () => {
           renderItem={({ item }) => (
             <LQDActionCard
               variant={item.icon as IActionIconVariant}
-              selected={selectedAction === item.id}
+              selected={selectedAction.id === item.id}
               actions={item}
-              action={() => setSelectedAction(item.id)}
+              action={() => setSelectedAction(item)}
             />
           )}
           keyExtractor={(_, index) => index.toString()}

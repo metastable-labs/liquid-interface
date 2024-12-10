@@ -1,6 +1,9 @@
+type IconVariant = 'moonwell' | 'aerodrome' | 'morpho' | 'deposit' | 'stake' | 'borrow' | 'supply';
+
 interface IActionItem {
   label?: string;
-  title: string;
+  title?: string;
+  icon?: IconVariant;
   action?: () => void;
 }
 interface IActions {

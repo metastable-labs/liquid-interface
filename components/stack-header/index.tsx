@@ -14,18 +14,17 @@ const LQDStackHeader = ({ navigation, options, hasTitle, leftIcon = 'back', righ
 
   return (
     <View style={[styles.container, style]}>
-      {/* Left Icon */}
-      <TouchableOpacity onPress={navigation.goBack}>{leftIcon && lIcon[leftIcon]}</TouchableOpacity>
+      <TouchableOpacity style={styles.icon} onPress={() => navigation.goBack()}>
+        {leftIcon && lIcon[leftIcon]}
+      </TouchableOpacity>
 
-      {/* Title */}
       {hasTitle && (
         <View style={styles.titleContainer}>
           <Text style={styles.title}>{`${options?.headerTitle}`}</Text>
         </View>
       )}
 
-      {/* Right Icon */}
-      <TouchableOpacity>{rightIcon && rIcon[rightIcon]}</TouchableOpacity>
+      <TouchableOpacity style={styles.icon}>{rightIcon && rIcon[rightIcon]}</TouchableOpacity>
     </View>
   );
 };
@@ -58,5 +57,8 @@ const styles = StyleSheet.create({
     lineHeight: 23.2,
     fontWeight: '500',
     fontFamily: 'AeonikMedium',
+  },
+  icon: {
+    zIndex: 2,
   },
 });

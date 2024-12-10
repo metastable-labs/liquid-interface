@@ -9,7 +9,6 @@ import '@/init/api';
 
 import { AllProviders } from '@/providers';
 import { LQDStackHeader, LQToast } from '@/components';
-import { View } from 'react-native';
 
 export default function RootLayout() {
   return (
@@ -83,34 +82,8 @@ function RootStack() {
           headerShown: true,
         }}
       />
-      <Stack.Screen
-        name="create-strategy"
-        options={{
-          header: (props) => <LQDStackHeader {...props} style={{ paddingTop: 60 }} hasTitle />,
-          headerTitle: 'Create Strategy',
-          headerShown: true,
-        }}
-      />
 
-      <Stack.Screen
-        name="new-action-strategy"
-        options={{
-          header: (props) => <LQDStackHeader {...props} style={{ paddingTop: 60 }} hasTitle rightIcon="bulb" leftIcon="close" />,
-          headerTitle: 'New Action',
-          headerShown: true,
-          presentation: 'fullScreenModal',
-          animation: 'slide_from_bottom',
-        }}
-      />
-
-      <Stack.Screen
-        name="preview-strategy"
-        options={{
-          header: (props) => <LQDStackHeader {...props} style={{ paddingTop: 60 }} hasTitle rightIcon="bulb" />,
-          headerTitle: 'Preview and publish',
-          headerShown: true,
-        }}
-      />
+      <Stack.Screen name="(create-strategy)" />
 
       {/* Common routes */}
       <Stack.Screen name="+not-found" options={{ headerShown: true }} />
