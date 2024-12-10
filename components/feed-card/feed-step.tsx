@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import Animated from 'react-native-reanimated';
-import { BorrowIcon, DepositIcon, StakeIcon, SupplyIcon, SwatchIcon } from '@/assets/icons'; // Replace icons as needed
+import { BorrowIcon, DepositIcon, StakeIcon, SupplyIcon } from '@/assets/icons';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import LQDPoolImages from '../pool-images';
 

@@ -15,8 +15,8 @@ const LQDInput = <T extends FieldValues>({
   rules,
   variant = 'primary',
   iconAction,
-  isTextarea = false, // New prop to enable textarea
-  numberOfLines = 4, // Default lines for textarea
+  isTextarea = false,
+  numberOfLines = 4,
 }: ILQDInput<T>) => {
   const iconsMap = {
     search: <SearchIcon />,
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   textareaContainer: {
-    alignItems: 'flex-start', // Align items at the top for textarea
+    alignItems: 'flex-start',
     paddingVertical: 8,
   },
   label: {
