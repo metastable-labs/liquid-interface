@@ -25,7 +25,7 @@ const LQDStackHeader = ({ navigation, options, hasTitle, leftIcon = 'back', righ
       )}
 
       {/* Right Icon */}
-      <TouchableOpacity onPress={navigation.goBack}>{rightIcon && rIcon[rightIcon]}</TouchableOpacity>
+      <TouchableOpacity>{rightIcon && rIcon[rightIcon]}</TouchableOpacity>
     </View>
   );
 };

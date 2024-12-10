@@ -35,6 +35,19 @@ export const actionList = [
   },
 ];
 
+export const sortList = [
+  {
+    id: '1',
+    icon: 'deposit',
+    title: 'Popular',
+  },
+  {
+    id: '2',
+    icon: 'stake',
+    title: 'New',
+  },
+];
+
 export const strategyies: Array<any> = [
   {
     id: '1',

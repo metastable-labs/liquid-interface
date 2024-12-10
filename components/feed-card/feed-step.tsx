@@ -10,7 +10,7 @@ const defaultAIconUrl = 'https://res.cloudinary.com/djzeufu4j/image/upload/v1732
 const defaultBIconUrl = 'https://res.cloudinary.com/djzeufu4j/image/upload/v1732105634/tokenBIcon_wscb3p.png';
 const connector = require('../../assets/images/connector.png');
 
-const FeedStep = ({ variant, tokenAIconURL, tokenBIconURL, tokenA, tokenB, isLast }: IFeedStep) => {
+const FeedStep = ({ variant, tokenAIconURL, tokenBIconURL, tokenA, tokenB, isLast, title = '' }: IFeedStep) => {
   const [tokenAIconError, setTokenAIconError] = useState(false);
   const [tokenBIconError, setTokenBIconError] = useState(false);
 

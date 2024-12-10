@@ -44,9 +44,9 @@ const LQDInput = <T extends FieldValues>({
               onBlur={onBlur}
               onChangeText={onChange}
               value={value}
-              multiline={isTextarea} // Enable multiline for textarea
-              numberOfLines={isTextarea ? numberOfLines : 1} // Set number of lines
-              textAlignVertical={isTextarea ? 'top' : 'center'} // Align text for textarea
+              multiline={isTextarea}
+              numberOfLines={isTextarea ? numberOfLines : 1}
+              textAlignVertical={isTextarea ? 'top' : 'center'}
               {...inputProps}
             />
           )}
@@ -66,7 +66,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    gap: 8,
     borderRadius: 13,
     borderColor: '#EAEEF4',
     borderWidth: 1,
@@ -96,8 +95,8 @@ const styles = StyleSheet.create({
     fontFamily: 'Aeonik',
   },
   textarea: {
-    textAlignVertical: 'top', // Ensure text aligns to the top for textarea
+    textAlignVertical: 'top',
     paddingTop: 8,
-    height: 80, // Default height for textarea
+    height: 80,
   },
 });

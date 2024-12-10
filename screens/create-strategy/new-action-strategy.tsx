@@ -9,12 +9,12 @@ import useAppActions from '@/store/app/actions';
 import { IActionIconVariant } from '@/components/action-card/types';
 import { IProtocolIconVariant } from '@/components/protocol-card/types';
 
-const ActionItem = ({ title = '', label = 'erefvg', action }: { title: string; label: string; action: () => void }) => {
+const ActionItem = ({ title = '', label = '', action }: IActionItem) => {
   return (
     <View>
       <Text style={styles.label}>{label}</Text>
       <View style={styles.actionItem}>
-        <View style={{ flexDirection: 'row', gap: 10, flex: 1 }}>
+        <View style={styles.iconFlex}>
           <LQDImage height={20} width={20} />
           <Text style={styles.actionText}>{title}</Text>
         </View>
@@ -92,7 +92,7 @@ const NewAction = () => {
         ))}
       </View>
 
-      <View style={{ paddingHorizontal: 20, marginTop: 30 }}>
+      <View style={styles.bottomWrapper}>
         <LQDButton title="Add" variant="secondary" />
       </View>
 
@@ -197,4 +197,6 @@ const styles = StyleSheet.create({
     paddingTop: Platform.OS === 'android' ? RNStatusBar.currentHeight : 20,
     paddingBottom: Platform.OS === 'android' ? -(RNStatusBar.currentHeight || 0) : -48,
   },
+  bottomWrapper: { paddingHorizontal: 20, marginTop: 30 },
+  iconFlex: { flexDirection: 'row', gap: 10, flex: 1 },
 });

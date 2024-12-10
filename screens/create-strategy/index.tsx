@@ -20,8 +20,13 @@ const CreateStrategy = () => {
   };
 
   const navigateNewAction = () => {
-    router.push('/new-action');
+    router.push('/new-action-strategy');
   };
+
+  const navigateToPreview = () => {
+    router.push('/preview-strategy');
+  };
+
   return (
     <View style={styles.container}>
       <View style={{ flex: 1 }}>
@@ -33,7 +38,7 @@ const CreateStrategy = () => {
           inputProps={{
             keyboardType: 'default',
             autoCapitalize: 'none',
-            placeholder: 'Search',
+            placeholder: 'name your strategy',
             onBlur: blurInput,
             onFocus: focusInput,
           }}
@@ -50,7 +55,7 @@ const CreateStrategy = () => {
             inputProps={{
               keyboardType: 'default',
               autoCapitalize: 'none',
-              placeholder: 'Search',
+              placeholder: 'Describe what your strategy does',
               onBlur: blurInput,
               onFocus: focusInput,
             }}
@@ -59,12 +64,12 @@ const CreateStrategy = () => {
         </View>
 
         <View style={{ marginTop: 20 }}>
-          <Actions addAction={navigateNewAction} />
+          <Actions action={navigateNewAction} />
         </View>
       </View>
 
       <View style={styles.btnBottomWrapper}>
-        <LQDButton title="Save" variant="secondary" />
+        <LQDButton onPress={navigateToPreview} title="Save" variant="secondary" />
         <Pressable>
           <Text style={styles.cancel}>Cancel</Text>
         </Pressable>

@@ -93,10 +93,21 @@ function RootStack() {
       />
 
       <Stack.Screen
-        name="new-action"
+        name="new-action-strategy"
+        options={{
+          header: (props) => <LQDStackHeader {...props} style={{ paddingTop: 60 }} hasTitle rightIcon="bulb" leftIcon="close" />,
+          headerTitle: 'New Action',
+          headerShown: true,
+          presentation: 'fullScreenModal',
+          animation: 'slide_from_bottom',
+        }}
+      />
+
+      <Stack.Screen
+        name="preview-strategy"
         options={{
           header: (props) => <LQDStackHeader {...props} style={{ paddingTop: 60 }} hasTitle rightIcon="bulb" />,
-          headerTitle: 'New Action',
+          headerTitle: 'Preview and publish',
           headerShown: true,
         }}
       />

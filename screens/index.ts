@@ -5,7 +5,8 @@ import Hot from './home/hot';
 
 import Discover from './discover';
 import CreateStrategy from './create-strategy';
-import NewAction from './create-strategy/new-action';
+import NewActionStrategy from './create-strategy/new-action-strategy';
+import PreviewStrategy from './create-strategy/preview-strategy';
 
 import Profile from './profile';
 import EditProfile from './profile/edit-profile.tsx';
@@ -26,6 +27,7 @@ export {
   Home,
   TopGainers,
   Trending,
+  PreviewStrategy,
   Hot,
   Discover,
   Profile,
@@ -39,5 +41,5 @@ export {
   AddLiquidty,
   RemoveLiquidity,
   CreateStrategy,
-  NewAction,
+  NewActionStrategy,
 };

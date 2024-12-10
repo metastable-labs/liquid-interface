@@ -81,9 +81,11 @@ import DragHandleIcon from './drag-handle-icon';
 import MoonWellIcon from './moonwell-icon';
 import MorphoIcon from './morpho-icon';
 import ArrowDropdownDownIcon from './arrow-dropdown-icon';
+import SortIcon from './sort-icon';
 
 export {
   LampIcon,
+  SortIcon,
   ArrowDropdownDownIcon,
   MorphoIcon,
   SwatchIcon,

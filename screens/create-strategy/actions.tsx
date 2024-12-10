@@ -4,16 +4,16 @@ import DraggableFlatList, { ScaleDecorator } from 'react-native-draggable-flatli
 import { BorrowIcon, DepositIcon, DragHandleIcon, EditProfileIcon, PlusIcon, StakeIcon } from '@/assets/icons'; // Replace these with your icon components
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 
-const ActionItem = ({ title, onAdd }: { title: string; onAdd: () => void }) => {
+const ActionItem = ({ title, action }: IActionItem) => {
   return (
-    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, padding: 10 }}>
+    <View style={styles.actionItemContainer}>
       <DragHandleIcon />
       <View style={{ flex: 1 }}>
         <View style={[styles.actionItem]}>
           <View style={styles.innerWrapper}>
             <Text style={styles.actionText}>{title}</Text>
           </View>
-          <TouchableOpacity onPress={onAdd} style={styles.addButton}>
+          <TouchableOpacity onPress={action} style={styles.addButton}>
             <PlusIcon fill="#64748B" height={20} width={20} />
           </TouchableOpacity>
         </View>
@@ -22,7 +22,7 @@ const ActionItem = ({ title, onAdd }: { title: string; onAdd: () => void }) => {
   );
 };
 
-const Actions = ({ addAction }: { addAction: () => void }) => {
+const Actions = ({ action }: IActions) => {
   const [actionList, setActionList] = useState([
     { id: '1', title: 'Stake', icon: 'stake' },
     { id: '2', title: 'Deposit', icon: 'deposit' },
@@ -35,8 +35,7 @@ const Actions = ({ addAction }: { addAction: () => void }) => {
     supply: null,
   };
 
-  // Render each draggable item
-  const renderItem = ({ item, drag, isActive }: any) => {
+  const renderItem = ({ item, drag, isActive }: IActionsRenderItem) => {
     return (
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, padding: 10 }}>
         <DragHandleIcon />
@@ -64,11 +63,11 @@ const Actions = ({ addAction }: { addAction: () => void }) => {
       <Text style={styles.title}>Actions</Text>
       <DraggableFlatList
         data={actionList}
-        onDragEnd={({ data }) => setActionList(data)} // Updates the order of items
+        onDragEnd={({ data }) => setActionList(data)}
         keyExtractor={(item) => item.id}
         renderItem={renderItem}
         contentContainerStyle={styles.listContainer}
-        ListFooterComponent={() => <ActionItem title="Add new action" onAdd={addAction} />}
+        ListFooterComponent={() => <ActionItem title="Add new action" action={action} />}
       />
     </View>
   );
@@ -126,4 +125,5 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   addButton: {},
+  actionItemContainer: { flexDirection: 'row', alignItems: 'center', gap: 10, padding: 10 },
 });

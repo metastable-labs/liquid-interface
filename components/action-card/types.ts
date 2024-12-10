@@ -1,4 +1,4 @@
-export type IActionIconVariant = 'deposit' | 'stake' | 'borrow' | 'supply';
+export type IActionIconVariant = 'deposit' | 'stake' | 'borrow' | 'supply' | 'sort';
 export interface IActionCard {
   actions: any;
   navigationVariant?: 'primary' | 'secondary';
