@@ -51,7 +51,7 @@ const Actions = ({ action }: IActions) => {
 
   const renderItem = ({ item, drag, isActive }: IActionsRenderItem) => {
     return (
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, padding: 10 }}>
+      <View style={styles.dragWrapper}>
         <DragHandleIcon />
         <View style={{ flex: 1 }}>
           <ScaleDecorator>
@@ -141,4 +141,5 @@ const styles = StyleSheet.create({
   },
   addButton: {},
   actionItemContainer: { flexDirection: 'row', alignItems: 'center', gap: 10, padding: 10 },
+  dragWrapper: { flexDirection: 'row', alignItems: 'center', gap: 10, padding: 10 },
 });
