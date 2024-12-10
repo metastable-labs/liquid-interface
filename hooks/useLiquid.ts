@@ -1,6 +1,14 @@
 import { useCallback } from 'react';
 import { Address, parseUnits, erc20Abi, Hex, PublicClient } from 'viem';
-import { encodePluginExecute, encodeAddLiquidity, encodeRemoveLiquidity, encodeSwap, encodeStake, encodeApprove } from '@/utils/encoders';
+import {
+  encodePluginExecute,
+  encodeAddLiquidity,
+  encodeRemoveLiquidity,
+  encodeSwap,
+  encodeStake,
+  encodeApprove,
+  encodeCreateStrategy,
+} from '@/utils/encoders';
 import { AERODROME_CONNECTOR, AERODROME_FACTORY_ADDRESS, CONNECTOR_PLUGIN } from '@/constants/addresses';
 import {
   AddLiquidityParams,
@@ -15,19 +23,6 @@ import { Call } from '@/utils/types';
 import { AerodromeConnectorABI } from '@/constants/abis';
 import useSystemFunctions from './useSystemFunctions';
 import { useMakeCalls } from './useCalls';
-
-async function handleTransaction(client: PublicClient, { hash, waitForReceipt = true }: TransactionConfig) {
-  if (!waitForReceipt) return { hash };
-
-  const receipt = await client.waitForTransactionReceipt({
-    hash,
-  });
-
-  return {
-    hash,
-    receipt,
-  };
-}
 
 export function useLiquidity(publicClient: PublicClient) {
   const { smartAccountState } = useSystemFunctions();
@@ -161,16 +156,13 @@ export function useLiquidity(publicClient: PublicClient) {
         caller: account,
       });
 
-      calls.push(createPluginCall(addLiquidityData, currentIndex));
+      //calls.push(createPluginCall(addLiquidityData, currentIndex));
 
-      const { opHash } = await makeCalls({
+      const { opHash, receipt } = await makeCalls({
         calls,
         account,
       });
-      return handleTransaction(publicClient, {
-        hash: opHash as `0x${string}`,
-        ...txConfig,
-      });
+      return { opHash, receipt };
     },
     [publicClient, createPluginCall, account]
   );
@@ -191,14 +183,11 @@ export function useLiquidity(publicClient: PublicClient) {
 
       const call = createPluginCall(connectorData, 0);
 
-      const { opHash } = await makeCalls({
+      const { opHash, receipt } = await makeCalls({
         calls: [call],
         account,
       });
-      return handleTransaction(publicClient, {
-        hash: opHash as `0x${string}`,
-        ...txConfig,
-      });
+      return { opHash, receipt };
     },
     [publicClient, createPluginCall, account]
   );
@@ -225,14 +214,11 @@ export function useLiquidity(publicClient: PublicClient) {
 
       const call = createPluginCall(connectorData, 0);
 
-      const { opHash } = await makeCalls({
+      const { opHash, receipt } = await makeCalls({
         calls: [call],
         account,
       });
-      return handleTransaction(publicClient, {
-        hash: opHash as `0x${string}`,
-        ...txConfig,
-      });
+      return { opHash, receipt };
     },
     [publicClient, createPluginCall, account]
   );
@@ -247,14 +233,11 @@ export function useLiquidity(publicClient: PublicClient) {
 
       const call = createPluginCall(connectorData, 0);
 
-      const { opHash } = await makeCalls({
+      const { opHash, receipt } = await makeCalls({
         calls: [call],
         account,
       });
-      return handleTransaction(publicClient, {
-        hash: opHash as `0x${string}`,
-        ...txConfig,
-      });
+      return { opHash, receipt };
     },
     [publicClient, createPluginCall, account]
   );
@@ -302,10 +285,26 @@ export function useLiquidity(publicClient: PublicClient) {
     }
   };
 
+  const createStrategy = useCallback(
+    async (params: StrategyBody, txConfig?: Partial<TransactionConfig>) => {
+      const connectorData = encodeCreateStrategy(params);
+
+      const call = createPluginCall(connectorData, 0);
+
+      const { opHash, receipt } = await makeCalls({
+        calls: [call],
+        account,
+      });
+      return { opHash, receipt };
+    },
+    [publicClient, createPluginCall, account]
+  );
+
   return {
     addLiquidity,
     removeLiquidity,
     swap,
     stake,
+    createStrategy,
   };
 }

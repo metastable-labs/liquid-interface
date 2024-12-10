@@ -12,9 +12,9 @@ import {
 import { BuildUserOperationParams, SignatureWrapperStruct, WebAuthnAuthStruct } from './types';
 
 export function buildWebAuthnSignature({ ownerIndex, authenticatorData, clientDataJSON, r, s }: BuildUserOperationParams): Hex {
-  const challengeIndex = clientDataJSON.indexOf('"challenge":');
-  const typeIndex = clientDataJSON.indexOf('"type":');
-
+  const challengeIndex = clientDataJSON.indexOf('"challenge"');
+  const typeIndex = clientDataJSON.indexOf('"type"');
+  console.log(authenticatorData, clientDataJSON);
   const webAuthnAuthBytes = encodeAbiParameters(
     [WebAuthnAuthStruct],
     [
