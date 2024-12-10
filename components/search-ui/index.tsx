@@ -181,7 +181,6 @@ const styles = StyleSheet.create({
     alignItems: 'stretch',
   },
 
-  // loader
   loaderContainer: {
     flex: 1,
     flexDirection: 'row',

@@ -90,3 +90,36 @@ export const feeds: Array<any> = [
     ],
   },
 ];
+
+export const steps = [
+  {
+    variant: 'supply',
+    tokenA: 'cbBTC',
+    tokenB: 'moonWell',
+    tokenAIconURL: 'https://res.cloudinary.com/djzeufu4j/image/upload/v1732105634/tokenAIcon_jgy241.png',
+    tokenBIconURL: 'https://res.cloudinary.com/djzeufu4j/image/upload/v1732105634/tokenBIcon_wscb3p.png',
+  },
+
+  {
+    variant: 'deposit',
+    tokenA: 'Borrowed USDC',
+    tokenB: 'Morpho',
+    tokenAIconURL: 'https://res.cloudinary.com/djzeufu4j/image/upload/v1732105634/tokenAIcon_jgy241.png',
+    tokenBIconURL: 'https://res.cloudinary.com/djzeufu4j/image/upload/v1732105634/tokenBIcon_wscb3p.png',
+  },
+  {
+    variant: 'borrow',
+    tokenA: 'USDC',
+    tokenB: 'Base',
+    tokenAIconURL: 'https://res.cloudinary.com/djzeufu4j/image/upload/v1732105634/tokenAIcon_jgy241.png',
+    tokenBIconURL: 'https://res.cloudinary.com/djzeufu4j/image/upload/v1732105634/tokenBIcon_wscb3p.png',
+  },
+  {
+    isLast: true,
+    variant: 'stake',
+    tokenA: 'DAI',
+    tokenB: 'USDC',
+    tokenAIconURL: 'https://res.cloudinary.com/djzeufu4j/image/upload/v1732105634/tokenAIcon_jgy241.png',
+    tokenBIconURL: 'https://res.cloudinary.com/djzeufu4j/image/upload/v1732105634/tokenBIcon_wscb3p.png',
+  },
+];

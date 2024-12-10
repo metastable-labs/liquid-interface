@@ -2,20 +2,52 @@ const image = 'https://pics.craiyon.com/2023-08-02/7a951cac85bd4aa2b0e70dbaabb84
 export const protocolList = [
   {
     id: '1',
-    icon: image,
+    icon: 'moonwell',
     title: 'Moonwell',
   },
   {
     id: '2',
-    icon: image,
+    icon: 'aerodrome',
     title: 'Aerodrome',
   },
   {
     id: '3',
-    icon: image,
+    icon: 'morpho',
     title: 'Morpho',
   },
 ];
+
+export const actionList = [
+  {
+    id: '1',
+    icon: 'deposit',
+    title: 'Deposit',
+  },
+  {
+    id: '2',
+    icon: 'stake',
+    title: 'Stake',
+  },
+  {
+    id: '3',
+    icon: 'borrow',
+    title: 'Borrow',
+  },
+];
+
+export const sortList = [
+  {
+    id: '1',
+    icon: 'deposit',
+    title: 'Popular',
+  },
+  {
+    id: '2',
+    icon: 'stake',
+    title: 'New',
+  },
+];
+
 export const strategyies: Array<any> = [
   {
     id: '1',

@@ -1,16 +1,19 @@
 import React, { useEffect, useRef } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import { AerodromeIcon, BorrowIcon, DepositIcon, FillCheckIcon, MoonWellIcon, MorphoIcon } from '@/assets/icons';
-import { IProtocolCard } from './types';
+import { BorrowIcon, DepositIcon, FillCheckIcon, SortIcon, StakeIcon } from '@/assets/icons';
+import LQDImage from '../image';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
+import { IActionCard } from './types';
 
-const LQDProtocolCard = ({ selected, action, variant, protocol }: IProtocolCard) => {
-  const { title, icon } = protocol;
+const LQDActionCard = ({ selected, action, actions, variant }: IActionCard) => {
+  const { title } = actions;
 
   const icons = {
-    aerodrome: <AerodromeIcon height={24} width={24} />,
-    moonwell: <MoonWellIcon height={24} width={24} />,
-    morpho: <MorphoIcon height={24} width={24} />,
+    stake: <StakeIcon fill="#1E293B" height={24} width={24} />,
+    deposit: <DepositIcon fill="#1E293B" height={24} width={24} />,
+    borrow: <BorrowIcon fill="#1E293B" height={24} width={24} />,
+    sort: <SortIcon />,
+    supply: null,
   };
 
   return (
@@ -24,7 +27,7 @@ const LQDProtocolCard = ({ selected, action, variant, protocol }: IProtocolCard)
   );
 };
 
-export default LQDProtocolCard;
+export default LQDActionCard;
 
 const styles = StyleSheet.create({
   container: {

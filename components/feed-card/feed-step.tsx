@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import Animated from 'react-native-reanimated';
-import { BorrowIcon, DepositIcon, StakeIcon, SupplyIcon, SwatchIcon } from '@/assets/icons'; // Replace icons as needed
+import { BorrowIcon, DepositIcon, StakeIcon, SupplyIcon } from '@/assets/icons';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import LQDPoolImages from '../pool-images';
 
@@ -10,7 +10,7 @@ const defaultAIconUrl = 'https://res.cloudinary.com/djzeufu4j/image/upload/v1732
 const defaultBIconUrl = 'https://res.cloudinary.com/djzeufu4j/image/upload/v1732105634/tokenBIcon_wscb3p.png';
 const connector = require('../../assets/images/connector.png');
 
-const FeedStep = ({ variant, tokenAIconURL, tokenBIconURL, tokenA, tokenB, isLast }: IFeedStep) => {
+const FeedStep = ({ variant, tokenAIconURL, tokenBIconURL, tokenA, tokenB, isLast, title = '' }: IFeedStep) => {
   const [tokenAIconError, setTokenAIconError] = useState(false);
   const [tokenBIconError, setTokenBIconError] = useState(false);
 

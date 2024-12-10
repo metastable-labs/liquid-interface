@@ -163,10 +163,10 @@ const styles = StyleSheet.create({
   },
   description: {
     color: '#64748B',
-    fontSize: adjustFontSizeForIOS(15, 2),
+    fontSize: adjustFontSizeForIOS(14, 2),
     fontFamily: 'AeonikRegular',
     fontWeight: '400',
-    lineHeight: 25,
+    lineHeight: 19,
   },
   seeMore: {
     color: '#375DFB',
