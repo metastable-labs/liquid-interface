@@ -123,3 +123,31 @@ export const steps = [
     tokenBIconURL: 'https://res.cloudinary.com/djzeufu4j/image/upload/v1732105634/tokenBIcon_wscb3p.png',
   },
 ];
+
+export const strategyInfo = [
+  {
+    id: '1',
+    icon: '💰', // Replace with your icons
+    title: 'Total value locked',
+    value: '$1.3M',
+  },
+  {
+    id: '2',
+    icon: '📊', // Replace with your icons
+    title: 'Risk profile',
+    value: 'Stable',
+    highlighted: true, // For the green background
+  },
+  {
+    id: '3',
+    icon: '🔄', // Replace with your icons
+    title: 'No. of deposits',
+    value: '1,947',
+  },
+  {
+    id: '4',
+    icon: '💼', // Replace with your icons
+    title: 'Curator fee',
+    value: '0.5%',
+  },
+];

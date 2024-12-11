@@ -1,68 +1,74 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { FlatList, View, ActivityIndicator, StyleSheet, ListRenderItem, RefreshControl } from 'react-native';
 import { LQDFlatlistProps } from './types';
 
-const LQDFlatlist = <T,>({
-  data = [],
-  renderItem,
-  keyExtractor = (item, index) => index.toString(),
-  ListHeaderComponent,
-  ListFooterComponent,
-  ListEmptyComponent,
-  refreshing = false,
-  onRefresh,
-  onEndReached,
-  onEndReachedThreshold = 0.1,
-  showsVerticalScrollIndicator = false,
-  showsHorizontalScrollIndicator = false,
-  contentContainerStyle,
-  horizontal = false,
-  style,
-  loader = false,
-}: LQDFlatlistProps<T>) => {
-  const DefaultFooterLoader = () => (
-    <View style={styles.loaderContainer}>
-      <ActivityIndicator size="small" color="#4691FE" />
-    </View>
-  );
+const LQDFlatlist = forwardRef(
+  <T,>(
+    {
+      data = [],
+      renderItem,
+      keyExtractor = (item, index) => index.toString(),
+      ListHeaderComponent,
+      ListFooterComponent,
+      ListEmptyComponent,
+      refreshing = false,
+      onRefresh,
+      onEndReached,
+      onEndReachedThreshold = 0.1,
+      showsVerticalScrollIndicator = false,
+      showsHorizontalScrollIndicator = false,
+      contentContainerStyle,
+      horizontal = false,
+      style,
+      loader = false,
+    }: LQDFlatlistProps<T>,
+    ref: React.Ref<FlatList<T>>
+  ) => {
+    const DefaultFooterLoader = () => (
+      <View style={styles.loaderContainer}>
+        <ActivityIndicator size="small" color="#4691FE" />
+      </View>
+    );
 
-  const IsRefresh = () => {
-    if (onRefresh) {
-      return (
-        <RefreshControl
-          refreshing={refreshing}
-          onRefresh={onRefresh}
-          progressBackgroundColor="white"
-          tintColor="#4691FE"
-          titleColor="#4691FE"
-        />
-      );
-    }
+    const IsRefresh = () => {
+      if (onRefresh) {
+        return (
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            progressBackgroundColor="white"
+            tintColor="#4691FE"
+            titleColor="#4691FE"
+          />
+        );
+      }
 
-    return null;
-  };
+      return null;
+    };
 
-  return (
-    <FlatList
-      data={data}
-      renderItem={renderItem as ListRenderItem<T>}
-      keyExtractor={keyExtractor}
-      ListHeaderComponent={ListHeaderComponent}
-      ListFooterComponent={loader ? <DefaultFooterLoader /> : ListFooterComponent}
-      ListEmptyComponent={ListEmptyComponent}
-      refreshing={refreshing}
-      refreshControl={<IsRefresh />}
-      onRefresh={onRefresh}
-      onEndReached={onEndReached}
-      onEndReachedThreshold={onEndReachedThreshold}
-      showsVerticalScrollIndicator={showsVerticalScrollIndicator}
-      contentContainerStyle={[{ paddingBottom: 100 }, contentContainerStyle]}
-      style={[style]}
-      horizontal={horizontal}
-      showsHorizontalScrollIndicator={showsHorizontalScrollIndicator}
-    />
-  );
-};
+    return (
+      <FlatList
+        ref={ref}
+        data={data}
+        renderItem={renderItem as ListRenderItem<T>}
+        keyExtractor={keyExtractor}
+        ListHeaderComponent={ListHeaderComponent}
+        ListFooterComponent={loader ? <DefaultFooterLoader /> : ListFooterComponent}
+        ListEmptyComponent={ListEmptyComponent}
+        refreshing={refreshing}
+        refreshControl={<IsRefresh />}
+        onRefresh={onRefresh}
+        onEndReached={onEndReached}
+        onEndReachedThreshold={onEndReachedThreshold}
+        showsVerticalScrollIndicator={showsVerticalScrollIndicator}
+        contentContainerStyle={[{ paddingBottom: 100 }, contentContainerStyle]}
+        style={[style]}
+        horizontal={horizontal}
+        showsHorizontalScrollIndicator={showsHorizontalScrollIndicator}
+      />
+    );
+  }
+);
 
 export default LQDFlatlist;
 

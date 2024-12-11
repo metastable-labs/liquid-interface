@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     paddingTop: 19,
     paddingBottom: 18,
     borderRadius: 50,
-    backgroundColor: '#FFF',
+    backgroundColor: '#F1F5F9',
   },
 
   primaryText: {
@@ -71,7 +71,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 1,
     shadowRadius: 0,
     elevation: 1,
-    borderWidth: 1,
     borderColor: '#EBEBEB',
   },
 

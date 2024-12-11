@@ -1,4 +1,4 @@
-import { FlatListProps } from 'react-native';
+import { FlatList, FlatListProps } from 'react-native';
 
 export interface LQDFlatlistProps<T> extends FlatListProps<T> {
   loader?: boolean;

@@ -33,7 +33,7 @@ const Home = () => {
 
   return (
     <>
-      <Pressable onPress={() => router.navigate('/(create-strategy)/create-strategy')} style={styles.addIcon}>
+      <Pressable onPress={() => router.navigate('/(create-strategy)/[strtegyId]/')} style={styles.addIcon}>
         <PlusIcon />
       </Pressable>
 
