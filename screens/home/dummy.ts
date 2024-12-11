@@ -127,27 +127,30 @@ export const steps = [
 export const strategyInfo = [
   {
     id: '1',
-    icon: '💰', // Replace with your icons
+    variant: 'locked',
     title: 'Total value locked',
     value: '$1.3M',
+    active: false,
   },
   {
     id: '2',
-    icon: '📊', // Replace with your icons
+    variant: 'risk',
     title: 'Risk profile',
     value: 'Stable',
-    highlighted: true, // For the green background
+    active: true,
   },
   {
     id: '3',
-    icon: '🔄', // Replace with your icons
+    variant: 'deposit',
     title: 'No. of deposits',
     value: '1,947',
+    active: false,
   },
   {
     id: '4',
-    icon: '💼', // Replace with your icons
+    variant: 'curator',
     title: 'Curator fee',
     value: '0.5%',
+    active: false,
   },
 ];

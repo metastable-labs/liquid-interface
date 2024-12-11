@@ -1,7 +1,7 @@
 import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import React, { useRef, useState } from 'react';
 import { LQDBottomSheet, LQDButton, LQDFeedCard, LQDFlatlist, LQDImage, LQDInput, LQDScrollView, LQShrimeLoader } from '@/components';
-import { feeds } from '../home/dummy';
+import { feeds, strategyInfo } from '../home/dummy';
 import { ArrowUpCircleIcon, DiscoverUSDIcon, FlashIcon, SmileEmojiIcon, CuratorIcon } from '@/assets/icons';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import StatsCard from './stats-card';
@@ -78,10 +78,9 @@ const StrategyDetail = ({ strategyId }: any) => {
         <Text style={styles.sectionTitle}>Strategy Info</Text>
 
         <View style={styles.statsWrapper}>
-          <StatsCard isActive={false} variant="locked" title="Total value locked" value="$1.3M" />
-          <StatsCard isActive={true} variant="risk" title="Risk Profile" value="Stable" />
-          <StatsCard isActive={false} variant="deposit" title="No. of deposits" value="1.947" />
-          <StatsCard isActive={false} variant="curator" title="Curator fee" value="0.5%" />
+          {strategyInfo.map((stats, index) => (
+            <StatsCard key={index} isActive={stats.active} variant={stats.variant} title={stats.title} value={stats.value} />
+          ))}
         </View>
 
         <View style={styles.tokenContainer}>
