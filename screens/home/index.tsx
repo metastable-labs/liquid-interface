@@ -45,7 +45,7 @@ const Home = () => {
 
   return (
     <>
-      <Pressable style={styles.addIcon}>
+      <Pressable onPress={() => postStrategy()} style={styles.addIcon}>
         <PlusIcon />
       </Pressable>
       {globalLoading && <Loader />}

@@ -1,5 +1,5 @@
 import { Address, Hex, encodeFunctionData, encodeAbiParameters, parseAbiParameters, erc20Abi } from 'viem';
-import { AerodromeConnectorABI, ConnectorPluginABI, LiquidStrategyABI } from '@/constants/abis';
+import { AerodromeConnectorABI, ConnectorPluginABI, LiquidStrategy } from '@/constants/abis';
 
 interface RouteStruct {
   from: Address;
@@ -173,7 +173,7 @@ export function encodeApprove({ amount, spender }: { amount: bigint; spender: Ad
 
 export function encodeCreateStrategy({ description, maxTvl, minDeposit, name, performanceFee, steps }: StrategyBody) {
   return encodeFunctionData({
-    abi: LiquidStrategyABI,
+    abi: LiquidStrategy.LiquidStrategy.abi,
     functionName: 'createStrategy',
     args: [name, description, steps, minDeposit, maxTvl, performanceFee],
   });

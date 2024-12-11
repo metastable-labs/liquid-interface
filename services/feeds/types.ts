@@ -88,16 +88,16 @@ type LikeStrategyResponse = {
 type StrategyBody = {
   name: string;
   description: string;
-  minDeposit: number;
-  maxTvl: number;
-  performanceFee: number;
+  minDeposit: bigint;
+  maxTvl: bigint;
+  performanceFee: bigint;
   steps: {
-    connector: string;
+    connector: `0x${string}`;
     actionType: ActionType;
-    assetsIn: string;
-    assetsOut: string;
-    amountRatio: number;
-    data?: any;
+    assetsIn: `0x${string}`[];
+    assetOut: `0x${string}`;
+    amountRatio: bigint;
+    data: `0x${string}`;
   }[];
 };
 

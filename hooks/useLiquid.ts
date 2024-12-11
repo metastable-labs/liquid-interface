@@ -9,7 +9,7 @@ import {
   encodeApprove,
   encodeCreateStrategy,
 } from '@/utils/encoders';
-import { AERODROME_CONNECTOR, AERODROME_FACTORY_ADDRESS, CONNECTOR_PLUGIN } from '@/constants/addresses';
+import { AERODROME_CONNECTOR, AERODROME_FACTORY_ADDRESS, CONNECTOR_PLUGIN, STRATEGY_CONTRACT_ADDRESS } from '@/constants/addresses';
 import {
   AddLiquidityParams,
   AddLiquidityWithSwapParams,
@@ -287,15 +287,23 @@ export function useLiquidity(publicClient: PublicClient) {
 
   const createStrategy = useCallback(
     async (params: StrategyBody, txConfig?: Partial<TransactionConfig>) => {
-      const connectorData = encodeCreateStrategy(params);
+      try {
+        const createStrategyData = encodeCreateStrategy(params);
+        const createStrategyCall = {
+          index: 0,
+          target: STRATEGY_CONTRACT_ADDRESS,
+          data: createStrategyData,
+          value: 0n,
+        };
 
-      const call = createPluginCall(connectorData, 0);
-
-      const { opHash, receipt } = await makeCalls({
-        calls: [call],
-        account,
-      });
-      return { opHash, receipt };
+        const { opHash, receipt } = await makeCalls({
+          calls: [createStrategyCall],
+          account,
+        });
+        return { opHash, receipt };
+      } catch (error) {
+        throw error;
+      }
     },
     [publicClient, createPluginCall, account]
   );
