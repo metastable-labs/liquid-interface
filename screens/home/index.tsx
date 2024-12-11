@@ -10,7 +10,6 @@ import { usePoolActions } from '@/store/pools/actions';
 import { useOnMount } from '@/hooks/useOnMount';
 import Loader from './loader';
 import { feeds } from './dummy';
-const image = 'https://pics.craiyon.com/2023-08-02/7a951cac85bd4aa2b0e70dbaabb8404e.webp';
 
 const Home = () => {
   const { router, poolsState, smartAccountState, accountState, appState } = useSystemFunctions();
@@ -34,10 +33,12 @@ const Home = () => {
 
   return (
     <>
-      <Pressable style={styles.addIcon}>
+      <Pressable onPress={() => router.navigate('/(create-strategy)/create-strategy')} style={styles.addIcon}>
         <PlusIcon />
       </Pressable>
+
       {globalLoading && <Loader />}
+
       {!globalLoading && (
         <LQDFlatlist
           refreshing={accountState.refreshing}

@@ -15,6 +15,8 @@ const LQDInput = <T extends FieldValues>({
   rules,
   variant = 'primary',
   iconAction,
+  isTextarea = false,
+  numberOfLines = 4,
 }: ILQDInput<T>) => {
   const iconsMap = {
     search: <SearchIcon />,
@@ -28,7 +30,7 @@ const LQDInput = <T extends FieldValues>({
   return (
     <View style={styles.container}>
       {label && <Text style={styles.label}>{label}</Text>}
-      <View style={styles.inputContainer}>
+      <View style={[styles.inputContainer, isTextarea && styles.textareaContainer]}>
         <Pressable onPress={iconAction}>{icon}</Pressable>
 
         <Controller
@@ -37,11 +39,14 @@ const LQDInput = <T extends FieldValues>({
           rules={rules}
           render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
-              style={styles.input}
+              style={[styles.input, isTextarea && styles.textarea]}
               placeholder={variant === 'search' ? 'Search' : placeholder}
               onBlur={onBlur}
               onChangeText={onChange}
               value={value}
+              multiline={isTextarea}
+              numberOfLines={isTextarea ? numberOfLines : 1}
+              textAlignVertical={isTextarea ? 'top' : 'center'}
               {...inputProps}
             />
           )}
@@ -61,7 +66,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    gap: 8,
     borderRadius: 13,
     borderColor: '#EAEEF4',
     borderWidth: 1,
@@ -72,16 +76,27 @@ const styles = StyleSheet.create({
     elevation: 1,
     backgroundColor: '#fff',
   },
+  textareaContainer: {
+    alignItems: 'flex-start',
+    paddingVertical: 8,
+  },
   label: {
     marginBottom: 8,
-    fontSize: adjustFontSizeForIOS(16, 2),
-    fontWeight: 'bold',
+    fontSize: adjustFontSizeForIOS(13, 2),
+    fontWeight: '500',
+    fontFamily: 'AeonikMedium',
   },
   input: {
     flex: 1,
     fontSize: adjustFontSizeForIOS(14, 2),
     lineHeight: 18.48,
     color: '#94A3B8',
-    fontFamily: 'AeonikRegular',
+    fontWeight: 400,
+    fontFamily: 'Aeonik',
+  },
+  textarea: {
+    textAlignVertical: 'top',
+    paddingTop: 8,
+    height: 80,
   },
 });

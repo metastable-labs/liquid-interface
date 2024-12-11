@@ -4,7 +4,7 @@ interface FeedCard {
 }
 
 interface IFeedStep {
-  title: string;
+  title?: string;
   variant: 'supply' | 'borrow' | 'deposit' | 'stake';
   tokenA: string;
   tokenB: string;
