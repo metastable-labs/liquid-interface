@@ -13,7 +13,7 @@ const LQDStrategyCard = ({ strategy, navigationVariant = 'primary' }: IStrategyC
   const { id } = strategy;
   const onPress = () => {
     searchIsFocused(false);
-    router.push(`/(tabs)/home/${id}`);
+    router.push('/(create-strategy)/[strtegyId]/');
   };
 
   const avatar = strategy.image;

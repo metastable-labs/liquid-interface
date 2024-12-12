@@ -4,13 +4,20 @@ import FastImage from 'react-native-fast-image';
 import { CommentIcon, FlashIcon, MoreIcon, ReTweetIcon, ShareIcon, SwatchIcon } from '@/assets/icons';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import FeedStep from './feed-step';
+import useSystemFunctions from '@/hooks/useSystemFunctions';
 
-const LQDFeedCard = ({ feed, showInvest = true }: FeedCard) => {
+const LQDFeedCard = ({ feed, showInvest = true, showComment }: FeedCard) => {
+  const { router } = useSystemFunctions();
+
+  const handlePress = () => {
+    router.push('/(create-strategy)/[strtegyId]/');
+  };
+
   const { steps, photo, username, address, date, percentage, estimate, title, description, commentCount, shareCount, flashCount } = feed;
+
   return (
-    <View style={styles.container}>
+    <Pressable style={styles.container} onPress={handlePress}>
       <View>
-        {/* top */}
         <View style={{ flexDirection: 'row', gap: 5 }}>
           <FastImage
             style={styles.image}
@@ -20,7 +27,7 @@ const LQDFeedCard = ({ feed, showInvest = true }: FeedCard) => {
             }}
             resizeMode={FastImage.resizeMode.contain}
           />
-          {/*  */}
+
           <View style={{ flex: 1 }}>
             <View style={styles.rightContentFlex}>
               <View>
@@ -36,8 +43,7 @@ const LQDFeedCard = ({ feed, showInvest = true }: FeedCard) => {
             </View>
           </View>
         </View>
-        {/* top */}
-        {/* second */}
+
         <View style={styles.feedStep}>
           {steps.map((step: IFeedStep, index: number) => (
             <FeedStep
@@ -52,8 +58,7 @@ const LQDFeedCard = ({ feed, showInvest = true }: FeedCard) => {
             />
           ))}
         </View>
-        {/* second */}
-        {/* third */}
+
         <View style={{ marginVertical: 20, gap: 15 }}>
           <Text style={styles.title}>{title}</Text>
           <View style={{ flexDirection: 'row', gap: 10 }}>
@@ -65,8 +70,7 @@ const LQDFeedCard = ({ feed, showInvest = true }: FeedCard) => {
             <Text style={styles.seeMore}>See more...</Text>
           </Pressable>
         </View>
-        {/* third */}
-        {/* fouth */}
+
         <View style={styles.bottomActionContainer}>
           <View style={styles.bottomActionInnerContainer}>
             {showInvest && (
@@ -75,10 +79,10 @@ const LQDFeedCard = ({ feed, showInvest = true }: FeedCard) => {
               </Pressable>
             )}
 
-            <View style={styles.actionFlex}>
+            <Pressable onPress={showComment} style={styles.actionFlex}>
               <CommentIcon />
               <Text style={styles.actionText}>{commentCount}</Text>
-            </View>
+            </Pressable>
             <View style={styles.actionFlex}>
               <ReTweetIcon />
               <Text style={styles.actionText}>{shareCount}</Text>
@@ -90,9 +94,8 @@ const LQDFeedCard = ({ feed, showInvest = true }: FeedCard) => {
           </View>
           <ShareIcon />
         </View>
-        {/* fouth */}
       </View>
-    </View>
+    </Pressable>
   );
 };
 

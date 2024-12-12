@@ -1,6 +1,6 @@
 import Svg, { Path, Rect } from 'react-native-svg';
 
-const SortIcon = ({ fill = '#FFF', height = 30, width = 30 }: IconProps) => (
+const CuratorIcon = ({ fill = '#FFF', height = 30, width = 30 }: IconProps) => (
   <Svg width={width} height={height} viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
     <Rect width="30" height="30" rx="9" fill="#0F172A" />
     <Path
@@ -27,4 +27,4 @@ const SortIcon = ({ fill = '#FFF', height = 30, width = 30 }: IconProps) => (
   </Svg>
 );
 
-export default SortIcon;
+export default CuratorIcon;
