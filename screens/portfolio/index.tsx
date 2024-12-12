@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { LQDActionCard, LQDBottomSheet, LQDButton, LQDFlatlist, LQDScrollView, LQDSlider, LQDStrategyCard } from '@/components';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import { addMoney, strategyies } from '../discover/dummy';
-import { IActionIconVariant } from '@/components/action-card/types';
+import { ActionIconVariant } from '@/components/action-card/types';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import AssetItem from './asset-item';
 
@@ -93,7 +93,7 @@ const Portfolio = () => {
             showsVerticalScrollIndicator={false}
             renderItem={({ item }: any) => (
               <LQDActionCard
-                variant={item.icon as IActionIconVariant}
+                variant={item.icon as ActionIconVariant}
                 selected={selectedAction === item.id}
                 actions={item}
                 action={() => setSelectedAction(item.id)}

@@ -16,7 +16,7 @@ import { LQDActionCard, LQDBottomSheet, LQDButton, LQDFlatlist, LQDImage, LQDPro
 import { actionList, protocolList } from '../discover/dummy';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import useAppActions from '@/store/app/actions';
-import { IActionIconVariant } from '@/components/action-card/types';
+import { ActionIconVariant } from '@/components/action-card/types';
 import { IProtocolIconVariant } from '@/components/protocol-card/types';
 
 const ActionItem = ({ title = '', label = '', icon = '', action }: IActionItem) => {
@@ -114,7 +114,7 @@ const NewAction = () => {
           showsVerticalScrollIndicator={false}
           renderItem={({ item }) => (
             <LQDActionCard
-              variant={item.icon as IActionIconVariant}
+              variant={item.icon as ActionIconVariant}
               selected={selectedAction.id === item.id}
               actions={item}
               action={() => setSelectedAction(item)}
