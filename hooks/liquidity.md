@@ -1,9 +1,11 @@
 # Aerodrome Liquidity Hooks Documentation
 
 ## Overview
+
 The `useLiquidity` hook provides methods for interacting with Aerodrome liquidity pools, including adding/removing liquidity, swapping tokens, and staking LP tokens.
 
 ## Installation & Setup
+
 ```typescript
 import { useLiquidity } from '@/hooks/useLiquidity';
 import { usePublicClient } from 'wagmi';
@@ -11,7 +13,7 @@ import { usePublicClient } from 'wagmi';
 function YourComponent() {
   const publicClient = usePublicClient();
   const { addLiquidity, removeLiquidity, swap, stake } = useLiquidity(
-    publicClient, 
+    publicClient,
     account // your wallet address
   );
 }
@@ -20,6 +22,7 @@ function YourComponent() {
 ## Core Methods
 
 ### 1. Adding Liquidity
+
 Add liquidity to an Aerodrome pool with optional pre-swap functionality.
 
 ```typescript
@@ -28,11 +31,11 @@ const addLiquidityExample = async () => {
   await addLiquidity({
     tokenA: {
       address: '0x...', // token A address
-      decimals: 18
+      decimals: 18,
     },
     tokenB: {
       address: '0x...', // token B address
-      decimals: 18
+      decimals: 18,
     },
     stable: true, // true for stable pools, false for volatile
     amountAIn: '1.0', // amount of token A to add
@@ -47,40 +50,41 @@ const addLiquidityWithSwapExample = async () => {
     // Regular liquidity parameters
     tokenA: {
       address: '0x...',
-      decimals: 18
+      decimals: 18,
     },
     tokenB: {
       address: '0x...',
-      decimals: 18
+      decimals: 18,
     },
     stable: true,
     amountAIn: '1.0',
     amountBIn: '1.0',
     to: account,
-    
+
     // Pre-swap configuration
     preSwap: {
       enabled: true,
       params: {
         tokenA: {
           address: '0x...', // token to swap from
-          decimals: 6
+          decimals: 6,
         },
         tokenB: {
           address: '0x...', // token to swap to
-          decimals: 18
+          decimals: 18,
         },
         amountIn: '1000', // amount to swap
         minReturnAmount: '0.95', // minimum expected return
         stable: true,
-        to: account
-      }
-    }
+        to: account,
+      },
+    },
   });
 };
 ```
 
 ### 2. Removing Liquidity
+
 Remove liquidity from an Aerodrome pool.
 
 ```typescript
@@ -88,22 +92,23 @@ const removeLiquidityExample = async () => {
   await removeLiquidity({
     tokenA: {
       address: '0x...',
-      decimals: 18
+      decimals: 18,
     },
     tokenB: {
       address: '0x...',
-      decimals: 18
+      decimals: 18,
     },
     stable: true,
     liquidity: '1.0', // amount of LP tokens to remove
     amountAMin: '0.95', // minimum amount of token A to receive
     amountBMin: '0.95', // minimum amount of token B to receive
-    to: account
+    to: account,
   });
 };
 ```
 
 ### 3. Swapping Tokens
+
 Execute a token swap on Aerodrome.
 
 ```typescript
@@ -111,21 +116,22 @@ const swapExample = async () => {
   await swap({
     tokenA: {
       address: '0x...',
-      decimals: 18
+      decimals: 18,
     },
     tokenB: {
       address: '0x...',
-      decimals: 18
+      decimals: 18,
     },
     stable: true,
     amountIn: '1.0',
     minReturnAmount: '0.95',
-    to: account
+    to: account,
   });
 };
 ```
 
 ### 4. Staking LP Tokens
+
 Stake LP tokens in an Aerodrome gauge.
 
 ```typescript
@@ -133,14 +139,15 @@ const stakeExample = async () => {
   await stake({
     gauge: {
       address: '0x...', // gauge address
-      decimals: 18
+      decimals: 18,
     },
-    amount: '1.0' // amount of LP tokens to stake
+    amount: '1.0', // amount of LP tokens to stake
   });
 };
 ```
 
 ## Transaction Configuration
+
 All methods accept an optional transaction configuration object:
 
 ```typescript
@@ -155,6 +162,7 @@ await addLiquidity(params, txConfig);
 ## Type Definitions
 
 ### Token Interface
+
 ```typescript
 interface Token {
   address: Address;
@@ -163,6 +171,7 @@ interface Token {
 ```
 
 ### Add Liquidity Parameters
+
 ```typescript
 interface AddLiquidityParams {
   tokenA: Token;
@@ -189,6 +198,7 @@ interface AddLiquidityWithSwapParams extends AddLiquidityParams {
 ```
 
 ### Remove Liquidity Parameters
+
 ```typescript
 interface RemoveLiquidityParams {
   tokenA: Token;
@@ -202,6 +212,7 @@ interface RemoveLiquidityParams {
 ```
 
 ### Swap Parameters
+
 ```typescript
 interface SwapExactTokensParams {
   tokenA: Token;
@@ -214,6 +225,7 @@ interface SwapExactTokensParams {
 ```
 
 ### Stake Parameters
+
 ```typescript
 interface StakeParams {
   gauge: {
@@ -225,6 +237,7 @@ interface StakeParams {
 ```
 
 ## Error Handling
+
 ```typescript
 try {
   await addLiquidity(params);
@@ -236,6 +249,7 @@ try {
 ```
 
 ## Notes
+
 - All amount inputs are in human-readable format (e.g., "1.0" for 1 token)
 - Decimals are handled automatically based on token configuration
 - Transactions are automatically batched for efficiency

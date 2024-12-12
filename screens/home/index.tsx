@@ -2,22 +2,19 @@ import { useEffect } from 'react';
 import { StyleSheet, Platform, StatusBar as RNStatusBar, Pressable } from 'react-native';
 
 import useSystemFunctions from '@/hooks/useSystemFunctions';
-import { adjustFontSizeForIOS, createArrayWithIndexes } from '@/utils/helpers';
-import { LQDBottomSheet, LQDFeedCard, LQDFlatlist, LQDPoolPairCard } from '@/components';
+import { adjustFontSizeForIOS } from '@/utils/helpers';
+import { LQDFeedCard, LQDFlatlist } from '@/components';
 import { PlusIcon } from '@/assets/icons';
 import { useAccountActions } from '@/store/account/actions';
 import { usePoolActions } from '@/store/pools/actions';
 import { useOnMount } from '@/hooks/useOnMount';
 import Loader from './loader';
-import { useWriteFeed } from '@/services/feeds/queries';
 import { feeds } from './dummy';
-const image = 'https://pics.craiyon.com/2023-08-02/7a951cac85bd4aa2b0e70dbaabb8404e.webp';
 
 const Home = () => {
-  const { router, poolsState, smartAccountState, accountState, appState } = useSystemFunctions();
+  const { router, poolsState, smartAccountState, accountState } = useSystemFunctions();
   const { getTokens } = useAccountActions();
   const { getAllPools } = usePoolActions();
-  const { postStrategy } = useWriteFeed();
 
   const { loadingPools } = poolsState;
   const { loading: loadingAccounts } = accountState;
@@ -34,21 +31,14 @@ const Home = () => {
     getAllPools();
   });
 
-  useEffect(
-    function a() {
-      if (!smartAccountState.address) return;
-
-      // postStrategy();
-    },
-    [smartAccountState.address]
-  );
-
   return (
     <>
-      <Pressable onPress={() => postStrategy()} style={styles.addIcon}>
+      <Pressable onPress={() => router.navigate('/(create-strategy)/create-strategy')} style={styles.addIcon}>
         <PlusIcon />
       </Pressable>
+
       {globalLoading && <Loader />}
+
       {!globalLoading && (
         <LQDFlatlist
           refreshing={accountState.refreshing}

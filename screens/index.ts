@@ -4,6 +4,9 @@ import Trending from './home/trending';
 import Hot from './home/hot';
 
 import Discover from './discover';
+import CreateStrategy from './create-strategy';
+import NewActionStrategy from './create-strategy/new-action-strategy';
+import PreviewStrategy from './create-strategy/preview-strategy';
 
 import Profile from './profile';
 import EditProfile from './profile/edit-profile.tsx';
@@ -24,6 +27,7 @@ export {
   Home,
   TopGainers,
   Trending,
+  PreviewStrategy,
   Hot,
   Discover,
   Profile,
@@ -36,4 +40,6 @@ export {
   PoolDetail,
   AddLiquidty,
   RemoveLiquidity,
+  CreateStrategy,
+  NewActionStrategy,
 };

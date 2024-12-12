@@ -1,6 +1,6 @@
 import Svg, { Path, Defs, Pattern, Use, Image } from 'react-native-svg';
 
-const DiscoverAerodromeIcon = ({ fill = '', height = 25, width = 25 }: IconProps) => (
+const AerodromeIcon = ({ fill = '', height = 25, width = 25 }: IconProps) => (
   <Svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" width={width} height={height} fill="none">
     <Path fill="url(#a)" d="M.601.4h24v24h-24z" />
     <Defs>
@@ -16,4 +16,4 @@ const DiscoverAerodromeIcon = ({ fill = '', height = 25, width = 25 }: IconProps
     </Defs>
   </Svg>
 );
-export default DiscoverAerodromeIcon;
+export default AerodromeIcon;

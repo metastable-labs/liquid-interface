@@ -11,7 +11,7 @@ const PopularAssetCard = ({ pool, navigationVariant = 'primary' }: IPopularAsset
   const { searchIsFocused, showSearch } = useAppActions();
   const onPress = () => {
     searchIsFocused(false);
-    // showSearch(true);
+    showSearch(true);
   };
 
   const tokenIconURL = pool.token0.logoUrl;
