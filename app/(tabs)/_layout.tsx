@@ -8,24 +8,32 @@ import { LQDActionCard, LQDBottomSheet, LQDFlatlist, LQDNavigation } from '@/com
 import Header from '@/screens/home/header';
 import { useState } from 'react';
 import { sortList } from '@/screens/discover/dummy';
+import useSystemFunctions from '@/hooks/useSystemFunctions';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
   const [show, setShow] = useState(false);
-  const [selected, setSelected] = useState('');
+  const [selectedAction, setSelectedAction] = useState('');
+  const { router } = useSystemFunctions();
+
+  const navigate = () => {
+    router.push('/(portfolio)');
+  };
+
+  const openModal = () => {
+    setShow((prev) => !prev);
+  };
 
   return (
     <>
       <StatusBar style="dark" />
       <View style={styles.container} />
-      {/* fix this header showing on all screens */}
-
-      <LQDBottomSheet show={show} title="Sort by" variant="primary" onClose={() => setShow((prev) => !prev)}>
+      <LQDBottomSheet show={show} title="Sort by" variant="primary" onClose={openModal}>
         <LQDFlatlist
           data={sortList}
           showsVerticalScrollIndicator={false}
           renderItem={({ item }) => (
-            <LQDActionCard variant="sort" selected={selected === item.id} actions={item} action={() => setSelected(item.id)} />
+            <LQDActionCard variant="sort" selected={selectedAction === item.id} actions={item} action={() => setSelectedAction(item.id)} />
           )}
           keyExtractor={(_, index) => index.toString()}
           showsHorizontalScrollIndicator={false}
@@ -38,7 +46,7 @@ export default function TabLayout() {
         screenOptions={{
           tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
           headerShown: true,
-          header: () => <Header amount={3333} action={() => setShow((prev) => !prev)} />,
+          header: () => <Header amount={3333} actionRight={navigate} actionLeft={openModal} />,
         }}
       >
         <Tabs.Screen

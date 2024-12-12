@@ -3,16 +3,16 @@ import React from 'react';
 import { HeaderMenuIcon, HeaderWalletIcon } from '@/assets/icons';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 
-const Header = ({ amount, action }: IHeader) => {
+const Header = ({ amount, actionLeft, actionRight }: IHeader) => {
   return (
     <View style={styles.container}>
-      <Pressable onPress={action}>
+      <Pressable onPress={actionLeft}>
         <HeaderMenuIcon />
       </Pressable>
-      <View style={styles.amountWrap}>
+      <Pressable onPress={actionRight} style={styles.amountWrap}>
         <Text style={styles.amount}>${amount}</Text>
         <HeaderWalletIcon />
-      </View>
+      </Pressable>
     </View>
   );
 };

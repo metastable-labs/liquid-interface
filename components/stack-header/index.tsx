@@ -52,9 +52,9 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    color: '#181E00',
-    fontSize: adjustFontSizeForIOS(16, 3),
-    lineHeight: 23.2,
+    color: '#1E293B',
+    fontSize: adjustFontSizeForIOS(16, 1),
+    lineHeight: 19.84,
     fontWeight: '500',
     fontFamily: 'AeonikMedium',
   },

@@ -26,9 +26,11 @@ import LQDImage from './image';
 import LQDStrategyCard from './strategy-card';
 import LQDProtocolCard from './protocol-card';
 import LQDActionCard from './action-card';
+import LQDSlider from './slider';
 
 export {
   LQDButton,
+  LQDSlider,
   LQDActionCard,
   LQDProtocolCard,
   LQDStrategyCard,
