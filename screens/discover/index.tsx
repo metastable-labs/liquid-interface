@@ -35,17 +35,16 @@ const Discover = () => {
     }).start();
   }, [search]);
 
-  // Animated styles
   const discoverStyle = {
     opacity: animationValue.interpolate({
       inputRange: [0, 1],
-      outputRange: [1, 0], // Fully visible when search is false
+      outputRange: [1, 0],
     }),
     transform: [
       {
         translateY: animationValue.interpolate({
           inputRange: [0, 1],
-          outputRange: [0, -20], // Slide up when transitioning
+          outputRange: [0, -20],
         }),
       },
     ],
@@ -54,13 +53,13 @@ const Discover = () => {
   const searchStyle = {
     opacity: animationValue.interpolate({
       inputRange: [0, 1],
-      outputRange: [0, 1], // Fully visible when search is true
+      outputRange: [0, 1],
     }),
     transform: [
       {
         translateY: animationValue.interpolate({
           inputRange: [0, 1],
-          outputRange: [20, 0], // Slide down when transitioning
+          outputRange: [20, 0],
         }),
       },
     ],
@@ -93,7 +92,6 @@ const Discover = () => {
 
   return (
     <View style={styles.container}>
-      {/* Discover Section */}
       {!search && (
         <Animated.View style={[styles.discoverTopWrapper, discoverStyle]}>
           <Text style={styles.topText}>Discover</Text>
@@ -123,7 +121,6 @@ const Discover = () => {
         </Animated.View>
       )}
 
-      {/* Search Section */}
       {search && (
         <Animated.View style={[styles.searchModalWrapper, searchStyle]}>
           <LQDInput

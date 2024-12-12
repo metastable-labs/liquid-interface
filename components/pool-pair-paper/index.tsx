@@ -5,10 +5,8 @@ import { adjustFontSizeForIOS, formatAmount, formatNumberWithSuffix, formatSymbo
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { setRecentSearchedPool, setSelectedPool } from '@/store/pools';
 import { PoolPairPaper } from './types';
-import LQDPoolImages from '../pool-images';
-import LQShrimeLoader from '../loader';
 import LQDImage from '../image';
-import { CheckIcon, FillCheckIcon } from '@/assets/icons';
+import { FillCheckIcon } from '@/assets/icons';
 
 const LQDPoolPairPaper = ({ pool, navigationVariant = 'primary', showFullSymbol, selected }: PoolPairPaper) => {
   const { router, dispatch } = useSystemFunctions();

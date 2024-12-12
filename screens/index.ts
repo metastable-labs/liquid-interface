@@ -7,6 +7,7 @@ import Discover from './discover';
 import CreateStrategy from './create-strategy';
 import NewActionStrategy from './create-strategy/new-action-strategy';
 import PreviewStrategy from './create-strategy/preview-strategy';
+import StrategyDetail from './strategy-detail';
 
 import Profile from './profile';
 import EditProfile from './profile/edit-profile.tsx';
@@ -42,4 +43,5 @@ export {
   RemoveLiquidity,
   CreateStrategy,
   NewActionStrategy,
+  StrategyDetail,
 };

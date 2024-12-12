@@ -81,11 +81,21 @@ import DragHandleIcon from './drag-handle-icon';
 import MoonWellIcon from './moonwell-icon';
 import MorphoIcon from './morpho-icon';
 import ArrowDropdownDownIcon from './arrow-dropdown-icon';
-import SortIcon from './sort-icon';
+import CuratorIcon from './sort-icon';
+import ArrowUpCircleIcon from './arrow-up-circle';
+import SmileEmojiIcon from './smile-emoji-icon';
+import LockedIcon from './locked-icon';
+import StatsDepositIcon from './stats-deposit-icon';
+import RiskIcon from './risk-icon';
 
 export {
   LampIcon,
-  SortIcon,
+  RiskIcon,
+  LockedIcon,
+  StatsDepositIcon,
+  ArrowUpCircleIcon,
+  SmileEmojiIcon,
+  CuratorIcon,
   ArrowDropdownDownIcon,
   MorphoIcon,
   SwatchIcon,

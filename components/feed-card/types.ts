@@ -1,6 +1,7 @@
 interface FeedCard {
   feed: any;
   showInvest?: boolean;
+  showComment?: () => void;
 }
 
 interface IFeedStep {

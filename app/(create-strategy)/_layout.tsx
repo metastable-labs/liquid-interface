@@ -28,6 +28,12 @@ const StrategyStack = () => {
           headerShown: true,
         }}
       />
+      <Stack.Screen
+        name="[strtegyId]"
+        options={{
+          headerShown: false,
+        }}
+      />
     </Stack>
   );
 };
