@@ -46,16 +46,7 @@ const LQDFeedCard = ({ feed, showInvest = true, showComment }: FeedCard) => {
 
         <View style={styles.feedStep}>
           {steps.map((step: IFeedStep, index: number) => (
-            <FeedStep
-              key={index}
-              variant={step.variant}
-              tokenA={step.tokenA}
-              tokenB={step.tokenB}
-              tokenAIconURL={step.tokenAIconURL}
-              tokenBIconURL={step.tokenBIconURL}
-              title={step.title}
-              isLast={step.isLast}
-            />
+            <FeedStep key={index} {...step} isLast={step.isLast} />
           ))}
         </View>
 

@@ -1,60 +1,62 @@
-import { Platform, StyleSheet, StatusBar as RNStatusBar, Text, TouchableOpacity, View } from 'react-native';
 import React, { useState } from 'react';
+import { Platform, StyleSheet, StatusBar as RNStatusBar, Text, TouchableOpacity, View } from 'react-native';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
-import {
-  AerodromeIcon,
-  ArrowDropdownDownIcon,
-  BorrowIcon,
-  DepositIcon,
-  MoonWellIcon,
-  MorphoIcon,
-  PlusIcon,
-  StakeIcon,
-  SupplyIcon,
-} from '@/assets/icons';
-import { LQDActionCard, LQDBottomSheet, LQDButton, LQDFlatlist, LQDImage, LQDProtocolCard, SearchUI } from '@/components';
-import { actionList, protocolList } from '../discover/dummy';
+import { ArrowDropdownDownIcon } from '@/assets/icons';
+import { LQDActionCard, LQDAssetSelection, LQDBottomSheet, LQDButton, LQDProtocolCard, LQDTokenImage } from '@/components';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import useAppActions from '@/store/app/actions';
-import { IActionIconVariant } from '@/components/action-card/types';
-import { IProtocolIconVariant } from '@/components/protocol-card/types';
+import { TokenItem } from '@/store/account/types';
+import ICONS from '@/constants/icons';
+import { actionList, protocolList } from '../discover/dummy';
 
-const ActionItem = ({ title = '', label = '', icon = '', action }: IActionItem) => {
-  const icons = {
-    aerodrome: <AerodromeIcon height={24} width={24} />,
-    moonwell: <MoonWellIcon height={24} width={24} />,
-    morpho: <MorphoIcon height={24} width={24} />,
-    stake: <StakeIcon fill="#1E293B" height={24} width={24} />,
-    deposit: <DepositIcon fill="#1E293B" height={24} width={24} />,
-    borrow: <BorrowIcon fill="#1E293B" height={24} width={24} />,
-    supply: <SupplyIcon />,
-  };
+const ActionItem = ({ title, label, icon, action }: IActionItem) => {
   return (
     <View>
       <Text style={styles.label}>{label}</Text>
-      <View style={styles.actionItem}>
+      <TouchableOpacity onPress={action} style={styles.actionItem}>
         <View style={styles.iconFlex}>
-          {icons[icon]}
+          {icon && ICONS[icon]}
           <Text style={styles.actionText}>{title}</Text>
         </View>
-        <TouchableOpacity onPress={action} style={styles.addButton}>
+        <View style={styles.addButton}>
           <ArrowDropdownDownIcon fill="#64748B" height={18} width={18} />
-        </TouchableOpacity>
-      </View>
+        </View>
+      </TouchableOpacity>
+    </View>
+  );
+};
+
+const AssetItem = ({ title, label, logoUrl, action }: IActionItem) => {
+  return (
+    <View>
+      <Text style={styles.label}>{label}</Text>
+      <TouchableOpacity onPress={action} style={styles.actionItem}>
+        <View style={styles.iconFlex}>
+          <LQDTokenImage iconURL={logoUrl} />
+          <Text style={styles.actionText}>{title}</Text>
+        </View>
+
+        <View style={styles.addButton}>
+          <ArrowDropdownDownIcon fill="#64748B" height={18} width={18} />
+        </View>
+      </TouchableOpacity>
     </View>
   );
 };
 
 const NewAction = () => {
   const { router, appState } = useSystemFunctions();
-  const { searchIsFocused, showSearch } = useAppActions();
-  const [selectedProtocal, setSelectedProtocal]: any = useState(protocolList[0]);
-  const [selectedAction, setSelectedAction]: any = useState(actionList[0]);
-  const [selectedAsset, setSelectedAsset] = useState(protocolList[2]);
+  const { handleStrategyActions } = useAppActions();
+  const [selectedProtocol, setSelectedProtocol] = useState<ProtocolItem>(protocolList[0]);
+  const [selectedAction, setSelectedAction] = useState<IActionsListItem>(actionList[0]);
+  const [selectedAssets, setSelectedAssets] = useState<TokenItem[]>([]);
 
   const [showProtocal, setShowProtocal] = useState(false);
   const [showActions, setShowActions] = useState(false);
-  const [showAssets, setShowAssets] = useState(false);
+  const [showFirstAssets, setShowFirstAssets] = useState(false);
+  const [showSecondAssets, setShowSecondAssets] = useState(false);
+
+  const { strategyActions } = appState;
 
   const openProtocal = () => {
     setShowProtocal((prev) => !prev);
@@ -64,67 +66,108 @@ const NewAction = () => {
     setShowActions((prev) => !prev);
   };
 
-  const openAssets = () => {
-    searchIsFocused(false);
-    showSearch(true);
+  const handleShowFirstAsset = () => {
+    setShowFirstAssets((prev) => !prev);
   };
 
-  if (appState.showSearch) {
-    return (
-      <View style={styles.searchWrapper}>
-        <SearchUI />
-      </View>
-    );
-  }
+  const handleShowSecondAsset = () => {
+    setShowSecondAssets((prev) => !prev);
+  };
+
+  const handleFirstAsset = (data: TokenItem) => {
+    const newAssets = [...selectedAssets];
+    newAssets[0] = data;
+    setSelectedAssets(newAssets);
+  };
+
+  const handleSecondAsset = (data: TokenItem) => {
+    const newAssets = [...selectedAssets];
+    newAssets[1] = data;
+    setSelectedAssets(newAssets);
+  };
+
+  const handleAddNewStrategyAction = () => {
+    const currentActions = [...strategyActions];
+
+    const selectedAssetsAddresses = selectedAssets.map((asset) => asset.address);
+
+    const newAction: StrategyAction = {
+      action: selectedAction.variant,
+      assetsIn: selectedAssetsAddresses,
+      protocol: selectedProtocol,
+    };
+
+    handleStrategyActions([...currentActions, newAction]);
+    router.back();
+  };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.username}>Njoku’s Aerodrome wealth builder</Text>
+      <View>
+        <Text style={styles.username}>Njoku’s Aerodrome wealth builder</Text>
 
-      <View style={styles.itemWrapper}>
-        <ActionItem icon={selectedProtocal.icon} title={selectedProtocal.title} label="Protocol" action={openProtocal} />
-        <ActionItem icon={selectedAction.icon} title={selectedAction.title} label="Actions" action={openActions} />
-        <ActionItem icon={selectedAsset.icon} title={selectedAsset.title} label="Assets" action={openAssets} />
+        <View style={styles.itemWrapper}>
+          <ActionItem icon={selectedProtocol.icon} title={selectedProtocol.title} label="Protocol" action={openProtocal} />
+          <ActionItem icon={selectedAction.variant} title={selectedAction.title} label="Actions" action={openActions} />
+          <AssetItem logoUrl={selectedAssets[0]?.logoUrl} title={selectedAssets[0]?.symbol} label="Assets" action={handleShowFirstAsset} />
+        </View>
       </View>
 
       <View style={styles.bottomWrapper}>
-        <LQDButton title="Add" variant="secondary" />
+        <LQDButton onPress={handleAddNewStrategyAction} title="Add" variant="secondary" />
       </View>
 
-      <LQDBottomSheet show={showProtocal} title="" variant="primary" onClose={openProtocal}>
-        <LQDFlatlist
-          data={protocolList}
-          showsVerticalScrollIndicator={false}
-          renderItem={({ item }) => (
+      <LQDBottomSheet show={showProtocal} variant="primary" onClose={openProtocal}>
+        <View style={styles.protocalContainerStyle}>
+          {protocolList.map((protocol, index) => (
             <LQDProtocolCard
-              variant={item.icon as IProtocolIconVariant}
-              selected={selectedProtocal.id === item.id}
-              protocol={item}
-              action={() => setSelectedProtocal(item)}
+              key={index}
+              variant={protocol.icon}
+              selected={selectedProtocol.id === protocol.id}
+              protocol={protocol}
+              onSelect={() => {
+                setSelectedProtocol(protocol);
+                openProtocal();
+              }}
             />
-          )}
-          keyExtractor={(_, index) => index.toString()}
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.protocalContainerStyle}
-        />
+          ))}
+        </View>
       </LQDBottomSheet>
-      <LQDBottomSheet show={showActions} title="" variant="primary" onClose={openActions}>
-        <LQDFlatlist
-          data={actionList}
-          showsVerticalScrollIndicator={false}
-          renderItem={({ item }) => (
+
+      <LQDBottomSheet show={showActions} variant="primary" onClose={openActions}>
+        <View style={styles.protocalContainerStyle}>
+          {actionList.map((action, index) => (
             <LQDActionCard
-              variant={item.icon as IActionIconVariant}
-              selected={selectedAction.id === item.id}
-              actions={item}
-              action={() => setSelectedAction(item)}
+              key={index}
+              variant={action.variant}
+              selected={selectedAction.id === action.id}
+              actions={action}
+              onSelect={() => {
+                setSelectedAction({ ...action });
+                openActions();
+              }}
             />
-          )}
-          keyExtractor={(_, index) => index.toString()}
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.protocalContainerStyle}
-        />
+          ))}
+        </View>
       </LQDBottomSheet>
+
+      <LQDAssetSelection
+        key={1}
+        close={handleShowFirstAsset}
+        setAsset={handleFirstAsset}
+        show={showFirstAssets}
+        title="Select token"
+        selectedAsset={selectedAssets[0]}
+      />
+
+      <LQDAssetSelection
+        key={2}
+        close={handleShowSecondAsset}
+        setAsset={handleSecondAsset}
+        show={showSecondAssets}
+        title="Select token"
+        selectedAsset={selectedAssets[1]}
+      />
     </View>
   );
 };
@@ -135,6 +178,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#fff',
     flex: 1,
+    justifyContent: 'space-between',
     paddingTop: 20,
     paddingHorizontal: 16,
   },
@@ -192,6 +236,6 @@ const styles = StyleSheet.create({
     paddingTop: Platform.OS === 'android' ? RNStatusBar.currentHeight : 20,
     paddingBottom: Platform.OS === 'android' ? -(RNStatusBar.currentHeight || 0) : -48,
   },
-  bottomWrapper: { paddingHorizontal: 20, marginTop: 30 },
+  bottomWrapper: { paddingHorizontal: 20, marginBottom: 50 },
   iconFlex: { flexDirection: 'row', gap: 10, flex: 1 },
 });

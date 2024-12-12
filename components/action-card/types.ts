@@ -4,5 +4,5 @@ export interface IActionCard {
   navigationVariant?: 'primary' | 'secondary';
   variant: IActionIconVariant;
   selected: boolean | null;
-  action?: () => void;
+  onSelect?: () => void;
 }

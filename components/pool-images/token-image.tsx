@@ -4,15 +4,15 @@ import { useState } from 'react';
 
 const defaultIconUrl = 'https://res.cloudinary.com/djzeufu4j/image/upload/v1732105634/tokenBIcon_wscb3p.png';
 
-const LQDTokenImage = ({ iconURL }: TokenImage) => {
+const LQDTokenImage = ({ iconURL, size }: TokenImage) => {
   const [iconError, setIconError] = useState(false);
 
   const icon = iconError ? defaultIconUrl : iconURL || defaultIconUrl;
 
   return (
-    <View style={styles.iconContainer}>
+    <View style={styles(size).iconContainer}>
       <FastImage
-        style={styles.icon}
+        style={styles(size).icon}
         source={{
           uri: icon,
           priority: FastImage.priority.high,
@@ -26,21 +26,22 @@ const LQDTokenImage = ({ iconURL }: TokenImage) => {
 
 export default LQDTokenImage;
 
-const styles = StyleSheet.create({
-  iconContainer: {
-    width: 24,
-    height: 24,
-    borderWidth: 1,
-    borderColor: '#EAEEF4',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 9999,
-  },
+const styles = (size: number = 24) =>
+  StyleSheet.create({
+    iconContainer: {
+      width: size,
+      height: size,
+      borderWidth: 1,
+      borderColor: '#EAEEF4',
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderRadius: 9999,
+    },
 
-  icon: {
-    width: 24,
-    height: 24,
-    objectFit: 'contain',
-    borderRadius: 9999,
-  },
-});
+    icon: {
+      width: size,
+      height: size,
+      objectFit: 'contain',
+      borderRadius: 9999,
+    },
+  });

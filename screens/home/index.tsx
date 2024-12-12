@@ -18,8 +18,6 @@ const Home = () => {
   const { getAllPools } = usePoolActions();
   const { status, data, error, isFetching } = useFeeds();
 
-  console.log(status, data, error, isFetching);
-
   const { loadingPools } = poolsState;
   const { loading: loadingAccounts } = accountState;
   const globalLoading = loadingPools || loadingAccounts;

@@ -5,4 +5,5 @@ type PoolImages = {
 
 type TokenImage = {
   iconURL?: string;
+  size?: number;
 };

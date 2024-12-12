@@ -1,17 +1,38 @@
-import { StyleSheet, Text, View } from 'react-native';
 import React, { useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { useLocalSearchParams } from 'expo-router';
+
 import { LQDButton } from '@/components';
 import FeedStep from '@/components/feed-card/feed-step';
-import { steps } from '../home/dummy';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
-import { IActionIconVariant } from '@/components/action-card/types';
+import useSystemFunctions from '@/hooks/useSystemFunctions';
 import Loader from './loader';
 
 const RreviewStrategy = () => {
+  const param = useLocalSearchParams();
+  const { appState, accountState } = useSystemFunctions();
+
+  const { strategyActions } = appState;
+  const { tokens } = accountState;
+
   const [loading, setLoading] = useState(false);
-  if (loading) {
-    return <Loader />;
-  }
+
+  const strategySteps = () => {
+    const steps = strategyActions.map((item, index) => {
+      const assetsIn = tokens.data?.find((token) => item.assetsIn[0] == token.address);
+
+      return {
+        variant: item.action,
+        token: assetsIn?.symbol || 'USDC',
+        protocolTitle: item.protocol.title,
+        tokenIconURL: assetsIn?.logoUrl || '',
+        protocolIcon: item.protocol.icon,
+        isLast: index === strategyActions.length - 1,
+      };
+    });
+
+    return steps;
+  };
 
   const openModal = () => {
     setLoading((prev) => !prev);
@@ -20,32 +41,26 @@ const RreviewStrategy = () => {
     }, 2000);
   };
 
+  if (loading) {
+    return <Loader />;
+  }
+
   return (
     <View style={styles.container}>
       <View style={{ flex: 1 }}>
         <View style={styles.feedStep}>
-          {steps.map((step, index: number) => (
-            <FeedStep
-              key={index}
-              variant={step.variant as IActionIconVariant}
-              tokenA={step.tokenA}
-              tokenB={step.tokenB}
-              tokenAIconURL={step.tokenAIconURL}
-              tokenBIconURL={step.tokenBIconURL}
-              isLast={step.isLast}
-            />
+          {strategySteps().map((step, index: number) => (
+            <FeedStep key={index} {...step} isLast={step.isLast} />
           ))}
         </View>
 
         <View style={styles.contentWrapper}>
-          <Text style={styles.title}>Moonwell - USDC</Text>
+          <Text style={styles.title}>{param.name}</Text>
           <View style={styles.estWrapper}>
             <Text style={styles.estimate}>Est. APY</Text>
             <Text style={styles.percentage}>65.45%</Text>
           </View>
-          <Text style={styles.description}>This strategy starts as an ease in for first and second quaterss of 2025</Text>
-          <Text style={styles.description}>This strategy starts as an ease in for first and second quaterss of 2025</Text>
-          <Text style={styles.description}>This strategy starts as an ease in for first and second quaterss of 2025</Text>
+          <Text style={styles.description}>{param.description}</Text>
         </View>
       </View>
 

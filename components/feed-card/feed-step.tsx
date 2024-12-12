@@ -2,50 +2,46 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import Animated from 'react-native-reanimated';
-import { BorrowIcon, DepositIcon, StakeIcon, SupplyIcon } from '@/assets/icons';
+import { AerodromeIcon, BorrowIcon, DepositIcon, MoonWellIcon, MorphoIcon, StakeIcon, SupplyIcon } from '@/assets/icons';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import LQDPoolImages from '../pool-images';
+import LQDTokenImage from '../pool-images/token-image';
 
-const defaultAIconUrl = 'https://res.cloudinary.com/djzeufu4j/image/upload/v1732105634/tokenAIcon_jgy241.png';
-const defaultBIconUrl = 'https://res.cloudinary.com/djzeufu4j/image/upload/v1732105634/tokenBIcon_wscb3p.png';
 const connector = require('../../assets/images/connector.png');
+const icons = {
+  stake: <StakeIcon />,
+  deposit: <DepositIcon />,
+  borrow: <BorrowIcon />,
+  supply: <SupplyIcon />,
+  aerodrome: <AerodromeIcon height={24} width={24} />,
+  moonwell: <MoonWellIcon height={24} width={24} />,
+  morpho: <MorphoIcon height={24} width={24} />,
+};
 
-const FeedStep = ({ variant, tokenAIconURL, tokenBIconURL, tokenA, tokenB, isLast, title = '' }: IFeedStep) => {
-  const [tokenAIconError, setTokenAIconError] = useState(false);
-  const [tokenBIconError, setTokenBIconError] = useState(false);
-
-  const iconA = tokenAIconError ? defaultAIconUrl : tokenAIconURL || defaultAIconUrl;
-  const iconB = tokenBIconError ? defaultBIconUrl : tokenBIconURL || defaultBIconUrl;
+const FeedStep = ({ variant, tokenIconURL, token, isLast, title = '', protocolIcon, protocolTitle }: IFeedStep) => {
   const deposite = variant === 'deposit';
-
-  const icons = {
-    stake: <StakeIcon />,
-    deposit: <DepositIcon />,
-    borrow: <BorrowIcon />,
-    supply: <SupplyIcon />,
-  };
 
   const depositVariant = () => (
     <View style={styles.details}>
       <Text style={styles.variantText}>{variant}</Text>
       <Text style={styles.variantText}> into</Text>
       <View>
-        <Text style={styles.tokenText}>
-          {tokenA}/{tokenB}
-        </Text>
+        <Text style={styles.tokenText}>{token}</Text>
       </View>
-      <LQDPoolImages tokenAIconURL={iconA} tokenBIconURL={iconB} />
+      <LQDPoolImages tokenAIconURL={tokenIconURL} tokenBIconURL={tokenIconURL} />
     </View>
   );
 
   const otherVariant = () => (
     <View style={styles.details}>
       <Text style={styles.variantText}>{variant}</Text>
-      <FastImage style={styles.tokenIcon} source={{ uri: iconA }} onError={() => setTokenAIconError(true)} />
-      <Text style={styles.tokenText}>{tokenA}</Text>
+      <LQDTokenImage size={16} iconURL={tokenIconURL} />
+      <Text style={styles.tokenText}>{token}</Text>
+
       <Text style={styles.variantText}> into</Text>
-      <FastImage style={styles.tokenIcon} source={{ uri: iconB }} onError={() => setTokenBIconError(true)} />
-      <Text style={styles.tokenText}>{tokenB}</Text>
+
+      {icons[protocolIcon]}
+      <Text style={styles.tokenText}>{protocolTitle}</Text>
     </View>
   );
 

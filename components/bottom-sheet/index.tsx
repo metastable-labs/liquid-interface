@@ -7,14 +7,14 @@ import { CloseIcon } from '@/assets/icons';
 const { height } = Dimensions.get('window');
 
 interface ILQDBottomSheet {
-  title: string;
+  title?: string;
   variant?: 'primary' | 'secondary';
   show: boolean;
   onClose: () => void;
   children?: React.ReactNode;
 }
 
-const LQDBottomSheet: React.FC<ILQDBottomSheet> = ({ title, variant = 'primary', show, onClose, children }) => {
+const LQDBottomSheet = ({ title = '', variant = 'primary', show, onClose, children }: ILQDBottomSheet) => {
   const bottomSheetMaxHeights = {
     primary: height * 0.6,
     secondary: height * 0.83,
