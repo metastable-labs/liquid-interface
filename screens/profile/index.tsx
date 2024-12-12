@@ -7,6 +7,7 @@ import { SceneMap } from 'react-native-tab-view';
 import useCustomTabView from '@/hooks/useCustomTabview';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { feeds } from './dummy';
+
 const Profile = () => {
   const { CustomTabView } = useCustomTabView();
   const { router } = useSystemFunctions();

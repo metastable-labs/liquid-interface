@@ -6,15 +6,8 @@ import { publicClient } from '@/init/client';
 import { PublicClient } from 'viem';
 import { isDev } from '@/constants/env';
 import { useToastActions } from '@/store/toast/actions';
-
-const SUPPLY = 0; // Supply assets
-const WITHDRAW = 1; // Withdraw assets
-const BORROW = 2; // Borrow assets
-const REPAY = 3; // Repay debt
-const STAKE = 4; // Stake assets
-const UNSTAKE = 5; // Unstake assets
-const SWAP = 6; // Swap assets
-const CLAIM = 7; // Claim rewards
+import { useState } from 'react';
+import useSystemFunctions from '@/hooks/useSystemFunctions';
 
 const useFeeds = () => {
   return useInfiniteQuery({
@@ -34,41 +27,24 @@ const useFeed = (strategyId: string) => {
 };
 
 const useWriteFeed = () => {
+  const { router } = useSystemFunctions();
   const { createStrategy } = useLiquidity(publicClient as PublicClient);
   const { showToast } = useToastActions();
+  const [loading, setLoading] = useState(false);
 
-  const postStrategy = async () => {
+  const postStrategy = async (data: StrategyBody) => {
     try {
-      const data: StrategyBody = {
-        name: 'MoonPiewkgkg',
-        description: 'This is a test strategy',
-        minDeposit: BigInt(1000),
-        maxTvl: BigInt(1000000),
-        performanceFee: BigInt(20),
-        steps: [
-          {
-            connector: '0x01249b37d803573c071186BC4C3ea92872B93F5E',
-            actionType: SUPPLY,
-            assetsIn: ['0xcbB7C0000aB88B473b1f5aFd9ef808440eed33Bf'],
-            amountRatio: BigInt(5000),
-            assetOut: '0xF877ACaFA28c19b96727966690b2f44d35aD5976',
-            data: '0x',
-          },
-          {
-            connector: '0x01249b37d803573c071186BC4C3ea92872B93F5E',
-            actionType: BORROW,
-            assetsIn: ['0xcbB7C0000aB88B473b1f5aFd9ef808440eed33Bf'],
-            amountRatio: BigInt(5000),
-            assetOut: '0xF877ACaFA28c19b96727966690b2f44d35aD5976',
-            data: '0x',
-          },
-        ],
-      };
+      setLoading(true);
+      await createStrategy(data);
 
-      const response = await createStrategy(data);
-      console.log(response);
+      showToast({
+        title: 'Strategy created!',
+        description: "You've successfully created a strategy",
+        variant: 'success',
+      });
+
+      return router.replace('/(tabs)/home');
     } catch (error: any) {
-      console.log(error);
       if (error.cause?.message && error.cause?.message.includes('Biometrics must be enabled')) {
         const alertTitle = 'Device not enrolled to FaceID';
         const alertMessage = isDev
@@ -87,10 +63,12 @@ const useWriteFeed = () => {
           variant: 'error',
         });
       }
+    } finally {
+      setLoading(false);
     }
   };
 
-  return { postStrategy };
+  return { postStrategy, loading };
 };
 
 export { useFeeds, useFeed, useWriteFeed };

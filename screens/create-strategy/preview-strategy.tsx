@@ -7,18 +7,42 @@ import FeedStep from '@/components/feed-card/feed-step';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import Loader from './loader';
+import { useWriteFeed } from '@/services/feeds/queries';
+
+const SUPPLY = 0; // Supply assets
+const WITHDRAW = 1; // Withdraw assets
+const BORROW = 2; // Borrow assets
+const REPAY = 3; // Repay debt
+const STAKE = 4; // Stake assets
+const UNSTAKE = 5; // Unstake assets
+const SWAP = 6; // Swap assets
+const CLAIM = 7; // Claim rewards
+
+const getActionType = (action: 'deposit' | 'stake' | 'borrow' | 'supply') => {
+  switch (action) {
+    case 'deposit':
+      return SUPPLY;
+    case 'stake':
+      return STAKE;
+    case 'borrow':
+      return BORROW;
+    case 'supply':
+      return SUPPLY;
+    default:
+      return SUPPLY;
+  }
+};
 
 const RreviewStrategy = () => {
   const param = useLocalSearchParams();
   const { appState, accountState } = useSystemFunctions();
+  const { postStrategy, loading } = useWriteFeed();
 
   const { strategyActions } = appState;
   const { tokens } = accountState;
 
-  const [loading, setLoading] = useState(false);
-
   const strategySteps = () => {
-    const steps = strategyActions.map((item, index) => {
+    const steps = strategyActions.map((item: StrategyAction, index) => {
       const assetsIn = tokens.data?.find((token) => item.assetsIn[0] == token.address);
 
       return {
@@ -34,11 +58,28 @@ const RreviewStrategy = () => {
     return steps;
   };
 
-  const openModal = () => {
-    setLoading((prev) => !prev);
-    setTimeout(() => {
-      setLoading(false);
-    }, 2000);
+  const handlePublish = () => {
+    const steps = strategyActions.map((item: StrategyAction) => {
+      return {
+        connector: '0x01249b37d803573c071186BC4C3ea92872B93F5E' as `0x${string}`,
+        actionType: getActionType(item.action),
+        assetsIn: item.assetsIn,
+        amountRatio: BigInt(5000),
+        assetOut: '0xF877ACaFA28c19b96727966690b2f44d35aD5976' as `0x${string}`,
+        data: '0x' as `0x${string}`,
+      };
+    });
+
+    const data: StrategyBody = {
+      name: param.name as string,
+      description: param.description as string,
+      minDeposit: BigInt(1000),
+      maxTvl: BigInt(1000000),
+      performanceFee: BigInt(20),
+      steps,
+    };
+
+    postStrategy(data);
   };
 
   if (loading) {
@@ -65,7 +106,7 @@ const RreviewStrategy = () => {
       </View>
 
       <View style={{ paddingBottom: 40 }}>
-        <LQDButton title="Publish" variant="secondary" onPress={openModal} />
+        <LQDButton title="Publish" variant="secondary" onPress={handlePublish} />
       </View>
     </View>
   );
