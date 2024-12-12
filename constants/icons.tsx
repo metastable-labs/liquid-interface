@@ -1,4 +1,15 @@
-import { AerodromeIcon, BorrowIcon, CuratorIcon, DepositIcon, MoonWellIcon, MorphoIcon, StakeIcon, SupplyIcon } from '@/assets/icons';
+import {
+  AerodromeIcon,
+  BorrowIcon,
+  CoinbaseWalletIcon,
+  CuratorIcon,
+  DebitCardIcon,
+  DepositIcon,
+  MoonWellIcon,
+  MorphoIcon,
+  StakeIcon,
+  SupplyIcon,
+} from '@/assets/icons';
 
 const ICONS = {
   aerodrome: <AerodromeIcon height={24} width={24} />,
@@ -9,6 +20,9 @@ const ICONS = {
   borrow: <BorrowIcon fill="#1E293B" height={24} width={24} />,
   supply: <SupplyIcon />,
   sort: <CuratorIcon />,
+  debitCard: <DebitCardIcon />,
+  crypto: <CuratorIcon />,
+  coinBase: <CoinbaseWalletIcon />,
 };
 
 export default ICONS;
