@@ -4,7 +4,7 @@ import { LQDButton } from '@/components';
 import FeedStep from '@/components/feed-card/feed-step';
 import { steps } from '../home/dummy';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
-import { IActionIconVariant } from '@/components/action-card/types';
+import { ActionIconVariant } from '@/components/action-card/types';
 import Loader from './loader';
 
 const RreviewStrategy = () => {
@@ -27,7 +27,7 @@ const RreviewStrategy = () => {
           {steps.map((step, index: number) => (
             <FeedStep
               key={index}
-              variant={step.variant as IActionIconVariant}
+              variant={step.variant as ActionIconVariant}
               tokenA={step.tokenA}
               tokenB={step.tokenB}
               tokenAIconURL={step.tokenAIconURL}

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import { BorrowIcon, DepositIcon, FillCheckIcon, CuratorIcon, StakeIcon } from '@/assets/icons';
+import { BorrowIcon, DepositIcon, FillCheckIcon, CuratorIcon, StakeIcon, CoinbaseWalletIcon, DebitCardIcon } from '@/assets/icons';
 import LQDImage from '../image';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import { IActionCard } from './types';
@@ -14,6 +14,9 @@ const LQDActionCard = ({ selected, action, actions, variant }: IActionCard) => {
     borrow: <BorrowIcon fill="#1E293B" height={24} width={24} />,
     sort: <CuratorIcon />,
     supply: null,
+    debitCard: <DebitCardIcon />,
+    crypto: <CuratorIcon />,
+    coinBase: <CoinbaseWalletIcon />,
   };
 
   return (

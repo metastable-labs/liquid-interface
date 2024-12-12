@@ -78,7 +78,7 @@ const StrategyDetail = ({ strategyId }: any) => {
         <Text style={styles.sectionTitle}>Strategy Info</Text>
 
         <View style={styles.statsWrapper}>
-          {strategyInfo.map((stats, index) => (
+          {strategyInfo.map((stats: any, index) => (
             <StatsCard key={index} isActive={stats.active} variant={stats.variant} title={stats.title} value={stats.value} />
           ))}
         </View>
@@ -109,7 +109,7 @@ const StrategyDetail = ({ strategyId }: any) => {
                   ref={flatListRef}
                   data={comments}
                   showsVerticalScrollIndicator={false}
-                  renderItem={({ item }) => <CommentCard comment={item} />}
+                  renderItem={({ item }: any) => <CommentCard comment={item} />}
                   keyExtractor={(_, index) => index.toString()}
                   showsHorizontalScrollIndicator={false}
                   contentContainerStyle={styles.commentContainerStyle}

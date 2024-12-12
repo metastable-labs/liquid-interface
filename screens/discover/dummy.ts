@@ -35,6 +35,24 @@ export const actionList = [
   },
 ];
 
+export const addMoney = [
+  {
+    id: '1',
+    icon: 'debitCard',
+    title: 'Debit card',
+  },
+  {
+    id: '2',
+    icon: 'crypto',
+    title: 'crypto',
+  },
+  {
+    id: '3',
+    icon: 'coinBase',
+    title: 'Coinbase Wallet',
+  },
+];
+
 export const sortList = [
   {
     id: '1',
@@ -504,5 +522,60 @@ export const strategyies: Array<any> = [
         tokenBIconURL: 'https://res.cloudinary.com/djzeufu4j/image/upload/v1732105634/tokenBIcon_wscb3p.png',
       },
     ],
+  },
+];
+
+export const positions = [
+  {
+    id: '1',
+    photo: image,
+    username: '@Nurayyy.eth',
+    tvl: '2.4m',
+    estimate: '56.7%',
+    steps: [
+      {
+        variant: 'deposit',
+        tokenA: 'Borrowed USDC',
+        tokenB: 'Morpho',
+        tokenAIconURL: 'https://res.cloudinary.com/djzeufu4j/image/upload/v1732105634/tokenAIcon_jgy241.png',
+        tokenBIconURL: 'https://res.cloudinary.com/djzeufu4j/image/upload/v1732105634/tokenBIcon_wscb3p.png',
+      },
+      {
+        variant: 'supply',
+        tokenA: 'cbBTC',
+        tokenB: 'moonWell',
+        tokenAIconURL: 'https://res.cloudinary.com/djzeufu4j/image/upload/v1732105634/tokenAIcon_jgy241.png',
+        tokenBIconURL: 'https://res.cloudinary.com/djzeufu4j/image/upload/v1732105634/tokenBIcon_wscb3p.png',
+      },
+      {
+        variant: 'borrow',
+        tokenA: 'USDC',
+        tokenB: 'Base',
+        tokenAIconURL: 'https://res.cloudinary.com/djzeufu4j/image/upload/v1732105634/tokenAIcon_jgy241.png',
+        tokenBIconURL: 'https://res.cloudinary.com/djzeufu4j/image/upload/v1732105634/tokenBIcon_wscb3p.png',
+      },
+      {
+        isLast: true,
+        variant: 'stake',
+        tokenA: 'DAI',
+        tokenB: 'USDC',
+        tokenAIconURL: 'https://res.cloudinary.com/djzeufu4j/image/upload/v1732105634/tokenAIcon_jgy241.png',
+        tokenBIconURL: 'https://res.cloudinary.com/djzeufu4j/image/upload/v1732105634/tokenBIcon_wscb3p.png',
+      },
+    ],
+  },
+  {
+    id: '2',
+    photo: image,
+    username: '@Nurayyy.eth',
+    tvl: '2.4m',
+    estimate: '56.7%',
+  },
+  {
+    id: '3',
+    photo: image,
+    username: '@Nurayyy.eth',
+    tvl: '2.4m',
+    estimate: '56.7%',
   },
 ];

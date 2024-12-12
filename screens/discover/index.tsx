@@ -19,7 +19,7 @@ const Discover = () => {
   const [showTvl, setShowTvl] = useState(false);
   const [protocal, setProtocal] = useState(false);
   const [percentage, setPercentage] = useState(25);
-  const [selected, setSelected] = useState('');
+  const [selectedToken, setSelecteToken] = useState('');
 
   const stableSetPercentage = useCallback((value: number) => setPercentage(value), []);
   const recentSearch = poolsState.recentSearchedPools;
@@ -160,12 +160,12 @@ const Discover = () => {
         <LQDFlatlist
           data={protocolList}
           showsVerticalScrollIndicator={false}
-          renderItem={({ item }) => (
+          renderItem={({ item }: any) => (
             <LQDProtocolCard
-              variant={item.icon as IProtocolIconVariant}
-              selected={selected === item.id}
+              variant={item.icon}
+              selected={selectedToken === item.id}
               protocol={item}
-              action={() => setSelected(item.id)}
+              action={() => setSelecteToken(item.id)}
             />
           )}
           keyExtractor={(_, index) => index.toString()}
