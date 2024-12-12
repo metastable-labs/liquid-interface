@@ -24,6 +24,8 @@ import PoolDetail from './pool-detail';
 import AddLiquidty from './liquidity-actions/add';
 import RemoveLiquidity from './liquidity-actions/remove';
 
+import Portfolio from './portfolio';
+
 export {
   Home,
   TopGainers,
@@ -44,4 +46,5 @@ export {
   CreateStrategy,
   NewActionStrategy,
   StrategyDetail,
+  Portfolio,
 };

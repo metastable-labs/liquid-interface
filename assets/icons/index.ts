@@ -87,10 +87,14 @@ import SmileEmojiIcon from './smile-emoji-icon';
 import LockedIcon from './locked-icon';
 import StatsDepositIcon from './stats-deposit-icon';
 import RiskIcon from './risk-icon';
+import CoinbaseWalletIcon from './coin-base-icon';
+import DebitCardIcon from './debit-card-icon';
 
 export {
   LampIcon,
+  DebitCardIcon,
   RiskIcon,
+  CoinbaseWalletIcon,
   LockedIcon,
   StatsDepositIcon,
   ArrowUpCircleIcon,

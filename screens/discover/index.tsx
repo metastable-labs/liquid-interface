@@ -160,13 +160,8 @@ const Discover = () => {
         <LQDFlatlist
           data={protocolList}
           showsVerticalScrollIndicator={false}
-          renderItem={({ item }) => (
-            <LQDProtocolCard
-              variant={item.icon as IProtocolIconVariant}
-              selected={selected === item.id}
-              protocol={item}
-              action={() => setSelected(item.id)}
-            />
+          renderItem={({ item }: any) => (
+            <LQDProtocolCard variant={item.icon} selected={selected === item.id} protocol={item} action={() => setSelected(item.id)} />
           )}
           keyExtractor={(_, index) => index.toString()}
           showsHorizontalScrollIndicator={false}

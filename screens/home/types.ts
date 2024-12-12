@@ -9,5 +9,6 @@ interface ISection {
 
 interface IHeader {
   amount: number;
-  action?: () => void;
+  actionLeft?: () => void;
+  actionRight?: () => void;
 }
