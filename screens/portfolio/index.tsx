@@ -9,7 +9,7 @@ import AssetItem from './asset-item';
 
 const Portfolio = () => {
   const [showModal, setShowModal] = useState(false);
-  const [selected, setSelected] = useState('');
+  const [selectedAction, setSelectedAction] = useState('');
   const { router, dispatch } = useSystemFunctions();
 
   const openModal = () => {
@@ -94,9 +94,9 @@ const Portfolio = () => {
             renderItem={({ item }: any) => (
               <LQDActionCard
                 variant={item.icon as IActionIconVariant}
-                selected={selected === item.id}
+                selected={selectedAction === item.id}
                 actions={item}
-                action={() => setSelected(item.id)}
+                action={() => setSelectedAction(item.id)}
               />
             )}
             keyExtractor={(_, index) => index.toString()}

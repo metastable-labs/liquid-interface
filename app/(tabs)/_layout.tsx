@@ -13,7 +13,7 @@ import useSystemFunctions from '@/hooks/useSystemFunctions';
 export default function TabLayout() {
   const colorScheme = useColorScheme();
   const [show, setShow] = useState(false);
-  const [selected, setSelected] = useState('');
+  const [selectedAction, setSelectedAction] = useState('');
   const { router } = useSystemFunctions();
 
   const navigate = () => {
@@ -28,14 +28,12 @@ export default function TabLayout() {
     <>
       <StatusBar style="dark" />
       <View style={styles.container} />
-      {/* fix this header showing on all screens */}
-
       <LQDBottomSheet show={show} title="Sort by" variant="primary" onClose={openModal}>
         <LQDFlatlist
           data={sortList}
           showsVerticalScrollIndicator={false}
           renderItem={({ item }) => (
-            <LQDActionCard variant="sort" selected={selected === item.id} actions={item} action={() => setSelected(item.id)} />
+            <LQDActionCard variant="sort" selected={selectedAction === item.id} actions={item} action={() => setSelectedAction(item.id)} />
           )}
           keyExtractor={(_, index) => index.toString()}
           showsHorizontalScrollIndicator={false}
