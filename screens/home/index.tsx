@@ -10,11 +10,15 @@ import { usePoolActions } from '@/store/pools/actions';
 import { useOnMount } from '@/hooks/useOnMount';
 import Loader from './loader';
 import { feeds } from './dummy';
+import { useFeeds } from '@/services/feeds/queries';
 
 const Home = () => {
   const { router, poolsState, smartAccountState, accountState } = useSystemFunctions();
   const { getTokens } = useAccountActions();
   const { getAllPools } = usePoolActions();
+  const { status, data, error, isFetching } = useFeeds();
+
+  console.log(status, data, error, isFetching);
 
   const { loadingPools } = poolsState;
   const { loading: loadingAccounts } = accountState;
