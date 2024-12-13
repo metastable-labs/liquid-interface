@@ -6,6 +6,7 @@ import * as AerodromeConnectorABI from './AerodromeConnector.json';
 import * as ConnectorPluginABI from './ConnectorPlugin.json';
 import * as AerodromePoolABI from './AerodromePoolABI.json';
 import * as LPSugarABI from './LPSugar';
+import * as LiquidStrategy from './LiquidStrategy';
 
 export {
   LPSugarABI,
@@ -16,4 +17,5 @@ export {
   EntryPointABI,
   AerodromeConnectorABI,
   ConnectorPluginABI,
+  LiquidStrategy,
 };

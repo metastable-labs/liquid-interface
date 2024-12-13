@@ -1,74 +1,46 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import DraggableFlatList, { ScaleDecorator } from 'react-native-draggable-flatlist';
-import {
-  AerodromeIcon,
-  BorrowIcon,
-  DepositIcon,
-  DragHandleIcon,
-  EditProfileIcon,
-  MoonWellIcon,
-  MorphoIcon,
-  PlusIcon,
-  StakeIcon,
-} from '@/assets/icons';
+import { DragHandleIcon, EditProfileIcon, PlusIcon } from '@/assets/icons';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
+import ICONS from '@/constants/icons';
 
 const ActionItem = ({ title, action }: IActionItem) => {
   return (
-    <View style={styles.actionItemContainer}>
+    <TouchableOpacity onPress={action} style={styles.actionItemContainer}>
       <DragHandleIcon />
       <View style={{ flex: 1 }}>
         <View style={[styles.actionItem]}>
           <View style={styles.innerWrapper}>
             <Text style={styles.actionText}>{title}</Text>
           </View>
-          <TouchableOpacity onPress={action} style={styles.addButton}>
+          <View style={styles.addButton}>
             <PlusIcon fill="#64748B" height={20} width={20} />
-          </TouchableOpacity>
+          </View>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
-const Actions = ({ action }: IActions) => {
-  const [actionList, setActionList] = useState([
-    { id: '1', title: 'Stake', icon: 'stake' },
-    { id: '2', title: 'Deposit', icon: 'deposit' },
-  ]);
-
-  const actions = () => {
-    setActionList((prevData) => [...prevData, { id: '1', title: 'Stake', icon: 'stake' }]);
-  };
-
-  const icons = {
-    stake: <StakeIcon fill="#1E293B" height={24} width={24} />,
-    deposit: <DepositIcon fill="#1E293B" height={24} width={24} />,
-    borrow: <BorrowIcon fill="#1E293B" height={24} width={24} />,
-    supply: null,
-  };
-
+const Actions = ({ addNewAction, list, setList }: IActions) => {
   const renderItem = ({ item, drag, isActive }: IActionsRenderItem) => {
     return (
-      <View style={styles.dragWrapper}>
-        <DragHandleIcon />
-        <View style={{ flex: 1 }}>
-          <ScaleDecorator>
-            <TouchableOpacity
-              style={[styles.actionItem, isActive && { backgroundColor: '#F1F5F9' }]}
-              onLongPress={drag}
-              activeOpacity={0.7}
-            >
+      <ScaleDecorator>
+        <TouchableOpacity onLongPress={drag} style={styles.dragWrapper}>
+          <DragHandleIcon />
+
+          <View style={{ flex: 1 }}>
+            <TouchableOpacity style={[styles.actionItem, isActive && { backgroundColor: '#F1F5F9' }]} activeOpacity={0.7}>
               <View style={styles.innerWrapper}>
-                {icons[item.icon]}
-                <Text style={styles.activeActionText}>{item.title}</Text>
+                {ICONS[item.action]}
+                <Text style={styles.activeActionText}>{item.protocol.title}</Text>
               </View>
               <EditProfileIcon fill="#64748B" height={20} width={20} />
             </TouchableOpacity>
-          </ScaleDecorator>
-        </View>
-      </View>
+          </View>
+        </TouchableOpacity>
+      </ScaleDecorator>
     );
   };
 
@@ -76,13 +48,13 @@ const Actions = ({ action }: IActions) => {
     <View style={styles.container}>
       <Text style={styles.title}>Actions</Text>
       <DraggableFlatList
-        data={actionList}
+        data={list}
         scrollEnabled={false}
-        onDragEnd={({ data }) => setActionList(data)}
-        keyExtractor={(item) => item.id}
+        onDragEnd={({ data }) => setList(data)}
+        keyExtractor={(_, index) => index.toString()}
         renderItem={renderItem}
         contentContainerStyle={styles.listContainer}
-        ListFooterComponent={() => <ActionItem title="Add new action" action={action} />}
+        ListFooterComponent={() => <ActionItem title="Add new action" action={addNewAction} />}
       />
     </View>
   );

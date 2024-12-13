@@ -14,6 +14,7 @@ export const TEST_USER: Address = '0x78815067c3926cc33F7790d87460BEC779F42d4D' a
 // Liquid connectors
 export const AERODROME_CONNECTOR: Address = '0x10e1aC384A4Fb3e0Bc4724D097B0d7F4e99143E6' as Address;
 export const CONNECTOR_PLUGIN: Address = '0x96281563A06a8D3319C9822B58d8808FaC7EA14D' as Address;
+export const STRATEGY_CONTRACT_ADDRESS = '0x4368d53677c09995989a22DE5b31EfceAeD735ae' as Address;
 
 export const CONNECTORS_BASE: Address[] = [
   USDC_ADDRESS, // USDC

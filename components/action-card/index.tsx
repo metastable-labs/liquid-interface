@@ -1,28 +1,18 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import { BorrowIcon, DepositIcon, FillCheckIcon, CuratorIcon, StakeIcon, CoinbaseWalletIcon, DebitCardIcon } from '@/assets/icons';
-import LQDImage from '../image';
+
+import { FillCheckIcon } from '@/assets/icons';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import { IActionCard } from './types';
+import ICONS from '@/constants/icons';
 
-const LQDActionCard = ({ selected, action, actions, variant }: IActionCard) => {
+const LQDActionCard = ({ selected, onSelect, actions, variant }: IActionCard) => {
   const { title } = actions;
 
-  const icons = {
-    stake: <StakeIcon fill="#1E293B" height={24} width={24} />,
-    deposit: <DepositIcon fill="#1E293B" height={24} width={24} />,
-    borrow: <BorrowIcon fill="#1E293B" height={24} width={24} />,
-    sort: <CuratorIcon />,
-    supply: null,
-    debitCard: <DebitCardIcon />,
-    crypto: <CuratorIcon />,
-    coinBase: <CoinbaseWalletIcon />,
-  };
-
   return (
-    <TouchableOpacity style={styles.container} activeOpacity={0.7} onPress={action}>
+    <TouchableOpacity style={styles.container} activeOpacity={0.7} onPress={onSelect}>
       <View style={styles.innerWrapper}>
-        {icons[variant]}
+        {ICONS[variant]}
         <Text style={styles.title}>{title}</Text>
       </View>
       <View style={styles.volumeWrapper}>{selected && <FillCheckIcon />}</View>

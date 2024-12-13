@@ -96,7 +96,7 @@ const Portfolio = () => {
                 variant={item.icon as ActionIconVariant}
                 selected={selectedAction === item.id}
                 actions={item}
-                action={() => setSelectedAction(item.id)}
+                onSelect={() => setSelectedAction(item.id)}
               />
             )}
             keyExtractor={(_, index) => index.toString()}

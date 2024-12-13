@@ -2,20 +2,30 @@ type IconVariant = 'moonwell' | 'aerodrome' | 'morpho' | 'deposit' | 'stake' | '
 
 interface IActionItem {
   label?: string;
-  title?: string;
+  title: string;
   icon?: IconVariant;
+  logoUrl?: string;
   action?: () => void;
 }
 interface IActions {
-  action?: () => void;
+  addNewAction: () => void;
+  list: StrategyAction[];
+  setList: (data: StrategyAction[]) => void;
 }
 interface IActionsListItem {
   id: string;
   title: string;
-  icon: 'deposit' | 'stake' | 'borrow' | 'supply';
+  variant: 'deposit' | 'stake' | 'borrow' | 'supply';
 }
 interface IActionsRenderItem {
   drag?: () => void;
-  item: IActionsListItem;
+  item: StrategyAction;
   isActive: boolean;
+}
+
+interface ProtocolItem {
+  id: string;
+  icon: 'moonwell' | 'aerodrome' | 'morpho';
+  title: string;
+  address: `0x${string}`;
 }

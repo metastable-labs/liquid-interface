@@ -1,56 +1,112 @@
-import { StyleSheet, Text, View } from 'react-native';
 import React, { useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { useLocalSearchParams } from 'expo-router';
+
 import { LQDButton } from '@/components';
 import FeedStep from '@/components/feed-card/feed-step';
-import { steps } from '../home/dummy';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
-import { ActionIconVariant } from '@/components/action-card/types';
+import useSystemFunctions from '@/hooks/useSystemFunctions';
 import Loader from './loader';
+import { useWriteFeed } from '@/services/feeds/queries';
+
+const SUPPLY = 0; // Supply assets
+const WITHDRAW = 1; // Withdraw assets
+const BORROW = 2; // Borrow assets
+const REPAY = 3; // Repay debt
+const STAKE = 4; // Stake assets
+const UNSTAKE = 5; // Unstake assets
+const SWAP = 6; // Swap assets
+const CLAIM = 7; // Claim rewards
+
+const getActionType = (action: 'deposit' | 'stake' | 'borrow' | 'supply') => {
+  switch (action) {
+    case 'deposit':
+      return SUPPLY;
+    case 'stake':
+      return STAKE;
+    case 'borrow':
+      return BORROW;
+    case 'supply':
+      return SUPPLY;
+    default:
+      return SUPPLY;
+  }
+};
 
 const RreviewStrategy = () => {
-  const [loading, setLoading] = useState(false);
+  const param = useLocalSearchParams();
+  const { appState, accountState } = useSystemFunctions();
+  const { postStrategy, loading } = useWriteFeed();
+
+  const { strategyActions } = appState;
+  const { tokens } = accountState;
+
+  const strategySteps = () => {
+    const steps = strategyActions.map((item: StrategyAction, index) => {
+      const assetsIn = tokens.data?.find((token) => item.assetsIn[0] == token.address);
+
+      return {
+        variant: item.action,
+        token: assetsIn?.symbol || 'USDC',
+        protocolTitle: item.protocol.title,
+        tokenIconURL: assetsIn?.logoUrl || '',
+        protocolIcon: item.protocol.icon,
+        isLast: index === strategyActions.length - 1,
+      };
+    });
+
+    return steps;
+  };
+
+  const handlePublish = () => {
+    const steps = strategyActions.map((item: StrategyAction) => {
+      return {
+        connector: '0x01249b37d803573c071186BC4C3ea92872B93F5E' as `0x${string}`,
+        actionType: getActionType(item.action),
+        assetsIn: item.assetsIn,
+        amountRatio: BigInt(5000),
+        assetOut: '0xF877ACaFA28c19b96727966690b2f44d35aD5976' as `0x${string}`,
+        data: '0x' as `0x${string}`,
+      };
+    });
+
+    const data: StrategyBody = {
+      name: param.name as string,
+      description: param.description as string,
+      minDeposit: BigInt(1000),
+      maxTvl: BigInt(1000000),
+      performanceFee: BigInt(20),
+      steps,
+    };
+
+    postStrategy(data);
+  };
+
   if (loading) {
     return <Loader />;
   }
-
-  const openModal = () => {
-    setLoading((prev) => !prev);
-    setTimeout(() => {
-      setLoading(false);
-    }, 2000);
-  };
 
   return (
     <View style={styles.container}>
       <View style={{ flex: 1 }}>
         <View style={styles.feedStep}>
-          {steps.map((step, index: number) => (
-            <FeedStep
-              key={index}
-              variant={step.variant as ActionIconVariant}
-              tokenA={step.tokenA}
-              tokenB={step.tokenB}
-              tokenAIconURL={step.tokenAIconURL}
-              tokenBIconURL={step.tokenBIconURL}
-              isLast={step.isLast}
-            />
+          {strategySteps().map((step, index: number) => (
+            <FeedStep key={index} {...step} isLast={step.isLast} />
           ))}
         </View>
 
         <View style={styles.contentWrapper}>
-          <Text style={styles.title}>Moonwell - USDC</Text>
+          <Text style={styles.title}>{param.name}</Text>
           <View style={styles.estWrapper}>
             <Text style={styles.estimate}>Est. APY</Text>
             <Text style={styles.percentage}>65.45%</Text>
           </View>
-          <Text style={styles.description}>This strategy starts as an ease in for first and second quaterss of 2025</Text>
-          <Text style={styles.description}>This strategy starts as an ease in for first and second quaterss of 2025</Text>
-          <Text style={styles.description}>This strategy starts as an ease in for first and second quaterss of 2025</Text>
+          <Text style={styles.description}>{param.description}</Text>
         </View>
       </View>
 
       <View style={{ paddingBottom: 40 }}>
-        <LQDButton title="Publish" variant="secondary" onPress={openModal} />
+        <LQDButton title="Publish" variant="secondary" onPress={handlePublish} />
       </View>
     </View>
   );

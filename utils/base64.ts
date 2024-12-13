@@ -1,4 +1,4 @@
-import type { Hex } from 'viem';
+import { bytesToBigInt, hexToBytes, type Hex } from 'viem';
 
 // ! taken from https://github.com/MasterKale/SimpleWebAuthn/blob/e02dce6f2f83d8923f3a549f84e0b7b3d44fa3da/packages/browser/src/helpers/base64URLStringToBuffer.ts
 /**
@@ -97,4 +97,20 @@ export function base64ToBytes(base64String: string): Uint8Array {
   }
 
   return bytes;
+}
+
+export function parseAndNormalizeSig(sig: Hex): { r: bigint; s: bigint } {
+  const bSig = hexToBytes(sig);
+  // assert(bSig.length === 64, "signature is not 64 bytes");
+  const bR = bSig.slice(0, 32);
+  const bS = bSig.slice(32);
+
+  // Avoid malleability. Ensure low S (<= N/2 where N is the curve order)
+  const r = bytesToBigInt(bR);
+  let s = bytesToBigInt(bS);
+  const n = BigInt('0xFFFFFFFF00000000FFFFFFFFFFFFFFFFBCE6FAADA7179E84F3B9CAC2FC632551');
+  if (s > n / 2n) {
+    s = n - s;
+  }
+  return { r, s };
 }

@@ -2,19 +2,21 @@ import { useEffect } from 'react';
 import { StyleSheet, Platform, StatusBar as RNStatusBar, Pressable } from 'react-native';
 
 import useSystemFunctions from '@/hooks/useSystemFunctions';
-import { adjustFontSizeForIOS, createArrayWithIndexes } from '@/utils/helpers';
-import { LQDBottomSheet, LQDFeedCard, LQDFlatlist, LQDPoolPairCard } from '@/components';
+import { adjustFontSizeForIOS } from '@/utils/helpers';
+import { LQDFeedCard, LQDFlatlist } from '@/components';
 import { PlusIcon } from '@/assets/icons';
 import { useAccountActions } from '@/store/account/actions';
 import { usePoolActions } from '@/store/pools/actions';
 import { useOnMount } from '@/hooks/useOnMount';
 import Loader from './loader';
 import { feeds } from './dummy';
+import { useFeeds } from '@/services/feeds/queries';
 
 const Home = () => {
-  const { router, poolsState, smartAccountState, accountState, appState } = useSystemFunctions();
+  const { router, poolsState, smartAccountState, accountState } = useSystemFunctions();
   const { getTokens } = useAccountActions();
   const { getAllPools } = usePoolActions();
+  const { status, data, error, isFetching } = useFeeds();
 
   const { loadingPools } = poolsState;
   const { loading: loadingAccounts } = accountState;

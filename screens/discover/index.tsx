@@ -1,29 +1,25 @@
 import { StyleSheet, View, Text, StatusBar as RNStatusBar, Pressable, Platform, Animated } from 'react-native';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { LQDBottomSheet, LQDButton, LQDFlatlist, LQDImage, LQDInput, LQDProtocolCard, LQDStrategyCard, SearchUI } from '@/components';
-import { SearchBar } from 'react-native-screens';
+import { LQDAssetSelection, LQDBottomSheet, LQDButton, LQDFlatlist, LQDInput, LQDProtocolCard, LQDStrategyCard } from '@/components';
 import { ArrowCircleDownIcon, DiscoverTVLIcon, SearchIcon, DiscoverUSDIcon, AerodromeIcon } from '@/assets/icons';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
-import RecentCard from '@/components/search-ui/popular-asset-card';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { protocolList, strategyies } from './dummy';
 import { useForm } from 'react-hook-form';
 import PercentageSetter from '../liquidity-actions/remove/percentage-setter';
-import useAppActions from '@/store/app/actions';
-import { IProtocolIconVariant } from '@/components/protocol-card/types';
 
 const Discover = () => {
-  const { router, poolsState, dispatch, appState } = useSystemFunctions();
-  const { searchIsFocused, showSearch } = useAppActions();
+  const { router, dispatch } = useSystemFunctions();
   const [search, setSearch] = useState(false);
   const [showTvl, setShowTvl] = useState(false);
   const [protocal, setProtocal] = useState(false);
-  const [percentage, setPercentage] = useState(25);
+  const [_, setPercentage] = useState(25);
   const [selectedToken, setSelecteToken] = useState('');
+  const [selectedAssets, setSelectedAssets] = useState<TokenItem[]>([]);
 
   const stableSetPercentage = useCallback((value: number) => setPercentage(value), []);
-  const recentSearch = poolsState.recentSearchedPools;
   const { control, watch } = useForm();
+  const [showAssets, setShowAssets] = useState(false);
 
   const animationValue = useRef(new Animated.Value(0)).current;
 
@@ -77,18 +73,15 @@ const Discover = () => {
     setProtocal((prev) => !prev);
   };
 
-  const openAssets = () => {
-    searchIsFocused(false);
-    showSearch(true);
+  const handleShowAsset = () => {
+    setShowAssets((prev) => !prev);
   };
 
-  if (appState.showSearch) {
-    return (
-      <View style={styles.searchWrapper}>
-        <SearchUI />
-      </View>
-    );
-  }
+  const handleAsset = (data: TokenItem) => {
+    const newAssets = [...selectedAssets];
+    newAssets[0] = data;
+    setSelectedAssets(newAssets);
+  };
 
   return (
     <View style={styles.container}>
@@ -102,7 +95,7 @@ const Discover = () => {
                 <ArrowCircleDownIcon />
               </View>
             </Pressable>
-            <Pressable onPress={openAssets} style={styles.relativeWrapper}>
+            <Pressable onPress={handleShowAsset} style={styles.relativeWrapper}>
               <DiscoverUSDIcon />
               <View style={styles.dropIcon}>
                 <ArrowCircleDownIcon />
@@ -114,7 +107,7 @@ const Discover = () => {
                 <ArrowCircleDownIcon />
               </View>
             </Pressable>
-            <Pressable onPress={() => setSearch(true)}>
+            <Pressable onPress={closeInput}>
               <SearchIcon />
             </Pressable>
           </View>
@@ -165,7 +158,7 @@ const Discover = () => {
               variant={item.icon}
               selected={selectedToken === item.id}
               protocol={item}
-              action={() => setSelecteToken(item.id)}
+              onSelect={() => setSelecteToken(item.id)}
             />
           )}
           keyExtractor={(_, index) => index.toString()}
@@ -173,6 +166,14 @@ const Discover = () => {
           contentContainerStyle={styles.protocalContainerStyle}
         />
       </LQDBottomSheet>
+      <LQDAssetSelection
+        key={1}
+        close={handleShowAsset}
+        setAsset={handleAsset}
+        show={showAssets}
+        title="Select token"
+        selectedAsset={selectedAssets[0]}
+      />
     </View>
   );
 };

@@ -1,16 +1,41 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
-import { LQDButton, LQDInput } from '@/components';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useForm } from 'react-hook-form';
+import * as yup from 'yup';
+import { LQDButton, LQDInput } from '@/components';
+import { yupResolver } from '@hookform/resolvers/yup';
 import useAppActions from '@/store/app/actions';
-import Actions from './actions';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 
+import Actions from './actions';
+import { AerodromeIcon, BorrowIcon, CuratorIcon, DepositIcon, MoonWellIcon, MorphoIcon, StakeIcon, SupplyIcon } from '@/assets/icons';
+
+const schema = yup.object().shape({
+  name: yup.string().required('Strategy name is required'),
+  description: yup.string().required('Description is required'),
+});
+
+interface CreateStrategyForm {
+  name: string;
+  description: string;
+}
+
 const CreateStrategy = () => {
-  const { control, watch } = useForm();
+  const {
+    control,
+    handleSubmit,
+    formState: { isValid },
+  } = useForm<CreateStrategyForm>({
+    mode: 'onSubmit',
+    resolver: yupResolver(schema),
+  });
   const { searchIsFocused: focusSearch, showSearch } = useAppActions();
-  const { router } = useSystemFunctions();
+  const { router, appState } = useSystemFunctions();
+  const { handleStrategyActions } = useAppActions();
+
+  const { strategyActions } = appState;
+
   const focusInput = () => {
     focusSearch(true);
   };
@@ -19,20 +44,28 @@ const CreateStrategy = () => {
     focusSearch(false);
   };
 
-  const navigateNewAction = () => {
+  const navigateToNewAction = () => {
     router.push('/new-action-strategy');
   };
 
-  const navigateToPreview = () => {
-    router.push('/preview-strategy');
+  const navigateToPreview = (data: CreateStrategyForm) => {
+    router.push({
+      pathname: '/preview-strategy',
+      params: { name: data.name, description: data.description },
+    });
+  };
+
+  const handleCancel = () => {
+    handleStrategyActions([]);
+    router.back();
   };
 
   return (
     <View style={styles.container}>
-      <View style={{ flex: 1 }}>
+      <ScrollView style={styles.scrollContainer}>
         <LQDInput
           control={control}
-          name="strategy-name"
+          name="name"
           rules={{ required: true }}
           label="Strategy Name"
           inputProps={{
@@ -64,13 +97,14 @@ const CreateStrategy = () => {
         </View>
 
         <View style={{ marginTop: 20 }}>
-          <Actions action={navigateNewAction} />
+          <Actions list={strategyActions} setList={handleStrategyActions} addNewAction={navigateToNewAction} />
         </View>
-      </View>
+      </ScrollView>
 
       <View style={styles.btnBottomWrapper}>
-        <LQDButton onPress={navigateToPreview} title="Continue" variant="secondary" />
-        <Pressable>
+        <LQDButton disabled={!isValid} onPress={handleSubmit(navigateToPreview)} title="Continue" variant="secondary" />
+
+        <Pressable onPress={handleCancel}>
           <Text style={styles.cancel}>Cancel</Text>
         </Pressable>
       </View>
@@ -86,6 +120,11 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 20,
     paddingHorizontal: 16,
+    gap: 50,
+  },
+  scrollContainer: {
+    flex: 1,
+    paddingBottom: 150,
   },
   cancel: {
     fontSize: adjustFontSizeForIOS(16, 2),
@@ -94,10 +133,10 @@ const styles = StyleSheet.create({
     fontFamily: 'QuantaGroteskProSemiBold',
     fontWeight: '600',
     alignSelf: 'center',
-    marginTop: 20,
   },
   btnBottomWrapper: {
     justifyContent: 'flex-end',
-    marginBottom: 25,
+    marginBottom: 40,
+    gap: 30,
   },
 });

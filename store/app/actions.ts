@@ -1,5 +1,5 @@
 import useSystemFunctions from '@/hooks/useSystemFunctions';
-import { setShowSearch, setSearchIsFocused } from '.';
+import { setShowSearch, setSearchIsFocused, setStrategyActions } from '.';
 
 const useAppActions = () => {
   const { dispatch } = useSystemFunctions();
@@ -12,9 +12,14 @@ const useAppActions = () => {
     dispatch(setSearchIsFocused(focused));
   };
 
+  const handleStrategyActions = (actions: StrategyAction[]) => {
+    dispatch(setStrategyActions(actions));
+  };
+
   return {
     showSearch,
     searchIsFocused,
+    handleStrategyActions,
   };
 };
 

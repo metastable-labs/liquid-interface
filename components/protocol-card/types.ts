@@ -5,5 +5,5 @@ export interface IProtocolCard {
   navigationVariant?: 'primary' | 'secondary';
   variant: IProtocolIconVariant;
   selected: boolean | null;
-  action?: () => void;
+  onSelect?: () => void;
 }

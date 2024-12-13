@@ -7,9 +7,9 @@ interface FeedCard {
 interface IFeedStep {
   title?: string;
   variant: 'supply' | 'borrow' | 'deposit' | 'stake';
-  tokenA: string;
-  tokenB: string;
-  tokenAIconURL: string;
-  tokenBIconURL: string;
+  token: string;
+  protocolTitle: string;
+  tokenIconURL: string;
+  protocolIcon: 'moonwell' | 'aerodrome' | 'morpho';
   isLast?: boolean;
 }
