@@ -61,10 +61,10 @@ const StrategyDetail = ({ strategyId }: any) => {
         />
         {comment.length > 0 ? (
           <TouchableOpacity onPress={handleComment}>
-            <ArrowUpCircleIcon />
+            <ArrowUpCircleIcon height={25} width={25} />
           </TouchableOpacity>
         ) : (
-          <SmileEmojiIcon />
+          <SmileEmojiIcon height={25} width={25} />
         )}
       </View>
     </View>
@@ -163,10 +163,11 @@ const styles = StyleSheet.create({
     height: 44,
     borderRadius: 16,
     alignItems: 'center',
-    paddingHorizontal: 10,
+    paddingLeft: 10,
+    paddingRight: 6,
     flex: 1,
     flexDirection: 'row',
-    gap: 5,
+    gap: 3,
   },
   infoContainer: {
     paddingVertical: 10,

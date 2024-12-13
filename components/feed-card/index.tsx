@@ -8,7 +8,7 @@ import useSystemFunctions from '@/hooks/useSystemFunctions';
 
 const LQDFeedCard = ({ feed, onPressInvest, onPressComment, onPressShare, onPressLike, onNavigate }: FeedCard) => {
   const { router } = useSystemFunctions();
-  const { steps, photo, username, address, date, percentage, estimate, title, description, commentCount, shareCount, flashCount } = feed;
+  const { steps, photo, username, address, date, percentage, estimate, title, description, commentCount, shareCount, likeCount } = feed;
   const StrLength = 40;
 
   const [isExpanded, setIsExpanded] = useState(false);
@@ -92,7 +92,7 @@ const LQDFeedCard = ({ feed, onPressInvest, onPressComment, onPressShare, onPres
             </Pressable>
             <Pressable onPress={onPressLike} style={styles.actionFlex}>
               <FlashIcon />
-              <Text style={styles.actionText}>{flashCount}</Text>
+              <Text style={styles.actionText}>{likeCount}</Text>
             </Pressable>
           </View>
           <Pressable>

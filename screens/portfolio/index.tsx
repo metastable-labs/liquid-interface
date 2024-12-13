@@ -114,7 +114,6 @@ const Portfolio = () => {
                 selected={selectedAction === action.id}
                 actions={action}
                 onSelect={() => setSelectedAction(action.id)}
-                // onSelect={() => handleSelectAction(action)}
               />
             ))}
           </View>
