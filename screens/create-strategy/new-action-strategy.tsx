@@ -109,7 +109,16 @@ const NewAction = () => {
         <View style={styles.itemWrapper}>
           <ActionItem icon={selectedProtocol.icon} title={selectedProtocol.title} label="Protocol" action={openProtocal} />
           <ActionItem icon={selectedAction.variant} title={selectedAction.title} label="Actions" action={openActions} />
-          <AssetItem logoUrl={selectedAssets[0]?.logoUrl} title={selectedAssets[0]?.symbol} label="Assets" action={handleShowFirstAsset} />
+          <AssetItem logoUrl={selectedAssets[0]?.logoUrl} title={selectedAssets[0]?.symbol} label="Asset" action={handleShowFirstAsset} />
+
+          {selectedProtocol.title === 'Aerodrome' && selectedAction.variant === 'deposit' && (
+            <AssetItem
+              logoUrl={selectedAssets[1]?.logoUrl}
+              title={selectedAssets[1]?.symbol}
+              label="Asset 2"
+              action={handleShowSecondAsset}
+            />
+          )}
         </View>
       </View>
 
