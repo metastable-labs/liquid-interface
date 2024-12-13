@@ -19,8 +19,15 @@ const LQDFeedCard = ({ feed, onPressInvest, onPressComment, onPressShare, onPres
     setIsExpanded(!isExpanded);
   };
 
+  const handlePressAction = (action?: () => void) => {
+    action?.();
+    if (!action) {
+      onNavigate?.();
+    }
+  };
+
   return (
-    <Pressable style={styles.container} onPress={onNavigate}>
+    <Pressable style={styles.container} onPress={() => handlePressAction(onNavigate)}>
       <View>
         <View style={{ flexDirection: 'row', gap: 5 }}>
           <FastImage
@@ -75,29 +82,31 @@ const LQDFeedCard = ({ feed, onPressInvest, onPressComment, onPressShare, onPres
         </View>
 
         <View style={styles.bottomActionContainer}>
-          <View style={styles.bottomActionInnerContainer}>
-            {onPressInvest && (
-              <Pressable style={styles.investBtn} onPress={onPressInvest}>
-                <Text style={styles.invest}>Invest</Text>
-              </Pressable>
-            )}
+          <View style={styles.bottomActionContainer}>
+            <View style={styles.bottomActionInnerContainer}>
+              {onPressInvest && (
+                <Pressable style={styles.investBtn} onPress={() => handlePressAction(onPressInvest)}>
+                  <Text style={styles.invest}>Invest</Text>
+                </Pressable>
+              )}
 
-            <Pressable onPress={onPressComment} style={styles.actionFlex}>
-              <CommentIcon />
-              <Text style={styles.actionText}>{commentCount}</Text>
-            </Pressable>
-            <Pressable onPress={onPressShare} style={styles.actionFlex}>
-              <ReTweetIcon />
-              <Text style={styles.actionText}>{shareCount}</Text>
-            </Pressable>
-            <Pressable onPress={onPressLike} style={styles.actionFlex}>
-              <FlashIcon />
-              <Text style={styles.actionText}>{likeCount}</Text>
+              <Pressable onPress={() => handlePressAction(onPressComment)} style={styles.actionFlex}>
+                <CommentIcon />
+                <Text style={styles.actionText}>{commentCount}</Text>
+              </Pressable>
+              <Pressable onPress={() => handlePressAction(onPressShare)} style={styles.actionFlex}>
+                <ReTweetIcon />
+                <Text style={styles.actionText}>{shareCount}</Text>
+              </Pressable>
+              <Pressable onPress={() => handlePressAction(onPressLike)} style={styles.actionFlex}>
+                <FlashIcon />
+                <Text style={styles.actionText}>{likeCount}</Text>
+              </Pressable>
+            </View>
+            <Pressable>
+              <ShareIcon />
             </Pressable>
           </View>
-          <Pressable>
-            <ShareIcon />
-          </Pressable>
         </View>
       </View>
     </Pressable>
