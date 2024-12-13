@@ -1,7 +1,9 @@
 interface FeedCard {
   feed: any;
-  showInvest?: boolean;
-  showComment?: () => void;
+  onPressComment?: () => void;
+  onPressInvest?: () => void;
+  onPressShare?: () => void;
+  onPressFlash?: () => void;
 }
 
 interface IFeedStep {

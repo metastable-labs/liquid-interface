@@ -1,22 +1,26 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 import FastImage from 'react-native-fast-image';
 import { CommentIcon, FlashIcon, MoreIcon, ReTweetIcon, ShareIcon, SwatchIcon } from '@/assets/icons';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import FeedStep from './feed-step';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 
-const LQDFeedCard = ({ feed, showInvest = true, showComment }: FeedCard) => {
+const LQDFeedCard = ({ feed, onPressInvest, onPressComment, onPressShare, onPressFlash, onNavigate }: FeedCard) => {
   const { router } = useSystemFunctions();
+  const { steps, photo, username, address, date, percentage, estimate, title, description, commentCount, shareCount, flashCount } = feed;
+  const StrLength = 40;
 
-  const handlePress = () => {
-    router.push('/(create-strategy)/[strtegyId]/');
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const truncatedDescription = description.substring(0, StrLength);
+
+  const handleToggle = () => {
+    setIsExpanded(!isExpanded);
   };
 
-  const { steps, photo, username, address, date, percentage, estimate, title, description, commentCount, shareCount, flashCount } = feed;
-
   return (
-    <Pressable style={styles.container} onPress={handlePress}>
+    <Pressable style={styles.container} onPress={onNavigate}>
       <View>
         <View style={{ flexDirection: 'row', gap: 5 }}>
           <FastImage
@@ -56,34 +60,44 @@ const LQDFeedCard = ({ feed, showInvest = true, showComment }: FeedCard) => {
             <Text style={styles.estimate}>{estimate}</Text>
             <Text style={styles.percentage}>{percentage}%</Text>
           </View>
-          <Text style={styles.description}>{description}</Text>
-          <Pressable>
-            <Text style={styles.seeMore}>See more...</Text>
-          </Pressable>
+          <Text style={styles.description}>{isExpanded ? description : truncatedDescription}</Text>
+
+          {description.length > StrLength && !isExpanded && (
+            <Pressable onPress={handleToggle}>
+              <Text style={styles.seeMore}>See more...</Text>
+            </Pressable>
+          )}
+          {isExpanded && (
+            <Pressable onPress={handleToggle}>
+              <Text style={styles.seeMore}>See less...</Text>
+            </Pressable>
+          )}
         </View>
 
         <View style={styles.bottomActionContainer}>
           <View style={styles.bottomActionInnerContainer}>
-            {showInvest && (
-              <Pressable style={styles.investBtn}>
+            {onPressInvest && (
+              <Pressable style={styles.investBtn} onPress={onPressInvest}>
                 <Text style={styles.invest}>Invest</Text>
               </Pressable>
             )}
 
-            <Pressable onPress={showComment} style={styles.actionFlex}>
+            <Pressable onPress={onPressComment} style={styles.actionFlex}>
               <CommentIcon />
               <Text style={styles.actionText}>{commentCount}</Text>
             </Pressable>
-            <View style={styles.actionFlex}>
+            <Pressable onPress={onPressShare} style={styles.actionFlex}>
               <ReTweetIcon />
               <Text style={styles.actionText}>{shareCount}</Text>
-            </View>
-            <View style={styles.actionFlex}>
+            </Pressable>
+            <Pressable onPress={onPressFlash} style={styles.actionFlex}>
               <FlashIcon />
               <Text style={styles.actionText}>{flashCount}</Text>
-            </View>
+            </Pressable>
           </View>
-          <ShareIcon />
+          <Pressable>
+            <ShareIcon />
+          </Pressable>
         </View>
       </View>
     </Pressable>

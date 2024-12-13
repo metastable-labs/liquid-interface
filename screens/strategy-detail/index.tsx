@@ -11,7 +11,7 @@ const StrategyDetail = ({ strategyId }: any) => {
   const flatListRef = useRef<FlatList>(null);
 
   const [comment, setComment] = useState('');
-  const [showComment, setShowComment] = useState(false);
+  const [onPressComment, setonPressComment] = useState(false);
   const [dynamicHeight, setDynamicHeight] = useState(0);
   const [comments, setComments] = useState<ICommentCard['comment'][]>([]);
 
@@ -34,7 +34,7 @@ const StrategyDetail = ({ strategyId }: any) => {
   };
 
   const openComment = () => {
-    setShowComment((prev) => !prev);
+    setonPressComment((prev) => !prev);
   };
 
   const EmptyState = () => (
@@ -72,7 +72,7 @@ const StrategyDetail = ({ strategyId }: any) => {
 
   return (
     <LQDScrollView refreshing={false} onRefresh={() => {}} style={styles.container}>
-      <LQDFeedCard showComment={openComment} feed={feeds[0]} />
+      <LQDFeedCard onPressComment={openComment} feed={feeds[0]} />
 
       <View style={styles.infoContainer}>
         <Text style={styles.sectionTitle}>Strategy Info</Text>
@@ -100,7 +100,7 @@ const StrategyDetail = ({ strategyId }: any) => {
       </View>
 
       <View style={{ flex: 1 }}>
-        <LQDBottomSheet show={showComment} title="Comments" variant="primary" onClose={openComment}>
+        <LQDBottomSheet show={onPressComment} title="Comments" variant="primary" onClose={openComment}>
           <View>
             <View style={styles.flatlistWrapper}>
               {!comments.length && <EmptyState />}
@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
   lineThree: { height: 8, borderRadius: 10, marginTop: 10, width: '40%' },
   emptyStateWrapper: { alignItems: 'center', marginTop: 30 },
   commentContainer: {
-    bottom: 30,
+    bottom: 10,
     left: 0,
     right: 0,
     flexDirection: 'row',
@@ -251,5 +251,5 @@ const styles = StyleSheet.create({
   buttonWrapper: {
     marginTop: 20,
   },
-  flatlistWrapper: { flex: 1, height: 400, maxHeight: 450 },
+  flatlistWrapper: { flex: 1, height: 320, maxHeight: 450 },
 });

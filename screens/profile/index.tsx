@@ -26,7 +26,7 @@ const Profile = () => {
       <LQDFlatlist
         data={feeds}
         showsVerticalScrollIndicator={false}
-        renderItem={({ item }) => <LQDFeedCard showInvest={false} feed={item} />}
+        renderItem={({ item }) => <LQDFeedCard onPressInvest={() => {}} feed={item} />}
         keyExtractor={(_, index) => index.toString()}
         showsHorizontalScrollIndicator={false}
         style={{ backgroundColor: '#fff' }}

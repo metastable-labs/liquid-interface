@@ -22,7 +22,7 @@ const LQDBottomSheet = ({ title = '', variant = 'primary', show, onClose, childr
 
   return (
     <Modal style={{ padding: 0, margin: 0 }} avoidKeyboard statusBarTranslucent isVisible={show} animationIn="slideInUp">
-      <Pressable style={styles.overlay} />
+      <Pressable style={styles.overlay} onPress={onClose} />
       <View
         style={{
           ...styles.bottomSheet,
