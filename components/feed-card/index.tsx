@@ -6,7 +6,7 @@ import { adjustFontSizeForIOS } from '@/utils/helpers';
 import FeedStep from './feed-step';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 
-const LQDFeedCard = ({ feed, onPressInvest, onPressComment, onPressShare, onPressFlash, onNavigate }: FeedCard) => {
+const LQDFeedCard = ({ feed, onPressInvest, onPressComment, onPressShare, onPressLike, onNavigate }: FeedCard) => {
   const { router } = useSystemFunctions();
   const { steps, photo, username, address, date, percentage, estimate, title, description, commentCount, shareCount, flashCount } = feed;
   const StrLength = 40;
@@ -90,7 +90,7 @@ const LQDFeedCard = ({ feed, onPressInvest, onPressComment, onPressShare, onPres
               <ReTweetIcon />
               <Text style={styles.actionText}>{shareCount}</Text>
             </Pressable>
-            <Pressable onPress={onPressFlash} style={styles.actionFlex}>
+            <Pressable onPress={onPressLike} style={styles.actionFlex}>
               <FlashIcon />
               <Text style={styles.actionText}>{flashCount}</Text>
             </Pressable>

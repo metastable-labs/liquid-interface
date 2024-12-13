@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { LQDActionCard, LQDBottomSheet, LQDButton, LQDFlatlist, LQDScrollView, LQDSlider, LQDStrategyCard } from '@/components';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import { addMoney, strategyies } from '../discover/dummy';
-import { ActionIconVariant } from '@/components/action-card/types';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import AssetItem from './asset-item';
 
@@ -18,6 +17,25 @@ const Portfolio = () => {
 
   const navigateToWithdrawal = () => {
     router.push('/withdraw');
+  };
+
+  const handleSelectAction = () => {
+    openModal();
+
+    if (selectedAction === '1') {
+      setSelectedAction('');
+      router.push('/deposit/debit');
+    }
+
+    if (selectedAction === '2') {
+      setSelectedAction('');
+      router.push('/deposit/crypto');
+    }
+
+    if (selectedAction === '3') {
+      // handle coinbase
+      setSelectedAction('');
+    }
   };
 
   return (
@@ -88,24 +106,21 @@ const Portfolio = () => {
         </View>
 
         <LQDBottomSheet show={showModal} title="Add money" variant="primary" onClose={openModal}>
-          <LQDFlatlist
-            data={addMoney}
-            showsVerticalScrollIndicator={false}
-            renderItem={({ item }: any) => (
+          <View style={styles.modalContainerStyle}>
+            {addMoney.map((action, index) => (
               <LQDActionCard
-                variant={item.icon as ActionIconVariant}
-                selected={selectedAction === item.id}
-                actions={item}
-                onSelect={() => setSelectedAction(item.id)}
+                key={index}
+                variant={action.icon}
+                selected={selectedAction === action.id}
+                actions={action}
+                onSelect={() => setSelectedAction(action.id)}
+                // onSelect={() => handleSelectAction(action)}
               />
-            )}
-            keyExtractor={(_, index) => index.toString()}
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.modalContainerStyle}
-          />
+            ))}
+          </View>
 
           <View style={styles.bottomWrapper}>
-            <LQDButton title="Continue" variant="secondary" />
+            <LQDButton title="Continue" variant="secondary" onPress={handleSelectAction} />
           </View>
         </LQDBottomSheet>
       </LQDScrollView>

@@ -3,7 +3,8 @@ interface FeedCard {
   onPressComment?: () => void;
   onPressInvest?: () => void;
   onPressShare?: () => void;
-  onPressFlash?: () => void;
+  onPressLike?: () => void;
+  onNavigate?: () => void;
 }
 
 interface IFeedStep {

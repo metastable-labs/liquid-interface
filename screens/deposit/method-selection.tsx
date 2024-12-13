@@ -66,6 +66,7 @@ const styles = StyleSheet.create({
   container: {
     alignSelf: 'stretch',
     gap: 14,
+    paddingBottom: 50,
   },
 
   selectorCard: {
