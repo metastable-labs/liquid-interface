@@ -1,8 +1,8 @@
 import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import React, { useRef, useState } from 'react';
-import { LQDBottomSheet, LQDButton, LQDFeedCard, LQDFlatlist, LQDImage, LQDInput, LQDScrollView, LQShrimeLoader } from '@/components';
+import { LQDBottomSheet, LQDButton, LQDFeedCard, LQDFlatlist, LQDImage, LQDScrollView, LQShrimeLoader } from '@/components';
 import { feeds, strategyInfo } from '../home/dummy';
-import { ArrowUpCircleIcon, DiscoverUSDIcon, FlashIcon, SmileEmojiIcon, CuratorIcon } from '@/assets/icons';
+import { ArrowUpCircleIcon, DiscoverUSDIcon, FlashIcon, SmileEmojiIcon } from '@/assets/icons';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import StatsCard from './stats-card';
 import CommentCard from './comment-card';
@@ -12,6 +12,7 @@ const StrategyDetail = ({ strategyId }: any) => {
 
   const [comment, setComment] = useState('');
   const [onPressComment, setonPressComment] = useState(false);
+  const [isInputFocused, setIsInputFocused] = useState(false);
   const [dynamicHeight, setDynamicHeight] = useState(0);
   const [comments, setComments] = useState<ICommentCard['comment'][]>([]);
 
@@ -49,15 +50,16 @@ const StrategyDetail = ({ strategyId }: any) => {
   const bottomInput = () => (
     <View style={styles.commentContainer}>
       <LQDImage />
-      <View style={[styles.commentInput, { height: inputheight }]}>
+      <View style={[styles.commentInput, isInputFocused && styles.focusedInput, { height: inputheight }]}>
         <TextInput
           placeholder="Write a comment"
           value={comment}
           onChangeText={(val) => setComment(val)}
           multiline={true}
           onContentSizeChange={(event) => setDynamicHeight(event.nativeEvent.contentSize.height)}
-          style={{ flex: 1 }}
-          autoFocus
+          style={styles.textInput}
+          onFocus={() => setIsInputFocused(true)}
+          onBlur={() => setIsInputFocused(false)}
         />
         {comment.length > 0 ? (
           <TouchableOpacity onPress={handleComment}>
@@ -253,4 +255,11 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   flatlistWrapper: { flex: 1, height: 320, maxHeight: 450 },
+  textInput: {
+    flex: 1,
+  },
+  focusedInput: {
+    borderColor: '#4691FE',
+    borderWidth: 1.2,
+  },
 });

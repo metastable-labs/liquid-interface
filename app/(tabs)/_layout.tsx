@@ -29,16 +29,17 @@ export default function TabLayout() {
       <StatusBar style="dark" />
       <View style={styles.container} />
       <LQDBottomSheet show={show} title="Sort by" variant="primary" onClose={openModal}>
-        <LQDFlatlist
-          data={sortList}
-          showsVerticalScrollIndicator={false}
-          renderItem={({ item }) => (
-            <LQDActionCard variant="sort" selected={selectedAction === item.id} actions={item} action={() => setSelectedAction(item.id)} />
-          )}
-          keyExtractor={(_, index) => index.toString()}
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.protocalContainerStyle}
-        />
+        <View style={styles.modalContainerStyle}>
+          {sortList.map((action, index) => (
+            <LQDActionCard
+              key={index}
+              variant="sort"
+              selected={selectedAction === action.id}
+              actions={action}
+              onSelect={() => setSelectedAction(action.id)}
+            />
+          ))}
+        </View>
       </LQDBottomSheet>
 
       <Tabs
@@ -84,4 +85,5 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   protocalContainerStyle: { gap: 20, paddingBottom: 50 },
+  modalContainerStyle: { gap: 20, paddingBottom: 50 },
 });
