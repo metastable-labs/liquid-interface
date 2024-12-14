@@ -8,7 +8,7 @@ import Loader from './loader';
 import { useFeeds } from '@/services/feeds/queries';
 
 const Home = () => {
-  const { router, poolsState, smartAccountState, accountState } = useSystemFunctions();
+  const { router } = useSystemFunctions();
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isFetching, isError, error, refetch } = useFeeds();
 
   const feeds = data?.pages.flatMap((page) => page.strategies) || [];
@@ -23,6 +23,10 @@ const Home = () => {
     return <Loader />;
   }
 
+  const handleNavigate = () => {
+    router.push('/(create-strategy)/[strtegyId]/');
+  };
+
   return (
     <>
       <Pressable onPress={() => router.navigate('/(create-strategy)/create-strategy')} style={styles.addIcon}>
@@ -33,7 +37,7 @@ const Home = () => {
         refreshing={isFetching}
         data={feeds}
         showsVerticalScrollIndicator={false}
-        renderItem={({ item }) => <LQDFeedCard feed={item} />}
+        renderItem={({ item }) => <LQDFeedCard feed={item as Strategy} onNavigate={handleNavigate} onPressInvest={() => {}} />}
         keyExtractor={(_, index) => index.toString()}
         showsHorizontalScrollIndicator={false}
         style={{ backgroundColor: '#fff' }}

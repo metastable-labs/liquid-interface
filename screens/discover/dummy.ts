@@ -39,7 +39,7 @@ export const actionList: IActionsListItem[] = [
   },
 ];
 
-export const addMoney = [
+export const addMoney: AddMoneyActionItem[] = [
   {
     id: '1',
     icon: 'debitCard',

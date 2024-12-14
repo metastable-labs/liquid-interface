@@ -1,27 +1,35 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 import FastImage from 'react-native-fast-image';
-import Moment from 'moment';
 
 import { CommentIcon, FlashIcon, MoreIcon, ReTweetIcon, ShareIcon, SwatchIcon } from '@/assets/icons';
 import { adjustFontSizeForIOS, formatTimestamp, truncate } from '@/utils/helpers';
 import FeedStep from './feed-step';
-import useSystemFunctions from '@/hooks/useSystemFunctions';
 
 const photo = 'https://pics.craiyon.com/2023-08-02/7a951cac85bd4aa2b0e70dbaabb8404e.webp';
+const maxDescriptionLength = 40;
 
-const LQDFeedCard = ({ feed, showInvest = true, showComment }: FeedCard) => {
-  const { router } = useSystemFunctions();
+const LQDFeedCard = ({ feed, onPressInvest, onPressComment, onPressShare, onPressLike, onNavigate }: FeedCard) => {
+  const [isExpanded, setIsExpanded] = useState(false);
 
-  const handlePress = () => {
-    router.push('/(create-strategy)/[strtegyId]/');
+  const handleToggle = () => {
+    setIsExpanded(!isExpanded);
   };
 
   const { steps, curatorAddress, createdAt, name, description, metrics } = feed;
   const { commentCount, likeCount, repostCount, apy } = metrics;
 
+  const truncatedDescription = description.substring(0, maxDescriptionLength);
+
+  const handlePressAction = (action?: () => void) => {
+    action?.();
+    if (!action) {
+      onNavigate?.();
+    }
+  };
+
   return (
-    <Pressable style={styles.container} onPress={handlePress}>
+    <Pressable style={styles.container} onPress={() => handlePressAction(onNavigate)}>
       <View>
         <View style={{ flexDirection: 'row', gap: 5 }}>
           <FastImage
@@ -61,34 +69,46 @@ const LQDFeedCard = ({ feed, showInvest = true, showComment }: FeedCard) => {
             <Text style={styles.estimate}>Est. APY</Text>
             <Text style={styles.percentage}>{apy}%</Text>
           </View>
-          <Text style={styles.description}>{description}</Text>
-          <Pressable>
-            <Text style={styles.seeMore}>See more...</Text>
-          </Pressable>
+          <Text style={styles.description}>{isExpanded ? description : truncatedDescription}</Text>
+
+          {description.length > maxDescriptionLength && !isExpanded && (
+            <Pressable onPress={handleToggle}>
+              <Text style={styles.seeMore}>See more...</Text>
+            </Pressable>
+          )}
+          {isExpanded && (
+            <Pressable onPress={handleToggle}>
+              <Text style={styles.seeMore}>See less...</Text>
+            </Pressable>
+          )}
         </View>
 
         <View style={styles.bottomActionContainer}>
-          <View style={styles.bottomActionInnerContainer}>
-            {showInvest && (
-              <Pressable style={styles.investBtn}>
-                <Text style={styles.invest}>Invest</Text>
-              </Pressable>
-            )}
+          <View style={styles.bottomActionContainer}>
+            <View style={styles.bottomActionInnerContainer}>
+              {onPressInvest && (
+                <Pressable style={styles.investBtn} onPress={() => handlePressAction(onPressInvest)}>
+                  <Text style={styles.invest}>Invest</Text>
+                </Pressable>
+              )}
 
-            <Pressable onPress={showComment} style={styles.actionFlex}>
-              <CommentIcon />
-              <Text style={styles.actionText}>{commentCount}</Text>
+              <Pressable onPress={() => handlePressAction(onPressComment)} style={styles.actionFlex}>
+                <CommentIcon />
+                <Text style={styles.actionText}>{commentCount}</Text>
+              </Pressable>
+              <Pressable onPress={() => handlePressAction(onPressShare)} style={styles.actionFlex}>
+                <ReTweetIcon />
+                <Text style={styles.actionText}>{repostCount}</Text>
+              </Pressable>
+              <Pressable onPress={() => handlePressAction(onPressLike)} style={styles.actionFlex}>
+                <FlashIcon />
+                <Text style={styles.actionText}>{likeCount}</Text>
+              </Pressable>
+            </View>
+            <Pressable>
+              <ShareIcon />
             </Pressable>
-            <View style={styles.actionFlex}>
-              <ReTweetIcon />
-              <Text style={styles.actionText}>{repostCount}</Text>
-            </View>
-            <View style={styles.actionFlex}>
-              <FlashIcon />
-              <Text style={styles.actionText}>{likeCount}</Text>
-            </View>
           </View>
-          <ShareIcon />
         </View>
       </View>
     </Pressable>

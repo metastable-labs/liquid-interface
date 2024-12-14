@@ -10,7 +10,7 @@ export const feeds: Array<any> = [
     title: 'Moonwell - USDC',
     commentCount: 26,
     shareCount: 26,
-    flashCount: 26,
+    likeCount: 26,
     description: 'This strategy starts as an ease in for first and second quaterss of 2025',
     steps: [
       {
@@ -55,7 +55,7 @@ export const feeds: Array<any> = [
     title: 'Moonwell - USDC',
     commentCount: 26,
     shareCount: 26,
-    flashCount: 26,
+    likeCount: 26,
     description: 'This strategy starts as an ease in for first and second quaterss of 2025',
     steps: [
       {

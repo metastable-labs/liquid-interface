@@ -88,6 +88,22 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 
+  lightContainer: {
+    paddingVertical: 17,
+    borderRadius: 50,
+    backgroundColor: '#FFF',
+    borderWidth: 1,
+    borderColor: '#F1F5F9',
+  },
+
+  lightText: {
+    fontSize: adjustFontSizeForIOS(16, 2),
+    lineHeight: 16,
+    color: '#1E293B',
+    fontFamily: 'QuantaGroteskProSemiBold',
+    fontWeight: '600',
+  },
+
   tertiaryContainer: {
     height: 40,
     paddingVertical: 5,
