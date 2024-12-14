@@ -8,6 +8,7 @@ import { isDev } from '@/constants/env';
 import { useToastActions } from '@/store/toast/actions';
 import { useState } from 'react';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
+import useAppActions from '@/store/app/actions';
 
 const useFeeds = () => {
   return useInfiniteQuery({
@@ -30,6 +31,7 @@ const useWriteFeed = () => {
   const { router } = useSystemFunctions();
   const { createStrategy } = useLiquidity(publicClient as PublicClient);
   const { showToast } = useToastActions();
+  const { handleStrategyActions } = useAppActions();
   const [loading, setLoading] = useState(false);
 
   const postStrategy = async (data: StrategyBody) => {
@@ -42,6 +44,8 @@ const useWriteFeed = () => {
         description: "You've successfully created a strategy",
         variant: 'success',
       });
+
+      handleStrategyActions([]);
 
       return router.replace('/(tabs)/home');
     } catch (error: any) {
