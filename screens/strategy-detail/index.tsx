@@ -1,8 +1,8 @@
 import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import React, { useRef, useState } from 'react';
-import { LQDBottomSheet, LQDButton, LQDFeedCard, LQDFlatlist, LQDImage, LQDInput, LQDScrollView, LQShrimeLoader } from '@/components';
+import { LQDBottomSheet, LQDButton, LQDFeedCard, LQDFlatlist, LQDImage, LQDScrollView, LQShrimeLoader } from '@/components';
 import { feeds, strategyInfo } from '../home/dummy';
-import { ArrowUpCircleIcon, DiscoverUSDIcon, FlashIcon, SmileEmojiIcon, CuratorIcon } from '@/assets/icons';
+import { ArrowUpCircleIcon, DiscoverUSDIcon, FlashIcon, SmileEmojiIcon } from '@/assets/icons';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import StatsCard from './stats-card';
 import CommentCard from './comment-card';
@@ -11,7 +11,8 @@ const StrategyDetail = ({ strategyId }: any) => {
   const flatListRef = useRef<FlatList>(null);
 
   const [comment, setComment] = useState('');
-  const [showComment, setShowComment] = useState(false);
+  const [onPressComment, setonPressComment] = useState(false);
+  const [isInputFocused, setIsInputFocused] = useState(false);
   const [dynamicHeight, setDynamicHeight] = useState(0);
   const [comments, setComments] = useState<ICommentCard['comment'][]>([]);
 
@@ -34,7 +35,7 @@ const StrategyDetail = ({ strategyId }: any) => {
   };
 
   const openComment = () => {
-    setShowComment((prev) => !prev);
+    setonPressComment((prev) => !prev);
   };
 
   const EmptyState = () => (
@@ -49,22 +50,23 @@ const StrategyDetail = ({ strategyId }: any) => {
   const bottomInput = () => (
     <View style={styles.commentContainer}>
       <LQDImage />
-      <View style={[styles.commentInput, { height: inputheight }]}>
+      <View style={[styles.commentInput, isInputFocused && styles.focusedInput, { height: inputheight }]}>
         <TextInput
           placeholder="Write a comment"
           value={comment}
           onChangeText={(val) => setComment(val)}
           multiline={true}
           onContentSizeChange={(event) => setDynamicHeight(event.nativeEvent.contentSize.height)}
-          style={{ flex: 1 }}
-          autoFocus
+          style={styles.textInput}
+          onFocus={() => setIsInputFocused(true)}
+          onBlur={() => setIsInputFocused(false)}
         />
         {comment.length > 0 ? (
           <TouchableOpacity onPress={handleComment}>
-            <ArrowUpCircleIcon />
+            <ArrowUpCircleIcon height={25} width={25} />
           </TouchableOpacity>
         ) : (
-          <SmileEmojiIcon />
+          <SmileEmojiIcon height={25} width={25} />
         )}
       </View>
     </View>
@@ -72,7 +74,7 @@ const StrategyDetail = ({ strategyId }: any) => {
 
   return (
     <LQDScrollView refreshing={false} onRefresh={() => {}} style={styles.container}>
-      <LQDFeedCard showComment={openComment} feed={feeds[0]} />
+      <LQDFeedCard onPressComment={openComment} feed={feeds[0]} />
 
       <View style={styles.infoContainer}>
         <Text style={styles.sectionTitle}>Strategy Info</Text>
@@ -100,7 +102,7 @@ const StrategyDetail = ({ strategyId }: any) => {
       </View>
 
       <View style={{ flex: 1 }}>
-        <LQDBottomSheet show={showComment} title="Comments" variant="primary" onClose={openComment}>
+        <LQDBottomSheet show={onPressComment} title="Comments" variant="primary" onClose={openComment}>
           <View>
             <View style={styles.flatlistWrapper}>
               {!comments.length && <EmptyState />}
@@ -140,7 +142,7 @@ const styles = StyleSheet.create({
   lineThree: { height: 8, borderRadius: 10, marginTop: 10, width: '40%' },
   emptyStateWrapper: { alignItems: 'center', marginTop: 30 },
   commentContainer: {
-    bottom: 30,
+    bottom: 10,
     left: 0,
     right: 0,
     flexDirection: 'row',
@@ -163,10 +165,11 @@ const styles = StyleSheet.create({
     height: 44,
     borderRadius: 16,
     alignItems: 'center',
-    paddingHorizontal: 10,
+    paddingLeft: 10,
+    paddingRight: 6,
     flex: 1,
     flexDirection: 'row',
-    gap: 5,
+    gap: 3,
   },
   infoContainer: {
     paddingVertical: 10,
@@ -251,5 +254,12 @@ const styles = StyleSheet.create({
   buttonWrapper: {
     marginTop: 20,
   },
-  flatlistWrapper: { flex: 1, height: 400, maxHeight: 450 },
+  flatlistWrapper: { flex: 1, height: 320, maxHeight: 450 },
+  textInput: {
+    flex: 1,
+  },
+  focusedInput: {
+    borderColor: '#4691FE',
+    borderWidth: 1.2,
+  },
 });

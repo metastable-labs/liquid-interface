@@ -131,6 +131,8 @@ const Discover = () => {
         </Animated.View>
       )}
       <LQDFlatlist
+        refreshing={false}
+        onRefresh={() => {}}
         data={strategyies}
         showsVerticalScrollIndicator={false}
         renderItem={({ item }) => <LQDStrategyCard strategy={item} />}

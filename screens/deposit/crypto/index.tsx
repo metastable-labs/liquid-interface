@@ -9,6 +9,7 @@ import { CaretDownIcon, CoinsIcon, CopyIcon } from '@/assets/icons';
 import PaymentMethodSelection from '../method-selection';
 import sharedStyles from '../styles';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
+import { LQDButton } from '@/components';
 
 const CryptoDeposit = () => {
   const { smartAccountState } = useSystemFunctions();
@@ -22,6 +23,12 @@ const CryptoDeposit = () => {
     <>
       <View style={styles.root}>
         <View style={styles.container}>
+          <TouchableOpacity style={sharedStyles.paymentSelector} onPress={() => setShowBottomSheet(true)}>
+            <CoinsIcon />
+            <Text style={[sharedStyles.selectorText, sharedStyles.paymentSelectorText]}>Crypto</Text>
+            <CaretDownIcon />
+          </TouchableOpacity>
+
           <QRCode value={smartAccountState?.address || ''} size={206} color="#4691FE" />
 
           <View style={styles.addressContainer}>
@@ -33,16 +40,13 @@ const CryptoDeposit = () => {
               <Text style={styles.copyText}>{hasCopied ? 'Copied' : 'Copy'}</Text>
             </TouchableOpacity>
           </View>
-
-          <TouchableOpacity style={sharedStyles.paymentSelector} onPress={() => setShowBottomSheet(true)}>
-            <CoinsIcon />
-            <Text style={[sharedStyles.selectorText, sharedStyles.paymentSelectorText]}>Crypto</Text>
-            <CaretDownIcon />
-          </TouchableOpacity>
         </View>
         <View style={styles.infoContainer}>
-          <Image source={tokensImage} style={styles.infoImage} />
+          <Text style={styles.title}>Deposit from external wallet</Text>
           <Text style={styles.text}>Send USDC, ETH or any ERC20 token on Base</Text>
+          <View style={styles.buttonWrapper}>
+            <LQDButton variant="light" title="Connect wallet" />
+          </View>
         </View>
       </View>
 
@@ -103,13 +107,14 @@ const styles = StyleSheet.create({
   },
 
   infoContainer: {
-    flexDirection: 'row',
-    padding: 16,
+    paddingHorizontal: 20,
+    paddingVertical: 20,
     alignSelf: 'stretch',
-    gap: 16,
-    alignItems: 'center',
-    borderRadius: 20,
-    backgroundColor: '#EBF1FF',
+    gap: 12,
+    borderRadius: 12,
+    backgroundColor: '#F8FAFC',
+    borderWidth: 1,
+    borderColor: '#EAEEF4',
   },
 
   infoImage: {
@@ -117,12 +122,20 @@ const styles = StyleSheet.create({
     height: 18,
   },
 
-  text: {
-    flex: 1,
+  title: {
     color: '#162664',
+    fontSize: adjustFontSizeForIOS(16, 3),
+    fontWeight: '500',
+    fontFamily: 'AeonikMedium',
+  },
+  text: {
+    color: '#475569',
     fontSize: adjustFontSizeForIOS(14, 2),
     lineHeight: 18.48,
     textAlign: 'left',
     fontFamily: 'AeonikRegular',
+  },
+  buttonWrapper: {
+    marginTop: 10,
   },
 });

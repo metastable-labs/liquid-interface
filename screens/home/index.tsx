@@ -33,6 +33,10 @@ const Home = () => {
     getAllPools();
   });
 
+  const handleNavigate = () => {
+    router.push('/(create-strategy)/[strtegyId]/');
+  };
+
   return (
     <>
       <Pressable onPress={() => router.navigate('/(create-strategy)/create-strategy')} style={styles.addIcon}>
@@ -46,7 +50,7 @@ const Home = () => {
           refreshing={accountState.refreshing}
           data={feeds}
           showsVerticalScrollIndicator={false}
-          renderItem={({ item }) => <LQDFeedCard feed={item} />}
+          renderItem={({ item }) => <LQDFeedCard onNavigate={handleNavigate} onPressInvest={() => {}} feed={item} />}
           keyExtractor={(_, index) => index.toString()}
           showsHorizontalScrollIndicator={false}
           style={{ backgroundColor: '#fff' }}
