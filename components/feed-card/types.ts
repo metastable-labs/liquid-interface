@@ -1,5 +1,5 @@
 interface FeedCard {
-  feed: any;
+  feed: Strategy;
   showInvest?: boolean;
   showComment?: () => void;
 }

@@ -2,56 +2,38 @@ type Feeds = {
   strategies: Strategy[];
   nextCursor?: string;
   hasMore: boolean;
-  metadata?: {
-    totalStrategies: number;
-    totalTvl: string;
-    uniqueProtocols: number;
-  };
 };
 
 type Strategy = {
   id: string;
   name: string;
+  onchainId: number;
+  curatorAddress: string;
   description: string;
-  contractAddress: string;
-  curator: {
-    walletAddress: string;
-    username: string;
-    avatar?: string;
-  };
-  steps: {
-    stepIndex: number;
-    protocolAddress: string;
-    actionType: 'supply' | 'withdraw' | 'borrow' | 'repay' | 'stake' | 'unstake' | 'swap' | 'claim';
-    assetIn: string;
-    assetOut?: string;
-    amountRatio: number;
-  }[];
+  minDeposit: number;
+  maxTvl: number;
+  performanceFee: number;
+  steps: StrategyStep[];
   metrics: {
     tvl: string;
     repostCount: number;
     likeCount: number;
     commentCount: number;
-    averageDeposit: string;
+    apy: number;
+    totalDepositAmount: string;
   };
   assets: {
-    addresses: string[];
+    addresses: `0x${string}`[];
     count: number;
   };
-  protocols: {
-    addresses: string[];
-    count: number;
-    actionTypes: string[];
-  };
-
-  userInteraction?: {
-    // Present if user is authenticated
+  userInteraction: {
     hasLiked: boolean;
-    hasDeposited: boolean;
-    depositAmount?: string;
+    deposit: {
+      amount: number;
+    };
   };
   createdAt: string;
-  transactionHash: string;
+  transactionHash: `0x${string}`;
 };
 
 type PostCommentBody = {
@@ -75,6 +57,16 @@ type PostCommentResponse = {
   };
   likeCount: number;
   createdAt: string;
+};
+
+type StrategyStep = {
+  id: string;
+  stepIndex: number;
+  protocolAddress: `0x${string}`;
+  actionType: 'supply' | 'withdraw' | 'borrow' | 'repay' | 'stake' | 'unstake' | 'swap' | 'claim';
+  assetIn: `0x${string}`;
+  assetOut: `0x${string}`[];
+  amountRatio: number;
 };
 
 type LikeStrategyResponse = {

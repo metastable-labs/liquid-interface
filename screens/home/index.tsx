@@ -1,37 +1,27 @@
-import { useEffect } from 'react';
 import { StyleSheet, Platform, StatusBar as RNStatusBar, Pressable } from 'react-native';
 
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import { LQDFeedCard, LQDFlatlist } from '@/components';
 import { PlusIcon } from '@/assets/icons';
-import { useAccountActions } from '@/store/account/actions';
-import { usePoolActions } from '@/store/pools/actions';
-import { useOnMount } from '@/hooks/useOnMount';
 import Loader from './loader';
-import { feeds } from './dummy';
 import { useFeeds } from '@/services/feeds/queries';
 
 const Home = () => {
   const { router, poolsState, smartAccountState, accountState } = useSystemFunctions();
-  const { getTokens } = useAccountActions();
-  const { getAllPools } = usePoolActions();
-  const { status, data, error, isFetching } = useFeeds();
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isFetching, isError, error, refetch } = useFeeds();
 
-  const { loadingPools } = poolsState;
-  const { loading: loadingAccounts } = accountState;
-  const globalLoading = loadingPools || loadingAccounts;
+  const feeds = data?.pages.flatMap((page) => page.strategies) || [];
 
-  useEffect(
-    function fetchBalances() {
-      getTokens();
-    },
-    [smartAccountState.address]
-  );
+  const loadMoreFeeds = () => {
+    if (hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  };
 
-  useOnMount(function loadData() {
-    getAllPools();
-  });
+  if (isLoading) {
+    return <Loader />;
+  }
 
   return (
     <>
@@ -39,20 +29,18 @@ const Home = () => {
         <PlusIcon />
       </Pressable>
 
-      {globalLoading && <Loader />}
-
-      {!globalLoading && (
-        <LQDFlatlist
-          refreshing={accountState.refreshing}
-          data={feeds}
-          showsVerticalScrollIndicator={false}
-          renderItem={({ item }) => <LQDFeedCard feed={item} />}
-          keyExtractor={(_, index) => index.toString()}
-          showsHorizontalScrollIndicator={false}
-          style={{ backgroundColor: '#fff' }}
-          onRefresh={() => {}}
-        />
-      )}
+      <LQDFlatlist
+        refreshing={isFetching}
+        data={feeds}
+        showsVerticalScrollIndicator={false}
+        renderItem={({ item }) => <LQDFeedCard feed={item} />}
+        keyExtractor={(_, index) => index.toString()}
+        showsHorizontalScrollIndicator={false}
+        style={{ backgroundColor: '#fff' }}
+        onRefresh={refetch}
+        onEndReached={loadMoreFeeds}
+        isFetchingNextPage={isFetchingNextPage}
+      />
     </>
   );
 };

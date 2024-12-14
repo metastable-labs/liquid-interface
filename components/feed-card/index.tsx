@@ -1,10 +1,14 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import FastImage from 'react-native-fast-image';
+import Moment from 'moment';
+
 import { CommentIcon, FlashIcon, MoreIcon, ReTweetIcon, ShareIcon, SwatchIcon } from '@/assets/icons';
-import { adjustFontSizeForIOS } from '@/utils/helpers';
+import { adjustFontSizeForIOS, formatTimestamp, truncate } from '@/utils/helpers';
 import FeedStep from './feed-step';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
+
+const photo = 'https://pics.craiyon.com/2023-08-02/7a951cac85bd4aa2b0e70dbaabb8404e.webp';
 
 const LQDFeedCard = ({ feed, showInvest = true, showComment }: FeedCard) => {
   const { router } = useSystemFunctions();
@@ -13,7 +17,8 @@ const LQDFeedCard = ({ feed, showInvest = true, showComment }: FeedCard) => {
     router.push('/(create-strategy)/[strtegyId]/');
   };
 
-  const { steps, photo, username, address, date, percentage, estimate, title, description, commentCount, shareCount, flashCount } = feed;
+  const { steps, curatorAddress, createdAt, name, description, metrics } = feed;
+  const { commentCount, likeCount, repostCount, apy } = metrics;
 
   return (
     <Pressable style={styles.container} onPress={handlePress}>
@@ -32,11 +37,11 @@ const LQDFeedCard = ({ feed, showInvest = true, showComment }: FeedCard) => {
             <View style={styles.rightContentFlex}>
               <View>
                 <View style={styles.usernameFlex}>
-                  <Text style={styles.username}>{username}</Text>
-                  <Text style={styles.time}>{date}</Text>
+                  <Text style={styles.username}>Meister</Text>
+                  <Text style={styles.time}>{formatTimestamp(createdAt)}</Text>
                 </View>
                 <Text style={styles.address} numberOfLines={1}>
-                  {address}
+                  {truncate(curatorAddress)}
                 </Text>
               </View>
               <MoreIcon />
@@ -45,16 +50,16 @@ const LQDFeedCard = ({ feed, showInvest = true, showComment }: FeedCard) => {
         </View>
 
         <View style={styles.feedStep}>
-          {steps.map((step: IFeedStep, index: number) => (
-            <FeedStep key={index} {...step} isLast={step.isLast} />
+          {steps.map((step, index: number) => (
+            <FeedStep key={index} {...step} isLast={steps.length == index} />
           ))}
         </View>
 
         <View style={{ marginVertical: 20, gap: 15 }}>
-          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.title}>{name}</Text>
           <View style={{ flexDirection: 'row', gap: 10 }}>
-            <Text style={styles.estimate}>{estimate}</Text>
-            <Text style={styles.percentage}>{percentage}%</Text>
+            <Text style={styles.estimate}>Est. APY</Text>
+            <Text style={styles.percentage}>{apy}%</Text>
           </View>
           <Text style={styles.description}>{description}</Text>
           <Pressable>
@@ -76,11 +81,11 @@ const LQDFeedCard = ({ feed, showInvest = true, showComment }: FeedCard) => {
             </Pressable>
             <View style={styles.actionFlex}>
               <ReTweetIcon />
-              <Text style={styles.actionText}>{shareCount}</Text>
+              <Text style={styles.actionText}>{repostCount}</Text>
             </View>
             <View style={styles.actionFlex}>
               <FlashIcon />
-              <Text style={styles.actionText}>{flashCount}</Text>
+              <Text style={styles.actionText}>{likeCount}</Text>
             </View>
           </View>
           <ShareIcon />

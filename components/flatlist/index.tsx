@@ -20,7 +20,7 @@ const LQDFlatlist = forwardRef(
       contentContainerStyle,
       horizontal = false,
       style,
-      loader = false,
+      isFetchingNextPage = false,
     }: LQDFlatlistProps<T>,
     ref: React.Ref<FlatList<T>>
   ) => {
@@ -30,7 +30,7 @@ const LQDFlatlist = forwardRef(
       </View>
     );
 
-    const IsRefresh = () => {
+    const Refresh = () => {
       if (onRefresh) {
         return (
           <RefreshControl
@@ -53,10 +53,10 @@ const LQDFlatlist = forwardRef(
         renderItem={renderItem as ListRenderItem<T>}
         keyExtractor={keyExtractor}
         ListHeaderComponent={ListHeaderComponent}
-        ListFooterComponent={loader ? <DefaultFooterLoader /> : ListFooterComponent}
+        ListFooterComponent={isFetchingNextPage ? <DefaultFooterLoader /> : ListFooterComponent}
         ListEmptyComponent={ListEmptyComponent}
         refreshing={refreshing}
-        refreshControl={<IsRefresh />}
+        refreshControl={<Refresh />}
         onRefresh={onRefresh}
         onEndReached={onEndReached}
         onEndReachedThreshold={onEndReachedThreshold}
