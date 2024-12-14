@@ -13,6 +13,10 @@ const Profile = () => {
   const { router } = useSystemFunctions();
   const [copyProfileLink, setCopyProfileLink] = useState(false);
 
+  const handleNavigate = () => {
+    router.push('/(create-strategy)/[strtegyId]/');
+  };
+
   const handleCopyPL = () => {
     setCopyProfileLink((prev) => !prev);
 
@@ -26,7 +30,7 @@ const Profile = () => {
       <LQDFlatlist
         data={feeds}
         showsVerticalScrollIndicator={false}
-        renderItem={({ item }) => <LQDFeedCard onPressInvest={() => {}} feed={item} />}
+        renderItem={({ item }) => <LQDFeedCard feed={item} onPressInvest={() => {}} onNavigate={handleNavigate} />}
         keyExtractor={(_, index) => index.toString()}
         showsHorizontalScrollIndicator={false}
         style={{ backgroundColor: '#fff' }}
@@ -40,7 +44,7 @@ const Profile = () => {
       <LQDFlatlist
         data={feeds}
         showsVerticalScrollIndicator={false}
-        renderItem={({ item }) => <LQDFeedCard feed={item} />}
+        renderItem={({ item }) => <LQDFeedCard feed={item} onNavigate={handleNavigate} />}
         keyExtractor={(_, index) => index.toString()}
         showsHorizontalScrollIndicator={false}
         style={{ backgroundColor: '#fff' }}
@@ -54,7 +58,7 @@ const Profile = () => {
       <LQDFlatlist
         data={feeds}
         showsVerticalScrollIndicator={false}
-        renderItem={({ item }) => <LQDFeedCard feed={item} />}
+        renderItem={({ item }) => <LQDFeedCard feed={item} onNavigate={handleNavigate} />}
         keyExtractor={(_, index) => index.toString()}
         showsHorizontalScrollIndicator={false}
         style={{ backgroundColor: '#fff' }}
