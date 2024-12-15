@@ -1,10 +1,8 @@
-import { axiosInstance } from '@/init/axios';
-
-const strategyBaseUrl = '/strategy/strategies';
+import { strategyAxiosInstance } from '@/init/axios';
 
 const fetchComments = async (strategyId: string, pageParam?: string) => {
   return (
-    await axiosInstance.get<Comments>(`${strategyBaseUrl}/${strategyId}/comments`, {
+    await strategyAxiosInstance.get<Comments>(`$${strategyId}/comments`, {
       params: {
         cursor: pageParam,
         limit: 10,
@@ -13,4 +11,8 @@ const fetchComments = async (strategyId: string, pageParam?: string) => {
   ).data;
 };
 
-export { fetchComments };
+const commentOnAStrategy = async (strategyId: string, data: PostCommentBody) => {
+  return (await strategyAxiosInstance.post(`${strategyId}/comments`, data)).data;
+};
+
+export { fetchComments, commentOnAStrategy };

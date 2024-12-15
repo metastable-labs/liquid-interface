@@ -19,3 +19,8 @@ type CommentItem = {
   replyToId: string;
   replies: string[];
 };
+
+type PostCommentBody = {
+  content: string;
+  replyToId?: string;
+};

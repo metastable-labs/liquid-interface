@@ -1,6 +1,4 @@
-import { axiosInstance } from '@/init/axios';
-
-const strategyBaseUrl = '/strategy/strategies';
+import { axiosInstance, strategyAxiosInstance } from '@/init/axios';
 
 const fetchUserInfo = async (walletAddress: string) => {
   return (await axiosInstance.get<User>(`/users/${walletAddress}`)).data;
@@ -8,7 +6,7 @@ const fetchUserInfo = async (walletAddress: string) => {
 
 const fetchUserStrategies = async (walletAddress: string, pageParam?: string) => {
   return (
-    await axiosInstance.get<UserStrategies>(`${strategyBaseUrl}/user/${walletAddress}`, {
+    await strategyAxiosInstance.get<UserStrategies>(`user/${walletAddress}`, {
       params: {
         cursor: pageParam,
         limit: 10,
@@ -19,7 +17,7 @@ const fetchUserStrategies = async (walletAddress: string, pageParam?: string) =>
 
 const fetchUserDeposits = async (walletAddress: string, pageParam?: string) => {
   return (
-    await axiosInstance.get<UserStrategies>(`${strategyBaseUrl}/user/${walletAddress}/deposits`, {
+    await strategyAxiosInstance.get<UserStrategies>(`user/${walletAddress}/deposits`, {
       params: {
         cursor: pageParam,
         limit: 10,
@@ -30,7 +28,7 @@ const fetchUserDeposits = async (walletAddress: string, pageParam?: string) => {
 
 const fetchUserLikes = async (walletAddress: string, pageParam?: string) => {
   return (
-    await axiosInstance.get<UserStrategies>(`${strategyBaseUrl}/user/${walletAddress}/liked`, {
+    await strategyAxiosInstance.get<UserStrategies>(`user/${walletAddress}/liked`, {
       params: {
         cursor: pageParam,
         limit: 10,
