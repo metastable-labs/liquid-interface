@@ -36,29 +36,6 @@ type Strategy = {
   transactionHash: `0x${string}`;
 };
 
-type PostCommentBody = {
-  content: string;
-  replyToId?: string;
-};
-
-type PostCommentResponse = {
-  id: string;
-  content: string;
-  author: {
-    walletAddress: string;
-    username: string;
-    avatar?: string;
-  };
-  replyTo?: {
-    id: string;
-    author: {
-      username: string;
-    };
-  };
-  likeCount: number;
-  createdAt: string;
-};
-
 type StrategyStep = {
   id: string;
   strategyId: string;

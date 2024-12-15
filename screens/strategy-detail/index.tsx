@@ -8,7 +8,7 @@ import StatsCard from './stats-card';
 import Comments from './comments';
 import Loader from '../home/loader';
 
-const StrategyDetail = ({ strategyId }: any) => {
+const StrategyDetail = ({ strategyId }: { strategyId: string }) => {
   const { data, isLoading, isFetching, isError, refetch } = useFeed(strategyId);
 
   const [showCommentSection, setShowCommentSection] = useState(false);
@@ -85,7 +85,7 @@ const StrategyDetail = ({ strategyId }: any) => {
         </View>
       </View>
 
-      <Comments openCloseComment={openCloseComment} showCommentSection={showCommentSection} />
+      <Comments strategyId={strategyId} openCloseComment={openCloseComment} showCommentSection={showCommentSection} />
     </LQDScrollView>
   );
 };

@@ -28,7 +28,6 @@ const UserRepostStrategies = () => {
       showsVerticalScrollIndicator={false}
       renderItem={({ item }) => <LQDFeedCard feed={item} />}
       keyExtractor={(_, index) => index.toString()}
-      showsHorizontalScrollIndicator={false}
       style={{ backgroundColor: '#fff' }}
       onRefresh={refetch}
       onEndReached={loadMoreStrategies}

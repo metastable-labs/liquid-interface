@@ -37,7 +37,7 @@ const Home = () => {
         renderItem={({ item }) => <LQDFeedCard feed={item} />}
         keyExtractor={(_, index) => index.toString()}
         showsHorizontalScrollIndicator={false}
-        style={{ backgroundColor: '#fff' }}
+        contentContainerStyle={styles.listContainer}
         onRefresh={refetch}
         onEndReached={loadMoreFeeds}
         ListFooterComponent={isFetchingNextPage ? <DefaultFooterLoader /> : null}
@@ -59,6 +59,11 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: 'space-between',
     paddingBottom: 150,
+  },
+
+  listContainer: {
+    backgroundColor: '#fff',
+    paddingBottom: 100,
   },
 
   balanceAndActionContainer: {
