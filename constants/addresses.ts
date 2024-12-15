@@ -32,4 +32,32 @@ export const CONNECTORS_BASE: Address[] = [
   '0xd9aAEc86B65D86f6A7B5B1b0c42FFA531710b6CA', // USDbC
 ];
 
+export const protocolList: ProtocolItem[] = [
+  {
+    id: '1',
+    icon: 'moonwell',
+    title: 'Moonwell',
+    address: '0x123456789abcdef123456789abcdef1234567890',
+  },
+  {
+    id: '2',
+    icon: 'aerodrome',
+    title: 'Aerodrome',
+    address: '0xabcdefabcdefabcdefabcdefabcdefabcdefabcd',
+  },
+  {
+    id: '3',
+    icon: 'morpho',
+    title: 'Morpho',
+    address: '0x789abcdef123456789abcdef123456789abcdef12',
+  },
+  // this is dummy
+  {
+    id: '4',
+    icon: 'moonwell',
+    title: 'Moonwell',
+    address: '0x3234567890123456789012345678901234567890',
+  },
+];
+
 export const OFFCHAIN_ORACLE_ADDRESS: Address = '0xf224a25453D76A41c4427DD1C05369BC9f498444' as Address;

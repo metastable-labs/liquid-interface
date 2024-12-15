@@ -1,11 +1,12 @@
-import { StyleSheet, Platform, StatusBar as RNStatusBar, Pressable } from 'react-native';
+import { StyleSheet, Platform, StatusBar as RNStatusBar, Pressable, FlatList } from 'react-native';
 
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
-import { LQDFeedCard, LQDFlatlist } from '@/components';
+import { LQDFeedCard } from '@/components';
 import { PlusIcon } from '@/assets/icons';
 import Loader from './loader';
 import { useFeeds } from '@/services/feeds/queries';
+import DefaultFooterLoader from '@/components/flatlist/footer-loader';
 
 const Home = () => {
   const { router } = useSystemFunctions();
@@ -23,27 +24,23 @@ const Home = () => {
     return <Loader />;
   }
 
-  const handleNavigate = () => {
-    router.push('/(create-strategy)/[strtegyId]/');
-  };
-
   return (
     <>
-      <Pressable onPress={() => router.navigate('/(create-strategy)/create-strategy')} style={styles.addIcon}>
+      <Pressable onPress={() => router.navigate('/(strategy)/create-strategy')} style={styles.addIcon}>
         <PlusIcon />
       </Pressable>
 
-      <LQDFlatlist
+      <FlatList
         refreshing={isFetching}
         data={feeds}
         showsVerticalScrollIndicator={false}
-        renderItem={({ item }) => <LQDFeedCard feed={item as Strategy} onNavigate={handleNavigate} onPressInvest={() => {}} />}
+        renderItem={({ item }) => <LQDFeedCard feed={item} />}
         keyExtractor={(_, index) => index.toString()}
         showsHorizontalScrollIndicator={false}
         style={{ backgroundColor: '#fff' }}
         onRefresh={refetch}
         onEndReached={loadMoreFeeds}
-        isFetchingNextPage={isFetchingNextPage}
+        ListFooterComponent={isFetchingNextPage ? <DefaultFooterLoader /> : null}
       />
     </>
   );

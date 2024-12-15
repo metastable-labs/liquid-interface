@@ -1,10 +1,8 @@
 interface FeedCard {
   feed: Strategy;
-  onPressComment?: () => void;
-  onPressInvest?: () => void;
-  onPressShare?: () => void;
-  onPressLike?: () => void;
   onNavigate?: () => void;
+  handleCommentPress?: () => void;
+  isDetailPage?: boolean;
 }
 
 interface IFeedStep {

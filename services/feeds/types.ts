@@ -61,12 +61,15 @@ type PostCommentResponse = {
 
 type StrategyStep = {
   id: string;
+  strategyId: string;
   stepIndex: number;
   protocolAddress: `0x${string}`;
-  actionType: 'supply' | 'withdraw' | 'borrow' | 'repay' | 'stake' | 'unstake' | 'swap' | 'claim';
+  actionType: 'supply' | 'borrow' | 'stake' | 'deposit';
   assetIn: `0x${string}`;
   assetOut: `0x${string}`[];
   amountRatio: number;
+  blockNumber: BigInt;
+  transactionHash: `0x${string}`;
 };
 
 type LikeStrategyResponse = {

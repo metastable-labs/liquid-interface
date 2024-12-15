@@ -1,35 +1,56 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React, { useState } from 'react';
 import FastImage from 'react-native-fast-image';
 
-import { CommentIcon, FlashIcon, MoreIcon, ReTweetIcon, ShareIcon, SwatchIcon } from '@/assets/icons';
+import { CommentIcon, FlashIcon, MoreIcon, ReTweetIcon, ShareIcon } from '@/assets/icons';
 import { adjustFontSizeForIOS, formatTimestamp, truncate } from '@/utils/helpers';
 import FeedStep from './feed-step';
+import useSystemFunctions from '@/hooks/useSystemFunctions';
 
 const photo = 'https://pics.craiyon.com/2023-08-02/7a951cac85bd4aa2b0e70dbaabb8404e.webp';
 const maxDescriptionLength = 40;
 
-const LQDFeedCard = ({ feed, onPressInvest, onPressComment, onPressShare, onPressLike, onNavigate }: FeedCard) => {
+const LQDFeedCard = ({ feed, isDetailPage, handleCommentPress }: FeedCard) => {
+  const { router } = useSystemFunctions();
   const [isExpanded, setIsExpanded] = useState(false);
 
   const handleToggle = () => {
     setIsExpanded(!isExpanded);
   };
 
-  const { steps, curatorAddress, createdAt, name, description, metrics } = feed;
+  const { steps, curatorAddress, createdAt, name, description, metrics, userInteraction, id } = feed;
   const { commentCount, likeCount, repostCount, apy } = metrics;
 
   const truncatedDescription = description.substring(0, maxDescriptionLength);
 
-  const handlePressAction = (action?: () => void) => {
-    action?.();
-    if (!action) {
-      onNavigate?.();
-    }
+  const handleInvestPress = () => {
+    console.log('Invest');
+  };
+
+  const handleRepostPress = () => {
+    console.log('Repost');
+  };
+
+  const handleLikePress = () => {
+    console.log('Like');
+  };
+
+  const handleSharePress = () => {
+    console.log('Share');
+  };
+
+  const handleMorePress = () => {
+    console.log('More');
+  };
+
+  const handleNavigate = () => {
+    if (isDetailPage) return;
+
+    router.push(`/details/${id}`);
   };
 
   return (
-    <Pressable style={styles.container} onPress={() => handlePressAction(onNavigate)}>
+    <Pressable style={styles.container} onPress={handleNavigate}>
       <View>
         <View style={{ flexDirection: 'row', gap: 5 }}>
           <FastImage
@@ -52,14 +73,17 @@ const LQDFeedCard = ({ feed, onPressInvest, onPressComment, onPressShare, onPres
                   {truncate(curatorAddress)}
                 </Text>
               </View>
-              <MoreIcon />
+
+              <TouchableOpacity onPress={handleMorePress}>
+                <MoreIcon />
+              </TouchableOpacity>
             </View>
           </View>
         </View>
 
         <View style={styles.feedStep}>
           {steps.map((step, index: number) => (
-            <FeedStep key={index} {...step} isLast={steps.length == index} />
+            <FeedStep key={index} step={step} isLast={steps.length - 1 == index} />
           ))}
         </View>
 
@@ -69,45 +93,48 @@ const LQDFeedCard = ({ feed, onPressInvest, onPressComment, onPressShare, onPres
             <Text style={styles.estimate}>Est. APY</Text>
             <Text style={styles.percentage}>{apy}%</Text>
           </View>
-          <Text style={styles.description}>{isExpanded ? description : truncatedDescription}</Text>
+          <Text style={styles.description}>{isExpanded ? description : `${truncatedDescription}...`}</Text>
 
-          {description.length > maxDescriptionLength && !isExpanded && (
-            <Pressable onPress={handleToggle}>
+          {isDetailPage && description.length > maxDescriptionLength && !isExpanded && (
+            <TouchableOpacity onPress={handleToggle}>
               <Text style={styles.seeMore}>See more...</Text>
-            </Pressable>
+            </TouchableOpacity>
           )}
+
           {isExpanded && (
-            <Pressable onPress={handleToggle}>
+            <TouchableOpacity onPress={handleToggle}>
               <Text style={styles.seeMore}>See less...</Text>
-            </Pressable>
+            </TouchableOpacity>
           )}
         </View>
 
         <View style={styles.bottomActionContainer}>
           <View style={styles.bottomActionContainer}>
             <View style={styles.bottomActionInnerContainer}>
-              {onPressInvest && (
-                <Pressable style={styles.investBtn} onPress={() => handlePressAction(onPressInvest)}>
-                  <Text style={styles.invest}>Invest</Text>
-                </Pressable>
-              )}
+              <TouchableOpacity style={styles.investBtn} onPress={handleInvestPress}>
+                <Text style={styles.invest}>Invest</Text>
+              </TouchableOpacity>
 
-              <Pressable onPress={() => handlePressAction(onPressComment)} style={styles.actionFlex}>
+              <TouchableOpacity onPress={handleCommentPress} style={styles.actionFlex}>
                 <CommentIcon />
                 <Text style={styles.actionText}>{commentCount}</Text>
-              </Pressable>
-              <Pressable onPress={() => handlePressAction(onPressShare)} style={styles.actionFlex}>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={handleRepostPress} style={styles.actionFlex}>
                 <ReTweetIcon />
                 <Text style={styles.actionText}>{repostCount}</Text>
-              </Pressable>
-              <Pressable onPress={() => handlePressAction(onPressLike)} style={styles.actionFlex}>
-                <FlashIcon />
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={handleLikePress} style={styles.actionFlex}>
+                {userInteraction?.hasLiked ? <FlashIcon fill="#F2AE40" bg="#F2AE40" /> : <FlashIcon />}
+
                 <Text style={styles.actionText}>{likeCount}</Text>
-              </Pressable>
+              </TouchableOpacity>
             </View>
-            <Pressable>
+
+            <TouchableOpacity onPress={handleSharePress}>
               <ShareIcon />
-            </Pressable>
+            </TouchableOpacity>
           </View>
         </View>
       </View>

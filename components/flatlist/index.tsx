@@ -34,7 +34,7 @@ const LQDFlatlist = forwardRef(
       if (onRefresh) {
         return (
           <RefreshControl
-            refreshing={refreshing}
+            refreshing={refreshing || false}
             onRefresh={onRefresh}
             progressBackgroundColor="white"
             tintColor="#4691FE"

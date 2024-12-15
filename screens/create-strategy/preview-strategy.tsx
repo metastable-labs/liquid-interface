@@ -3,11 +3,11 @@ import { StyleSheet, Text, View } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 
 import { LQDButton } from '@/components';
-import FeedStep from '@/components/feed-card/feed-step';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import Loader from './loader';
 import { useWriteFeed } from '@/services/feeds/queries';
+import PreviewFeedStep from '@/components/feed-card/preview-feed-step';
 
 const SUPPLY = 0; // Supply assets
 const WITHDRAW = 1; // Withdraw assets
@@ -91,7 +91,7 @@ const RreviewStrategy = () => {
       <View style={{ flex: 1 }}>
         <View style={styles.feedStep}>
           {strategySteps().map((step, index: number) => (
-            <FeedStep key={index} {...step} isLast={step.isLast} />
+            <PreviewFeedStep key={index} {...step} isLast={step.isLast} />
           ))}
         </View>
 

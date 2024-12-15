@@ -11,9 +11,10 @@ const LQDStrategyCard = ({ strategy, navigationVariant = 'primary' }: IStrategyC
   const { router, pathname } = useSystemFunctions();
   const { searchIsFocused } = useAppActions();
   const { id } = strategy;
-  const onPress = () => {
+
+  const onPress = (strategyId: string) => {
     searchIsFocused(false);
-    router.push('/(create-strategy)/[strtegyId]/');
+    router.push(`/details/${strategyId}`);
   };
 
   const avatar = strategy.image;
@@ -23,7 +24,7 @@ const LQDStrategyCard = ({ strategy, navigationVariant = 'primary' }: IStrategyC
   const steps = strategy.steps;
 
   return (
-    <TouchableOpacity activeOpacity={0.5} onPress={onPress} style={styles.container}>
+    <TouchableOpacity activeOpacity={0.5} onPress={() => onPress(strategy.id)} style={styles.container}>
       <View style={[styles.iconContainer, { width: '25%' }]}>
         <LQDImage height={24} width={24} src={avatar} />
         <Text numberOfLines={1} style={styles.username}>

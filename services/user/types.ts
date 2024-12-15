@@ -16,45 +16,7 @@ type User = {
 };
 
 type UserStrategies = {
-  items: {
-    id: string;
-    name: string;
-    description: string;
-    metrics: {
-      tvl: string;
-      depositorCount: number;
-      likeCount: number;
-    };
-    createdAt: string;
-    transactionHash: string;
-  }[];
-  nextCursor?: string;
-  hasMore: boolean;
-};
-
-type UserDeposits = {
-  items: {
-    strategyId: string;
-    strategyName: string;
-    amount: string;
-    status: 'active' | 'withdrawn';
-    depositedAt: string;
-    transactionHash: string;
-  }[];
-  nextCursor?: string;
-  hasMore: boolean;
-};
-
-type UserLikes = {
-  items: {
-    strategyId: string;
-    strategyName: string;
-    likedAt: string;
-    curator: {
-      walletAddress: string;
-      username: string;
-    };
-  }[];
+  data: Strategy[];
   nextCursor?: string;
   hasMore: boolean;
 };

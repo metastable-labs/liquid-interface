@@ -6,8 +6,9 @@ import { LQDActionCard, LQDAssetSelection, LQDBottomSheet, LQDButton, LQDProtoco
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import useAppActions from '@/store/app/actions';
 import { TokenItem } from '@/store/account/types';
+import { protocolList } from '@/constants/addresses';
 import ICONS from '@/constants/icons';
-import { actionList, protocolList } from '../discover/dummy';
+import { actionList } from '../discover/dummy';
 
 const ActionItem = ({ title, label, icon, action }: IActionItem) => {
   return (

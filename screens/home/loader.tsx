@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Platform, StatusBar as RNStatusBar } from 'react-native';
+import { View, StyleSheet, Platform, StatusBar as RNStatusBar } from 'react-native';
 import React from 'react';
 import { LQShrimeLoader } from '@/components';
 import { createArrayWithIndexes } from '@/utils/helpers';

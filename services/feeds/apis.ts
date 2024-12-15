@@ -18,7 +18,7 @@ const fetchFeeds = async (pageParam?: string, sort?: 'latest' | 'trending') => {
 };
 
 const fetchFeed = async (strategyId: string) => {
-  return (await axiosInstance.get<Strategy>(`${strategyBaseUrl}/:${strategyId}`)).data;
+  return (await axiosInstance.get<Strategy>(`${strategyBaseUrl}/${strategyId}`)).data;
 };
 
 const commentOnAStrategy = async (strategyId: string, data: PostCommentBody) => {
