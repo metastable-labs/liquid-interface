@@ -1,47 +1,48 @@
-import { View, StyleSheet, Text, TouchableOpacity, Pressable } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import useAppActions from '@/store/app/actions';
 import LQDImage from '../image';
-import { IStrategyCard } from './types';
 import { MoneysIcon } from '@/assets/icons';
 
-const LQDStrategyCard = ({ strategy, navigationVariant = 'primary' }: IStrategyCard) => {
-  const { router, pathname } = useSystemFunctions();
+const LQDStrategyCard = (strategy: Strategy) => {
+  const { router } = useSystemFunctions();
   const { searchIsFocused } = useAppActions();
-  const { id } = strategy;
+
+  const { id, metrics, steps } = strategy;
 
   const onPress = (strategyId: string) => {
     searchIsFocused(false);
     router.push(`/details/${strategyId}`);
   };
 
-  const avatar = strategy.image;
-  const username = strategy.username;
-  const tvl = strategy.tvl;
-  const estimate = strategy.estimate;
-  const steps = strategy.steps;
+  const username = 'Meister';
+  const tvl = metrics.tvl;
+  const apy = metrics.apy;
 
   return (
     <TouchableOpacity activeOpacity={0.5} onPress={() => onPress(strategy.id)} style={styles.container}>
-      <View style={[styles.iconContainer, { width: '25%' }]}>
-        <LQDImage height={24} width={24} src={avatar} />
+      <View style={[styles.iconContainer, styles.profileContainer]}>
+        <LQDImage height={24} width={24} />
         <Text numberOfLines={1} style={styles.username}>
-          {username}
+          @{username}
         </Text>
       </View>
-      <View style={styles.iconContainer}>
+
+      <View style={[styles.iconContainer, styles.actionsContainer]}>
         <MoneysIcon fill="#253EA7" />
         <Text numberOfLines={1} style={styles.actions}>
-          {steps.length} actions...
+          {steps.length} action{steps.length > 1 ? 's' : ''}...
         </Text>
       </View>
-      <View style={styles.iconContainer}>
+
+      <View style={[styles.iconContainer, styles.apyContainer]}>
         <Text style={styles.key}>Est. APY</Text>
-        <Text style={styles.value}>{estimate}</Text>
+        <Text style={styles.value}>{apy}%</Text>
       </View>
-      <View style={styles.iconContainer}>
+
+      <View style={[styles.iconContainer, styles.tvlContainer]}>
         <Text style={styles.key}>TVL</Text>
         <Text style={styles.value}>{tvl}</Text>
       </View>
@@ -54,9 +55,9 @@ export default LQDStrategyCard;
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignSelf: 'stretch',
     alignItems: 'center',
-    gap: 8 + 15,
     paddingHorizontal: 14,
     paddingVertical: 12,
     borderRadius: 10,
@@ -67,6 +68,22 @@ const styles = StyleSheet.create({
 
   iconContainer: {
     gap: 5,
+  },
+
+  profileContainer: {
+    width: '25%',
+  },
+
+  actionsContainer: {
+    width: '30%',
+  },
+
+  apyContainer: {
+    width: '22%',
+  },
+
+  tvlContainer: {
+    width: '19%',
   },
 
   icon: {
@@ -95,7 +112,7 @@ const styles = StyleSheet.create({
   },
   value: {
     color: '#4691FE',
-    fontSize: adjustFontSizeForIOS(14, 2),
+    fontSize: adjustFontSizeForIOS(13, 2),
     fontWeight: '500',
     fontFamily: 'ClashDisplayMedium',
     lineHeight: 15.6,
@@ -103,7 +120,7 @@ const styles = StyleSheet.create({
   },
   actions: {
     color: '#64748B',
-    fontSize: adjustFontSizeForIOS(14, 2),
+    fontSize: adjustFontSizeForIOS(13, 2),
     fontWeight: '500',
     lineHeight: 16.12,
     fontFamily: 'ClashDisplayMedium',
