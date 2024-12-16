@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { LQDButton, LQDFeedCard, LQDScrollView } from '@/components';
 import { DiscoverUSDIcon } from '@/assets/icons';
-import { adjustFontSizeForIOS } from '@/utils/helpers';
+import { adjustFontSizeForIOS, formatNumberWithSuffix } from '@/utils/helpers';
 import { useFeed } from '@/services/feeds/queries';
 import StatsCard from './stats-card';
 import Comments from './comments';
@@ -22,7 +22,7 @@ const StrategyDetail = ({ strategyId }: { strategyId: string }) => {
       id: '1',
       variant: 'locked',
       title: 'Total value locked',
-      value: '$1.3M',
+      value: `$${formatNumberWithSuffix(data?.metrics.tvl || 0)}`,
       active: false,
     },
     {
