@@ -1,5 +1,6 @@
 import { decodeAbiParameters, formatUnits, Hex, hexToBigInt } from 'viem';
 import { Platform } from 'react-native';
+import moment from 'moment';
 
 const formatAmount = (amount?: number | string, decimals = 4): number => {
   if (!amount) return 0;
@@ -136,7 +137,7 @@ const formatInputAmount = (value: string): string => {
   return newValue;
 };
 
-export const formatSymbol = (symbol: string, showFullSymbol?: boolean) => {
+const formatSymbol = (symbol: string, showFullSymbol?: boolean) => {
   if (!showFullSymbol) {
     return symbol.split('-')[1].replace('/', ' / ');
   }
@@ -157,7 +158,6 @@ const createArrayWithIndexes = (length: number): number[] => {
 };
 
 function splitSignature(signature: string): { r: bigint; s: bigint } {
-  console.log(signature, 'from splitting');
   let [r, s] = decodeAbiParameters([{ type: 'uint256' }, { type: 'uint256' }], signature as Hex);
   const n = hexToBigInt('0xffffffff00000000ffffffffffffffffbce6faada7179e84f3b9cac2fc632551');
   if (s > n / 2n) {
@@ -173,6 +173,19 @@ export const findQuoteIndices = (input: string): { beforeType: bigint; beforeCha
     beforeType: beforeTypeIndex,
     beforeChallenge: beforeChallengeIndex,
   };
+};
+
+const formatTimestamp = (timestamp: string | number | Date): string => {
+  const now = moment();
+  const time = moment(timestamp);
+
+  const diffInHours = now.diff(time, 'hours');
+
+  if (diffInHours < 24) {
+    return time.fromNow(); // e.g., "1hr ago", "few secs ago"
+  } else {
+    return time.format('MMM D, YYYY'); // e.g., "Dec 13, 2024"
+  }
 };
 
 export {
@@ -194,4 +207,5 @@ export {
   formatSymbol,
   createArrayWithIndexes,
   splitSignature,
+  formatTimestamp,
 };

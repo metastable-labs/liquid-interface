@@ -1,62 +1,47 @@
-import { useEffect } from 'react';
-import { StyleSheet, Platform, StatusBar as RNStatusBar, Pressable } from 'react-native';
+import { StyleSheet, Platform, StatusBar as RNStatusBar, Pressable, FlatList } from 'react-native';
 
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
-import { LQDFeedCard, LQDFlatlist } from '@/components';
+import { LQDFeedCard } from '@/components';
 import { PlusIcon } from '@/assets/icons';
-import { useAccountActions } from '@/store/account/actions';
-import { usePoolActions } from '@/store/pools/actions';
-import { useOnMount } from '@/hooks/useOnMount';
 import Loader from './loader';
-import { feeds } from './dummy';
 import { useFeeds } from '@/services/feeds/queries';
+import DefaultFooterLoader from '@/components/flatlist/footer-loader';
 
 const Home = () => {
-  const { router, poolsState, smartAccountState, accountState } = useSystemFunctions();
-  const { getTokens } = useAccountActions();
-  const { getAllPools } = usePoolActions();
-  const { status, data, error, isFetching } = useFeeds();
+  const { router } = useSystemFunctions();
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isFetching, isError, error, refetch } = useFeeds();
 
-  const { loadingPools } = poolsState;
-  const { loading: loadingAccounts } = accountState;
-  const globalLoading = loadingPools || loadingAccounts;
+  const feeds = data?.pages.flatMap((page) => page.strategies) || [];
 
-  useEffect(
-    function fetchBalances() {
-      getTokens();
-    },
-    [smartAccountState.address]
-  );
-
-  useOnMount(function loadData() {
-    getAllPools();
-  });
-
-  const handleNavigate = () => {
-    router.push('/(create-strategy)/[strtegyId]/');
+  const loadMoreFeeds = () => {
+    if (hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
   };
+
+  if (isLoading) {
+    return <Loader />;
+  }
 
   return (
     <>
-      <Pressable onPress={() => router.navigate('/(create-strategy)/create-strategy')} style={styles.addIcon}>
+      <Pressable onPress={() => router.navigate('/(strategy)/create-strategy')} style={styles.addIcon}>
         <PlusIcon />
       </Pressable>
 
-      {globalLoading && <Loader />}
-
-      {!globalLoading && (
-        <LQDFlatlist
-          refreshing={accountState.refreshing}
-          data={feeds}
-          showsVerticalScrollIndicator={false}
-          renderItem={({ item }) => <LQDFeedCard onNavigate={handleNavigate} onPressInvest={() => {}} feed={item} />}
-          keyExtractor={(_, index) => index.toString()}
-          showsHorizontalScrollIndicator={false}
-          style={{ backgroundColor: '#fff' }}
-          onRefresh={() => {}}
-        />
-      )}
+      <FlatList
+        refreshing={isFetching}
+        data={feeds}
+        showsVerticalScrollIndicator={false}
+        renderItem={({ item }) => <LQDFeedCard feed={item} />}
+        keyExtractor={(_, index) => index.toString()}
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.listContainer}
+        onRefresh={refetch}
+        onEndReached={loadMoreFeeds}
+        ListFooterComponent={isFetchingNextPage ? <DefaultFooterLoader /> : null}
+      />
     </>
   );
 };
@@ -74,6 +59,11 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: 'space-between',
     paddingBottom: 150,
+  },
+
+  listContainer: {
+    backgroundColor: '#fff',
+    paddingBottom: 100,
   },
 
   balanceAndActionContainer: {

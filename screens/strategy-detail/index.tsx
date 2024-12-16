@@ -1,80 +1,64 @@
-import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import React, { useRef, useState } from 'react';
-import { LQDBottomSheet, LQDButton, LQDFeedCard, LQDFlatlist, LQDImage, LQDScrollView, LQShrimeLoader } from '@/components';
-import { feeds, strategyInfo } from '../home/dummy';
-import { ArrowUpCircleIcon, DiscoverUSDIcon, FlashIcon, SmileEmojiIcon } from '@/assets/icons';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { LQDButton, LQDFeedCard, LQDScrollView } from '@/components';
+import { DiscoverUSDIcon } from '@/assets/icons';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
+import { useFeed } from '@/services/feeds/queries';
 import StatsCard from './stats-card';
-import CommentCard from './comment-card';
+import Comments from './comments';
+import Loader from '../home/loader';
 
-const StrategyDetail = ({ strategyId }: any) => {
-  const flatListRef = useRef<FlatList>(null);
+const StrategyDetail = ({ strategyId }: { strategyId: string }) => {
+  const { data, isLoading, isFetching, isError, refetch } = useFeed(strategyId);
 
-  const [comment, setComment] = useState('');
-  const [onPressComment, setonPressComment] = useState(false);
-  const [isInputFocused, setIsInputFocused] = useState(false);
-  const [dynamicHeight, setDynamicHeight] = useState(0);
-  const [comments, setComments] = useState<ICommentCard['comment'][]>([]);
+  const [showCommentSection, setShowCommentSection] = useState(false);
 
-  const inputheight = Math.min(Math.max(44, dynamicHeight), 80);
-
-  const handleComment = () => {
-    const payload = {
-      content: comment,
-      date: '2h',
-      likes: 34,
-      username: '@Njoku',
-      image: '',
-    };
-    if (comment.trim().length > 0) {
-      setComments((prev: any) => [...prev, payload]);
-      setComment('');
-    }
-
-    flatListRef.current?.scrollToEnd({ animated: true });
+  const openCloseComment = () => {
+    setShowCommentSection((prev) => !prev);
   };
 
-  const openComment = () => {
-    setonPressComment((prev) => !prev);
-  };
+  const strategyInfo = [
+    {
+      id: '1',
+      variant: 'locked',
+      title: 'Total value locked',
+      value: '$1.3M',
+      active: false,
+    },
+    {
+      id: '2',
+      variant: 'risk',
+      title: 'Risk profile',
+      value: 'Stable',
+      active: true,
+    },
+    {
+      id: '3',
+      variant: 'deposit',
+      title: 'No. of deposits',
+      value: Number(data?.metrics.totalDepositAmount || 0).toLocaleString(),
+      active: false,
+    },
+    {
+      id: '4',
+      variant: 'curator',
+      title: 'Curator fee',
+      value: `${data?.performanceFee}%`,
+      active: false,
+    },
+  ];
 
-  const EmptyState = () => (
-    <View style={styles.emptyStateWrapper}>
-      <Text style={styles.emptyText}>No comments</Text>
-      <LQShrimeLoader style={styles.lineOne} />
-      <LQShrimeLoader style={styles.lineTwo} />
-      <LQShrimeLoader style={styles.lineThree} />
-    </View>
-  );
+  if (isLoading) {
+    return <Loader />;
+  }
 
-  const bottomInput = () => (
-    <View style={styles.commentContainer}>
-      <LQDImage />
-      <View style={[styles.commentInput, isInputFocused && styles.focusedInput, { height: inputheight }]}>
-        <TextInput
-          placeholder="Write a comment"
-          value={comment}
-          onChangeText={(val) => setComment(val)}
-          multiline={true}
-          onContentSizeChange={(event) => setDynamicHeight(event.nativeEvent.contentSize.height)}
-          style={styles.textInput}
-          onFocus={() => setIsInputFocused(true)}
-          onBlur={() => setIsInputFocused(false)}
-        />
-        {comment.length > 0 ? (
-          <TouchableOpacity onPress={handleComment}>
-            <ArrowUpCircleIcon height={25} width={25} />
-          </TouchableOpacity>
-        ) : (
-          <SmileEmojiIcon height={25} width={25} />
-        )}
-      </View>
-    </View>
-  );
+  if (isError) {
+    return <Text>error</Text>;
+  }
 
   return (
-    <LQDScrollView refreshing={false} onRefresh={() => {}} style={styles.container}>
-      <LQDFeedCard onPressComment={openComment} feed={feeds[0]} />
+    <LQDScrollView refreshing={isFetching} onRefresh={refetch} style={styles.container}>
+      <LQDFeedCard handleCommentPress={openCloseComment} feed={data!} isDetailPage={true} />
 
       <View style={styles.infoContainer}>
         <Text style={styles.sectionTitle}>Strategy Info</Text>
@@ -101,27 +85,7 @@ const StrategyDetail = ({ strategyId }: any) => {
         </View>
       </View>
 
-      <View style={{ flex: 1 }}>
-        <LQDBottomSheet show={onPressComment} title="Comments" variant="primary" onClose={openComment}>
-          <View>
-            <View style={styles.flatlistWrapper}>
-              {!comments.length && <EmptyState />}
-              {comments.length > 0 && (
-                <LQDFlatlist
-                  ref={flatListRef}
-                  data={comments}
-                  showsVerticalScrollIndicator={false}
-                  renderItem={({ item }: any) => <CommentCard comment={item} />}
-                  keyExtractor={(_, index) => index.toString()}
-                  showsHorizontalScrollIndicator={false}
-                  contentContainerStyle={styles.commentContainerStyle}
-                />
-              )}
-            </View>
-            {bottomInput()}
-          </View>
-        </LQDBottomSheet>
-      </View>
+      <Comments strategyId={strategyId} openCloseComment={openCloseComment} showCommentSection={showCommentSection} />
     </LQDScrollView>
   );
 };
@@ -133,48 +97,18 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFFFFF',
   },
-  statsWrapper: { flexDirection: 'row', width: '100%', flexWrap: 'wrap', gap: 20 },
-  commentRightWrapper: { alignItems: 'center', gap: 6 },
-  commentLeftWrapper: { flex: 1, marginRight: 10, gap: 5 },
-  commentCardContainer: { flexDirection: 'row', gap: 8 },
-  lineOne: { height: 8, borderRadius: 10, marginTop: 10, width: '80%' },
-  lineTwo: { height: 8, borderRadius: 10, marginTop: 10, width: '60%' },
-  lineThree: { height: 8, borderRadius: 10, marginTop: 10, width: '40%' },
-  emptyStateWrapper: { alignItems: 'center', marginTop: 30 },
-  commentContainer: {
-    bottom: 10,
-    left: 0,
-    right: 0,
+  statsWrapper: {
     flexDirection: 'row',
-    gap: 10,
-    alignItems: 'center',
-    backgroundColor: '#FFFFFF',
-    paddingVertical: 8,
-
-    borderTopColor: '#EAEEF4',
-    zIndex: 10,
-  },
-  commentContainerStyle: {
+    width: '100%',
+    flexWrap: 'wrap',
     gap: 20,
-    paddingBottom: 50,
   },
 
-  commentInput: {
-    borderWidth: 1,
-    borderColor: '#EAEEF4',
-    height: 44,
-    borderRadius: 16,
-    alignItems: 'center',
-    paddingLeft: 10,
-    paddingRight: 6,
-    flex: 1,
-    flexDirection: 'row',
-    gap: 3,
-  },
   infoContainer: {
     paddingVertical: 10,
     paddingHorizontal: 16,
   },
+
   emptyText: {
     fontSize: adjustFontSizeForIOS(16, 1),
     fontFamily: 'AeonikBold',
@@ -254,7 +188,7 @@ const styles = StyleSheet.create({
   buttonWrapper: {
     marginTop: 20,
   },
-  flatlistWrapper: { flex: 1, height: 320, maxHeight: 450 },
+
   textInput: {
     flex: 1,
   },

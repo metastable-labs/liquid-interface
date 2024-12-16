@@ -83,7 +83,7 @@ function RootStack() {
         }}
       />
 
-      <Stack.Screen name="(create-strategy)" />
+      <Stack.Screen name="(strategy)" />
 
       {/* Common routes */}
       <Stack.Screen name="+not-found" options={{ headerShown: true }} />

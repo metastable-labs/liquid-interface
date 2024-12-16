@@ -29,7 +29,7 @@ const StrategyStack = () => {
         }}
       />
       <Stack.Screen
-        name="[strtegyId]"
+        name="details"
         options={{
           headerShown: false,
         }}

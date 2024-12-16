@@ -6,7 +6,6 @@ import { AerodromeIcon, BorrowIcon, DepositIcon, MoonWellIcon, MorphoIcon, Stake
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import LQDPoolImages from '../pool-images';
 import LQDTokenImage from '../pool-images/token-image';
-import { protocolList } from '@/constants/addresses';
 
 const connector = require('../../assets/images/connector.png');
 const icons = {
@@ -19,57 +18,46 @@ const icons = {
   morpho: <MorphoIcon height={24} width={24} />,
 };
 
-const FeedStep = ({ step, isLast }: { step: StrategyStep; isLast: boolean }) => {
-  const { actionType } = step;
-
-  const deposite = actionType === 'deposit';
-
-  const protocol = protocolList.find((protocol) => protocol.address == step.protocolAddress);
-  const tokenIconUrl = 'https://res.cloudinary.com/djzeufu4j/image/upload/v1732105634/tokenAIcon_jgy241.png';
-  const poolPair = 'DAI/USDC';
-  const tokenName = 'cbBTC';
+const PreviewFeedStep = ({ variant, tokenIconURL, token, isLast, title = '', protocolIcon, protocolTitle }: IFeedStep) => {
+  const deposite = variant === 'deposit';
 
   const depositVariant = () => (
     <View style={styles.details}>
-      <Text style={styles.variantText}>{actionType}</Text>
+      <Text style={styles.variantText}>{variant}</Text>
       <Text style={styles.variantText}> into</Text>
       <View>
-        <Text style={styles.tokenText}>{poolPair}</Text>
+        <Text style={styles.tokenText}>{token}</Text>
       </View>
-      <LQDPoolImages tokenAIconURL={tokenIconUrl} tokenBIconURL={tokenIconUrl} />
+      <LQDPoolImages tokenAIconURL={tokenIconURL} tokenBIconURL={tokenIconURL} />
     </View>
   );
 
   const otherVariant = () => (
     <View style={styles.details}>
-      <Text style={styles.variantText}>{actionType}</Text>
+      <Text style={styles.variantText}>{variant}</Text>
+      <LQDTokenImage size={16} iconURL={tokenIconURL} />
+      <Text style={styles.tokenText}>{token}</Text>
 
-      <Text style={styles.tokenText}>{tokenName}</Text>
+      <Text style={styles.variantText}> into</Text>
 
-      <LQDTokenImage size={14} iconURL={tokenIconUrl} />
-
-      <Text style={styles.variantText}>{actionType == 'borrow' || actionType == 'stake' ? 'on' : 'into'}</Text>
-
-      <Text style={styles.tokenText}>{protocol?.title}</Text>
-
-      <View style={styles.protocolIconWrapper}>{icons[protocol?.icon!]}</View>
+      {icons[protocolIcon]}
+      <Text style={styles.tokenText}>{protocolTitle}</Text>
     </View>
   );
 
   return (
     <Animated.View style={styles.container}>
       <View style={styles.connectorWrap}>
-        <View style={styles.iconContainer}>{icons[actionType]}</View>
+        <View style={styles.iconContainer}>{icons[variant]}</View>
         {!isLast && <FastImage style={{ height: 12, width: 1, marginBottom: 10 }} source={connector} />}
       </View>
-
       {deposite && depositVariant()}
       {!deposite && otherVariant()}
     </Animated.View>
   );
 };
 
-export default FeedStep;
+export default PreviewFeedStep;
 
 const styles = StyleSheet.create({
   container: {
@@ -78,14 +66,9 @@ const styles = StyleSheet.create({
     gap: 2,
   },
 
-  protocolIconWrapper: {
-    paddingTop: 9,
-  },
-
   connectorWrap: {
     alignItems: 'center',
     width: 32,
-    paddingTop: 6,
   },
 
   iconContainer: {
@@ -107,7 +90,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     flexWrap: 'wrap',
-    gap: 4,
+    gap: 2,
   },
 
   variantText: {

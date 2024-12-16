@@ -1,21 +1,19 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
 import React, { useState } from 'react';
-import { LQDFeedCard, LQDFlatlist, LQDImage } from '@/components';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { SceneMap } from 'react-native-tab-view';
+import { LQDImage } from '@/components';
 import { CopyIcon, FamcasterIcon, FillCheckIcon, LinkIcon, UserOctagonIcon, XIcon } from '@/assets/icons';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
-import { SceneMap } from 'react-native-tab-view';
 import useCustomTabView from '@/hooks/useCustomTabview';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
-import { feeds } from './dummy';
+import UserStrategies from './user-strategies';
+import UserLikedStrategies from './user-liked-strategies';
+import UserRepostStrategies from './user-repost-strategies';
 
 const Profile = () => {
   const { CustomTabView } = useCustomTabView();
   const { router } = useSystemFunctions();
   const [copyProfileLink, setCopyProfileLink] = useState(false);
-
-  const handleNavigate = () => {
-    router.push('/(create-strategy)/[strtegyId]/');
-  };
 
   const handleCopyPL = () => {
     setCopyProfileLink((prev) => !prev);
@@ -25,52 +23,10 @@ const Profile = () => {
     }, 3000);
   };
 
-  const StrategyRoute = () => {
-    return (
-      <LQDFlatlist
-        data={feeds}
-        showsVerticalScrollIndicator={false}
-        renderItem={({ item }) => <LQDFeedCard feed={item} onPressInvest={() => {}} onNavigate={handleNavigate} />}
-        keyExtractor={(_, index) => index.toString()}
-        showsHorizontalScrollIndicator={false}
-        style={{ backgroundColor: '#fff' }}
-        onRefresh={() => {}}
-      />
-    );
-  };
-
-  const DepositRoute = () => {
-    return (
-      <LQDFlatlist
-        data={feeds}
-        showsVerticalScrollIndicator={false}
-        renderItem={({ item }) => <LQDFeedCard feed={item} onNavigate={handleNavigate} />}
-        keyExtractor={(_, index) => index.toString()}
-        showsHorizontalScrollIndicator={false}
-        style={{ backgroundColor: '#fff' }}
-        onRefresh={() => {}}
-      />
-    );
-  };
-
-  const LikesRoute = () => {
-    return (
-      <LQDFlatlist
-        data={feeds}
-        showsVerticalScrollIndicator={false}
-        renderItem={({ item }) => <LQDFeedCard feed={item} onNavigate={handleNavigate} />}
-        keyExtractor={(_, index) => index.toString()}
-        showsHorizontalScrollIndicator={false}
-        style={{ backgroundColor: '#fff' }}
-        onRefresh={() => {}}
-      />
-    );
-  };
-
   const renderScene = SceneMap({
-    strategy: StrategyRoute,
-    deposit: DepositRoute,
-    like: LikesRoute,
+    strategy: UserStrategies,
+    deposit: UserRepostStrategies,
+    like: UserLikedStrategies,
   });
 
   const [routes] = React.useState([
