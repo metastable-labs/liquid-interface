@@ -36,6 +36,7 @@ const LQDFeedCard = ({ feed, isDetailPage, handleCommentPress }: FeedCard) => {
   };
 
   const handleLikePress = () => {
+    console.log('Like');
     const previousHasLiked = hasLikedFeed;
     const previousLikeCount = likeCount;
 
