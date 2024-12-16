@@ -12,10 +12,10 @@ const Step1 = () => {
       image={image}
       firstArc={arc}
       secondArc={arc1}
-      title="DeFi made easy"
+      title="Discover DeFi strategies easily"
       subtitle="Earn more with your money, securely"
-      containerStyle={{ backgroundColor: '#4691FE' }}
-      imageStyle={{ left: 6 }}
+      containerStyle={{ backgroundColor: '#FFF' }}
+      imageStyle={{ left: '24%' }}
       firstArcStyle={styles.firstArc}
       secondArcStyle={styles.secondArc}
     />
@@ -26,9 +26,9 @@ export default Step1;
 
 const styles = StyleSheet.create({
   firstArc: {
-    height: 352,
+    height: 320,
     left: -57,
-    top: 82,
+    top: 250,
   },
 
   secondArc: {
