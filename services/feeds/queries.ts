@@ -75,4 +75,7 @@ const useWriteFeed = () => {
   return { postStrategy, loading };
 };
 
-export { useFeeds, useFeed, useWriteFeed };
+const useLikeMutation = () => {};
+const useUnLikeMutation = () => {};
+
+export { useFeeds, useFeed, useWriteFeed, useLikeMutation, useUnLikeMutation };
