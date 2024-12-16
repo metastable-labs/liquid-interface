@@ -12,7 +12,7 @@ const Home = () => {
   const { router } = useSystemFunctions();
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isFetching, isError, error, refetch } = useFeeds();
 
-  const feeds = data?.pages.flatMap((page) => page.strategies) || [];
+  const feeds = data?.pages.flatMap((page) => page.data) || [];
 
   const loadMoreFeeds = () => {
     if (hasNextPage && !isFetchingNextPage) {

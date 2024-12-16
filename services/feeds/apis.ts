@@ -16,7 +16,7 @@ const fetchFeeds = async (pageParam?: string, sort?: 'latest' | 'trending') => {
 };
 
 const fetchFeed = async (strategyId: string) => {
-  return (await strategyAxiosInstance.get<Strategy>(`${strategyId}`)).data;
+  return (await strategyAxiosInstance.get<Strategy>(`${strategyId}`)).data?.data;
 };
 
 const likeAStrategy = async (strategyId: string) => {

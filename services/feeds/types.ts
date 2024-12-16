@@ -1,18 +1,21 @@
 type Feeds = {
-  strategies: Strategy[];
-  nextCursor?: string;
-  hasMore: boolean;
+  data: Strategy[];
+  pagination: {
+    hasMore: boolean;
+    nextCursor?: string;
+  };
 };
 
 type Strategy = {
   id: string;
   name: string;
   onchainId: number;
-  curatorAddress: string;
   description: string;
-  minDeposit: number;
-  maxTvl: number;
-  performanceFee: number;
+  curator: {
+    address: `0x${string}`;
+    username: string;
+    avatarUrl: string;
+  };
   steps: StrategyStep[];
   metrics: {
     tvl: string;
@@ -38,14 +41,21 @@ type Strategy = {
 
 type StrategyStep = {
   id: string;
-  strategyId: string;
   stepIndex: number;
   protocolAddress: `0x${string}`;
   actionType: 'supply' | 'borrow' | 'stake' | 'deposit';
-  assetIn: `0x${string}`;
-  assetOut: `0x${string}`[];
+  assetInToken: {
+    address: `0x${string}`;
+    symbol: string;
+    logoUrl: string;
+  };
+  assetOutTokens: {
+    address: `0x${string}`;
+    symbol: string;
+    logoUrl: string;
+  }[];
   amountRatio: number;
-  blockNumber: BigInt;
+  blockNumber: string;
   transactionHash: `0x${string}`;
 };
 

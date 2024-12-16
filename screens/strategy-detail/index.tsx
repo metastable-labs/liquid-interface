@@ -43,7 +43,7 @@ const StrategyDetail = ({ strategyId }: { strategyId: string }) => {
       id: '4',
       variant: 'curator',
       title: 'Curator fee',
-      value: `${data?.performanceFee}%`,
+      value: `5%`,
       active: false,
     },
   ];

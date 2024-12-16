@@ -14,7 +14,7 @@ const useFeeds = () => {
   return useInfiniteQuery({
     queryKey: ['feeds'],
     queryFn: ({ pageParam }) => fetchFeeds(pageParam),
-    getNextPageParam: (lastPage) => (lastPage.hasMore ? lastPage.nextCursor : undefined),
+    getNextPageParam: (lastPage) => (lastPage.pagination.hasMore ? lastPage.pagination.nextCursor : undefined),
     initialPageParam: '',
   });
 };

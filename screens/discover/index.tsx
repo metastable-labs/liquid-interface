@@ -8,7 +8,7 @@ import Loader from '../home/loader';
 const Discover = () => {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isFetching, isError, error, refetch } = useFeeds();
 
-  const strategies = data?.pages.flatMap((page) => page.strategies) || [];
+  const strategies = data?.pages.flatMap((page) => page.data) || [];
 
   const loadMoreStrategies = () => {
     if (hasNextPage && !isFetchingNextPage) {

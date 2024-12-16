@@ -25,9 +25,9 @@ const FeedStep = ({ step, isLast }: { step: StrategyStep; isLast: boolean }) => 
   const deposite = actionType === 'deposit';
 
   const protocol = protocolList.find((protocol) => protocol.address == step.protocolAddress);
-  const tokenIconUrl = 'https://res.cloudinary.com/djzeufu4j/image/upload/v1732105634/tokenAIcon_jgy241.png';
   const poolPair = 'DAI/USDC';
-  const tokenName = 'cbBTC';
+  const tokenName = step.assetOutTokens[0].symbol;
+  const tokenIconUrl = step.assetOutTokens[0].logoUrl;
 
   const depositVariant = () => (
     <View style={styles.details}>

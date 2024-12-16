@@ -7,7 +7,6 @@ import { adjustFontSizeForIOS, formatTimestamp, truncate } from '@/utils/helpers
 import FeedStep from './feed-step';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 
-const photo = 'https://pics.craiyon.com/2023-08-02/7a951cac85bd4aa2b0e70dbaabb8404e.webp';
 const maxDescriptionLength = 40;
 
 const LQDFeedCard = ({ feed, isDetailPage, handleCommentPress }: FeedCard) => {
@@ -18,8 +17,9 @@ const LQDFeedCard = ({ feed, isDetailPage, handleCommentPress }: FeedCard) => {
     setIsExpanded(!isExpanded);
   };
 
-  const { steps, curatorAddress, createdAt, name, description, metrics, userInteraction, id } = feed;
+  const { steps, curator, createdAt, name, description, metrics, userInteraction, id } = feed;
   const { commentCount, likeCount, repostCount, apy } = metrics;
+  const { address: curatorAddress, avatarUrl, username } = curator;
 
   const truncatedDescription = description.substring(0, maxDescriptionLength);
 
@@ -56,7 +56,7 @@ const LQDFeedCard = ({ feed, isDetailPage, handleCommentPress }: FeedCard) => {
           <FastImage
             style={styles.image}
             source={{
-              uri: photo,
+              uri: avatarUrl,
               priority: FastImage.priority.normal,
             }}
             resizeMode={FastImage.resizeMode.contain}
@@ -66,7 +66,9 @@ const LQDFeedCard = ({ feed, isDetailPage, handleCommentPress }: FeedCard) => {
             <View style={styles.rightContentFlex}>
               <View>
                 <View style={styles.usernameFlex}>
-                  <Text style={styles.username}>Meister</Text>
+                  <Text style={styles.username} numberOfLines={1}>
+                    {username}
+                  </Text>
                   <Text style={styles.time}>{formatTimestamp(createdAt)}</Text>
                 </View>
                 <Text style={styles.address} numberOfLines={1}>
@@ -245,5 +247,11 @@ const styles = StyleSheet.create({
   bottomActionContainer: { flexDirection: 'row', gap: 20, alignItems: 'center' },
   bottomActionInnerContainer: { flex: 1, flexDirection: 'row', gap: 20 },
   rightContentFlex: { flexDirection: 'row', justifyContent: 'space-between' },
-  usernameFlex: { flexDirection: 'row', gap: 9, alignItems: 'center', marginBottom: 5 },
+  usernameFlex: {
+    flexDirection: 'row',
+    gap: 9,
+    alignItems: 'center',
+    marginBottom: 5,
+    maxWidth: '70%',
+  },
 });
