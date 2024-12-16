@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { LQDButton, LQDFeedCard, LQDScrollView } from '@/components';
 import { DiscoverUSDIcon } from '@/assets/icons';
 import { adjustFontSizeForIOS, formatNumberWithSuffix } from '@/utils/helpers';
-import { useFeed } from '@/services/feeds/queries';
+import { useFeed, useLikeMutation } from '@/services/feeds/queries';
 import StatsCard from './stats-card';
 import Comments from './comments';
 import Loader from '../home/loader';

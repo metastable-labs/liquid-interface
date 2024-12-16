@@ -1,6 +1,5 @@
-import { useInfiniteQuery, useQuery, useMutation } from '@tanstack/react-query';
-
-import { fetchFeed, fetchFeeds } from './apis';
+import { QueryKey, useInfiniteQuery, useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { fetchFeed, fetchFeeds, likeAStrategy } from './apis';
 import { useLiquidity } from '@/hooks/useLiquid';
 import { publicClient } from '@/init/client';
 import { PublicClient } from 'viem';
@@ -75,7 +74,44 @@ const useWriteFeed = () => {
   return { postStrategy, loading };
 };
 
-const useLikeMutation = () => {};
-const useUnLikeMutation = () => {};
+const useLikeMutation = () => {
+  const queryClient = useQueryClient();
 
-export { useFeeds, useFeed, useWriteFeed, useLikeMutation, useUnLikeMutation };
+  return useMutation({
+    mutationFn: likeAStrategy,
+    onMutate: async (strategyId: string) => {
+      const queryKey: any = ['feedDetail', strategyId] as QueryKey;
+
+      await queryClient.cancelQueries(queryKey);
+
+      const previousFeed = queryClient.getQueryData(queryKey);
+
+      queryClient.setQueryData(queryKey, (oldData: any) => {
+        if (!oldData) return oldData;
+        return {
+          ...oldData,
+          isLiked: true,
+          likesCount: oldData.likesCount + 1,
+        };
+      });
+
+      return { previousFeed };
+    },
+    onError: (err, strategyId, context) => {
+      // Note i am leaving this commented code here
+
+      // const queryKey = ['feedDetail', strategyId] as QueryKey;
+      // if (context?.previousFeed) {
+      //   queryClient.setQueryData(queryKey, context.previousFeed);
+      // }
+      console.log('Error liking strategy:', err);
+    },
+    onSettled: (data, error, strategyId) => {
+      const queryKey: any = ['feedDetail', strategyId] as QueryKey; // Explicitly cast as QueryKey
+
+      queryClient.invalidateQueries(queryKey);
+    },
+  });
+};
+
+export { useFeeds, useFeed, useWriteFeed, useLikeMutation };
