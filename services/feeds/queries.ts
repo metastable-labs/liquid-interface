@@ -74,13 +74,13 @@ const useWriteFeed = () => {
   return { postStrategy, loading };
 };
 
-const useLikeMutation = () => {
+const useLikeMutation = (strategyId: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: likeAStrategy,
-    onMutate: async (strategyId: string) => {
-      const queryKey: any = ['feedDetail', strategyId] as QueryKey;
+    mutationFn: () => likeAStrategy(strategyId),
+    onMutate: async () => {
+      const queryKey: any = ['feedDetail', strategyId];
 
       await queryClient.cancelQueries(queryKey);
 
@@ -97,17 +97,16 @@ const useLikeMutation = () => {
 
       return { previousFeed };
     },
-    onError: (err, strategyId, context) => {
-      const queryKey = ['feedDetail', strategyId] as QueryKey;
+    onError: (err, _, context) => {
+      const queryKey = ['feedDetail', strategyId];
       if (context?.previousFeed) {
         queryClient.setQueryData(queryKey, context.previousFeed);
       }
 
       console.log('Error liking strategy:', err);
     },
-    onSettled: (data, error, strategyId) => {
-      const queryKey: any = ['feedDetail', strategyId] as QueryKey; // Explicitly cast as QueryKey
-
+    onSettled: () => {
+      const queryKey: any = ['feedDetail', strategyId];
       queryClient.invalidateQueries(queryKey);
     },
   });

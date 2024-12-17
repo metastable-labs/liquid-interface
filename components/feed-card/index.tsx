@@ -12,12 +12,13 @@ const maxDescriptionLength = 40;
 
 const LQDFeedCard = ({ feed, isDetailPage, handleCommentPress }: FeedCard) => {
   const { router } = useSystemFunctions();
-  const likeMutation = useLikeMutation();
 
   const { steps, curator, createdAt, name, description, metrics, userInteraction, id } = feed;
   const { commentCount, repostCount, apy, likeCount } = metrics;
   const { address: curatorAddress, avatarUrl, username } = curator;
   const truncatedDescription = description.substring(0, maxDescriptionLength);
+
+  const likeMutation = useLikeMutation(id);
 
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -34,7 +35,7 @@ const LQDFeedCard = ({ feed, isDetailPage, handleCommentPress }: FeedCard) => {
   };
 
   const handleLikePress = () => {
-    likeMutation.mutate(id);
+    likeMutation.mutate();
   };
 
   const handleSharePress = () => {
