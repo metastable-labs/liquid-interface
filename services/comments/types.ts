@@ -15,7 +15,7 @@ type CommentItem = {
   };
   likeCount: number;
   isLiked: boolean;
-  stategyId: string;
+  strategyId: string;
   replyToId: string;
   replies: string[];
 };
