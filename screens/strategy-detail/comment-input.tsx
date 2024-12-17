@@ -2,8 +2,9 @@ import { useRef, useState } from 'react';
 import { FlatList, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 import { LQDImage } from '@/components';
 import { ArrowUpCircleIcon, SmileEmojiIcon } from '@/assets/icons';
+import { useAddCommentMutation } from '@/services/comments/queries';
 
-const CommentInput = () => {
+const CommentInput = ({ strategyId }: { strategyId: string }) => {
   const flatListRef = useRef<FlatList>(null);
   const [comment, setComment] = useState('');
   const [isInputFocused, setIsInputFocused] = useState(false);
@@ -11,10 +12,20 @@ const CommentInput = () => {
 
   const inputheight = Math.min(Math.max(44, dynamicHeight), 80);
 
-  const handleComment = () => {
-    setComment('');
+  const addCommentMutation = useAddCommentMutation(strategyId);
 
-    flatListRef.current?.scrollToEnd({ animated: true });
+  const handleAddComment = () => {
+    if (comment.trim()) {
+      addCommentMutation.mutate(
+        { content: comment.trim() },
+        {
+          onSuccess: () => {
+            setComment('');
+            flatListRef.current?.scrollToEnd({ animated: true });
+          },
+        }
+      );
+    }
   };
 
   return (
@@ -31,8 +42,9 @@ const CommentInput = () => {
           onFocus={() => setIsInputFocused(true)}
           onBlur={() => setIsInputFocused(false)}
         />
+
         {comment.length > 0 ? (
-          <TouchableOpacity onPress={handleComment}>
+          <TouchableOpacity onPress={handleAddComment}>
             <ArrowUpCircleIcon height={25} width={25} />
           </TouchableOpacity>
         ) : (

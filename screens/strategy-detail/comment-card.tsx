@@ -3,8 +3,15 @@ import React from 'react';
 import { FlashIcon } from '@/assets/icons';
 import { adjustFontSizeForIOS, formatTimestamp } from '@/utils/helpers';
 import { LQDImage } from '@/components';
+import { useLikeCommentMutation } from '@/services/comments/queries';
 
-const CommentCard = ({ author, content, createdAt, isLiked, likeCount, id }: CommentItem) => {
+const CommentCard = ({ author, content, createdAt, isLiked, likeCount, id, strategyId }: CommentItem) => {
+  const likeCommentMutation = useLikeCommentMutation(strategyId, id);
+
+  const handleLikeComment = () => {
+    likeCommentMutation.mutate();
+  };
+
   return (
     <View style={styles.container}>
       <LQDImage height={30} width={30} />
@@ -17,7 +24,7 @@ const CommentCard = ({ author, content, createdAt, isLiked, likeCount, id }: Com
         <Text style={styles.comment}>{content}</Text>
       </View>
 
-      <TouchableOpacity style={styles.commentRightWrapper}>
+      <TouchableOpacity style={styles.commentRightWrapper} onPress={handleLikeComment}>
         {isLiked ? <FlashIcon fill="#F2AE40" bg="#F2AE40" /> : <FlashIcon />}
 
         <Text style={[styles.likeCount, { color: isLiked ? '#F2AE40' : '#1E293B' }]}>{likeCount}</Text>
