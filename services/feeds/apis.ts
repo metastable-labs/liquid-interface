@@ -20,11 +20,7 @@ const fetchFeed = async (strategyId: string) => {
 };
 
 const likeAStrategy = async (strategyId: string) => {
-  return (await strategyAxiosInstance.post<LikeStrategyResponse>(`${strategyId}/likes`)).data;
+  return (await strategyAxiosInstance.post<LikeStrategyResponse>(`${strategyId}/like`)).data;
 };
 
-const unLikeAStrategy = async (strategyId: string) => {
-  return (await strategyAxiosInstance.delete<LikeStrategyResponse>(`${strategyId}/likes`)).data;
-};
-
-export { fetchFeeds, fetchFeed, likeAStrategy, unLikeAStrategy };
+export { fetchFeeds, fetchFeed, likeAStrategy };

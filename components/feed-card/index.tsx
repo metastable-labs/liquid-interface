@@ -6,22 +6,25 @@ import { CommentIcon, FlashIcon, MoreIcon, ReTweetIcon, ShareIcon } from '@/asse
 import { adjustFontSizeForIOS, formatTimestamp, truncate } from '@/utils/helpers';
 import FeedStep from './feed-step';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
+import { useLikeMutation } from '@/services/feeds/queries';
 
 const maxDescriptionLength = 40;
 
 const LQDFeedCard = ({ feed, isDetailPage, handleCommentPress }: FeedCard) => {
   const { router } = useSystemFunctions();
+
+  const { steps, curator, createdAt, name, description, metrics, userInteraction, id } = feed;
+  const { commentCount, repostCount, apy, likeCount } = metrics;
+  const { address: curatorAddress, avatarUrl, username } = curator;
+  const truncatedDescription = description.substring(0, maxDescriptionLength);
+
+  const likeMutation = useLikeMutation(id);
+
   const [isExpanded, setIsExpanded] = useState(false);
 
   const handleToggle = () => {
     setIsExpanded(!isExpanded);
   };
-
-  const { steps, curator, createdAt, name, description, metrics, userInteraction, id } = feed;
-  const { commentCount, likeCount, repostCount, apy } = metrics;
-  const { address: curatorAddress, avatarUrl, username } = curator;
-
-  const truncatedDescription = description.substring(0, maxDescriptionLength);
 
   const handleInvestPress = () => {
     console.log('Invest');
@@ -32,7 +35,7 @@ const LQDFeedCard = ({ feed, isDetailPage, handleCommentPress }: FeedCard) => {
   };
 
   const handleLikePress = () => {
-    console.log('Like');
+    likeMutation.mutate();
   };
 
   const handleSharePress = () => {
@@ -128,7 +131,7 @@ const LQDFeedCard = ({ feed, isDetailPage, handleCommentPress }: FeedCard) => {
               </TouchableOpacity>
 
               <TouchableOpacity onPress={handleLikePress} style={styles.actionFlex}>
-                {userInteraction?.hasLiked ? <FlashIcon fill="#F2AE40" bg="#F2AE40" /> : <FlashIcon />}
+                {userInteraction.hasLiked ? <FlashIcon fill="#F2AE40" bg="#F2AE40" /> : <FlashIcon />}
 
                 <Text style={styles.actionText}>{likeCount}</Text>
               </TouchableOpacity>

@@ -15,4 +15,8 @@ const commentOnAStrategy = async (strategyId: string, data: PostCommentBody) => 
   return (await strategyAxiosInstance.post(`${strategyId}/comments`, data)).data;
 };
 
-export { fetchComments, commentOnAStrategy };
+const likeCommentOnAStrategy = async (comment: string) => {
+  return (await strategyAxiosInstance.post<LikeStrategyResponse>(`comments/${comment}/like`)).data;
+};
+
+export { fetchComments, commentOnAStrategy, likeCommentOnAStrategy };
