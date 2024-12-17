@@ -98,12 +98,11 @@ const useLikeMutation = () => {
       return { previousFeed };
     },
     onError: (err, strategyId, context) => {
-      // Note i am leaving this commented code here
+      const queryKey = ['feedDetail', strategyId] as QueryKey;
+      if (context?.previousFeed) {
+        queryClient.setQueryData(queryKey, context.previousFeed);
+      }
 
-      // const queryKey = ['feedDetail', strategyId] as QueryKey;
-      // if (context?.previousFeed) {
-      //   queryClient.setQueryData(queryKey, context.previousFeed);
-      // }
       console.log('Error liking strategy:', err);
     },
     onSettled: (data, error, strategyId) => {
