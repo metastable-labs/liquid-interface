@@ -6,18 +6,30 @@ import { ArrowCircleDownIcon, DiscoverTVLIcon, SearchIcon, DiscoverUSDIcon, Aero
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import { protocolList } from '@/constants/addresses';
 import PercentageSetter from '../liquidity-actions/remove/percentage-setter';
+import { useDebouncedEffect } from '@/hooks/useDebouncedEffect';
 
-const DiscoverFilters = () => {
+const DiscoverFilters = ({ setSearchQuery, setMinTvl, setMaxTvl, setCursor, setAssets, setProtocols }: DiscoverFiltersProps) => {
+  const { control, watch } = useForm();
+  const searchValue = watch('search');
   const [search, setSearch] = useState(false);
   const [showTvl, setShowTvl] = useState(false);
   const [protocal, setProtocal] = useState(false);
   const [_, setPercentage] = useState(25);
-  const [selectedToken, setSelecteToken] = useState('');
+  const [selectedProtocol, setSelecteProtocol] = useState('');
   const [selectedAssets, setSelectedAssets] = useState<TokenItem[]>([]);
 
   const stableSetPercentage = useCallback((value: number) => setPercentage(value), []);
-  const { control, watch } = useForm();
   const [showAssets, setShowAssets] = useState(false);
+
+  useDebouncedEffect(
+    function setSearchValue() {
+      if (setSearchQuery && searchValue !== undefined) {
+        setSearchQuery(searchValue);
+      }
+    },
+    [searchValue, setSearchQuery],
+    300
+  );
 
   const animationValue = useRef(new Animated.Value(0)).current;
 
@@ -138,6 +150,7 @@ const DiscoverFilters = () => {
           <LQDButton variant="secondary" title="Continue" />
         </View>
       </LQDBottomSheet>
+
       <LQDBottomSheet show={protocal} title="" variant="primary" onClose={openProtocal}>
         <LQDFlatlist
           data={protocolList}
@@ -145,9 +158,13 @@ const DiscoverFilters = () => {
           renderItem={({ item }: any) => (
             <LQDProtocolCard
               variant={item.icon}
-              selected={selectedToken === item.id}
+              selected={selectedProtocol === item.address}
               protocol={item}
-              onSelect={() => setSelecteToken(item.id)}
+              onSelect={() => {
+                setSelecteProtocol(item.address);
+                setProtocols([item.address]);
+                openProtocal();
+              }}
             />
           )}
           keyExtractor={(_, index) => index.toString()}
@@ -155,6 +172,7 @@ const DiscoverFilters = () => {
           contentContainerStyle={styles.protocalContainerStyle}
         />
       </LQDBottomSheet>
+
       <LQDAssetSelection
         key={1}
         close={handleShowAsset}

@@ -47,7 +47,7 @@ export default function TabLayout() {
         screenOptions={{
           tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
           headerShown: true,
-          header: () => <Header amount={3333} actionRight={navigate} actionLeft={openModal} />,
+          header: () => <Header amount={3333} actionRight={navigate} />,
         }}
       >
         <Tabs.Screen

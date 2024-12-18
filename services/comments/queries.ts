@@ -1,6 +1,6 @@
 import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { fetchComments, likeCommentOnAStrategy } from './apis';
+import { commentOnAStrategy, fetchComments, likeCommentOnAStrategy } from './apis';
 
 const useComments = (strategyId: string) => {
   return useInfiniteQuery({
@@ -59,4 +59,67 @@ const useLikeCommentMutation = (strategyId: string, commentId: string) => {
   });
 };
 
-export { useComments, useLikeCommentMutation };
+const useAddCommentMutation = (strategyId: string) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: PostCommentBody) => commentOnAStrategy(strategyId, data),
+
+    onMutate: async (newComment) => {
+      const queryKey: any = ['feedDetail', strategyId];
+
+      await queryClient.cancelQueries(queryKey);
+
+      const previousFeed = queryClient.getQueryData(queryKey);
+
+      queryClient.setQueryData(queryKey, (oldData: any) => {
+        if (!oldData || !oldData.comments) return oldData;
+
+        return {
+          ...oldData,
+          comments: [
+            ...oldData.comments,
+            {
+              ...newComment,
+              id: `temp-${Date.now()}`,
+              isTemporary: true,
+            },
+          ],
+        };
+      });
+
+      return { previousFeed };
+    },
+
+    onError: (err, _, context) => {
+      const queryKey = ['feedDetail', strategyId];
+
+      if (context?.previousFeed) {
+        queryClient.setQueryData(queryKey, context.previousFeed);
+      }
+
+      console.log('Error adding comment:', err);
+    },
+
+    onSuccess: (newComment) => {
+      const queryKey = ['feedDetail', strategyId];
+
+      queryClient.setQueryData(queryKey, (oldData: any) => {
+        if (!oldData || !oldData.comments) return oldData;
+
+        return {
+          ...oldData,
+          comments: oldData.comments.map((comment: any) => (comment.isTemporary ? newComment : comment)),
+        };
+      });
+    },
+
+    onSettled: () => {
+      const queryKey: any = ['feedDetail', strategyId];
+
+      queryClient.invalidateQueries(queryKey);
+    },
+  });
+};
+
+export { useComments, useLikeCommentMutation, useAddCommentMutation };
