@@ -10,8 +10,8 @@ export type TokenResponse = {
 };
 
 export type TokenItem = {
-  formattedBalance: string;
-  usdBalance: string;
+  formattedBalance?: string;
+  usdBalance?: string;
   address: Address;
   symbol: string;
   decimals: number;

@@ -1,10 +1,10 @@
+import { useState } from 'react';
 import { StyleSheet, View, FlatList, Text } from 'react-native';
 import { LQDStrategyCard } from '@/components';
 import DefaultFooterLoader from '@/components/flatlist/footer-loader';
 import DiscoverFilters from './filters';
 import Loader from '../home/loader';
 import { useSearchFeeds } from '@/services/discover/queries';
-import { useState } from 'react';
 
 const Discover = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -31,10 +31,6 @@ const Discover = () => {
     }
   };
 
-  if (isLoading) {
-    return <Loader />;
-  }
-
   return (
     <View style={styles.container}>
       <DiscoverFilters
@@ -46,7 +42,9 @@ const Discover = () => {
         setProtocols={setProtocols}
       />
 
-      {feeds.length > 0 && (
+      {isLoading && <Loader />}
+
+      {feeds.length > 0 && !isLoading && (
         <FlatList
           refreshing={isFetching}
           onRefresh={refetch}
@@ -60,7 +58,7 @@ const Discover = () => {
         />
       )}
 
-      {!feeds.length && <Text style={styles.noStrategiesText}>No strategies found</Text>}
+      {!feeds.length && !isLoading && <Text style={styles.noStrategiesText}>No strategies found</Text>}
     </View>
   );
 };
@@ -86,4 +84,5 @@ const styles = StyleSheet.create({
     fontFamily: 'AeonikMedium',
     marginTop: 50,
   },
+  topGainerLoaderOne: { height: 45, width: 45, borderRadius: 100 },
 });

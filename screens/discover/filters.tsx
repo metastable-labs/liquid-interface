@@ -9,12 +9,12 @@ import PercentageSetter from '../liquidity-actions/remove/percentage-setter';
 import { useDebouncedEffect } from '@/hooks/useDebouncedEffect';
 
 const DiscoverFilters = ({ setSearchQuery, setMinTvl, setMaxTvl, setCursor, setAssets, setProtocols }: DiscoverFiltersProps) => {
-  const { control, watch } = useForm();
+  const { control, watch, reset } = useForm();
   const searchValue = watch('search');
   const [search, setSearch] = useState(false);
   const [showTvl, setShowTvl] = useState(false);
   const [protocal, setProtocal] = useState(false);
-  const [_, setPercentage] = useState(25);
+  const [percentage, setPercentage] = useState(0);
   const [selectedProtocol, setSelecteProtocol] = useState('');
   const [selectedAssets, setSelectedAssets] = useState<TokenItem[]>([]);
 
@@ -30,6 +30,13 @@ const DiscoverFilters = ({ setSearchQuery, setMinTvl, setMaxTvl, setCursor, setA
     [searchValue, setSearchQuery],
     300
   );
+
+  const hanldeFilterTVL = () => {
+    setMaxTvl(String(percentage));
+    setShowTvl((prev) => !prev);
+  };
+
+  console.log(percentage, 'percentage');
 
   const animationValue = useRef(new Animated.Value(0)).current;
 
@@ -64,6 +71,8 @@ const DiscoverFilters = ({ setSearchQuery, setMinTvl, setMaxTvl, setCursor, setA
   };
 
   const closeInput = () => {
+    setSearchQuery('');
+    reset({ search: '' });
     setSearch((prev) => !prev);
   };
 
@@ -72,6 +81,7 @@ const DiscoverFilters = ({ setSearchQuery, setMinTvl, setMaxTvl, setCursor, setA
   };
 
   const openProtocal = () => {
+    setSelecteProtocol('');
     setProtocal((prev) => !prev);
   };
 
@@ -83,6 +93,7 @@ const DiscoverFilters = ({ setSearchQuery, setMinTvl, setMaxTvl, setCursor, setA
     const newAssets = [...selectedAssets];
     newAssets[0] = data;
     setSelectedAssets(newAssets);
+    setAssets([newAssets[0].address]);
   };
 
   useEffect(() => {
@@ -136,18 +147,26 @@ const DiscoverFilters = ({ setSearchQuery, setMinTvl, setMaxTvl, setCursor, setA
               placeholder: '',
             }}
             variant="close"
-            iconAction={() => setSearch(false)}
+            iconAction={closeInput}
           />
         </Animated.View>
       )}
 
-      <LQDBottomSheet show={showTvl} title="TVL" variant="primary" onClose={openTvl}>
+      <LQDBottomSheet
+        show={showTvl}
+        title="TVL"
+        variant="primary"
+        onClose={() => {
+          setMaxTvl('');
+          openTvl();
+        }}
+      >
         <View style={{ paddingBottom: 50 }}>
           <View style={styles.percentageSetterContainer}>
             <PercentageSetter setPercentage={stableSetPercentage} />
           </View>
 
-          <LQDButton variant="secondary" title="Continue" />
+          <LQDButton variant="secondary" title="Continue" onPress={hanldeFilterTVL} />
         </View>
       </LQDBottomSheet>
 
@@ -240,6 +259,7 @@ const styles = StyleSheet.create({
   searchModalWrapper: {
     paddingHorizontal: 12,
     paddingBottom: 10,
+    backgroundColor: '#fff',
   },
   discoverTopWrapper: {
     flexDirection: 'row',
