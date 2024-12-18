@@ -36,8 +36,6 @@ const DiscoverFilters = ({ setSearchQuery, setMinTvl, setMaxTvl, setCursor, setA
     setShowTvl((prev) => !prev);
   };
 
-  console.log(percentage, 'percentage');
-
   const animationValue = useRef(new Animated.Value(0)).current;
 
   const discoverStyle = {
