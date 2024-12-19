@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import Animated from 'react-native-reanimated';
-import { AerodromeIcon, BorrowIcon, DepositIcon, MoonWellIcon, MorphoIcon, StakeIcon, SupplyIcon } from '@/assets/icons';
+import { AerodromeIcon, BorrowIcon, CuratorIcon, DepositIcon, MoonWellIcon, MorphoIcon, StakeIcon, SupplyIcon } from '@/assets/icons';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import LQDPoolImages from '../pool-images';
 import LQDTokenImage from '../pool-images/token-image';
@@ -17,6 +17,7 @@ const icons = {
   aerodrome: <AerodromeIcon height={24} width={24} />,
   moonwell: <MoonWellIcon height={24} width={24} />,
   morpho: <MorphoIcon height={24} width={24} />,
+  swap: <StakeIcon />,
 };
 
 const FeedStep = ({ step, isLast }: { step: StrategyStep; isLast: boolean }) => {
@@ -85,7 +86,6 @@ const styles = StyleSheet.create({
   connectorWrap: {
     alignItems: 'center',
     width: 32,
-    paddingTop: 6,
   },
 
   iconContainer: {
@@ -108,6 +108,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexWrap: 'wrap',
     gap: 4,
+    paddingTop: 2,
   },
 
   variantText: {

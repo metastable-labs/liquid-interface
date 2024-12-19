@@ -43,7 +43,7 @@ type StrategyStep = {
   id: string;
   stepIndex: number;
   protocolAddress: `0x${string}`;
-  actionType: 'supply' | 'borrow' | 'stake' | 'deposit';
+  actionType: 'supply' | 'borrow' | 'stake' | 'deposit' | 'swap';
   assetInToken: {
     address: `0x${string}`;
     symbol: string;

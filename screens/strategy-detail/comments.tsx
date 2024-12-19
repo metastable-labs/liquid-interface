@@ -61,7 +61,7 @@ const Comments = ({
             )}
           </View>
 
-          <CommentInput />
+          <CommentInput strategyId={strategyId} />
         </View>
       </LQDBottomSheet>
     </View>

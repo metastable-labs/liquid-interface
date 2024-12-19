@@ -5,15 +5,7 @@ import { ILQDScrollView } from './types';
 const LQDScrollView: React.FC<ILQDScrollView> = ({ children, onRefresh, refreshing, style, contentStyle }) => {
   return (
     <ScrollView
-      refreshControl={
-        <RefreshControl
-          refreshing={refreshing}
-          onRefresh={onRefresh}
-          progressBackgroundColor="white"
-          tintColor="#4691FE"
-          titleColor="#4691FE"
-        />
-      }
+      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} progressBackgroundColor="white" />}
       style={[style, { flex: 1 }]}
       showsVerticalScrollIndicator={false}
       contentContainerStyle={[
