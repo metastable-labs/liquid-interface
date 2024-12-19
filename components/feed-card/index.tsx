@@ -7,6 +7,7 @@ import { adjustFontSizeForIOS, formatTimestamp, truncate } from '@/utils/helpers
 import FeedStep from './feed-step';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { useLikeMutation } from '@/services/feeds/queries';
+import LQDImage from '../image';
 
 const maxDescriptionLength = 40;
 
@@ -56,7 +57,7 @@ const LQDFeedCard = ({ feed, isDetailPage, handleCommentPress }: FeedCard) => {
     <Pressable style={styles.container} onPress={handleNavigate}>
       <View>
         <View style={{ flexDirection: 'row', gap: 5 }}>
-          <FastImage
+          <LQDImage
             style={styles.image}
             source={{
               uri: avatarUrl,

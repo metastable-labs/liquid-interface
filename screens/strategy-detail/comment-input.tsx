@@ -21,7 +21,7 @@ const CommentInput = ({ strategyId }: { strategyId: string }) => {
         {
           onSuccess: () => {
             setComment('');
-            flatListRef.current?.scrollToEnd({ animated: true });
+            flatListRef.current?.scrollToOffset({ offset: 0, animated: true });
           },
         }
       );

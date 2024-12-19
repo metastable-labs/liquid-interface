@@ -38,6 +38,7 @@ const Home = () => {
         keyExtractor={(_, index) => index.toString()}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.listContainer}
+        style={{ backgroundColor: '#fff' }}
         onRefresh={refetch}
         onEndReached={loadMoreFeeds}
         ListFooterComponent={isFetchingNextPage ? <DefaultFooterLoader /> : null}

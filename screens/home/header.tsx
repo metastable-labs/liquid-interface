@@ -6,13 +6,22 @@ import { adjustFontSizeForIOS } from '@/utils/helpers';
 const Header = ({ amount, actionLeft, actionRight }: IHeader) => {
   return (
     <View style={styles.container}>
-      <Pressable onPress={actionLeft}>
-        <HeaderMenuIcon />
-      </Pressable>
-      <Pressable onPress={actionRight} style={styles.amountWrap}>
-        <Text style={styles.amount}>${amount}</Text>
-        <HeaderWalletIcon />
-      </Pressable>
+      <View>
+        {actionLeft && (
+          <Pressable onPress={actionLeft}>
+            <HeaderMenuIcon />
+          </Pressable>
+        )}
+      </View>
+
+      <View>
+        {actionRight && (
+          <Pressable onPress={actionRight} style={styles.amountWrap}>
+            <Text style={styles.amount}>${amount}</Text>
+            <HeaderWalletIcon />
+          </Pressable>
+        )}
+      </View>
     </View>
   );
 };
