@@ -1,12 +1,13 @@
 import { Address, formatUnits, PublicClient } from 'viem';
 import { AerodromePoolABI, LPSugarABI, OffchainOracleABI } from '@/constants/abis';
-import { USDC_ADDRESS, WETH_ADDRESS } from '@/constants/addresses';
+import { LP_SUGAR_ADDRESS, USDC_ADDRESS, WETH_ADDRESS } from '@/constants/addresses';
+import { publicClient } from '@/init/client';
 
 const { LpSugar } = LPSugarABI;
 const { OffchainOracle } = OffchainOracleABI;
 
-export function useLpSugarContract(address: Address, publicClient: PublicClient) {
-  if (!LpSugar || !address || !publicClient) {
+export function useLpSugarContract(address: Address) {
+  if (!LpSugar || !LP_SUGAR_ADDRESS || !publicClient) {
     throw new Error('Required parameters not provided to useLpSugarContract');
   }
 
@@ -25,12 +26,12 @@ export function useLpSugarContract(address: Address, publicClient: PublicClient)
       });
     },
 
-    async getPositions(limit: number, offset: number, account: Address) {
+    async getPositions(account: Address) {
       return publicClient.readContract({
         address,
         abi: LpSugar.abi,
         functionName: 'positions',
-        args: [BigInt(limit), BigInt(offset), account],
+        args: [BigInt(200), BigInt(0), account],
       });
     },
 

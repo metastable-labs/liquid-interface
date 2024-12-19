@@ -6,13 +6,13 @@ const styles = StyleSheet.create({
   root: {
     paddingHorizontal: 16,
     paddingTop: 70,
-    paddingBottom: 34,
     backgroundColor: '#FFF',
   },
 
   contentStyle: {
-    flex: 1,
+    flexGrow: 1,
     justifyContent: 'space-between',
+    paddingBottom: 130,
   },
 
   container: {
@@ -58,8 +58,7 @@ const styles = StyleSheet.create({
 
   bottomContainer: {
     paddingHorizontal: 8,
-    paddingVertical: 12,
-    alignItems: 'stretch',
+    paddingTop: 50,
   },
 
   errorText: {
@@ -91,7 +90,7 @@ const coinSelectorInputStyles = StyleSheet.create({
     lineHeight: 26.88,
     letterSpacing: -0.6,
     fontWeight: '500',
-    maxWidth: '35%',
+    maxWidth: '40%',
     fontFamily: 'AeonikMedium',
   },
 

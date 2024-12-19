@@ -5,8 +5,7 @@ export type PoolResponse = {
   pagination: {
     limit: number;
     page: number;
-    total: number;
-    totalPages: number;
+    hasMore: boolean;
   };
 };
 
@@ -15,53 +14,44 @@ export const defaultPoolResponse = {
   pagination: {
     limit: 10,
     page: 0,
-    total: 0,
-    totalPages: 1,
+    hasMore: true,
   },
 };
 
 export type Pool = {
   address: Address;
   decimals: number;
-  emissions: {
-    rate: string;
-    tokenAddress: Address;
-  };
-  factory: Address;
-  fees: {
-    address: Address;
-    poolFee: number;
-    token0: string;
-    token1: string;
-    unstakedFee: number;
-  };
-  gauge: {
-    address: Address;
-    isAlive: boolean;
-    liquidity: string;
-  };
-  isStable: boolean;
   symbol: string;
+  apr: number;
+  tvl: number;
+  totalVolumeUSD: number;
+  totalFeesUSD: number;
+  poolFee: number;
+  txCount: number;
+  isStable: boolean;
+  factory: Address;
+  quoteTokenPriceBaseToken: number;
+  baseTokenPriceQuoteToken: number;
   token0: {
     address: Address;
     logoUrl: string;
-    price: string;
-    reserve: string;
-    staked: string;
+    price: number;
+    reserve: number;
+    reserveUSD: number;
+    volume: string;
   };
   token1: {
     address: Address;
     logoUrl: string;
-    price: string;
-    reserve: string;
-    staked: string;
+    price: number;
+    reserve: number;
+    reserveUSD: number;
+    volume: string;
   };
-  totalLiquidity: string;
-  tvl: string;
-  type: string;
-  volume: {
-    token0: string;
-    token1: string;
-    usd: string;
+  historicalVolumeUSD: {
+    m5: number;
+    h1: number;
+    h6: number;
+    h24: number;
   };
 };

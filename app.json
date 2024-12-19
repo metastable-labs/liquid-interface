@@ -14,7 +14,7 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.liquid.supermigrate",
+      "bundleIdentifier": "xyz.useliquid.liquid",
       "buildNumber": "1",
       "infoPlist": {
         "NSFaceIDUsageDescription": "This app uses Face ID to sign in with Passkeys."
@@ -22,18 +22,14 @@
       "config": {
         "usesNonExemptEncryption": false
       },
-      "associatedDomains": [
-        "webcredentials:api.useliquid.xyz?mode=developer",
-        "webcredentials:api.useliquid.xyz",
-        "webcredentials:development.useliquid.xyz"
-      ]
+      "associatedDomains": ["webcredentials:api.useliquid.xyz", "webcredentials:development.useliquid.xyz"]
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/liquid-adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.liquid.supermigrate"
+      "package": "xyz.useliquid.liquid"
     },
     "web": {
       "bundler": "metro",

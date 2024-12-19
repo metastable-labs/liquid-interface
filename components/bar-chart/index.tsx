@@ -1,27 +1,17 @@
 import { View, StyleSheet } from 'react-native';
 import { VictoryBar, VictoryChart, VictoryAxis, VictoryTheme } from 'victory-native';
-import moment from 'moment';
 
 import { adjustFontSizeForIOS, formatNumberWithSuffix } from '@/utils/helpers';
 
-const LQDBarChart = ({ data, period }: ILQDBarChart) => {
+const LQDBarChart = ({ data }: ILQDBarChart) => {
   const getXAxisLabels = () => {
-    const formatMap: Record<PeriodValue, string> = {
-      '1y': 'MMM',
-      '1m': 'MMM DD',
-      '1w': 'ddd',
-      '1d': 'HH:mm',
-    };
-
-    const format = formatMap[period];
-
-    return data.map((d) => moment(d.date).format(format));
+    return data.map((d) => d.dateFormat);
   };
 
   return (
     <View style={styles.wrapper}>
       <VictoryChart
-        key={`chart-${period}-${data.length}`}
+        key={`chart-${Math.random()}-${data.length}`}
         theme={VictoryTheme.material}
         domainPadding={12}
         height={315}
@@ -45,7 +35,7 @@ const LQDBarChart = ({ data, period }: ILQDBarChart) => {
               fontFamily: 'AeonikRegular',
               fill: '#475569',
               textAnchor: 'middle',
-              angle: period === '1d' || period === '1y' ? -45 : 0,
+              // angle: period === '1d' || period === '1y' ? -45 : 0,
             },
           }}
         />
@@ -76,7 +66,7 @@ const LQDBarChart = ({ data, period }: ILQDBarChart) => {
           data={data}
           x="date"
           y="value"
-          barWidth={16}
+          barWidth={40}
           style={{
             data: {
               fill: '#898B82',

@@ -1,155 +1,49 @@
-import { useEffect } from 'react';
-import { StyleSheet, View, Text, FlatList, ScrollView, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, Platform, StatusBar as RNStatusBar, Pressable, FlatList } from 'react-native';
 
 import useSystemFunctions from '@/hooks/useSystemFunctions';
-import { adjustFontSizeForIOS, formatAmountWithWholeAndDecimal } from '@/utils/helpers';
-import { LQDButton, LQDPoolPairCard, LQDPoolPairPaper } from '@/components';
-import { CaretRightIcon, DirectUpIcon, DollarSquareIcon, TrendUpIcon } from '@/assets/icons';
-import { useAccountActions } from '@/store/account/actions';
-import Section from './section';
-import { clearPersistedSmartAccountInfo } from '@/store/smartAccount/persist';
-import { useAuth } from '@/providers';
-import { useSmartAccountActions } from '@/store/smartAccount/actions';
+import { adjustFontSizeForIOS } from '@/utils/helpers';
+import { LQDFeedCard } from '@/components';
+import { PlusIcon } from '@/assets/icons';
+import Loader from './loader';
+import { useFeeds } from '@/services/feeds/queries';
+import DefaultFooterLoader from '@/components/flatlist/footer-loader';
 
 const Home = () => {
-  const { router, poolsState, smartAccountState, accountState, dispatch } = useSystemFunctions();
-  const { getTokens, getPositions } = useAccountActions();
-  const { logout } = useSmartAccountActions();
+  const { router } = useSystemFunctions();
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isFetching, isError, error, refetch } = useFeeds();
 
-  const { trendingPools, hotPools, topGainers } = poolsState;
+  const feeds = data?.pages.flatMap((page) => page.data) || [];
 
-  const { whole, decimal } = formatAmountWithWholeAndDecimal(accountState.tokenBalance.toFixed(2));
-
-  const top10TrendingPools = trendingPools.data.slice(0, 10);
-
-  const top10HotPools = hotPools.data.slice(0, 10);
-
-  const top7Gainers = topGainers.data.slice(0, 7);
-
-  const sections = [
-    {
-      title: 'Top gainers',
-      subtitle: 'by APR',
-      icon: <TrendUpIcon />,
-      action: () => router.push('/(tabs)/home/top'),
-      children: (
-        <FlatList
-          data={top7Gainers}
-          horizontal
-          renderItem={({ item }) => <LQDPoolPairCard pool={item} />}
-          keyExtractor={(_, index) => index.toString()}
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={{ gap: 10 }}
-        />
-      ),
-    },
-
-    {
-      title: 'Trending',
-      subtitle: 'by Volume',
-      icon: <DirectUpIcon />,
-      action: () => router.push('/(tabs)/home/trending'),
-      children: (
-        <View style={styles.mapContainer}>
-          {top10TrendingPools.map((pool, index) => (
-            <LQDPoolPairPaper key={index} pool={pool} />
-          ))}
-        </View>
-      ),
-    },
-
-    {
-      title: 'Hot',
-      subtitle: 'by TVL',
-      icon: <DollarSquareIcon />,
-      action: () => router.push('/(tabs)/home/hot'),
-      children: (
-        <View style={styles.mapContainer}>
-          {top10HotPools.map((pool, index) => (
-            <LQDPoolPairPaper key={index} pool={pool} />
-          ))}
-        </View>
-      ),
-    },
-  ];
-
-  const handleSignOut = () => {
-    Alert.alert('Sign out', 'Are you sure you want to sign out?', [
-      { text: 'Cancel', style: 'cancel' },
-      {
-        text: 'Sign out',
-        style: 'destructive',
-        onPress: logout,
-      },
-    ]);
-  };
-
-  const { session } = useAuth();
-
-  const handleSmartAccountSign = async () => {
-    if (!session) {
-      throw new Error('No smart account found');
-    }
-
-    try {
-      const messageToSign = {
-        message: 'Hello, world!',
-        timestamp: Date.now(),
-      };
-
-      const signature = await session.signMessage({ message: JSON.stringify(messageToSign) });
-
-      console.log('Signature successful:', signature);
-
-      Alert.alert('Signing Successful', 'Signature: ' + signature);
-    } catch (error: any) {
-      console.log('Error signing message:', error);
-      console.log('Error cause:', error.cause);
-
-      Alert.alert('Signing Failed', error.message + '\n' + error.cause);
+  const loadMoreFeeds = () => {
+    if (hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
     }
   };
 
-  useEffect(
-    function fetchBalances() {
-      getTokens();
-      getPositions();
-    },
-    [smartAccountState.address]
-  );
+  if (isLoading) {
+    return <Loader />;
+  }
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer} showsVerticalScrollIndicator={false}>
-      <View style={styles.balanceAndActionContainer}>
-        <View style={styles.balanceContainer}>
-          <Text style={styles.balanceTitle}>Total Balance</Text>
+    <>
+      <Pressable onPress={() => router.navigate('/(strategy)/create-strategy')} style={styles.addIcon}>
+        <PlusIcon />
+      </Pressable>
 
-          <TouchableOpacity onPress={() => router.push('/(tabs)/holdings')} style={styles.balanceValueContainer}>
-            <Text style={styles.balanceWholeValue}>
-              ${whole}.<Text style={styles.balanceDecimalValue}>{decimal}</Text>
-            </Text>
-
-            <CaretRightIcon width={20} height={20} fill="#F8FAFC" />
-          </TouchableOpacity>
-        </View>
-
-        <LQDButton
-          title="Add money"
-          onPress={() => router.push('/deposit/debit')}
-          variant="tertiaryOutline"
-          icon="money"
-          iconColor="#334155"
-          style={{ alignSelf: 'stretch' }}
-        />
-
-        <LQDButton title="Sign message" onPress={handleSmartAccountSign} variant="tertiaryOutline" />
-        <LQDButton title="Sign out" onPress={handleSignOut} variant="tertiaryOutline" />
-      </View>
-
-      {sections.map((section, index) => (
-        <Section key={index} {...section} />
-      ))}
-    </ScrollView>
+      <FlatList
+        refreshing={isFetching}
+        data={feeds}
+        showsVerticalScrollIndicator={false}
+        renderItem={({ item }) => <LQDFeedCard feed={item} />}
+        keyExtractor={(_, index) => index.toString()}
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.listContainer}
+        style={{ backgroundColor: '#fff' }}
+        onRefresh={refetch}
+        onEndReached={loadMoreFeeds}
+        ListFooterComponent={isFetchingNextPage ? <DefaultFooterLoader /> : null}
+      />
+    </>
   );
 };
 
@@ -157,15 +51,20 @@ export default Home;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     paddingTop: 34,
     paddingHorizontal: 16,
     backgroundColor: '#fff',
   },
 
   contentContainer: {
-    paddingBottom: 175,
-    gap: 40,
+    flexGrow: 1,
+    justifyContent: 'space-between',
+    paddingBottom: 150,
+  },
+
+  listContainer: {
+    backgroundColor: '#fff',
+    paddingBottom: 100,
   },
 
   balanceAndActionContainer: {
@@ -219,5 +118,25 @@ const styles = StyleSheet.create({
     flex: 1,
     gap: 24,
     alignItems: 'stretch',
+  },
+
+  searchWrapper: {
+    flex: 1,
+    paddingHorizontal: 16,
+    backgroundColor: '#fff',
+    paddingTop: Platform.OS === 'android' ? RNStatusBar.currentHeight : 20,
+    paddingBottom: Platform.OS === 'android' ? -(RNStatusBar.currentHeight || 0) : -48,
+  },
+  addIcon: {
+    backgroundColor: '#4691FE',
+    height: 50,
+    width: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 100,
+    position: 'absolute',
+    bottom: '12%',
+    right: 15,
+    zIndex: 2,
   },
 });

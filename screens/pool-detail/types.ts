@@ -3,28 +3,33 @@ interface PoolID {
 }
 
 interface PoolDetails {
-  primaryIconURL: string;
-  secondaryIconURL: string;
-  primaryTitle: string;
-  secondaryTitle: string;
-  primaryBalance: number;
-  secondaryBalance: number;
-  primaryUSDValue: number;
-  secondaryUSDValue: number;
+  tokenAIconURL: string;
+  tokenBIconURL: string;
+  tokenATitle: string;
+  tokenBTitle: string;
+  tokenABalance: number;
+  tokenBBalance: number;
+  tokenAUSDValue: number;
+  tokenBUSDValue: number;
   condition: 'stable' | 'volatile';
-  fee: number;
-  aero: number;
-  stakedAero: number;
-  availableAero: number;
+  fee: number | string;
   symbol: string;
   volume: number;
   tvl: number;
+  tx: number;
+  reserveA: number;
+  reserveB: number;
+  reserveAUSD: number;
+  reserveBUSD: number;
+  poolFee: number | string;
+  poolAddress: `0x${string}`;
 }
 
 interface Stat {
-  fee: number;
+  fee: number | string;
   volume: number;
   tvl: number;
+  tx: number;
 }
 
 type Metric = 'tvl' | 'volume' | 'fees';

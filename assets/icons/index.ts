@@ -41,9 +41,96 @@ import SwapHorizontalIcon from './swap-horizontal-icon';
 import TrendUpIcon from './trend-up-icon';
 import WalletIcon from './wallet-icon';
 import WalletMoneyIcon from './wallet-money-icon';
+import DollarCoinSMIcon from './dollar-coin-sm-icon';
+import FavoriteChartIcon from './favorite-chart-icon';
+import ChartSquareIcon from './chart-square-icon';
+import SettingsIcon from './settings-icon';
+import SignoutIcon from './sign-out-icon';
+import LegalIcon from './legal-icon';
+import SupportIcon from './support-icon';
+import XIcon from './x-ixon';
+import DiscordIcon from './discord-icon';
+import SearchEmptyStateIcon from './search-empty-state-icon';
+import CloseToastIcon from './close-toast-icon';
+import ToastVarintIcon from './toast-varient-icon';
+import HeaderMenuIcon from './header-menu-icon';
+import HeaderWalletIcon from './header-wallet-icon';
+import MoreIcon from './more-icon';
+import ReTweetIcon from './re-tweet-icon';
+import CommentIcon from './comment-icon';
+import FlashIcon from './flash-icon';
+import ShareIcon from './share-icon';
+import ConnectorIcon from './connector-icon';
+import BorrowIcon from './borrow-icon';
+import StakeIcon from './stake-icon';
+import DepositIcon from './deposit-icon';
+import SupplyIcon from './supply-icon';
+import PlusIcon from './plus-icon';
+import DiscordTabIcon from './discover-tab-icon';
+import EditProfileIcon from './edit-profile-icon';
+import UserOctagonIcon from './user-octagon-icon';
+import LinkIcon from './link-icon';
+import FamcasterIcon from './farcaster-icon';
+import FillCheckIcon from './fill-check-icon';
+import ArrowCircleDownIcon from './arrow-circle-down-icon';
+import DiscoverTVLIcon from './discover-tvl-iocn';
+import DiscoverUSDIcon from './discover-usd-icon';
+import LampIcon from './lamp-icon';
+import AerodromeIcon from './aerodrome-icon';
+import DragHandleIcon from './drag-handle-icon';
+import MoonWellIcon from './moonwell-icon';
+import MorphoIcon from './morpho-icon';
+import ArrowDropdownDownIcon from './arrow-dropdown-icon';
+import CuratorIcon from './sort-icon';
+import ArrowUpCircleIcon from './arrow-up-circle';
+import SmileEmojiIcon from './smile-emoji-icon';
+import LockedIcon from './locked-icon';
+import StatsDepositIcon from './stats-deposit-icon';
+import RiskIcon from './risk-icon';
+import CoinbaseWalletIcon from './coin-base-icon';
+import DebitCardIcon from './debit-card-icon';
 
 export {
+  LampIcon,
+  DebitCardIcon,
+  RiskIcon,
+  CoinbaseWalletIcon,
+  LockedIcon,
+  StatsDepositIcon,
+  ArrowUpCircleIcon,
+  SmileEmojiIcon,
+  CuratorIcon,
+  ArrowDropdownDownIcon,
+  MorphoIcon,
   SwatchIcon,
+  MoonWellIcon,
+  DragHandleIcon,
+  DiscoverTVLIcon,
+  DiscoverUSDIcon,
+  AerodromeIcon,
+  FillCheckIcon,
+  ArrowCircleDownIcon,
+  FamcasterIcon,
+  UserOctagonIcon,
+  LinkIcon,
+  EditProfileIcon,
+  ConnectorIcon,
+  PlusIcon,
+  DiscordTabIcon,
+  MoreIcon,
+  HeaderMenuIcon,
+  HeaderWalletIcon,
+  SearchEmptyStateIcon,
+  BorrowIcon,
+  StakeIcon,
+  DepositIcon,
+  SupplyIcon,
+  CloseToastIcon,
+  ShareIcon,
+  ToastVarintIcon,
+  ReTweetIcon,
+  CommentIcon,
+  FlashIcon,
   ChartIcon,
   ShieldTickIcon,
   MoneysIcon,
@@ -86,4 +173,13 @@ export {
   TrendUpIcon,
   WalletIcon,
   WalletMoneyIcon,
+  DollarCoinSMIcon,
+  FavoriteChartIcon,
+  ChartSquareIcon,
+  SettingsIcon,
+  SignoutIcon,
+  LegalIcon,
+  SupportIcon,
+  XIcon,
+  DiscordIcon,
 };

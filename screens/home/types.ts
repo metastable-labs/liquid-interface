@@ -6,3 +6,9 @@ interface ISection {
   action?: () => void;
   isShowingAll?: boolean;
 }
+
+interface IHeader {
+  amount: number;
+  actionLeft?: () => void;
+  actionRight?: () => void;
+}

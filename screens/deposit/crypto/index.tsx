@@ -4,44 +4,49 @@ import QRCode from 'react-native-qrcode-svg';
 
 import useTruncateText from '@/hooks/useTruncateText';
 import useCopy from '@/hooks/useCopy';
-import { adjustFontSizeForIOS } from '@/utils/helpers';
+import { adjustFontSizeForIOS, truncate } from '@/utils/helpers';
 import { CaretDownIcon, CoinsIcon, CopyIcon } from '@/assets/icons';
 import PaymentMethodSelection from '../method-selection';
 import sharedStyles from '../styles';
+import useSystemFunctions from '@/hooks/useSystemFunctions';
+import { LQDButton } from '@/components';
 
 const CryptoDeposit = () => {
-  const [address, setAddress] = useState('0x4b3a9d4f3e5f2e3c4e6f3a9d4f3e5f2e3c4e6f3a');
+  const { smartAccountState } = useSystemFunctions();
   const [showBottomSheet, setShowBottomSheet] = useState(false);
   const { handleCopy, hasCopied } = useCopy();
 
-  const { truncatedText: truncatedAddress } = useTruncateText(address, 7, 4);
+  const address = truncate(smartAccountState?.address || '');
   const tokensImage = require('../../../assets/images/tokens.png');
 
   return (
     <>
       <View style={styles.root}>
         <View style={styles.container}>
-          <QRCode value={address} size={206} color="#4691FE" />
-
-          <View style={styles.addressContainer}>
-            <View style={styles.addressWrapper}>
-              <Text style={[styles.text, { fontWeight: '500' }]}>{truncatedAddress}</Text>
-            </View>
-            <TouchableOpacity style={styles.copyContainer} onPress={() => handleCopy(address)}>
-              <CopyIcon />
-              <Text style={styles.copyText}>{hasCopied ? 'Copied' : 'Copy'}</Text>
-            </TouchableOpacity>
-          </View>
-
           <TouchableOpacity style={sharedStyles.paymentSelector} onPress={() => setShowBottomSheet(true)}>
             <CoinsIcon />
             <Text style={[sharedStyles.selectorText, sharedStyles.paymentSelectorText]}>Crypto</Text>
             <CaretDownIcon />
           </TouchableOpacity>
+
+          <QRCode value={smartAccountState?.address || ''} size={206} color="#4691FE" />
+
+          <View style={styles.addressContainer}>
+            <View style={styles.addressWrapper}>
+              <Text style={[styles.text, { fontWeight: '500' }]}>{address}</Text>
+            </View>
+            <TouchableOpacity style={styles.copyContainer} onPress={() => handleCopy(smartAccountState?.address || '')}>
+              <CopyIcon />
+              <Text style={styles.copyText}>{hasCopied ? 'Copied' : 'Copy'}</Text>
+            </TouchableOpacity>
+          </View>
         </View>
         <View style={styles.infoContainer}>
-          <Image source={tokensImage} style={styles.infoImage} />
-          <Text style={styles.text}>For now you can only receive USDC on Base</Text>
+          <Text style={styles.title}>Deposit from external wallet</Text>
+          <Text style={styles.text}>Send USDC, ETH or any ERC20 token on Base</Text>
+          <View style={styles.buttonWrapper}>
+            <LQDButton variant="light" title="Connect wallet" />
+          </View>
         </View>
       </View>
 
@@ -102,13 +107,14 @@ const styles = StyleSheet.create({
   },
 
   infoContainer: {
-    flexDirection: 'row',
-    padding: 16,
+    paddingHorizontal: 20,
+    paddingVertical: 20,
     alignSelf: 'stretch',
-    gap: 16,
-    alignItems: 'center',
-    borderRadius: 20,
-    backgroundColor: '#EBF1FF',
+    gap: 12,
+    borderRadius: 12,
+    backgroundColor: '#F8FAFC',
+    borderWidth: 1,
+    borderColor: '#EAEEF4',
   },
 
   infoImage: {
@@ -116,12 +122,20 @@ const styles = StyleSheet.create({
     height: 18,
   },
 
-  text: {
-    flex: 1,
+  title: {
     color: '#162664',
+    fontSize: adjustFontSizeForIOS(16, 3),
+    fontWeight: '500',
+    fontFamily: 'AeonikMedium',
+  },
+  text: {
+    color: '#475569',
     fontSize: adjustFontSizeForIOS(14, 2),
     lineHeight: 18.48,
     textAlign: 'left',
     fontFamily: 'AeonikRegular',
+  },
+  buttonWrapper: {
+    marginTop: 10,
   },
 });

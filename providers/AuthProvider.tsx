@@ -7,8 +7,7 @@ import { getPersistedSmartAccountInfo } from '@/store/smartAccount/persist';
 import { SmartAccountInfoNotPersistedError } from '@/store/smartAccount/errors';
 import { rpId } from '@/constants/env';
 import { toCoinbaseSmartAccount, toWebAuthnAccount } from 'viem/account-abstraction';
-import { publicClient } from '@/init/viem';
-import { getPublicKeyHex } from '@/utils/base64';
+import { publicClient } from '@/init/client';
 import { getFn } from '@/store/smartAccount/getFn';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { setAddress } from '@/store/smartAccount';
@@ -36,12 +35,12 @@ export function AuthProvider({ children }: PropsWithChildren) {
 
   async function loadSession() {
     try {
-      const { publicKey, registrationResponse } = await getPersistedSmartAccountInfo();
+      const { publicKey, credentialID } = await getPersistedSmartAccountInfo();
 
       const webAuthnAccount = toWebAuthnAccount({
         credential: {
-          id: registrationResponse.credentialId,
-          publicKey: getPublicKeyHex(publicKey),
+          id: credentialID,
+          publicKey,
         },
         getFn,
         rpId,

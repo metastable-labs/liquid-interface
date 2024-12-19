@@ -24,7 +24,7 @@ const EnterEmail = ({ isSignup }: Props) => {
   const [loading, setLoading] = useState(false);
   const [emailError, setEmailError] = useState(false);
 
-  const isValid = emailIsValid(email) && !emailError;
+  const isValid = emailIsValid(email) && !emailError && !loading;
 
   const handleTagChange = (value: string) => {
     if (emailError) setEmailError(false);
@@ -63,12 +63,12 @@ const EnterEmail = ({ isSignup }: Props) => {
       setLoading(true);
 
       if (isSignup) {
-        return handleRegistration();
+        await handleRegistration();
+      } else {
+        await handleLogin();
       }
-
-      return handleLogin();
     } catch (error) {
-      setEmailError(true);
+      Alert.alert('An error occurred. Please check your email and try again.');
     } finally {
       setLoading(false);
     }
@@ -80,7 +80,7 @@ const EnterEmail = ({ isSignup }: Props) => {
 
   return (
     <View style={styles.root}>
-      <StatusBar style="inverted" />
+      <StatusBar style="dark" />
 
       <LQDKeyboardWrapper>
         <View style={styles.container}>

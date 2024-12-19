@@ -1,15 +1,12 @@
-import { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Stack } from 'expo-router';
 
 import { LQDButton, LQDStackHeader } from '@/components';
 import { ILQDButton } from '@/components/button/types';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
-import useAppActions from '@/store/app/actions';
 
 const PoolDetailLayout = () => {
   const { router } = useSystemFunctions();
-  const { hideSearch } = useAppActions();
 
   const actions: Array<ILQDButton> = [
     {
@@ -24,16 +21,11 @@ const PoolDetailLayout = () => {
     },
   ];
 
-  useEffect(() => {
-    hideSearch(true);
-
-    return () => hideSearch(false);
-  }, []);
   return (
     <>
       <Stack
         screenOptions={{
-          header: (props) => <LQDStackHeader {...props} style={{ paddingTop: 50 }} />,
+          header: (props) => <LQDStackHeader {...props} style={{ paddingTop: 0 }} />,
           headerShown: true,
         }}
       ></Stack>

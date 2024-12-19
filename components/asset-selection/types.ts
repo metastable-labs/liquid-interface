@@ -1,16 +1,9 @@
-interface IAssetSelection {
+import { TokenItem } from '@/store/account/types';
+
+export interface AssetSelection {
   title: string;
   show: boolean;
   close: () => void;
-  setAsset: (asset: IAsset) => void;
-  asset?: IAsset;
-  assets: Array<IAsset>;
-}
-
-interface IAsset {
-  id: string;
-  name: string;
-  symbol: string;
-  balance: number;
-  iconUrl: string;
+  setAsset: (asset: TokenItem) => void;
+  selectedAsset?: TokenItem;
 }

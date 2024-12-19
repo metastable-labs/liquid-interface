@@ -1,6 +1,12 @@
-import { Address, Hex, encodeFunctionData } from 'viem';
-import { AerodromeConnectorABI, ConnectorPluginABI } from '@/constants/abis';
-import { IRouter } from '@/hooks/types';
+import { Address, Hex, encodeFunctionData, encodeAbiParameters, parseAbiParameters, erc20Abi } from 'viem';
+import { AerodromeConnectorABI, ConnectorPluginABI, LiquidStrategy } from '@/constants/abis';
+
+interface RouteStruct {
+  from: Address;
+  to: Address;
+  stable: boolean;
+  factory: Address;
+}
 
 export function encodePluginExecute(connector: Address, data: Hex) {
   return encodeFunctionData({
@@ -21,6 +27,7 @@ export function encodeAddLiquidity({
   balanceTokenRatio,
   to,
   deadline,
+  caller,
 }: {
   tokenA: Address;
   tokenB: Address;
@@ -32,11 +39,28 @@ export function encodeAddLiquidity({
   balanceTokenRatio: boolean;
   to: Address;
   deadline: bigint;
+  caller: Address;
 }) {
+  const params = encodeAbiParameters(parseAbiParameters('bytes, address'), [
+    encodeAbiParameters(parseAbiParameters('address, address, bool, uint256, uint256, uint256, uint256, bool, address, uint256'), [
+      tokenA,
+      tokenB,
+      stable,
+      amountAIn,
+      amountBIn,
+      amountAMin,
+      amountBMin,
+      balanceTokenRatio,
+      to,
+      deadline,
+    ]),
+    caller,
+  ]);
+
   return encodeFunctionData({
     abi: AerodromeConnectorABI.abi,
-    functionName: 'addLiquidity',
-    args: [tokenA, tokenB, stable, amountAIn, amountBIn, amountAMin, amountBMin, balanceTokenRatio, to, deadline],
+    functionName: 'execute',
+    args: [params],
   });
 }
 
@@ -49,6 +73,7 @@ export function encodeRemoveLiquidity({
   amountBMin,
   to,
   deadline,
+  caller,
 }: {
   tokenA: Address;
   tokenB: Address;
@@ -58,11 +83,26 @@ export function encodeRemoveLiquidity({
   amountBMin: bigint;
   to: Address;
   deadline: bigint;
+  caller: Address;
 }) {
+  const params = encodeAbiParameters(parseAbiParameters('bytes, address'), [
+    encodeAbiParameters(parseAbiParameters('address, address, bool, uint256, uint256, uint256, address, uint256'), [
+      tokenA,
+      tokenB,
+      stable,
+      liquidity,
+      amountAMin,
+      amountBMin,
+      to,
+      deadline,
+    ]),
+    caller,
+  ]);
+
   return encodeFunctionData({
     abi: AerodromeConnectorABI.abi,
-    functionName: 'removeLiquidity',
-    args: [tokenA, tokenB, stable, liquidity, amountAMin, amountBMin, to, deadline],
+    functionName: 'execute',
+    args: [params],
   });
 }
 
@@ -72,24 +112,69 @@ export function encodeSwap({
   routes,
   to,
   deadline,
+  caller,
 }: {
   amountIn: bigint;
   minReturnAmount: bigint;
-  routes: IRouter.RouteStruct[];
+  routes: RouteStruct[];
   to: Address;
   deadline: bigint;
+  caller: Address;
 }) {
+  const params = encodeAbiParameters(parseAbiParameters('bytes, address'), [
+    encodeAbiParameters(
+      [
+        { type: 'uint256' },
+        { type: 'uint256' },
+        {
+          type: 'tuple[]',
+          components: [
+            { name: 'from', type: 'address' },
+            { name: 'to', type: 'address' },
+            { name: 'stable', type: 'bool' },
+            { name: 'factory', type: 'address' },
+          ],
+        },
+        { type: 'address' },
+        { type: 'uint256' },
+      ],
+      [amountIn, minReturnAmount, routes, to, deadline]
+    ),
+    caller,
+  ]);
+
   return encodeFunctionData({
     abi: AerodromeConnectorABI.abi,
-    functionName: 'swapExactTokensForTokens',
-    args: [amountIn, minReturnAmount, routes, to, deadline],
+    functionName: 'execute',
+    args: [params],
   });
 }
 
-export function encodeStake({ gaugeAddress, amount }: { gaugeAddress: Address; amount: bigint }) {
+export function encodeStake({ gaugeAddress, amount, caller }: { gaugeAddress: Address; amount: bigint; caller: Address }) {
+  const params = encodeAbiParameters(parseAbiParameters('bytes, address'), [
+    encodeAbiParameters(parseAbiParameters('address, uint256'), [gaugeAddress, amount]),
+    caller,
+  ]);
+
   return encodeFunctionData({
     abi: AerodromeConnectorABI.abi,
-    functionName: 'deposit',
-    args: [gaugeAddress, amount],
+    functionName: 'execute',
+    args: [params],
+  });
+}
+
+export function encodeApprove({ amount, spender }: { amount: bigint; spender: Address }) {
+  return encodeFunctionData({
+    abi: erc20Abi,
+    functionName: 'approve',
+    args: [spender, amount],
+  });
+}
+
+export function encodeCreateStrategy({ description, maxTvl, minDeposit, name, performanceFee, steps }: StrategyBody) {
+  return encodeFunctionData({
+    abi: LiquidStrategy.LiquidStrategy.abi,
+    functionName: 'createStrategy',
+    args: [name, description, steps, minDeposit, maxTvl, performanceFee],
   });
 }

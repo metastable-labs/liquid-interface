@@ -1,21 +1,25 @@
 import useSystemFunctions from '@/hooks/useSystemFunctions';
-import { CallbackProps } from '..';
-import { setHideSearch, setSearchIsFocused } from '.';
+import { setShowSearch, setSearchIsFocused, setStrategyActions } from '.';
 
 const useAppActions = () => {
   const { dispatch } = useSystemFunctions();
 
-  const hideSearch = (hide: boolean) => {
-    dispatch(setHideSearch(hide));
+  const showSearch = (hide: boolean) => {
+    dispatch(setShowSearch(hide));
   };
 
   const searchIsFocused = (focused: boolean) => {
     dispatch(setSearchIsFocused(focused));
   };
 
+  const handleStrategyActions = (actions: StrategyAction[]) => {
+    dispatch(setStrategyActions(actions));
+  };
+
   return {
-    hideSearch,
+    showSearch,
     searchIsFocused,
+    handleStrategyActions,
   };
 };
 

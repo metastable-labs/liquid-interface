@@ -8,6 +8,7 @@ import appReducer from './app';
 import smartAccountReducer from './smartAccount';
 import poolReducer from './pools';
 import accountReducer from './account';
+import toastReducer from './toast';
 
 export interface CallbackProps {
   onSuccess?: Function;
@@ -20,12 +21,13 @@ const rootReducer = combineReducers({
   smartAccount: smartAccountReducer,
   pools: poolReducer,
   account: accountReducer,
+  toast: toastReducer,
 });
 
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  whitelist: ['user', 'pools', 'smartAccount', 'account'],
+  whitelist: ['user', 'smartAccount', 'pools'],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -34,10 +36,12 @@ export const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
-      serializableCheck: {
-        // Ignore redux-persist actions
-        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-      },
+      serializableCheck: false,
+      immutableCheck: false,
+      // serializableCheck: {
+      //   // Ignore redux-persist actions
+      //   ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      // },
     }),
 });
 

@@ -1,29 +1,37 @@
 import { useMemo } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { useForm } from 'react-hook-form';
 
 import { CheckIcon } from '@/assets/icons';
-import { adjustFontSizeForIOS } from '@/utils/helpers';
+import { adjustFontSizeForIOS, formatAmount } from '@/utils/helpers';
 import LQDBottomSheet from '../bottom-sheet';
 import LQDInput from '../input';
+import useSystemFunctions from '@/hooks/useSystemFunctions';
+import { AssetSelection } from './types';
+import { TokenItem } from '@/store/account/types';
+import LQDTokenImage from '../pool-images/token-image';
+import LQNoResult from '../no-result';
 
-const LQDAssetSelection = ({ assets, close, setAsset, show, title, asset }: IAssetSelection) => {
+const LQDAssetSelection = ({ close, setAsset, show, title, selectedAsset }: AssetSelection) => {
+  const { accountState } = useSystemFunctions();
+  const { tokens } = accountState;
+
   const { control, watch } = useForm();
   const searchValue = watch('search', '');
 
   const searchedAssets = useMemo(() => {
-    if (!searchValue) return assets;
-    return assets.filter(
-      (asset) =>
-        asset.name.toLowerCase().includes(searchValue.toLowerCase()) || asset.symbol.toLowerCase().includes(searchValue.toLowerCase())
+    if (!searchValue) return tokens.data;
+
+    return tokens.data.filter(
+      (asset) => asset.symbol.toLowerCase().includes(searchValue.toLowerCase()) || asset.address.includes(searchValue.toLowerCase())
     );
   }, [searchValue]);
 
-  const action = (active: boolean, asset: IAsset) => {
-    if (!active) {
-      setAsset(asset);
-      close();
-    }
+  const action = (active: boolean, asset: TokenItem) => {
+    if (active) return;
+
+    setAsset(asset);
+    close();
   };
 
   return (
@@ -42,20 +50,24 @@ const LQDAssetSelection = ({ assets, close, setAsset, show, title, asset }: IAss
         />
 
         <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
-          {searchedAssets.map((asset_, index) => {
-            const active = asset?.id === asset_?.id;
+          {searchedAssets.length === 0 && searchValue && (
+            <LQNoResult
+              title="Can’t find this token"
+              description="We can’t find that token, make sure it’s not a typo or you can explore other token on Liquid"
+            />
+          )}
+          {searchedAssets.map((_asset, index) => {
+            const active = selectedAsset?.address === _asset?.address;
 
             return (
-              <TouchableOpacity key={index} style={styles.selector} onPress={() => action(active, asset_)} disabled={active}>
+              <TouchableOpacity key={index} style={styles.selector} onPress={() => action(active, _asset)} disabled={active}>
                 <View style={styles.selectorContainer}>
-                  <View style={styles.iconContainer}>
-                    <Image source={{ uri: asset_?.iconUrl }} style={styles.icon} />
-                  </View>
+                  <LQDTokenImage iconURL={_asset?.logoUrl} />
 
                   <View style={styles.textContainer}>
-                    <Text style={styles.primaryText}>{asset_?.name}</Text>
+                    <Text style={styles.primaryText}>{_asset?.symbol}</Text>
                     <Text style={styles.secondaryText}>
-                      {asset_.balance.toLocaleString()} {asset_?.symbol}
+                      {formatAmount(_asset.balance).toLocaleString()} {_asset?.symbol}
                     </Text>
                   </View>
                 </View>
@@ -100,22 +112,6 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     alignItems: 'center',
     gap: 10,
-  },
-
-  iconContainer: {
-    width: 24,
-    height: 24,
-    borderWidth: 1,
-    borderColor: '#EAEEF4',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 9999,
-  },
-
-  icon: {
-    width: 24,
-    height: 24,
-    objectFit: 'contain',
   },
 
   textContainer: {

@@ -1,28 +1,32 @@
 import { PublicClient } from 'viem';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
-import { useToken } from '@/hooks/useToken';
-import { publicClient } from '@/init/viem';
+import { publicClient } from '@/init/client';
 import { setLoading, setLpBalance, setPositions, setRefreshing, setTokenBalance, setTokens } from '.';
-import { Position, Token } from '@/hooks/types';
-import { usePool } from '@/hooks/usePool';
+import { Position } from '@/hooks/types';
+import api from '@/init/api';
+import { TokenItem } from './types';
 
 export function useAccountActions() {
-  const { dispatch } = useSystemFunctions();
-  const { fetchTokens } = useToken(publicClient as PublicClient);
-  const { fetchPositions } = usePool(publicClient as PublicClient);
+  const { dispatch, accountState, smartAccountState } = useSystemFunctions();
 
   const getTokens = async (refresh?: boolean) => {
     try {
       if (refresh) {
         dispatch(setRefreshing(true));
-        const tokens = await fetchTokens(15, 0);
-        return _setValidTokens(tokens);
+      } else {
+        dispatch(setLoading(true));
       }
 
-      dispatch(setLoading(true));
-      const tokens = await fetchTokens(15, 0);
+      const query = smartAccountState.address ? `?address=${smartAccountState.address}` : '';
+      const tokens = await api.getTokens(query);
 
-      return _setValidTokens(tokens);
+      const totalBalance = tokens.data.reduce((acc, token) => acc + parseFloat(token.usdBalance || '0'), 0);
+      const sortedTokens = await _sortTokensByBalance(tokens.data);
+
+      tokens.data = [...sortedTokens];
+
+      dispatch(setTokens(tokens));
+      dispatch(setTokenBalance(totalBalance));
     } catch (error: any) {
       //
     } finally {
@@ -31,18 +35,39 @@ export function useAccountActions() {
     }
   };
 
-  const getPositions = async (refresh?: boolean) => {
+  const getPaginatedTokens = async (refresh?: boolean) => {
     try {
       if (refresh) {
         dispatch(setRefreshing(true));
-        const positions = await fetchPositions(15, 0);
-        return _setValidPositions(positions || []);
+
+        const query = smartAccountState.address ? `?address=${smartAccountState.address}` : '';
+        const tokens = await api.getTokens(query);
+
+        return dispatch(setTokens(tokens));
       }
 
-      dispatch(setLoading(true));
-      const positions = await fetchPositions(15, 0);
+      const { tokens: currentTokens } = accountState;
 
-      return _setValidPositions(positions || []);
+      if (!currentTokens?.pagination?.hasMore) return;
+
+      dispatch(setLoading(true));
+
+      const nextPage = currentTokens?.pagination.page + 1;
+
+      const addressQuery = smartAccountState.address ? `address=${smartAccountState.address}` : '';
+      const query = `?page=${nextPage}&address=${addressQuery}`;
+
+      const tokens = await api.getTokens(query);
+      const sortedTokens = await _sortTokensByBalance(tokens.data);
+      tokens.data = [...sortedTokens];
+
+      const newData = { ...currentTokens.data, ...tokens.data };
+      tokens.data = newData;
+
+      const totalBalance = tokens.data.reduce((acc, token) => acc + parseFloat(token.balance) * parseFloat(token.usdPrice), 0);
+
+      dispatch(setTokens(tokens));
+      dispatch(setTokenBalance(totalBalance));
     } catch (error: any) {
       //
     } finally {
@@ -51,13 +76,28 @@ export function useAccountActions() {
     }
   };
 
-  const _setValidTokens = async (tokens: Token[]) => {
-    const validTokens = await tokens.filter((token) => token.isListed && token.balance !== '0');
-    const totalBalance = validTokens.reduce((acc, token) => acc + parseFloat(token.balance) * parseFloat(token.usdPrice), 0);
+  // const getPositions = async (refresh?: boolean) => {
+  //   try {
+  //     if (refresh) {
+  //       dispatch(setRefreshing(true));
+  //       console.log('got here');
+  //       const returnedPosition = await lpSugar.getPositions(TEST_USER);
 
-    dispatch(setTokens(validTokens));
-    dispatch(setTokenBalance(totalBalance));
-  };
+  //       console.log(returnedPosition, 'returned position');
+  //       return _setValidPositions(positions || []);
+  //     }
+
+  //     dispatch(setLoading(true));
+  //     const returnedPosition = await lpSugar.getPositions(TEST_USER);
+
+  //     return _setValidPositions(positions || []);
+  //   } catch (error: any) {
+  //     //
+  //   } finally {
+  //     dispatch(setLoading(false));
+  //     dispatch(setRefreshing(false));
+  //   }
+  // };
 
   const _setValidPositions = async (positions: Position[]) => {
     const validPositions = await positions.filter((po) => po.balance !== '0');
@@ -67,8 +107,20 @@ export function useAccountActions() {
     dispatch(setLpBalance(lpBalance));
   };
 
+  const _sortTokensByBalance = async (tokens: TokenItem[]) => {
+    const sortedTokens = tokens.sort((a, b) => {
+      const balanceA = parseFloat(a.balance);
+      const balanceB = parseFloat(b.balance);
+
+      return balanceB - balanceA;
+    });
+
+    return sortedTokens;
+  };
+
   return {
     getTokens,
-    getPositions,
+    //getPositions,
+    getPaginatedTokens,
   };
 }

@@ -3,29 +3,23 @@ import 'react-native-reanimated';
 import { Stack } from 'expo-router';
 
 // setup viem and api on app start
-import '@/init/viem';
+import '@/init/useViem';
+import '@/init/client';
 import '@/init/api';
 
 import { AllProviders } from '@/providers';
-import { LQDStackHeader } from '@/components';
-import { useOnMount } from '@/hooks/useOnMount';
-import { usePoolActions } from '@/store/pools/actions';
+import { LQDStackHeader, LQToast } from '@/components';
 
 export default function RootLayout() {
   return (
     <AllProviders>
       <RootStack />
+      <LQToast />
     </AllProviders>
   );
 }
 
 function RootStack() {
-  const { getPools } = usePoolActions();
-
-  useOnMount(function loadData() {
-    getPools();
-  });
-
   return (
     <Stack screenOptions={{ headerShown: false }} initialRouteName="index">
       <Stack.Screen name="index" options={{ title: 'AuthGate' }} />
@@ -57,11 +51,39 @@ function RootStack() {
       <Stack.Screen
         name="withdraw"
         options={{
-          header: (props) => <LQDStackHeader {...props} style={{ paddingTop: 80 }} hasTitle />,
+          header: (props) => <LQDStackHeader {...props} style={{ paddingTop: 60 }} hasTitle />,
           headerTitle: 'Withdraw',
           headerShown: true,
         }}
       />
+      <Stack.Screen
+        name="(settings)/index"
+        options={{
+          header: (props) => <LQDStackHeader {...props} style={{ paddingTop: 60 }} hasTitle />,
+          headerTitle: 'Settings',
+          headerShown: true,
+        }}
+      />
+
+      <Stack.Screen
+        name="(settings)/legal-privacy"
+        options={{
+          header: (props) => <LQDStackHeader {...props} style={{ paddingTop: 60 }} hasTitle />,
+          headerTitle: 'Legal & Privacy',
+          headerShown: true,
+        }}
+      />
+
+      <Stack.Screen
+        name="(settings)/support"
+        options={{
+          header: (props) => <LQDStackHeader {...props} style={{ paddingTop: 60 }} hasTitle />,
+          headerTitle: 'Support',
+          headerShown: true,
+        }}
+      />
+
+      <Stack.Screen name="(strategy)" />
 
       {/* Common routes */}
       <Stack.Screen name="+not-found" options={{ headerShown: true }} />

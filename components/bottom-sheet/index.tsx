@@ -1,4 +1,5 @@
-import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Modal, Pressable } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Pressable } from 'react-native';
+import Modal from 'react-native-modal';
 
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import { CloseIcon } from '@/assets/icons';
@@ -6,23 +7,22 @@ import { CloseIcon } from '@/assets/icons';
 const { height } = Dimensions.get('window');
 
 interface ILQDBottomSheet {
-  title: string;
+  title?: string;
   variant?: 'primary' | 'secondary';
   show: boolean;
   onClose: () => void;
   children?: React.ReactNode;
 }
 
-const LQDBottomSheet: React.FC<ILQDBottomSheet> = ({ title, variant = 'primary', show, onClose, children }) => {
+const LQDBottomSheet = ({ title = '', variant = 'primary', show, onClose, children }: ILQDBottomSheet) => {
   const bottomSheetMaxHeights = {
     primary: height * 0.6,
     secondary: height * 0.83,
   };
 
   return (
-    <Modal statusBarTranslucent transparent visible={show} animationType="slide">
+    <Modal style={{ padding: 0, margin: 0 }} avoidKeyboard statusBarTranslucent isVisible={show} animationIn="slideInUp">
       <Pressable style={styles.overlay} onPress={onClose} />
-
       <View
         style={{
           ...styles.bottomSheet,
@@ -32,7 +32,7 @@ const LQDBottomSheet: React.FC<ILQDBottomSheet> = ({ title, variant = 'primary',
       >
         <View style={styles.header}>
           <Text style={styles.title}>{title}</Text>
-          <TouchableOpacity onPress={onClose}>
+          <TouchableOpacity onPress={onClose} style={{ position: 'absolute', right: 0 }}>
             <CloseIcon />
           </TouchableOpacity>
         </View>
@@ -46,8 +46,8 @@ const LQDBottomSheet: React.FC<ILQDBottomSheet> = ({ title, variant = 'primary',
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: '#2125506B',
     justifyContent: 'flex-end',
+    width: '100%',
   },
 
   bottomSheet: {
@@ -55,8 +55,8 @@ const styles = StyleSheet.create({
     bottom: 0,
     zIndex: 30,
     width: '100%',
-    paddingBottom: 62.45,
-    paddingTop: 27.55,
+
+    paddingTop: 17,
     paddingHorizontal: 16,
     backgroundColor: '#fff',
     borderTopLeftRadius: 20,
@@ -66,13 +66,13 @@ const styles = StyleSheet.create({
 
   header: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
   },
 
   title: {
     color: '#0F172A',
-    fontSize: adjustFontSizeForIOS(20, 3),
+    fontSize: adjustFontSizeForIOS(17, 3),
     lineHeight: 23.2,
     fontWeight: '500',
     fontFamily: 'AeonikMedium',
