@@ -8,7 +8,7 @@ const ConncetWallet = ({ openCloseComment, showCommentSection, data }: ConncetWa
   const { router } = useSystemFunctions();
 
   const handleNavigate = () => {
-    router.push('/deposit/connected-wallet');
+    router.push('/deposit/crypto-wallet');
     openCloseComment();
   };
 

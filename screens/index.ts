@@ -14,7 +14,7 @@ import EditProfile from './profile/edit-profile.tsx';
 
 import Setup from './setup';
 import CryptoDeposit from './deposit/crypto';
-import CryptoWalletDeposit from './deposit/crypto/connected-wallet';
+import CryptoWalletDeposit from './deposit/crypto/crypto-wallet';
 import DebitDeposit from './deposit/debit';
 
 import LiquidityManagement from './liquidity-management';
