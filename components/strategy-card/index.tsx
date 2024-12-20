@@ -18,8 +18,8 @@ const LQDStrategyCard = (strategy: Strategy) => {
   };
 
   const username = 'Meister';
-  const tvl = metrics.tvl;
-  const apy = metrics.apy;
+  const tvl = metrics?.tvl;
+  const apy = metrics?.apy;
 
   return (
     <TouchableOpacity activeOpacity={0.5} onPress={() => onPress(strategy.id)} style={styles.container}>
@@ -33,7 +33,7 @@ const LQDStrategyCard = (strategy: Strategy) => {
       <View style={[styles.iconContainer, styles.actionsContainer]}>
         <MoneysIcon fill="#253EA7" />
         <Text numberOfLines={1} style={styles.actions}>
-          {steps.length} action{steps.length > 1 ? 's' : ''}...
+          {steps?.length} action{steps?.length > 1 ? 's' : ''}...
         </Text>
       </View>
 

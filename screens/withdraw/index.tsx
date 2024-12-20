@@ -41,7 +41,8 @@ const Withdraw = () => {
     { text: '$500', action: () => setAmount('500') },
   ];
 
-  const disableButton = !parseFloat(removeCommasFromNumber(amount)) || parseFloat(removeCommasFromNumber(amount)) > Number(asset?.balance)!;
+  const disableButton =
+    !parseFloat(removeCommasFromNumber(amount)) || parseFloat(removeCommasFromNumber(amount)) > Number(asset?.balance || 0)!;
 
   const handleAmountChange = (key: string) => {
     if (key === '⌫') {
@@ -54,8 +55,8 @@ const Withdraw = () => {
   };
 
   const onSubmit = () => {
-    const amountNumber = parseFloat(removeCommasFromNumber(amount));
-    console.log('submit', { amount: amountNumber });
+    // const amountNumber = parseFloat(removeCommasFromNumber(amount));
+    // console.log('submit', { amount: amountNumber });
   };
 
   useEffect(() => {
@@ -84,13 +85,14 @@ const Withdraw = () => {
                 </Text>
 
                 <View style={styles.inputContainer}>
-                  {amount && <Text style={styles.input}>$</Text>}
+                  {amount && <Text style={{ ...styles.input, color: disableButton ? '#AF1D38' : '#020617' }}>$</Text>}
                   <TextInput
                     style={[
                       styles.input,
                       Platform.OS === 'android' && {
                         maxWidth: getMaxWidth(amount),
                       },
+                      { color: disableButton ? '#AF1D38' : '#020617' },
                     ]}
                     value={amount}
                     placeholder="$100"

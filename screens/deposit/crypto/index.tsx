@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, Pressable } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 
 import useTruncateText from '@/hooks/useTruncateText';
@@ -9,15 +9,22 @@ import { CaretDownIcon, CoinsIcon, CopyIcon } from '@/assets/icons';
 import PaymentMethodSelection from '../method-selection';
 import sharedStyles from '../styles';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
-import { LQDButton } from '@/components';
+import { LQDActionCard, LQDBottomSheet, LQDButton, LQDImage, LQDScrollView } from '@/components';
+import { popularList } from '../dummy';
+import ConncetWallet from './connect-wallet';
 
 const CryptoDeposit = () => {
   const { smartAccountState } = useSystemFunctions();
   const [showBottomSheet, setShowBottomSheet] = useState(false);
+  const [showConnectWalletSheet, setShowConnectWalletSheet] = useState(false);
   const { handleCopy, hasCopied } = useCopy();
 
   const address = truncate(smartAccountState?.address || '');
   const tokensImage = require('../../../assets/images/tokens.png');
+
+  const handleOpenWallet = () => {
+    setShowConnectWalletSheet((prev) => !prev);
+  };
 
   return (
     <>
@@ -45,10 +52,17 @@ const CryptoDeposit = () => {
           <Text style={styles.title}>Deposit from external wallet</Text>
           <Text style={styles.text}>Send USDC, ETH or any ERC20 token on Base</Text>
           <View style={styles.buttonWrapper}>
-            <LQDButton variant="light" title="Connect wallet" />
+            <LQDButton onPress={handleOpenWallet} variant="light" title="Connect wallet" />
           </View>
         </View>
       </View>
+      <LQDBottomSheet show={false} title="0x8db6...aEA8" onClose={() => {}}>
+        <View style={{ marginBottom: 40 }}>
+          <LQDActionCard actions={{ title: 'Disconnect' }} variant="disconnect" onSelect={() => {}} />
+        </View>
+      </LQDBottomSheet>
+
+      <ConncetWallet data={popularList} showCommentSection={showConnectWalletSheet} openCloseComment={handleOpenWallet} />
 
       <PaymentMethodSelection close={() => setShowBottomSheet(false)} show={showBottomSheet} />
     </>

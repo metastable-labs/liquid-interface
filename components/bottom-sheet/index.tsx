@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Pressable } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Pressable, StyleProp, ViewStyle } from 'react-native';
 import Modal from 'react-native-modal';
 
 import { adjustFontSizeForIOS } from '@/utils/helpers';
@@ -12,22 +12,32 @@ interface ILQDBottomSheet {
   show: boolean;
   onClose: () => void;
   children?: React.ReactNode;
+  sizeMode?: 'cover' | 'contain';
 }
 
-const LQDBottomSheet = ({ title = '', variant = 'primary', show, onClose, children }: ILQDBottomSheet) => {
+const LQDBottomSheet = ({ title = '', variant = 'primary', show, onClose, children, sizeMode = 'cover' }: ILQDBottomSheet) => {
   const bottomSheetMaxHeights = {
     primary: height * 0.6,
     secondary: height * 0.83,
   };
 
+  const isCoverMode = sizeMode === 'cover';
+
   return (
-    <Modal style={{ padding: 0, margin: 0 }} avoidKeyboard statusBarTranslucent isVisible={show} animationIn="slideInUp">
+    <Modal
+      style={{ ...styles.container, margin: isCoverMode ? 0 : 15 }}
+      avoidKeyboard
+      statusBarTranslucent
+      isVisible={show}
+      animationIn="slideInUp"
+    >
       <Pressable style={styles.overlay} onPress={onClose} />
       <View
         style={{
           ...styles.bottomSheet,
           maxHeight: bottomSheetMaxHeights[variant],
           height: variant === 'secondary' ? '83%' : 'auto',
+          borderRadius: !isCoverMode ? 20 : 0,
         }}
       >
         <View style={styles.header}>
@@ -44,6 +54,7 @@ const LQDBottomSheet = ({ title = '', variant = 'primary', show, onClose, childr
 };
 
 const styles = StyleSheet.create({
+  container: { padding: 0, margin: 20 },
   overlay: {
     flex: 1,
     justifyContent: 'flex-end',
@@ -55,7 +66,6 @@ const styles = StyleSheet.create({
     bottom: 0,
     zIndex: 30,
     width: '100%',
-
     paddingTop: 17,
     paddingHorizontal: 16,
     backgroundColor: '#fff',
@@ -72,7 +82,7 @@ const styles = StyleSheet.create({
 
   title: {
     color: '#0F172A',
-    fontSize: adjustFontSizeForIOS(17, 3),
+    fontSize: adjustFontSizeForIOS(15, 3),
     lineHeight: 23.2,
     fontWeight: '500',
     fontFamily: 'AeonikMedium',

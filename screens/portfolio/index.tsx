@@ -13,6 +13,7 @@ const Portfolio = () => {
 
   const openModal = () => {
     setShowModal((prev) => !prev);
+    setSelectedAction('');
   };
 
   const navigateToWithdrawal = () => {
@@ -22,20 +23,19 @@ const Portfolio = () => {
   const handleSelectAction = () => {
     openModal();
 
-    if (selectedAction === '1') {
-      setSelectedAction('');
-      router.push('/deposit/debit');
-    }
+    setTimeout(() => {
+      if (selectedAction === '1') {
+        router.push('/deposit/crypto');
+      }
 
-    if (selectedAction === '2') {
-      setSelectedAction('');
-      router.push('/deposit/crypto');
-    }
+      if (selectedAction === '2') {
+        router.push('/deposit/debit');
+      }
 
-    if (selectedAction === '3') {
-      // handle coinbase
-      setSelectedAction('');
-    }
+      if (selectedAction === '3') {
+        // handle coinbase
+      }
+    }, 200);
   };
 
   return (
@@ -109,17 +109,18 @@ const Portfolio = () => {
           <View style={styles.modalContainerStyle}>
             {addMoney.map((action, index) => (
               <LQDActionCard
+                comingSoon={action.comingSoon}
                 key={index}
                 variant={action.icon}
                 selected={selectedAction === action.id}
                 actions={action}
-                onSelect={() => setSelectedAction(action.id)}
+                onSelect={() => !action.comingSoon && setSelectedAction(action.id)}
               />
             ))}
           </View>
 
           <View style={styles.bottomWrapper}>
-            <LQDButton title="Continue" variant="secondary" onPress={handleSelectAction} />
+            <LQDButton disabled={!selectedAction} title="Continue" variant="secondary" onPress={handleSelectAction} />
           </View>
         </LQDBottomSheet>
       </LQDScrollView>

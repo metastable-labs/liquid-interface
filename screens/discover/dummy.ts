@@ -21,18 +21,21 @@ export const actionList: IActionsListItem[] = [
 export const addMoney: AddMoneyActionItem[] = [
   {
     id: '1',
-    icon: 'debitCard',
-    title: 'Debit card',
+    icon: 'crypto',
+    title: 'Crypto',
+    comingSoon: false,
   },
   {
     id: '2',
-    icon: 'crypto',
-    title: 'crypto',
+    icon: 'debitCard',
+    title: 'Debit card',
+    comingSoon: true,
   },
   {
     id: '3',
     icon: 'coinBase',
     title: 'Coinbase Wallet',
+    comingSoon: true,
   },
 ];
 

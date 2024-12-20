@@ -12,13 +12,13 @@ const LQDImage = ({
   src,
   height = 40,
   width = 40,
+  borderRadius = Math.min(height, width) / 2,
   edit,
   action,
   onError,
   ...rest
 }: LQDImageProps) => {
   const [isError, setIsError] = useState(false);
-  const borderRadius = Math.min(height, width) / 2;
 
   const handleError = () => {
     setIsError(true);
@@ -28,7 +28,7 @@ const LQDImage = ({
   if (isError) {
     return (
       <FastImage
-        style={[styles.fallbackImage, { borderRadius }]}
+        style={[style, styles.fallbackImage, { borderRadius }]}
         source={{ uri: fallbackImage, priority: FastImage.priority.high }}
         resizeMode={resizeMode}
       />
