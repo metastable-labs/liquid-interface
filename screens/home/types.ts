@@ -12,3 +12,10 @@ interface IHeader {
   actionLeft?: () => void;
   actionRight?: () => void;
 }
+
+interface DepositToast {
+  title: string;
+  subTitle: string;
+  onPress: () => void;
+  onClose: () => void;
+}

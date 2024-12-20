@@ -1,5 +1,4 @@
-import { StyleSheet, Platform, StatusBar as RNStatusBar, Pressable, FlatList } from 'react-native';
-
+import { StyleSheet, Platform, StatusBar as RNStatusBar, Pressable, FlatList, View } from 'react-native';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import { LQDFeedCard } from '@/components';
@@ -7,10 +6,13 @@ import { PlusIcon } from '@/assets/icons';
 import Loader from './loader';
 import { useFeeds } from '@/services/feeds/queries';
 import DefaultFooterLoader from '@/components/flatlist/footer-loader';
+import DepositToast from './deposit-toast';
+import { useState } from 'react';
 
 const Home = () => {
   const { router } = useSystemFunctions();
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isFetching, isError, error, refetch } = useFeeds();
+  const [showDepositToast, setShowDepositToast] = useState(true);
 
   const feeds = data?.pages.flatMap((page) => page.data) || [];
 
@@ -29,6 +31,17 @@ const Home = () => {
       <Pressable onPress={() => router.navigate('/(strategy)/create-strategy')} style={styles.addIcon}>
         <PlusIcon />
       </Pressable>
+
+      {showDepositToast && (
+        <View style={styles.toastWrapper}>
+          <DepositToast
+            onClose={() => setShowDepositToast(false)}
+            onPress={() => router.push('/deposit/crypto')}
+            title="Make a new deposit"
+            subTitle="add funds to your liquid wallet and start earning"
+          />
+        </View>
+      )}
 
       <FlatList
         refreshing={isFetching}
@@ -55,6 +68,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     backgroundColor: '#fff',
   },
+
+  toastWrapper: { paddingHorizontal: 16, backgroundColor: '#fff', paddingTop: 20 },
 
   contentContainer: {
     flexGrow: 1,
