@@ -12,6 +12,7 @@ const DepositStack = () => {
       <Stack.Screen name="debit" />
 
       <Stack.Screen name="crypto" />
+      <Stack.Screen name="connected-wallet" />
     </Stack>
   );
 };

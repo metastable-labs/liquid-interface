@@ -1,9 +1,17 @@
-import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { LQDBottomSheet, LQDImage, LQDScrollView, LQShrimeLoader } from '@/components';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import { ConncetWalletProps } from '../types';
+import useSystemFunctions from '@/hooks/useSystemFunctions';
 
 const ConncetWallet = ({ openCloseComment, showCommentSection, data }: ConncetWalletProps) => {
+  const { router } = useSystemFunctions();
+
+  const handleNavigate = () => {
+    router.push('/deposit/connected-wallet');
+    openCloseComment();
+  };
+
   return (
     <View>
       <LQDBottomSheet show={showCommentSection} title="Connect a Wallet" sizeMode="contain" onClose={openCloseComment}>
@@ -13,15 +21,16 @@ const ConncetWallet = ({ openCloseComment, showCommentSection, data }: ConncetWa
               <View key={index} style={styles.itemContainer}>
                 <Text style={styles.itemTitle}>{item.title}</Text>
                 {item.children.map((child) => (
-                  <View key={child.id} style={styles.childContainer}>
+                  <Pressable onPress={handleNavigate} key={child.id} style={styles.childContainer}>
                     <LQDImage height={35} width={35} borderRadius={9} />
                     <Text style={styles.childText}>{child.title}</Text>
-                  </View>
+                  </Pressable>
                 ))}
               </View>
             ))}
           </LQDScrollView>
         </View>
+
         <View style={styles.bottomWrapper}>
           <Text style={styles.bottomTitle}>New to ethereum wallets?</Text>
           <Pressable>

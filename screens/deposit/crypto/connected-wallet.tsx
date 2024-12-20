@@ -1,13 +1,10 @@
 import { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, TextInput, Platform } from 'react-native';
-import FastImage from 'react-native-fast-image';
 
-import { LQDAssetSelection, LQDButton, LQDNumericKeyboard } from '@/components';
+import { LQDActionCard, LQDBottomSheet, LQDButton, LQDNumericKeyboard } from '@/components';
 import { formatAmount, formatWithThousandSeparator, removeCommasFromNumber } from '@/utils/helpers';
-import { CaretDownIcon } from '@/assets/icons';
-import { TokenItem } from '@/store/account/types';
-import useSystemFunctions from '@/hooks/useSystemFunctions';
-import styles from './styles';
+import { CaretDownIcon, UserOctagonIcon } from '@/assets/icons';
+import styles from '../styles';
 
 const getMaxWidth = (amount: string) => {
   const baseWidth = 27;
@@ -27,23 +24,23 @@ const getMaxWidth = (amount: string) => {
   return totalWidth;
 };
 
-const Withdraw = () => {
-  const { accountState } = useSystemFunctions();
-  const { router, dispatch } = useSystemFunctions();
+const CryptoWalletDeposit = () => {
   const [amount, setAmount] = useState('');
-  const [asset, setAsset] = useState<TokenItem>();
   const [showCursor, setShowCursor] = useState(true);
+  const [address, setAddress] = useState('0x8db6...aEA8');
   const [showBottomSheet, setShowBottomSheet] = useState(false);
+
+  const walletBalance = 100;
+
+  const disableButton =
+    !parseFloat(removeCommasFromNumber(amount)) || parseFloat(removeCommasFromNumber(amount)) > Number(walletBalance || 0)!;
 
   const balancePartitions = [
     { text: '$10', action: () => setAmount('10') },
     { text: '$50', action: () => setAmount('50') },
     { text: '$100', action: () => setAmount('100') },
-    { text: '$500', action: () => setAmount('500') },
+    { text: 'Max', action: () => setAmount('500') },
   ];
-
-  const disableButton =
-    !parseFloat(removeCommasFromNumber(amount)) || parseFloat(removeCommasFromNumber(amount)) > Number(asset?.balance || 0)!;
 
   const handleAmountChange = (key: string) => {
     if (key === '⌫') {
@@ -58,20 +55,12 @@ const Withdraw = () => {
   const onSubmit = () => {
     const amountNumber = parseFloat(removeCommasFromNumber(amount));
     console.log('submit', { amount: amountNumber });
-    router.push('/withdraw/recepient-address');
   };
-
-  useEffect(() => {
-    if (!accountState.tokens?.data) return;
-
-    setAsset(accountState.tokens?.data[0]);
-  }, [accountState.tokens]);
 
   useEffect(() => {
     const cursorInterval = setInterval(() => {
       setShowCursor((prev) => !prev);
     }, 500);
-
     return () => clearInterval(cursorInterval);
   }, []);
 
@@ -82,12 +71,18 @@ const Withdraw = () => {
           <View style={styles.container}>
             <View style={styles.inputAndPayment}>
               <View style={styles.balanceAndInput}>
-                <Text style={styles.balanceText}>
-                  Bal: ${formatAmount(asset?.balance).toLocaleString()} {asset?.symbol}
-                </Text>
-
                 <View style={styles.inputContainer}>
-                  {amount && <Text style={{ ...styles.input, color: disableButton ? '#AF1D38' : '#020617' }}>$</Text>}
+                  {amount && (
+                    <Text
+                      style={{
+                        ...styles.input,
+                        fontFamily: 'ClashDisplaySemibold',
+                        color: disableButton ? '#AF1D38' : '#020617',
+                      }}
+                    >
+                      $
+                    </Text>
+                  )}
                   <TextInput
                     style={[
                       styles.input,
@@ -105,22 +100,13 @@ const Withdraw = () => {
                 </View>
               </View>
 
-              <TouchableOpacity style={styles.assetSelector} onPress={() => setShowBottomSheet(true)}>
-                <View style={styles.iconContainer}>
-                  <FastImage
-                    style={styles.icon}
-                    source={{
-                      uri: asset?.logoUrl,
-                      priority: FastImage.priority.high,
-                    }}
-                    resizeMode={FastImage.resizeMode.contain}
-                  />
-                </View>
-
-                <Text style={[styles.selectorText, styles.paymentSelectorText]}>{asset?.symbol}</Text>
-
+              <TouchableOpacity style={styles.paymentSelector} onPress={() => setShowBottomSheet(true)}>
+                <UserOctagonIcon />
+                <Text style={[styles.selectorText, styles.paymentSelectorText]}>{address}</Text>
                 <CaretDownIcon />
               </TouchableOpacity>
+
+              <Text style={styles.balanceText}>Bal: {formatAmount(walletBalance).toLocaleString()} USDC</Text>
             </View>
 
             <View style={styles.balanceSelectorContainer}>
@@ -133,6 +119,10 @@ const Withdraw = () => {
           </View>
 
           <LQDNumericKeyboard onKeyPress={handleAmountChange} />
+          <View style={styles.feeWrapper}>
+            <Text style={[styles.selectorText, styles.fee]}>Fees:</Text>
+            <Text style={[styles.selectorText, styles.feeAmount]}>$5</Text>
+          </View>
         </View>
 
         <View style={styles.action}>
@@ -140,9 +130,13 @@ const Withdraw = () => {
         </View>
       </View>
 
-      <LQDAssetSelection title="Select Asset" close={() => setShowBottomSheet(false)} setAsset={setAsset} show={showBottomSheet} />
+      <LQDBottomSheet show={showBottomSheet} title={address} onClose={() => setShowBottomSheet(false)}>
+        <View style={{ marginBottom: 40 }}>
+          <LQDActionCard actions={{ title: 'Disconnect' }} variant="disconnect" onSelect={() => {}} />
+        </View>
+      </LQDBottomSheet>
     </>
   );
 };
 
-export default Withdraw;
+export default CryptoWalletDeposit;

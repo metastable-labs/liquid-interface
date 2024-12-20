@@ -49,14 +49,6 @@ function RootStack() {
         }}
       />
       <Stack.Screen
-        name="withdraw"
-        options={{
-          header: (props) => <LQDStackHeader {...props} style={{ paddingTop: 60 }} hasTitle />,
-          headerTitle: 'Withdraw',
-          headerShown: true,
-        }}
-      />
-      <Stack.Screen
         name="(settings)/index"
         options={{
           header: (props) => <LQDStackHeader {...props} style={{ paddingTop: 60 }} hasTitle />,

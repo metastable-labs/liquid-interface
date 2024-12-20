@@ -48,6 +48,7 @@ const CryptoDeposit = () => {
             </TouchableOpacity>
           </View>
         </View>
+
         <View style={styles.infoContainer}>
           <Text style={styles.title}>Deposit from external wallet</Text>
           <Text style={styles.text}>Send USDC, ETH or any ERC20 token on Base</Text>
@@ -56,11 +57,6 @@ const CryptoDeposit = () => {
           </View>
         </View>
       </View>
-      <LQDBottomSheet show={false} title="0x8db6...aEA8" onClose={() => {}}>
-        <View style={{ marginBottom: 40 }}>
-          <LQDActionCard actions={{ title: 'Disconnect' }} variant="disconnect" onSelect={() => {}} />
-        </View>
-      </LQDBottomSheet>
 
       <ConncetWallet data={popularList} showCommentSection={showConnectWalletSheet} openCloseComment={handleOpenWallet} />
 

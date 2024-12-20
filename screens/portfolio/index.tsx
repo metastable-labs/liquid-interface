@@ -17,7 +17,7 @@ const Portfolio = () => {
   };
 
   const navigateToWithdrawal = () => {
-    router.push('/withdraw');
+    router.push('/withdraw/withdraw');
   };
 
   const handleSelectAction = () => {
