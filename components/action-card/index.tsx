@@ -9,15 +9,7 @@ import ICONS from '@/constants/icons';
 const LQDActionCard = ({ selected, onSelect, actions, variant, comingSoon }: IActionCard) => {
   const { title } = actions;
 
-  let colorType = '';
-
-  if (variant === 'disconnect') {
-    colorType = '#AF1D38';
-  } else if (comingSoon) {
-    colorType = '#94A3B8';
-  } else {
-    colorType = '#1E293B';
-  }
+  const colorType = variant === 'disconnect' ? '#AF1D38' : comingSoon ? '#94A3B8' : '#1E293B';
 
   const icons = {
     ...ICONS,

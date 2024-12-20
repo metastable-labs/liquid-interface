@@ -97,7 +97,6 @@ const styles = StyleSheet.create({
     color: '#94A3B8',
     fontWeight: 400,
     fontFamily: 'Aeonik',
-    // marginHorizontal: 10,
   },
   textarea: {
     textAlignVertical: 'top',
