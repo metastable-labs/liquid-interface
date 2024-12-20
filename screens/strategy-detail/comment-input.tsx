@@ -67,7 +67,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#FFFFFF',
     paddingVertical: 8,
-
     borderTopColor: '#EAEEF4',
     zIndex: 10,
   },

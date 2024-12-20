@@ -9,7 +9,8 @@ interface ILQDInput<T extends FieldValues> {
   isTextarea?: boolean;
   numberOfLines?: number;
   placeholder?: string;
-  variant?: 'primary' | 'secondary' | 'search' | 'close';
+  variant?: 'primary' | 'secondary' | 'search' | 'close' | 'wallet';
+  iconPosition?: 'left' | 'right';
   inputProps?: TextInputProps;
   iconAction?: () => void;
 }

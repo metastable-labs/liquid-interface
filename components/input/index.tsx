@@ -2,7 +2,7 @@ import React from 'react';
 import { Controller, FieldValues } from 'react-hook-form';
 import { TextInput, Text, View, StyleSheet, Pressable } from 'react-native';
 
-import { CloseIcon, SearchIcon } from '@/assets/icons';
+import { CloseIcon, SearchIcon, WalletIcon } from '@/assets/icons';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import { ILQDInput } from './types';
 
@@ -17,10 +17,12 @@ const LQDInput = <T extends FieldValues>({
   iconAction,
   isTextarea = false,
   numberOfLines = 4,
+  iconPosition = 'left',
 }: ILQDInput<T>) => {
   const iconsMap = {
     search: <SearchIcon />,
     close: <CloseIcon fill="#94A3B8" />,
+    wallet: <WalletIcon fill="#94A3B8" />,
     primary: null,
     secondary: null,
   };
@@ -31,7 +33,7 @@ const LQDInput = <T extends FieldValues>({
     <View style={styles.container}>
       {label && <Text style={styles.label}>{label}</Text>}
       <View style={[styles.inputContainer, isTextarea && styles.textareaContainer]}>
-        <Pressable onPress={iconAction}>{icon}</Pressable>
+        {iconPosition === 'left' && <Pressable onPress={iconAction}>{icon}</Pressable>}
 
         <Controller
           control={control}
@@ -51,6 +53,8 @@ const LQDInput = <T extends FieldValues>({
             />
           )}
         />
+
+        {iconPosition === 'right' && <Pressable onPress={iconAction}>{icon}</Pressable>}
       </View>
     </View>
   );
@@ -93,7 +97,6 @@ const styles = StyleSheet.create({
     color: '#94A3B8',
     fontWeight: 400,
     fontFamily: 'Aeonik',
-    marginLeft: 10,
   },
   textarea: {
     textAlignVertical: 'top',

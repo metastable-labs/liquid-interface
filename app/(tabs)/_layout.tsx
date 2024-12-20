@@ -28,20 +28,6 @@ export default function TabLayout() {
     <>
       <StatusBar style="dark" />
       <View style={styles.container} />
-      <LQDBottomSheet show={show} title="Sort by" variant="primary" onClose={openModal}>
-        <View style={styles.modalContainerStyle}>
-          {sortList.map((action, index) => (
-            <LQDActionCard
-              key={index}
-              variant="sort"
-              selected={selectedAction === action.id}
-              actions={action}
-              onSelect={() => setSelectedAction(action.id)}
-            />
-          ))}
-        </View>
-      </LQDBottomSheet>
-
       <Tabs
         tabBar={(props) => <LQDNavigation {...props} />}
         screenOptions={{

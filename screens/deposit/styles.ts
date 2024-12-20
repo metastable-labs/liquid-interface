@@ -111,6 +111,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#F8FAFC',
   },
 
+  fee: {
+    color: '#64748B',
+    fontWeight: '400',
+    fontFamily: 'AeonikRegular',
+  },
+
+  feeAmount: {
+    color: '#475569',
+  },
+
   balanceSelectorText: {
     color: '#334155',
   },
@@ -119,6 +129,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 12,
     alignItems: 'stretch',
+  },
+
+  feeWrapper: {
+    flexDirection: 'row',
+    gap: 10,
   },
 });
 

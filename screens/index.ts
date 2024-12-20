@@ -14,11 +14,13 @@ import EditProfile from './profile/edit-profile.tsx';
 
 import Setup from './setup';
 import CryptoDeposit from './deposit/crypto';
+import CryptoWalletDeposit from './deposit/crypto/crypto-wallet';
 import DebitDeposit from './deposit/debit';
 
 import LiquidityManagement from './liquidity-management';
 
 import Withdraw from './withdraw';
+import RecepientAddress from './withdraw/recepient-address';
 import PoolDetail from './pool-detail';
 
 import AddLiquidty from './liquidity-actions/add';
@@ -38,8 +40,10 @@ export {
   Setup,
   LiquidityManagement,
   CryptoDeposit,
+  CryptoWalletDeposit,
   DebitDeposit,
   Withdraw,
+  RecepientAddress,
   PoolDetail,
   AddLiquidty,
   RemoveLiquidity,

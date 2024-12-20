@@ -9,6 +9,7 @@ import {
   MorphoIcon,
   StakeIcon,
   SupplyIcon,
+  DisconnectWalletIcon,
 } from '@/assets/icons';
 
 const ICONS = {
@@ -23,6 +24,7 @@ const ICONS = {
   debitCard: <DebitCardIcon />,
   crypto: <CuratorIcon />,
   coinBase: <CoinbaseWalletIcon />,
+  disconnect: <DisconnectWalletIcon />,
 };
 
 export default ICONS;

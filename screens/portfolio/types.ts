@@ -7,5 +7,6 @@ interface IAssetItem {
 interface AddMoneyActionItem {
   title: string;
   id: string;
+  comingSoon: boolean;
   icon: 'debitCard' | 'crypto' | 'coinBase' | 'supply';
 }

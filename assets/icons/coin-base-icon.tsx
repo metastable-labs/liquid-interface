@@ -1,10 +1,10 @@
 import Svg, { G, Path, Rect, Defs, ClipPath } from 'react-native-svg';
 
-const CoinbaseWalletIcon = ({ height = 18, width = 19, fill = '#0F172A' }: IconProps) => (
-  <Svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <Rect width="30" height="30" rx="9" fill="#0F172A" />
+const CoinbaseWalletIcon = ({ height = 30, width = 30, fill = '#1E293B' }: IconProps) => (
+  <Svg width={width} height={height} viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <Rect width="30" height="30" rx="9" fill={fill} />
     <G clip-path="url(#clip0_4256_162797)">
-      <Path d="M24 6H6V24H24V6Z" fill="#1E293B" />
+      <Path d="M24 6H6V24H24V6Z" fill={fill} />
       <Path
         fill-rule="evenodd"
         clip-rule="evenodd"

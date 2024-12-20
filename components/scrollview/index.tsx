@@ -2,10 +2,17 @@ import React from 'react';
 import { RefreshControl, ScrollView } from 'react-native';
 import { ILQDScrollView } from './types';
 
-const LQDScrollView: React.FC<ILQDScrollView> = ({ children, onRefresh, refreshing, style, contentStyle }) => {
+const LQDScrollView: React.FC<ILQDScrollView> = ({ children, onRefresh, refreshing = false, style, contentStyle }) => {
+  const Refresh = () => {
+    if (onRefresh) {
+      return <RefreshControl refreshing={refreshing || false} onRefresh={onRefresh} progressBackgroundColor="white" />;
+    }
+
+    return null;
+  };
+
   return (
     <ScrollView
-      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} progressBackgroundColor="white" />}
       style={[style, { flex: 1 }]}
       showsVerticalScrollIndicator={false}
       contentContainerStyle={[
@@ -14,6 +21,7 @@ const LQDScrollView: React.FC<ILQDScrollView> = ({ children, onRefresh, refreshi
         },
         contentStyle,
       ]}
+      refreshControl={<Refresh />}
     >
       {children}
     </ScrollView>

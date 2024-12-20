@@ -1,21 +1,30 @@
 import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 
-import { FillCheckIcon } from '@/assets/icons';
+import { CoinbaseWalletIcon, DebitCardIcon, FillCheckIcon, SoonIcon } from '@/assets/icons';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
 import { IActionCard } from './types';
 import ICONS from '@/constants/icons';
 
-const LQDActionCard = ({ selected, onSelect, actions, variant }: IActionCard) => {
+const LQDActionCard = ({ selected, onSelect, actions, variant, comingSoon }: IActionCard) => {
   const { title } = actions;
 
+  const colorType = variant === 'disconnect' ? '#AF1D38' : comingSoon ? '#94A3B8' : '#1E293B';
+
+  const icons = {
+    ...ICONS,
+    debitCard: <DebitCardIcon fill="#94A3B8" />,
+    coinBase: <CoinbaseWalletIcon fill="#94A3B8" />,
+  };
+
   return (
-    <TouchableOpacity style={styles.container} activeOpacity={0.7} onPress={onSelect}>
+    <TouchableOpacity style={[styles.container]} activeOpacity={0.7} onPress={onSelect}>
       <View style={styles.innerWrapper}>
-        {ICONS[variant]}
-        <Text style={styles.title}>{title}</Text>
+        {icons[variant]}
+        <Text style={[styles.title, { color: colorType }]}>{title}</Text>
       </View>
-      <View style={styles.volumeWrapper}>{selected && <FillCheckIcon />}</View>
+      {comingSoon && <SoonIcon />}
+      {!comingSoon && <View style={styles.volumeWrapper}>{selected && <FillCheckIcon />}</View>}
     </TouchableOpacity>
   );
 };
@@ -41,7 +50,6 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     gap: 8,
   },
-
   title: {
     color: '#1E293B',
     fontSize: adjustFontSizeForIOS(16, 2),

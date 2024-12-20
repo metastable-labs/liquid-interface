@@ -89,9 +89,17 @@ import StatsDepositIcon from './stats-deposit-icon';
 import RiskIcon from './risk-icon';
 import CoinbaseWalletIcon from './coin-base-icon';
 import DebitCardIcon from './debit-card-icon';
+import SoonIcon from './soon-icon';
+import DisconnectWalletIcon from './disconnect-wallet-icon';
+import CautionIcon from './caution-icon';
+import FaceIDIcon from './face-id-icon';
 
 export {
   LampIcon,
+  FaceIDIcon,
+  CautionIcon,
+  SoonIcon,
+  DisconnectWalletIcon,
   DebitCardIcon,
   RiskIcon,
   CoinbaseWalletIcon,

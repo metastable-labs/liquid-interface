@@ -11,4 +11,20 @@ interface IMethod {
   path: Href<string>;
 }
 
-export type { IPaymentMethodSelection, IMethod };
+interface Wallet {
+  id: string;
+  title: string;
+}
+
+interface WalletCategory {
+  title: string;
+  children: Wallet[];
+}
+
+interface ConncetWalletProps {
+  openCloseComment: () => void;
+  showCommentSection: boolean;
+  data: WalletCategory[];
+}
+
+export type { IPaymentMethodSelection, IMethod, ConncetWalletProps };
