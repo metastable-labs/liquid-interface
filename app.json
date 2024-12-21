@@ -18,12 +18,22 @@
       "buildNumber": "1",
       "infoPlist": {
         "NSFaceIDUsageDescription": "This app uses Face ID to sign in with Passkeys.",
-        "LSApplicationQueriesSchemes": ["metamask", "trust", "safe", "rainbow", "uniswap"]
+        "LSApplicationQueriesSchemes": [
+          "metamask",
+          "trust",
+          "safe",
+          "rainbow",
+          "uniswap"
+        ]
       },
       "config": {
         "usesNonExemptEncryption": false
       },
-      "associatedDomains": ["webcredentials:api.useliquid.xyz", "webcredentials:development.useliquid.xyz"]
+      "associatedDomains": [
+        "webcredentials:api.useliquid.xyz",
+        "webcredentials:development.useliquid.xyz"
+      ],
+      "appleTeamId": "9S3LU9BPRR"
     },
     "android": {
       "adaptiveIcon": {
