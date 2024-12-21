@@ -13,9 +13,14 @@ export const smartAccountInfoKey = 'SMART_ACCOUNT_INFO';
 
 export const privyAppId = process.env.EXPO_PUBLIC_PRIVY_APP_ID as string;
 export const privyClientId = process.env.EXPO_PUBLIC_PRIVY_CLIENT_ID as string;
+export const walletConnectProjectId = process.env.EXPO_PUBLIC_WALLET_CONNECT_PROJECT_ID as string;
 
 if (!privyAppId || !privyClientId) {
   throw new Error('EXPO_PUBLIC_PRIVY_APP_ID and EXPO_PUBLIC_PRIVY_CLIENT_ID are required');
+}
+
+if (!walletConnectProjectId) {
+  throw new Error('EXPO_PUBLIC_WALLET_CONNECT_PROJECT_ID is required');
 }
 
 export const apiUrl = process.env.EXPO_PUBLIC_API_URL as string;

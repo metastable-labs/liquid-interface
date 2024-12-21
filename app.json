@@ -17,7 +17,8 @@
       "bundleIdentifier": "xyz.useliquid.liquid",
       "buildNumber": "1",
       "infoPlist": {
-        "NSFaceIDUsageDescription": "This app uses Face ID to sign in with Passkeys."
+        "NSFaceIDUsageDescription": "This app uses Face ID to sign in with Passkeys.",
+        "LSApplicationQueriesSchemes": ["metamask", "trust", "safe", "rainbow", "uniswap"]
       },
       "config": {
         "usesNonExemptEncryption": false
@@ -48,7 +49,7 @@
             "buildToolsVersion": "34.0.0"
           },
           "ios": {
-            "deploymentTarget": "15.0"
+            "deploymentTarget": "15.1"
           }
         }
       ]
