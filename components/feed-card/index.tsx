@@ -11,7 +11,7 @@ import LQDImage from '../image';
 
 const maxDescriptionLength = 40;
 
-const LQDFeedCard = ({ feed, isDetailPage, handleCommentPress }: FeedCard) => {
+const LQDFeedCard = ({ feed, isDetailPage, handleCommentPress, handleInvestPress }: FeedCard) => {
   const { router } = useSystemFunctions();
 
   const { steps, curator, createdAt, name, description, metrics, userInteraction, id } = feed;
@@ -25,10 +25,6 @@ const LQDFeedCard = ({ feed, isDetailPage, handleCommentPress }: FeedCard) => {
 
   const handleToggle = () => {
     setIsExpanded(!isExpanded);
-  };
-
-  const handleInvestPress = () => {
-    console.log('Invest');
   };
 
   const handleRepostPress = () => {

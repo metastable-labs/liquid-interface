@@ -2,6 +2,7 @@ interface FeedCard {
   feed: Strategy;
   onNavigate?: () => void;
   handleCommentPress?: () => void;
+  handleInvestPress?: () => void;
   isDetailPage?: boolean;
 }
 

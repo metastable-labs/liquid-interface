@@ -26,12 +26,8 @@ const Home = () => {
     return <Loader />;
   }
 
-  return (
+  const renderToast = () => (
     <>
-      <Pressable onPress={() => router.navigate('/(strategy)/create-strategy')} style={styles.addIcon}>
-        <PlusIcon />
-      </Pressable>
-
       {showDepositToast && (
         <View style={styles.toastWrapper}>
           <DepositToast
@@ -42,6 +38,14 @@ const Home = () => {
           />
         </View>
       )}
+    </>
+  );
+
+  return (
+    <>
+      <Pressable onPress={() => router.navigate('/(strategy)/create-strategy')} style={styles.addIcon}>
+        <PlusIcon />
+      </Pressable>
 
       <FlatList
         refreshing={isFetching}
@@ -55,6 +59,7 @@ const Home = () => {
         onRefresh={refetch}
         onEndReached={loadMoreFeeds}
         ListFooterComponent={isFetchingNextPage ? <DefaultFooterLoader /> : null}
+        ListHeaderComponent={renderToast()}
       />
     </>
   );

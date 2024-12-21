@@ -7,14 +7,20 @@ import { useFeed, useLikeMutation } from '@/services/feeds/queries';
 import StatsCard from './stats-card';
 import Comments from './comments';
 import Loader from '../home/loader';
+import Invest from './invest-modal';
 
 const StrategyDetail = ({ strategyId }: { strategyId: string }) => {
   const { data, isLoading, isFetching, isError, refetch } = useFeed(strategyId);
 
   const [showCommentSection, setShowCommentSection] = useState(false);
+  const [showInvestModal, setShowInvestModal] = useState(false);
 
   const openCloseComment = () => {
     setShowCommentSection((prev) => !prev);
+  };
+
+  const openCloseInvest = () => {
+    setShowInvestModal((prev) => !prev);
   };
 
   const strategyInfo = [
@@ -58,7 +64,7 @@ const StrategyDetail = ({ strategyId }: { strategyId: string }) => {
 
   return (
     <LQDScrollView refreshing={isFetching} onRefresh={refetch} style={styles.container}>
-      <LQDFeedCard handleCommentPress={openCloseComment} feed={data!} isDetailPage={true} />
+      <LQDFeedCard handleCommentPress={openCloseComment} handleInvestPress={openCloseInvest} feed={data!} isDetailPage={true} />
 
       <View style={styles.infoContainer}>
         <Text style={styles.sectionTitle}>Strategy Info</Text>
@@ -85,6 +91,7 @@ const StrategyDetail = ({ strategyId }: { strategyId: string }) => {
         </View>
       </View>
 
+      <Invest strategyId={strategyId} openCloseComment={openCloseInvest} showCommentSection={showInvestModal} />
       <Comments strategyId={strategyId} openCloseComment={openCloseComment} showCommentSection={showCommentSection} />
     </LQDScrollView>
   );
