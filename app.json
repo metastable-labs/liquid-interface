@@ -5,7 +5,7 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/liquid-icon.png",
-    "scheme": "myapp",
+    "scheme": "myliquidapp",
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/images/splash.png",
@@ -17,12 +17,14 @@
       "bundleIdentifier": "xyz.useliquid.liquid",
       "buildNumber": "1",
       "infoPlist": {
-        "NSFaceIDUsageDescription": "This app uses Face ID to sign in with Passkeys."
+        "NSFaceIDUsageDescription": "This app uses Face ID to sign in with Passkeys.",
+        "LSApplicationQueriesSchemes": ["metamask", "trust", "safe", "rainbow", "uniswap"]
       },
       "config": {
         "usesNonExemptEncryption": false
       },
-      "associatedDomains": ["webcredentials:api.useliquid.xyz", "webcredentials:development.useliquid.xyz"]
+      "associatedDomains": ["webcredentials:api.useliquid.xyz", "webcredentials:development.useliquid.xyz"],
+      "appleTeamId": "9S3LU9BPRR"
     },
     "android": {
       "adaptiveIcon": {
@@ -48,7 +50,7 @@
             "buildToolsVersion": "34.0.0"
           },
           "ios": {
-            "deploymentTarget": "15.0"
+            "deploymentTarget": "15.1"
           }
         }
       ]

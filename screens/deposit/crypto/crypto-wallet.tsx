@@ -1,10 +1,14 @@
+import React from 'react';
 import { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, TextInput, Platform } from 'react-native';
+import { parseEther } from 'viem';
+import { base, mainnet } from 'viem/chains';
 
 import { LQDActionCard, LQDBottomSheet, LQDButton, LQDNumericKeyboard } from '@/components';
 import { formatAmount, formatWithThousandSeparator, removeCommasFromNumber } from '@/utils/helpers';
 import { CaretDownIcon, UserOctagonIcon } from '@/assets/icons';
 import styles from '../styles';
+import { useWalletConnect } from '@/providers';
 
 const getMaxWidth = (amount: string) => {
   const baseWidth = 27;
@@ -25,6 +29,8 @@ const getMaxWidth = (amount: string) => {
 };
 
 const CryptoWalletDeposit = () => {
+  const { walletClient } = useWalletConnect();
+
   const [amount, setAmount] = useState('');
   const [showCursor, setShowCursor] = useState(true);
   const [address, setAddress] = useState('0x8db6...aEA8');
@@ -52,9 +58,34 @@ const CryptoWalletDeposit = () => {
     setAmount((prev) => formatWithThousandSeparator(prev + key));
   };
 
-  const onSubmit = () => {
-    const amountNumber = parseFloat(removeCommasFromNumber(amount));
-    console.log('submit', { amount: amountNumber });
+  const onSubmit = async () => {
+    // const amountNumber = parseFloat(removeCommasFromNumber(amount));
+    // console.log('submit', { amount: amountNumber });
+    onSendTransaction();
+  };
+
+  const onSendTransaction = async () => {
+    try {
+      if (!walletClient) {
+        return;
+      }
+      const [address] = await walletClient.getAddresses();
+
+      const hash = await walletClient.sendTransaction({
+        chain: mainnet,
+        account: address,
+        to: '0x704457b418E9Fb723e1Bc0cB98106a6B8Cf87689', // test address
+        value: parseEther('0.00009'),
+        data: '0x',
+      });
+
+      return {
+        method: 'send transaction',
+        response: hash,
+      };
+    } catch (error) {
+      console.error('Error sending transaction:', error);
+    }
   };
 
   useEffect(() => {
@@ -126,7 +157,7 @@ const CryptoWalletDeposit = () => {
         </View>
 
         <View style={styles.action}>
-          <LQDButton title="Hold to confirm" disabled={disableButton} onLongPress={onSubmit} variant="secondary" />
+          <LQDButton title="Hold to confirm" disabled={disableButton} onPress={onSubmit} variant="secondary" />
         </View>
       </View>
 

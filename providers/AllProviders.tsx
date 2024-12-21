@@ -1,6 +1,7 @@
-import { PropsWithChildren, useCallback, useEffect, useState } from 'react';
+import { PropsWithChildren, useEffect } from 'react';
 import * as SplashScreen from 'expo-splash-screen';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import * as Linking from 'expo-linking';
 
 import { useLoadAppFonts } from '@/hooks/useLoadAppFonts';
 import { PrivyProvider } from '@privy-io/expo';
@@ -10,26 +11,35 @@ import { ReduxProvider } from './ReduxProvider';
 import { ThemeProvider } from './ThemeProvider';
 import { AuthProvider } from './AuthProvider';
 import { TanstackProvider } from './TanstackProvider';
+import { WalletConnectProvider } from './WalletConnectProvider';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
+SplashScreen.setOptions({ fade: true, duration: 1000 });
 
 export function AllProviders({ children }: PropsWithChildren) {
   const [allFontsLoaded] = useLoadAppFonts();
-  const [isReduxStorePersisted, setReduxStorePersisted] = useState(false);
 
   useEffect(
     function liftSplashScreen() {
-      if (allFontsLoaded && isReduxStorePersisted) {
+      if (allFontsLoaded) {
         SplashScreen.hideAsync();
       }
     },
-    [allFontsLoaded, isReduxStorePersisted]
+    [allFontsLoaded]
   );
 
-  const handleReduxStorePersisted = useCallback(() => {
-    setReduxStorePersisted(true);
-  }, [setReduxStorePersisted]);
+  useEffect(() => {
+    const subscription = Linking.addEventListener('url', (event) => {
+      const url = event.url;
+      console.log('Deep link received:', url);
+      // Handle the deep link
+    });
+
+    return () => {
+      subscription.remove();
+    };
+  }, []);
 
   if (!allFontsLoaded) {
     return null;
@@ -39,9 +49,11 @@ export function AllProviders({ children }: PropsWithChildren) {
     <GestureHandlerRootView>
       <PrivyProvider appId={privyAppId} clientId={privyClientId}>
         <TanstackProvider>
-          <ReduxProvider onBeforeLift={handleReduxStorePersisted}>
+          <ReduxProvider>
             <ThemeProvider>
-              <AuthProvider>{children}</AuthProvider>
+              <AuthProvider>
+                <WalletConnectProvider>{children}</WalletConnectProvider>
+              </AuthProvider>
             </ThemeProvider>
           </ReduxProvider>
         </TanstackProvider>

@@ -1,67 +1,48 @@
-import { useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, Pressable } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 
-import useTruncateText from '@/hooks/useTruncateText';
 import useCopy from '@/hooks/useCopy';
 import { adjustFontSizeForIOS, truncate } from '@/utils/helpers';
-import { CaretDownIcon, CoinsIcon, CopyIcon } from '@/assets/icons';
-import PaymentMethodSelection from '../method-selection';
+import { CoinsIcon, CopyIcon } from '@/assets/icons';
 import sharedStyles from '../styles';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
-import { LQDActionCard, LQDBottomSheet, LQDButton, LQDImage, LQDScrollView } from '@/components';
-import { popularList } from '../dummy';
-import ConncetWallet from './connect-wallet';
+import WalletConnect from './wallet-connect';
 
 const CryptoDeposit = () => {
   const { smartAccountState } = useSystemFunctions();
-  const [showBottomSheet, setShowBottomSheet] = useState(false);
-  const [showConnectWalletSheet, setShowConnectWalletSheet] = useState(false);
   const { handleCopy, hasCopied } = useCopy();
 
   const address = truncate(smartAccountState?.address || '');
-  const tokensImage = require('../../../assets/images/tokens.png');
-
-  const handleOpenWallet = () => {
-    setShowConnectWalletSheet((prev) => !prev);
-  };
 
   return (
-    <>
-      <View style={styles.root}>
-        <View style={styles.container}>
-          <TouchableOpacity style={sharedStyles.paymentSelector} onPress={() => setShowBottomSheet(true)}>
-            <CoinsIcon />
-            <Text style={[sharedStyles.selectorText, sharedStyles.paymentSelectorText]}>Crypto</Text>
-            <CaretDownIcon />
-          </TouchableOpacity>
-
-          <QRCode value={smartAccountState?.address || ''} size={206} color="#4691FE" />
-
-          <View style={styles.addressContainer}>
-            <View style={styles.addressWrapper}>
-              <Text style={[styles.text, { fontWeight: '500' }]}>{address}</Text>
-            </View>
-            <TouchableOpacity style={styles.copyContainer} onPress={() => handleCopy(smartAccountState?.address || '')}>
-              <CopyIcon />
-              <Text style={styles.copyText}>{hasCopied ? 'Copied' : 'Copy'}</Text>
-            </TouchableOpacity>
-          </View>
+    <View style={styles.root}>
+      <View style={styles.container}>
+        <View style={sharedStyles.paymentSelector}>
+          <CoinsIcon />
+          <Text style={[sharedStyles.selectorText, sharedStyles.paymentSelectorText]}>Crypto</Text>
         </View>
 
-        <View style={styles.infoContainer}>
-          <Text style={styles.title}>Deposit from external wallet</Text>
-          <Text style={styles.text}>Send USDC, ETH or any ERC20 token on Base</Text>
-          <View style={styles.buttonWrapper}>
-            <LQDButton onPress={handleOpenWallet} variant="light" title="Connect wallet" />
+        <QRCode value={smartAccountState?.address || ''} size={206} color="#4691FE" />
+
+        <View style={styles.addressContainer}>
+          <View style={styles.addressWrapper}>
+            <Text style={[styles.text, { fontWeight: '500' }]}>{address}</Text>
           </View>
+          <TouchableOpacity style={styles.copyContainer} onPress={() => handleCopy(smartAccountState?.address || '')}>
+            <CopyIcon />
+            <Text style={styles.copyText}>{hasCopied ? 'Copied' : 'Copy'}</Text>
+          </TouchableOpacity>
         </View>
       </View>
 
-      <ConncetWallet data={popularList} showCommentSection={showConnectWalletSheet} openCloseComment={handleOpenWallet} />
-
-      <PaymentMethodSelection close={() => setShowBottomSheet(false)} show={showBottomSheet} />
-    </>
+      <View style={styles.infoContainer}>
+        <Text style={styles.title}>Deposit from external wallet</Text>
+        <Text style={styles.text}>Send USDC, ETH or any ERC20 token on Base</Text>
+        <View style={styles.buttonWrapper}>
+          <WalletConnect />
+        </View>
+      </View>
+    </View>
   );
 };
 
