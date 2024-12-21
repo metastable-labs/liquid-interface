@@ -7,13 +7,15 @@ import { useFeed, useLikeMutation } from '@/services/feeds/queries';
 import StatsCard from './stats-card';
 import Comments from './comments';
 import Loader from '../home/loader';
-import Invest from './invest-modal';
+import Invest from './invest';
+import Withdraw from './withdraw';
 
 const StrategyDetail = ({ strategyId }: { strategyId: string }) => {
   const { data, isLoading, isFetching, isError, refetch } = useFeed(strategyId);
 
   const [showCommentSection, setShowCommentSection] = useState(false);
   const [showInvestModal, setShowInvestModal] = useState(false);
+  const [showWithdrawModal, setShowWithdrawModal] = useState(false);
 
   const openCloseComment = () => {
     setShowCommentSection((prev) => !prev);
@@ -21,6 +23,10 @@ const StrategyDetail = ({ strategyId }: { strategyId: string }) => {
 
   const openCloseInvest = () => {
     setShowInvestModal((prev) => !prev);
+  };
+
+  const openCloseWithdraw = () => {
+    setShowWithdrawModal((prev) => !prev);
   };
 
   const strategyInfo = [
@@ -87,11 +93,12 @@ const StrategyDetail = ({ strategyId }: { strategyId: string }) => {
         </View>
 
         <View style={styles.buttonWrapper}>
-          <LQDButton title="Withdraw" variant="primary" />
+          <LQDButton title="Withdraw" onPress={openCloseWithdraw} variant="primary" />
         </View>
       </View>
 
       <Invest strategyId={strategyId} openCloseComment={openCloseInvest} showCommentSection={showInvestModal} />
+      <Withdraw strategyId={strategyId} openCloseComment={openCloseWithdraw} showCommentSection={showWithdrawModal} />
       <Comments strategyId={strategyId} openCloseComment={openCloseComment} showCommentSection={showCommentSection} />
     </LQDScrollView>
   );

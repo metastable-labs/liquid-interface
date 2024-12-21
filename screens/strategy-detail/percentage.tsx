@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Slider from '@react-native-community/slider';
+import { adjustFontSizeForIOS } from '@/utils/helpers';
+import { DiscoverUSDIcon } from '@/assets/icons';
 
-const PercentageSetter = ({ setPercentage }: IPercentageSetter) => {
-  const [percentage, setInternalPercentage] = useState(25);
+const PercentageSetter = ({ setPercentage, amount }: Percentage) => {
+  const [percentage, setInternalPercentage] = useState(0);
 
   const percentages = [
     { value: 10, label: '10%' },
@@ -30,7 +32,10 @@ const PercentageSetter = ({ setPercentage }: IPercentageSetter) => {
   return (
     <View style={styles.container}>
       <View style={styles.top}>
-        <Text style={styles.label}>{percentage}%</Text>
+        <View style={styles.percentageWrapper}>
+          <Text style={styles.label}>{percentage}%</Text>
+          <Text style={styles.amount}>{amount || 0} USDC</Text>
+        </View>
         <View style={styles.sliderContainer}>
           <Slider
             style={{ width: '100%', height: 16 }}
@@ -44,7 +49,18 @@ const PercentageSetter = ({ setPercentage }: IPercentageSetter) => {
             thumbTintColor="#4691FE"
             tapToSeek
             lowerLimit={1}
+            thumbImage={require('../../assets/images/Dot.png')}
           />
+        </View>
+        <View style={styles.percentageWrapper}>
+          <View style={styles.itemsFlex}>
+            <DiscoverUSDIcon width={20} height={20} />
+            <Text style={styles.token}>USDC</Text>
+          </View>
+          <View style={styles.itemsFlex}>
+            <Text style={styles.investedText}>Invested:</Text>
+            <Text style={styles.investedAmount}>3,600</Text>
+          </View>
         </View>
       </View>
 
@@ -72,10 +88,15 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     paddingHorizontal: 11,
     gap: 16,
+    borderWidth: 1,
+    borderColor: '#EAEEF4',
+    borderRadius: 12,
   },
+
   top: {
     gap: 4,
   },
+
   label: {
     color: '#475569',
     fontSize: 18,
@@ -83,6 +104,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     fontFamily: 'AeonikMedium',
   },
+
   sliderContainer: {
     width: '100%',
   },
@@ -93,6 +115,34 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     gap: 18,
+  },
+
+  token: {
+    color: '#0F172A',
+    fontWeight: '500',
+    fontFamily: 'AeonikMedium',
+    fontSize: adjustFontSizeForIOS(14, 2),
+  },
+
+  amount: {
+    color: '#475569',
+    fontWeight: '400',
+    fontFamily: 'AeonikMedium',
+    fontSize: adjustFontSizeForIOS(15, 2),
+  },
+
+  investedText: {
+    color: '#64748B',
+    fontWeight: '400',
+    fontFamily: 'AeonikRegular',
+    fontSize: adjustFontSizeForIOS(12, 2),
+  },
+
+  investedAmount: {
+    color: '#334155',
+    fontWeight: '400',
+    fontFamily: 'AeonikRegular',
+    fontSize: adjustFontSizeForIOS(13, 2),
   },
 
   partition: {
@@ -117,5 +167,16 @@ const styles = StyleSheet.create({
     lineHeight: 16.12,
     fontWeight: '500',
     fontFamily: 'AeonikMedium',
+  },
+
+  percentageWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+
+  itemsFlex: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
   },
 });

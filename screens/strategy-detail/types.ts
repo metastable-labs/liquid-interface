@@ -4,3 +4,8 @@ interface IStatCard {
   value: string;
   isActive: boolean;
 }
+
+interface Percentage {
+  setPercentage?: (percentage: number) => void;
+  amount: string;
+}

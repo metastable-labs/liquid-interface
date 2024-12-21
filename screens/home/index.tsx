@@ -74,7 +74,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
 
-  toastWrapper: { paddingHorizontal: 16, backgroundColor: '#fff', paddingTop: 20 },
+  toastWrapper: {
+    paddingHorizontal: 16,
+    backgroundColor: '#fff',
+    paddingTop: 20,
+  },
 
   contentContainer: {
     flexGrow: 1,
