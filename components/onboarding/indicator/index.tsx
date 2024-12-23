@@ -45,24 +45,16 @@ const LQDOnboardingIndicator = ({ currentStep, isPaused, timer, totalSteps, fini
   return (
     <View style={styles.container}>
       <View style={styles.subContainer}>
-        <View style={styles.logoContainer}>
-          <Image source={require('../../../assets/images/logo.png')} style={styles.logo} />
-          <Text style={styles.logoText}>Welcome to Liquid</Text>
-        </View>
-
-        <View style={styles.actionContainer}>
-          <TouchableOpacity style={styles.action} onPress={togglePause}>
-            <Image source={actions[+isPaused]} style={styles.actionIcon} />
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      <View style={styles.subContainer}>
         {Array.from({ length: totalSteps }).map((_, index) => (
           <View key={index} style={styles.indicator}>
             <Animated.View style={[styles.progress, animatedWidthStyle(index)]} />
           </View>
         ))}
+        <View style={styles.actionContainer}>
+          <TouchableOpacity style={styles.action} onPress={togglePause}>
+            <Image source={actions[+isPaused]} style={styles.actionIcon} />
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
@@ -83,6 +75,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 10,
     width: '100%',
+    paddingTop: 15,
   },
   logoContainer: {
     flexDirection: 'row',
@@ -113,6 +106,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 9999,
+    borderWidth: 1,
+    borderColor: '#71AAFE',
   },
   actionIcon: {
     width: 18,
@@ -122,11 +117,11 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 4,
     borderRadius: 9999,
-    backgroundColor: '#FFFFFF3D',
+    backgroundColor: '#D4E6FF',
     overflow: 'hidden',
   },
   progress: {
     height: '100%',
-    backgroundColor: '#FFF',
+    backgroundColor: '#4691FE',
   },
 });

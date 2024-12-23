@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
-import { StyleSheet, Dimensions, Platform, View, StatusBar as RNStatusBar, Pressable } from 'react-native';
+import { StyleSheet, Dimensions, Platform, View, StatusBar as RNStatusBar, Pressable, Text, Modal } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { StatusBar } from 'expo-status-bar';
+import { WebView } from 'react-native-webview';
 
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import { LQDButton } from '@/components';
@@ -10,6 +11,11 @@ import { LQDOnboardingIndicator } from '@/components/onboarding';
 import Step1 from './step1';
 import Step2 from './step2';
 import Step3 from './step3';
+import Step4 from './step4';
+
+import { adjustFontSizeForIOS } from '@/utils/helpers';
+import { CloseIcon } from '@/assets/icons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -19,23 +25,33 @@ const getCurrentStep = (pathname: string) => {
       return 1;
     case '/step3':
       return 2;
+    case '/step4':
+      return 3;
     default:
       return 0;
   }
 };
 
+const url = 'https://metastablelabs.notion.site/Terms-of-Use-149716767cb4802094c6d36593120eea';
+
 export default function OnboardingTabLayout() {
+  const insets = useSafeAreaInsets();
   const { router, pathname } = useSystemFunctions();
 
   const [timer, setTimer] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [finished, setFinished] = useState(false);
+  const [showTC, setShowTC] = useState(false);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const currentStep = getCurrentStep(pathname);
 
   const togglePause = () => {
     setIsPaused((prev) => !prev);
+  };
+
+  const openTC = () => {
+    setShowTC((prev) => !prev);
   };
 
   const navigateToNextScreen = () => {
@@ -47,6 +63,9 @@ export default function OnboardingTabLayout() {
         router.push('/(onboarding)/step3');
         break;
       case '/step3':
+        router.push('/(onboarding)/step4');
+        break;
+      case '/step4':
         if (intervalRef.current) {
           clearInterval(intervalRef.current);
         }
@@ -63,6 +82,9 @@ export default function OnboardingTabLayout() {
         break;
       case '/step3':
         router.push('/(onboarding)/step2');
+        break;
+      case '/step4':
+        router.push('/(onboarding)/step3');
         break;
     }
   };
@@ -89,7 +111,7 @@ export default function OnboardingTabLayout() {
 
   useEffect(() => {
     setTimer(0);
-    if (pathname !== '/step3' && finished) {
+    if (pathname !== '/step4' && finished) {
       setFinished(false);
       setIsPaused(false);
     }
@@ -103,7 +125,7 @@ export default function OnboardingTabLayout() {
           timer={timer}
           isPaused={isPaused}
           currentStep={currentStep}
-          totalSteps={3}
+          totalSteps={4}
           togglePause={togglePause}
           finished={finished}
         />
@@ -139,6 +161,13 @@ export default function OnboardingTabLayout() {
             title: 'Step3',
           }}
         />
+        <Tab.Screen
+          name="step4"
+          component={Step4}
+          options={{
+            title: 'Step4',
+          }}
+        />
       </Tab.Navigator>
 
       <Pressable
@@ -151,7 +180,7 @@ export default function OnboardingTabLayout() {
       />
       <Pressable
         onPress={() => {
-          if (currentStep < 2) {
+          if (currentStep < 3) {
             navigateToNextScreen();
           }
         }}
@@ -159,13 +188,41 @@ export default function OnboardingTabLayout() {
       />
 
       <View style={styles.action}>
-        <LQDButton onPress={() => router.replace('/(signup)')} title="Let's go!" />
+        <LQDButton variant="secondary" onPress={() => router.replace('/(signup)')} title="Get started" />
+
+        <Pressable onPress={openTC}>
+          <Text style={styles.tcWrapper}>
+            <Text style={styles.tcText}>By clicking continue, you agree to Liquid’s</Text>
+            <Text style={styles.boldTcText}> Terms of Service</Text>
+            <Text style={styles.tcText}> and </Text>
+            <Text style={styles.boldTcText}>Privacy Policy</Text>
+          </Text>
+        </Pressable>
       </View>
+
+      <Modal visible={showTC} animationType="slide">
+        <View style={{ flex: 1 }}>
+          <Pressable onPress={openTC} style={[styles.closeIcon, { paddingTop: insets.top }]}>
+            <CloseIcon height={30} width={30} />
+          </Pressable>
+          <WebView
+            source={{ uri: url }}
+            style={styles.webview}
+            startInLoadingState={true}
+            javaScriptEnabled={true}
+            domStorageEnabled={true}
+          />
+        </View>
+      </Modal>
     </>
   );
 }
 
 const styles = StyleSheet.create({
+  webview: {
+    flex: 1,
+  },
+
   indicator: {
     position: 'absolute',
     top: 0,
@@ -175,6 +232,7 @@ const styles = StyleSheet.create({
     zIndex: 1,
     justifyContent: 'space-between',
   },
+
   action: {
     position: 'absolute',
     bottom: 0,
@@ -183,6 +241,7 @@ const styles = StyleSheet.create({
     paddingBottom: Platform.OS === 'ios' ? 33 : 16,
     width: Dimensions.get('window').width,
   },
+
   prev: {
     flex: 1,
     position: 'absolute',
@@ -190,11 +249,39 @@ const styles = StyleSheet.create({
     left: 0,
     width: 65,
   },
+
   next: {
     flex: 1,
     position: 'absolute',
     height: Dimensions.get('window').height,
     right: 0,
     width: 65,
+  },
+
+  tcText: {
+    color: '#64748B',
+    fontFamily: 'AeonikRegular',
+    fontWeight: '600',
+    fontSize: adjustFontSizeForIOS(11, 2),
+    lineHeight: 17,
+  },
+
+  boldTcText: {
+    color: '#64748B',
+    fontFamily: 'AeonikBold',
+    fontWeight: '700',
+    fontSize: adjustFontSizeForIOS(11, 2),
+    lineHeight: 17,
+  },
+
+  closeIcon: {
+    alignItems: 'flex-end',
+    paddingHorizontal: 10,
+  },
+
+  tcWrapper: {
+    textAlign: 'center',
+    marginTop: 13,
+    marginHorizontal: 30,
   },
 });
