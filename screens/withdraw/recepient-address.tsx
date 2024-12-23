@@ -54,12 +54,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     flex: 1,
   },
+
   action: {
     paddingHorizontal: 8,
     paddingVertical: 12,
     alignItems: 'stretch',
     gap: 50,
   },
+
   toastWrapper: {
     height: 36,
     borderRadius: 8,
@@ -70,11 +72,13 @@ const styles = StyleSheet.create({
     gap: 8,
     marginTop: 20,
   },
+
   toastTitle: {
     fontSize: adjustFontSizeForIOS(14, 1),
     fontFamily: 'AeonikRegular',
     fontWeight: '400',
   },
+
   faceIDBtn: {
     backgroundColor: '#007AFF',
     height: 60,
@@ -84,6 +88,7 @@ const styles = StyleSheet.create({
     gap: 10,
     borderRadius: 12,
   },
+
   faceIDText: {
     fontSize: adjustFontSizeForIOS(17, 1),
     lineHeight: 22,

@@ -7,14 +7,26 @@ import { useFeed, useLikeMutation } from '@/services/feeds/queries';
 import StatsCard from './stats-card';
 import Comments from './comments';
 import Loader from '../home/loader';
+import Invest from './invest';
+import Withdraw from './withdraw';
 
 const StrategyDetail = ({ strategyId }: { strategyId: string }) => {
   const { data, isLoading, isFetching, isError, refetch } = useFeed(strategyId);
 
   const [showCommentSection, setShowCommentSection] = useState(false);
+  const [showInvestModal, setShowInvestModal] = useState(false);
+  const [showWithdrawModal, setShowWithdrawModal] = useState(false);
 
   const openCloseComment = () => {
     setShowCommentSection((prev) => !prev);
+  };
+
+  const openCloseInvest = () => {
+    setShowInvestModal((prev) => !prev);
+  };
+
+  const openCloseWithdraw = () => {
+    setShowWithdrawModal((prev) => !prev);
   };
 
   const strategyInfo = [
@@ -58,7 +70,7 @@ const StrategyDetail = ({ strategyId }: { strategyId: string }) => {
 
   return (
     <LQDScrollView refreshing={isFetching} onRefresh={refetch} style={styles.container}>
-      <LQDFeedCard handleCommentPress={openCloseComment} feed={data!} isDetailPage={true} />
+      <LQDFeedCard handleCommentPress={openCloseComment} handleInvestPress={openCloseInvest} feed={data!} isDetailPage={true} />
 
       <View style={styles.infoContainer}>
         <Text style={styles.sectionTitle}>Strategy Info</Text>
@@ -81,10 +93,12 @@ const StrategyDetail = ({ strategyId }: { strategyId: string }) => {
         </View>
 
         <View style={styles.buttonWrapper}>
-          <LQDButton title="Withdraw" variant="primary" />
+          <LQDButton title="Withdraw" onPress={openCloseWithdraw} variant="primary" />
         </View>
       </View>
 
+      <Invest strategyId={strategyId} openCloseComment={openCloseInvest} showCommentSection={showInvestModal} />
+      <Withdraw strategyId={strategyId} openCloseComment={openCloseWithdraw} showCommentSection={showWithdrawModal} />
       <Comments strategyId={strategyId} openCloseComment={openCloseComment} showCommentSection={showCommentSection} />
     </LQDScrollView>
   );
@@ -132,6 +146,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     lineHeight: 16.8,
   },
+
   comment: {
     color: '#64748B',
     fontSize: adjustFontSizeForIOS(11, 3),
@@ -139,6 +154,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     lineHeight: 16.8,
   },
+
   time: {
     color: '#64748B',
     fontSize: adjustFontSizeForIOS(11, 3),
@@ -146,12 +162,14 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     lineHeight: 15.84,
   },
+
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
     color: '#1E293B',
     marginBottom: 12,
   },
+
   token: {
     fontSize: adjustFontSizeForIOS(14, 2),
     fontWeight: '500',
@@ -159,6 +177,7 @@ const styles = StyleSheet.create({
     lineHeight: 18.48,
     fontFamily: 'AeonikMedium',
   },
+
   invested: {
     fontSize: adjustFontSizeForIOS(14, 2),
     fontWeight: '500',
@@ -166,6 +185,7 @@ const styles = StyleSheet.create({
     lineHeight: 18.48,
     fontFamily: 'AeonikMedium',
   },
+
   investedAmount: {
     fontSize: adjustFontSizeForIOS(16, 2),
     fontWeight: '500',
@@ -173,6 +193,7 @@ const styles = StyleSheet.create({
     lineHeight: 19.84,
     fontFamily: 'AeonikMedium',
   },
+
   tokenContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -180,11 +201,13 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     paddingHorizontal: 5,
   },
+
   tokenWrapper: {
     flexDirection: 'row',
     gap: 5,
     alignItems: 'center',
   },
+
   buttonWrapper: {
     marginTop: 20,
   },
@@ -192,6 +215,7 @@ const styles = StyleSheet.create({
   textInput: {
     flex: 1,
   },
+
   focusedInput: {
     borderColor: '#4691FE',
     borderWidth: 1.2,

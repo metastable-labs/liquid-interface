@@ -17,7 +17,7 @@ interface ILQDBottomSheet {
 
 const LQDBottomSheet = ({ title = '', variant = 'primary', show, onClose, children, sizeMode = 'cover' }: ILQDBottomSheet) => {
   const bottomSheetMaxHeights = {
-    primary: height * 0.6,
+    primary: height,
     secondary: height * 0.83,
   };
 

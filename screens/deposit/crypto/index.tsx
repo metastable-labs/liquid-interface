@@ -9,7 +9,7 @@ import { CaretDownIcon, CoinsIcon, CopyIcon } from '@/assets/icons';
 import PaymentMethodSelection from '../method-selection';
 import sharedStyles from '../styles';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
-import { LQDActionCard, LQDBottomSheet, LQDButton, LQDImage, LQDScrollView } from '@/components';
+import { LQDButton } from '@/components';
 import { popularList } from '../dummy';
 import ConncetWallet from './connect-wallet';
 
