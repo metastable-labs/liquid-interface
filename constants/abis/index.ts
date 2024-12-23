@@ -7,6 +7,7 @@ import * as ConnectorPluginABI from './ConnectorPlugin.json';
 import * as AerodromePoolABI from './AerodromePoolABI.json';
 import * as LPSugarABI from './LPSugar';
 import * as LiquidStrategy from './LiquidStrategy';
+import * as UsdcAbi from './USDC';
 
 export {
   LPSugarABI,
@@ -18,4 +19,5 @@ export {
   AerodromeConnectorABI,
   ConnectorPluginABI,
   LiquidStrategy,
+  UsdcAbi,
 };

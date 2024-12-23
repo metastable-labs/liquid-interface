@@ -4,7 +4,7 @@ const providerMetadata: IProviderMetadata = {
   name: 'Liquid',
   description: 'Liquid Wallet',
   url: 'https://useliquid.xyz',
-  icons: ['https://res.cloudinary.com/djzeufu4j/image/upload/v1734702324/favicon_oolyl7.ico'],
+  icons: ['https://res.cloudinary.com/djzeufu4j/image/upload/v1734991182/liquid_logo_ico.ico'],
   redirect: {
     native: 'myliquidapp://',
   },

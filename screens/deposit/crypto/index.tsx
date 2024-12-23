@@ -4,8 +4,8 @@ import QRCode from 'react-native-qrcode-svg';
 import useCopy from '@/hooks/useCopy';
 import { adjustFontSizeForIOS, truncate } from '@/utils/helpers';
 import { CoinsIcon, CopyIcon } from '@/assets/icons';
-import sharedStyles from '../styles';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
+import sharedStyles from '../styles';
 import WalletConnect from './wallet-connect';
 
 const CryptoDeposit = () => {
@@ -22,7 +22,7 @@ const CryptoDeposit = () => {
           <Text style={[sharedStyles.selectorText, sharedStyles.paymentSelectorText]}>Crypto</Text>
         </View>
 
-        <QRCode value={smartAccountState?.address || ''} size={206} color="#4691FE" />
+        <QRCode logoSize={50} value={smartAccountState?.address || ''} size={206} color="#4691FE" />
 
         <View style={styles.addressContainer}>
           <View style={styles.addressWrapper}>

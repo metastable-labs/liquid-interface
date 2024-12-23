@@ -30,6 +30,7 @@ const styles = StyleSheet.create({
   },
 
   balanceAndInput: {
+    flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
   },

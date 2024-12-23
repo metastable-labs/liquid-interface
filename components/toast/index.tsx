@@ -13,6 +13,8 @@ const LQToast = () => {
   const iconsMap = {
     success: <ToastVarintIcon variant="success" />,
     error: <ToastVarintIcon variant="error" />,
+    info: <ToastVarintIcon variant="info" />,
+    warning: <ToastVarintIcon variant="warning" />,
   };
 
   const icon = iconsMap[variant] || null;
@@ -70,6 +72,8 @@ const styles = StyleSheet.create({
   },
   success: { backgroundColor: '#EFFAF6', top: 10 },
   error: { backgroundColor: '#FDEDF0', top: 10 },
+  info: { backgroundColor: '#F0F4FF', top: 10 },
+  warning: { backgroundColor: '#FFF8E5', top: 10 },
   title: { fontSize: 15, fontFamily: 'AeonikMedium', fontWeight: '700', color: '#0A0D14' },
   description: { color: '#64748B', fontSize: 15, fontFamily: 'AeonikRegular', fontWeight: '500' },
 });

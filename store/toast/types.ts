@@ -1,6 +1,6 @@
 export type Toast = {
   title: string;
   description: string;
-  variant: 'success' | 'error';
+  variant: 'success' | 'error' | 'info' | 'warning';
   isVisible?: boolean;
 };

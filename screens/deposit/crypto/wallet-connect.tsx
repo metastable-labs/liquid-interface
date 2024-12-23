@@ -12,7 +12,7 @@ import { useWalletConnect } from '@/providers';
 import RequestModal from './request-modal';
 
 function WalletConnect() {
-  const { isConnected, connect, disconnect } = useWalletConnect();
+  const { isConnected, connect } = useWalletConnect();
   const { router } = useSystemFunctions();
   const [modalVisible, setModalVisible] = useState(false);
   const [rpcResponse, setRpcResponse] = useState<any>();
