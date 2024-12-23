@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Slider from '@react-native-community/slider';
-import { adjustFontSizeForIOS } from '@/utils/helpers';
+import { adjustFontSizeForIOS, formatWithThousandSeparator, formatAmount } from '@/utils/helpers';
 import { DiscoverUSDIcon } from '@/assets/icons';
 
-const PercentageSetter = ({ setPercentage, amount }: Percentage) => {
+const PercentageSetter = ({ setPercentage, amount = 0, balance = 0 }: Percentage) => {
   const [percentage, setInternalPercentage] = useState(0);
+  const [adjustedAmount, setAdjustedAmount] = useState(0);
 
   const percentages = [
     { value: 10, label: '10%' },
@@ -15,26 +16,53 @@ const PercentageSetter = ({ setPercentage, amount }: Percentage) => {
     { value: 100, label: 'MAX' },
   ];
 
+  const clampAmount = (inputAmount: number) => {
+    return Math.min(Math.max(inputAmount, 0), balance);
+  };
+
   useEffect(() => {
-    if (setPercentage) {
-      setPercentage(percentage);
+    if (amount && balance) {
+      const validAmount = clampAmount(amount);
+
+      const calculatedPercentage = (validAmount / balance) * 100;
+      const clampedPercentage = Math.min(Math.max(calculatedPercentage, 0), 100);
+      setInternalPercentage(Math.round(clampedPercentage));
     }
-  }, [percentage, setPercentage]);
+  }, [amount, balance]);
+
+  useEffect(() => {
+    if (balance) {
+      setAdjustedAmount((balance * percentage) / 100);
+    }
+  }, [percentage, balance]);
 
   const handleSliderChange = (value: number) => {
-    setInternalPercentage(Math.round(value));
+    const clampedValue = Math.min(Math.max(value, 0), 100);
+    setInternalPercentage(clampedValue);
   };
 
   const setPredefinedPercentage = (value: number) => {
-    setInternalPercentage(value);
+    const clampedValue = Math.min(Math.max(value, 0), 100);
+    setInternalPercentage(clampedValue);
   };
+
+  useEffect(() => {
+    const validAmount = clampAmount((balance * percentage) / 100);
+    setAdjustedAmount(validAmount);
+    if (setPercentage) {
+      setPercentage(percentage);
+    }
+  }, [percentage, setPercentage, balance]);
 
   return (
     <View style={styles.container}>
       <View style={styles.top}>
         <View style={styles.percentageWrapper}>
           <Text style={styles.label}>{percentage}%</Text>
-          <Text style={styles.amount}>{amount || 0} USDC</Text>
+          <Text style={styles.amount}>
+            {formatAmount(adjustedAmount).toLocaleString()}
+            USDC
+          </Text>
         </View>
         <View style={styles.sliderContainer}>
           <Slider
@@ -48,8 +76,6 @@ const PercentageSetter = ({ setPercentage, amount }: Percentage) => {
             maximumTrackTintColor="#CBD5E1"
             thumbTintColor="#4691FE"
             tapToSeek
-            lowerLimit={1}
-            thumbImage={require('../../assets/images/Dot.png')}
           />
         </View>
         <View style={styles.percentageWrapper}>
@@ -59,7 +85,7 @@ const PercentageSetter = ({ setPercentage, amount }: Percentage) => {
           </View>
           <View style={styles.itemsFlex}>
             <Text style={styles.investedText}>Invested:</Text>
-            <Text style={styles.investedAmount}>3,600</Text>
+            <Text style={styles.investedAmount}>{formatWithThousandSeparator(String(balance))}</Text>
           </View>
         </View>
       </View>

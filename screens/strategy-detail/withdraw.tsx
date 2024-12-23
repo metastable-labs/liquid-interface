@@ -16,7 +16,7 @@ const Withdraw = ({
 }) => {
   const [amount, setAmount] = useState('');
   const [percentage, setPercentage] = useState(0);
-  const walletBalance = 50;
+  const walletBalance = 1000;
 
   const handleAmountChange = (key: string) => {
     if (key === '⌫') {
@@ -41,7 +41,7 @@ const Withdraw = ({
       <LQDBottomSheet show={showCommentSection} title="Withdraw" variant="primary" onClose={openCloseComment}>
         <View style={{ justifyContent: 'center', alignItems: 'center' }}>
           <View style={styles.percentage}>
-            <PercentageSetter amount={amount} setPercentage={setPercentage} />
+            <PercentageSetter amount={parseFloat(removeCommasFromNumber(amount))} setPercentage={setPercentage} balance={walletBalance} />
           </View>
 
           <LQDNumericKeyboard onKeyPress={handleAmountChange} />

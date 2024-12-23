@@ -7,5 +7,6 @@ interface IStatCard {
 
 interface Percentage {
   setPercentage?: (percentage: number) => void;
-  amount: string;
+  amount: number;
+  balance: number;
 }
