@@ -2,15 +2,15 @@ import { StyleSheet } from 'react-native';
 
 import { LQDOnboardingStep } from '@/components/onboarding';
 
-const Step3 = () => {
-  const image = require('../../assets/images/onboarding2.png');
+const Step4 = () => {
+  const image = require('../../assets/images/onboarding3.png');
   const arc = require('../../assets/images/onboardingStep3Arc.png');
   const arc1 = require('../../assets/images/onboardingStep3Arc1.png');
 
   return (
     <LQDOnboardingStep
       image={image}
-      title="Monitor your positions "
+      title="Explore top Strategies"
       subtitle="One app, one account, multiple protocols."
       containerStyle={{ backgroundColor: '#FFF' }}
       firstArc={arc}
@@ -22,7 +22,7 @@ const Step3 = () => {
   );
 };
 
-export default Step3;
+export default Step4;
 
 const styles = StyleSheet.create({
   firstArc: {

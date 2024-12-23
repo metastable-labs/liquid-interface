@@ -10,6 +10,7 @@ import { LQDOnboardingIndicator } from '@/components/onboarding';
 import Step1 from './step1';
 import Step2 from './step2';
 import Step3 from './step3';
+import Step4 from './step4'; // New import for Step4
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -19,6 +20,8 @@ const getCurrentStep = (pathname: string) => {
       return 1;
     case '/step3':
       return 2;
+    case '/step4':
+      return 3;
     default:
       return 0;
   }
@@ -47,6 +50,9 @@ export default function OnboardingTabLayout() {
         router.push('/(onboarding)/step3');
         break;
       case '/step3':
+        router.push('/(onboarding)/step4');
+        break;
+      case '/step4':
         if (intervalRef.current) {
           clearInterval(intervalRef.current);
         }
@@ -63,6 +69,9 @@ export default function OnboardingTabLayout() {
         break;
       case '/step3':
         router.push('/(onboarding)/step2');
+        break;
+      case '/step4':
+        router.push('/(onboarding)/step3');
         break;
     }
   };
@@ -89,7 +98,7 @@ export default function OnboardingTabLayout() {
 
   useEffect(() => {
     setTimer(0);
-    if (pathname !== '/step3' && finished) {
+    if (pathname !== '/step4' && finished) {
       setFinished(false);
       setIsPaused(false);
     }
@@ -103,7 +112,7 @@ export default function OnboardingTabLayout() {
           timer={timer}
           isPaused={isPaused}
           currentStep={currentStep}
-          totalSteps={3}
+          totalSteps={4}
           togglePause={togglePause}
           finished={finished}
         />
@@ -139,6 +148,13 @@ export default function OnboardingTabLayout() {
             title: 'Step3',
           }}
         />
+        <Tab.Screen
+          name="step4"
+          component={Step4}
+          options={{
+            title: 'Step4',
+          }}
+        />
       </Tab.Navigator>
 
       <Pressable
@@ -151,7 +167,7 @@ export default function OnboardingTabLayout() {
       />
       <Pressable
         onPress={() => {
-          if (currentStep < 2) {
+          if (currentStep < 3) {
             navigateToNextScreen();
           }
         }}
@@ -159,7 +175,7 @@ export default function OnboardingTabLayout() {
       />
 
       <View style={styles.action}>
-        <LQDButton onPress={() => router.replace('/(signup)')} title="Let's go!" />
+        <LQDButton variant="secondary" onPress={() => router.replace('/(signup)')} title="Get started" />
       </View>
     </>
   );
