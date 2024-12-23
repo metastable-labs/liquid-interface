@@ -31,6 +31,7 @@ const PercentageSetter = ({ setPercentage }: IPercentageSetter) => {
     <View style={styles.container}>
       <View style={styles.top}>
         <Text style={styles.label}>{percentage}%</Text>
+
         <View style={styles.sliderContainer}>
           <Slider
             style={{ width: '100%', height: 16 }}
@@ -73,9 +74,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 11,
     gap: 16,
   },
+
   top: {
     gap: 4,
   },
+
   label: {
     color: '#475569',
     fontSize: 18,
@@ -83,6 +86,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     fontFamily: 'AeonikMedium',
   },
+
   sliderContainer: {
     width: '100%',
   },

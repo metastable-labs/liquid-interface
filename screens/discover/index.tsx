@@ -71,12 +71,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     paddingTop: 20,
   },
+
   strategyContainerStyle: {
     gap: 20,
     paddingBottom: 120,
     paddingHorizontal: 12,
     paddingTop: 15,
   },
+
   noStrategiesText: {
     fontSize: 16,
     fontWeight: '500',
@@ -84,5 +86,10 @@ const styles = StyleSheet.create({
     fontFamily: 'AeonikMedium',
     marginTop: 50,
   },
-  topGainerLoaderOne: { height: 45, width: 45, borderRadius: 100 },
+
+  topGainerLoaderOne: {
+    height: 45,
+    width: 45,
+    borderRadius: 100,
+  },
 });

@@ -146,6 +146,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     lineHeight: 16.8,
   },
+
   comment: {
     color: '#64748B',
     fontSize: adjustFontSizeForIOS(11, 3),
@@ -153,6 +154,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     lineHeight: 16.8,
   },
+
   time: {
     color: '#64748B',
     fontSize: adjustFontSizeForIOS(11, 3),
@@ -160,12 +162,14 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     lineHeight: 15.84,
   },
+
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
     color: '#1E293B',
     marginBottom: 12,
   },
+
   token: {
     fontSize: adjustFontSizeForIOS(14, 2),
     fontWeight: '500',
@@ -173,6 +177,7 @@ const styles = StyleSheet.create({
     lineHeight: 18.48,
     fontFamily: 'AeonikMedium',
   },
+
   invested: {
     fontSize: adjustFontSizeForIOS(14, 2),
     fontWeight: '500',
@@ -180,6 +185,7 @@ const styles = StyleSheet.create({
     lineHeight: 18.48,
     fontFamily: 'AeonikMedium',
   },
+
   investedAmount: {
     fontSize: adjustFontSizeForIOS(16, 2),
     fontWeight: '500',
@@ -187,6 +193,7 @@ const styles = StyleSheet.create({
     lineHeight: 19.84,
     fontFamily: 'AeonikMedium',
   },
+
   tokenContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -194,11 +201,13 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     paddingHorizontal: 5,
   },
+
   tokenWrapper: {
     flexDirection: 'row',
     gap: 5,
     alignItems: 'center',
   },
+
   buttonWrapper: {
     marginTop: 20,
   },
@@ -206,6 +215,7 @@ const styles = StyleSheet.create({
   textInput: {
     flex: 1,
   },
+
   focusedInput: {
     borderColor: '#4691FE',
     borderWidth: 1.2,

@@ -1,8 +1,8 @@
 import { StyleSheet, Text, View } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { LQDBottomSheet, LQDButton, LQDNumericKeyboard } from '@/components';
 import { adjustFontSizeForIOS, formatWithThousandSeparator, removeCommasFromNumber } from '@/utils/helpers';
-import { ArrowDownIcon, ArrowDropdownDownIcon, DiscoverUSDIcon, MoonWellIcon } from '@/assets/icons';
+import { DiscoverUSDIcon } from '@/assets/icons';
 import PercentageSetter from './percentage';
 
 const Withdraw = ({

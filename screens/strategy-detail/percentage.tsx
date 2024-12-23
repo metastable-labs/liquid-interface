@@ -26,6 +26,7 @@ const PercentageSetter = ({ setPercentage, amount = 0, balance = 0 }: Percentage
 
       const calculatedPercentage = (validAmount / balance) * 100;
       const clampedPercentage = Math.min(Math.max(calculatedPercentage, 0), 100);
+
       setInternalPercentage(Math.round(clampedPercentage));
     }
   }, [amount, balance]);
@@ -38,17 +39,20 @@ const PercentageSetter = ({ setPercentage, amount = 0, balance = 0 }: Percentage
 
   const handleSliderChange = (value: number) => {
     const clampedValue = Math.min(Math.max(value, 0), 100);
+
     setInternalPercentage(clampedValue);
   };
 
   const setPredefinedPercentage = (value: number) => {
     const clampedValue = Math.min(Math.max(value, 0), 100);
+
     setInternalPercentage(clampedValue);
   };
 
   useEffect(() => {
     const validAmount = clampAmount((balance * percentage) / 100);
     setAdjustedAmount(validAmount);
+
     if (setPercentage) {
       setPercentage(percentage);
     }
@@ -59,11 +63,13 @@ const PercentageSetter = ({ setPercentage, amount = 0, balance = 0 }: Percentage
       <View style={styles.top}>
         <View style={styles.percentageWrapper}>
           <Text style={styles.label}>{percentage}%</Text>
+
           <Text style={styles.amount}>
             {formatAmount(adjustedAmount).toLocaleString()}
             USDC
           </Text>
         </View>
+
         <View style={styles.sliderContainer}>
           <Slider
             style={{ width: '100%', height: 16 }}
@@ -78,11 +84,13 @@ const PercentageSetter = ({ setPercentage, amount = 0, balance = 0 }: Percentage
             tapToSeek
           />
         </View>
+
         <View style={styles.percentageWrapper}>
           <View style={styles.itemsFlex}>
             <DiscoverUSDIcon width={20} height={20} />
             <Text style={styles.token}>USDC</Text>
           </View>
+
           <View style={styles.itemsFlex}>
             <Text style={styles.investedText}>Invested:</Text>
             <Text style={styles.investedAmount}>{formatWithThousandSeparator(String(balance))}</Text>
