@@ -9,6 +9,7 @@ import { privyAppId, privyClientId } from '@/constants/env';
 import { ReduxProvider } from './ReduxProvider';
 import { ThemeProvider } from './ThemeProvider';
 import { AuthProvider } from './AuthProvider';
+import { TanstackProvider } from './TanstackProvider';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -37,11 +38,13 @@ export function AllProviders({ children }: PropsWithChildren) {
   return (
     <GestureHandlerRootView>
       <PrivyProvider appId={privyAppId} clientId={privyClientId}>
-        <ReduxProvider onBeforeLift={handleReduxStorePersisted}>
-          <ThemeProvider>
-            <AuthProvider>{children}</AuthProvider>
-          </ThemeProvider>
-        </ReduxProvider>
+        <TanstackProvider>
+          <ReduxProvider onBeforeLift={handleReduxStorePersisted}>
+            <ThemeProvider>
+              <AuthProvider>{children}</AuthProvider>
+            </ThemeProvider>
+          </ReduxProvider>
+        </TanstackProvider>
       </PrivyProvider>
     </GestureHandlerRootView>
   );

@@ -13,12 +13,10 @@ const Section = ({ children, icon, subtitle, title, action, isShowingAll }: ISec
           <Text style={styles.subtitle}>{subtitle}</Text>
         </View>
 
-        {!isShowingAll && (
-          <TouchableOpacity onPress={action} style={styles.action}>
-            <Text style={styles.actionText}>See all</Text>
-            <CaretRightAltIcon />
-          </TouchableOpacity>
-        )}
+        <TouchableOpacity onPress={action} style={styles.action}>
+          <Text style={styles.actionText}>See all</Text>
+          <CaretRightAltIcon />
+        </TouchableOpacity>
       </View>
 
       {children}

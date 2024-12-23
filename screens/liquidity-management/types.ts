@@ -5,8 +5,8 @@ interface ILiquidityManagement {
 
 interface IPairDetails {
   condition: 'stable' | 'volatile';
-  primaryIconURL: string;
-  secondaryIconURL: string;
-  primaryTitle: string;
-  secondaryTitle: string;
+  tokenAIconURL: string;
+  tokenBIconURL: string;
+  tokenATitle: string;
+  tokenBTitle: string;
 }

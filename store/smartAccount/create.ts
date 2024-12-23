@@ -3,10 +3,10 @@ import * as Passkeys from 'react-native-passkeys';
 import { toCoinbaseSmartAccount, toWebAuthnAccount } from 'viem/account-abstraction';
 
 import api from '@/init/api';
-import { publicClient } from '@/init/viem';
+import { publicClient } from '@/init/client';
 import { isDev, rpId } from '@/constants/env';
 import { SmartAccount, Address, SmartAccountPersistedInfo, VerifyRegistration } from '@/init/types';
-import { getPublicKeyHex } from '@/utils/base64';
+import { base64URLStringToHex } from '@/utils/base64';
 
 import { getFn } from './getFn';
 import { FailedToCreatePasskeyCredentialError, FailedToUpdateUserAddressError, PasskeyNotSupportedError } from './errors';
@@ -29,18 +29,33 @@ export async function createSmartAccount(registrationOptions: PublicKeyCredentia
     }
 
     const credentialId = credential.id;
-    const { attestationObject, clientDataJSON, publicKey } = credential.response;
+    const { attestationObject, clientDataJSON } = credential.response;
 
     const registrationResponse = {
       credentialId,
       attestationObject,
       clientDataJSON,
     };
+    const publicKeyHex = base64URLStringToHex(credential.response.getPublicKey());
+    const smartAccountInfo: VerifyRegistration = {
+      username: registrationOptions.user.name,
+      pubKey: publicKeyHex.toString(),
+      id: registrationResponse.credentialId,
+      rawId: registrationResponse.credentialId,
+      response: {
+        attestationObject: registrationResponse.attestationObject,
+        clientDataJSON: registrationResponse.clientDataJSON,
+      },
+      type: 'public-key',
+      authenticatorAttachment: 'platform',
+    };
+
+    await api.verifyRegistration(smartAccountInfo);
 
     const webAuthnAccount = toWebAuthnAccount({
       credential: {
         id: registrationResponse.credentialId,
-        publicKey: getPublicKeyHex(publicKey),
+        publicKey: publicKeyHex,
       },
       getFn,
       rpId,
@@ -54,20 +69,6 @@ export async function createSmartAccount(registrationOptions: PublicKeyCredentia
     const address = await smartAccount.getAddress();
     const username = registrationOptions.user.name;
 
-    const smartAccountInfo: VerifyRegistration = {
-      username: registrationOptions.user.name,
-      id: registrationResponse.credentialId,
-      rawId: registrationResponse.credentialId,
-      response: {
-        attestationObject: registrationResponse.attestationObject,
-        clientDataJSON: registrationResponse.clientDataJSON,
-      },
-      type: 'public-key',
-      authenticatorAttachment: 'platform',
-    };
-
-    await api.verifyRegistration(smartAccountInfo);
-
     const updateUserAddressResponse = await api.updateUserAddress(username, address);
     if (!updateUserAddressResponse.success) {
       throw new FailedToUpdateUserAddressError();
@@ -77,8 +78,8 @@ export async function createSmartAccount(registrationOptions: PublicKeyCredentia
       smartAccount,
       address,
       smartAccountInfo: {
-        publicKey,
-        registrationResponse,
+        publicKey: publicKeyHex,
+        credentialID: smartAccountInfo.id,
       },
     };
   } catch (error: any) {

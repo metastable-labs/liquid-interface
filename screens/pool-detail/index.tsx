@@ -6,7 +6,8 @@ import Balance from './balance';
 import PoolLiquidity from './pool-liquidity';
 import PoolStats from './stats';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
-import { Address } from 'viem';
+import { Address, formatEther } from 'viem';
+import { roundUp } from '@/utils/helpers';
 
 const PoolDetail = ({ poolId }: PoolID) => {
   const { poolsState, accountState } = useSystemFunctions();
@@ -16,33 +17,37 @@ const PoolDetail = ({ poolId }: PoolID) => {
   const title = symbol?.split('/');
 
   const getTokenBalance = (address?: Address) => {
-    const balance = accountState.tokens.find((token) => token.address === address)?.balance || 0;
+    const balance = accountState.tokens?.data?.find((token) => token.address === address)?.balance || 0;
     return Number(balance);
   };
 
   const getTokenUSDValue = (address?: Address) => {
-    const token = accountState.tokens.find((token) => token.address === address);
+    const token = accountState.tokens?.data?.find((token) => token.address === address);
     const balance = Number(token?.balance || 0) * Number(token?.usdPrice || 0);
     return balance;
   };
 
   const POOL: PoolDetails = {
-    primaryIconURL: pool?.token0.logoUrl || '',
-    primaryBalance: getTokenBalance(pool?.token0.address),
-    primaryUSDValue: getTokenUSDValue(pool?.token0.address),
-    secondaryIconURL: pool?.token1.logoUrl || '',
-    secondaryBalance: getTokenBalance(pool?.token1.address),
-    secondaryUSDValue: getTokenUSDValue(pool?.token1.address),
+    tokenAIconURL: pool?.token0.logoUrl || '',
+    tokenABalance: getTokenBalance(pool?.token0.address),
+    tokenAUSDValue: getTokenUSDValue(pool?.token0.address),
+    tokenBIconURL: pool?.token1.logoUrl || '',
+    tokenBBalance: getTokenBalance(pool?.token1.address),
+    tokenBUSDValue: getTokenUSDValue(pool?.token1.address),
     condition: pool?.isStable ? 'stable' : 'volatile',
-    fee: pool?.fees.poolFee || 0,
-    aero: 10,
-    stakedAero: 300,
-    availableAero: 4_090,
-    primaryTitle: title ? title[0] : '',
-    secondaryTitle: title ? title[1] : '',
+    fee: pool?.totalFeesUSD?.toFixed(2) || '0',
+    poolFee: roundUp(pool?.poolFee || 0),
+    tokenATitle: title ? title[0] : '',
+    tokenBTitle: title ? title[1] : '',
     symbol: pool?.symbol.split('-')[1].replace('/', ' / ') || '',
-    volume: Number(pool?.volume.usd || 0),
-    tvl: Number(pool?.tvl || 0),
+    volume: pool?.totalVolumeUSD || 0,
+    tvl: pool?.tvl || 0,
+    tx: pool?.txCount || 0,
+    reserveA: pool?.token0.reserve || 0,
+    reserveB: pool?.token1.reserve || 0,
+    reserveAUSD: pool?.token0.reserveUSD || 0,
+    reserveBUSD: pool?.token1.reserveUSD || 0,
+    poolAddress: pool?.address!,
   };
 
   if (!pool) return null;
@@ -62,7 +67,7 @@ const PoolDetail = ({ poolId }: PoolID) => {
           <PoolLiquidity {...POOL} />
         </View>
 
-        <PoolStats fee={POOL.fee} tvl={POOL.tvl} volume={POOL.volume} />
+        <PoolStats fee={POOL.fee} tvl={POOL.tvl} volume={POOL.volume} tx={POOL.tx} />
       </View>
     </ScrollView>
   );

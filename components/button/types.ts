@@ -4,7 +4,7 @@ interface ILQDButton {
   title: string;
   onPress?: () => void;
   onLongPress?: () => void;
-  variant?: 'primary' | 'secondary' | 'tertiary' | 'tertiaryOutline';
+  variant?: 'primary' | 'secondary' | 'tertiary' | 'tertiaryOutline' | 'light';
   disabled?: boolean;
   loading?: boolean;
   style?: StyleProp<ViewStyle>;

@@ -1,10 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Address, formatUnits, PublicClient } from 'viem';
-import { CONNECTORS_BASE, LP_SUGAR_ADDRESS, OFFCHAIN_ORACLE_ADDRESS } from '@/constants/addresses';
+import { CONNECTORS_BASE, LP_SUGAR_ADDRESS, OFFCHAIN_ORACLE_ADDRESS, WETH_ADDRESS } from '@/constants/addresses';
 import { useLpSugarContract, useOffchainOracleContract } from './useContract';
 import { LPSugarToken, LPSugarTokenResponse, Token } from './types';
 import useSystemFunctions from './useSystemFunctions';
-import { OffchainOracleABI } from '@/constants/abis';
 
 export function useToken(publicClient: PublicClient) {
   const { smartAccountState } = useSystemFunctions();
@@ -13,7 +12,7 @@ export function useToken(publicClient: PublicClient) {
   const [tokens, setTokens] = useState<Token[]>([]);
   const [tokenMap, setTokenMap] = useState<Map<string, Token>>(new Map());
 
-  const lpSugar = useLpSugarContract(LP_SUGAR_ADDRESS, publicClient);
+  const lpSugar = useLpSugarContract(LP_SUGAR_ADDRESS);
   const oracle = useOffchainOracleContract(OFFCHAIN_ORACLE_ADDRESS, publicClient);
 
   const fetchTokens = async (BATCH_SIZE: number, offset: number): Promise<Token[]> => {
@@ -28,25 +27,11 @@ export function useToken(publicClient: PublicClient) {
       const tokenAddresses = batch.map((token: LPSugarToken) => token.token_address);
       const tokenDecimals = batch.map((token: LPSugarToken) => token.decimals);
       const prices = await oracle.getRateToUSD(tokenAddresses, tokenDecimals, true);
-      const tokenEthContracts = tokenAddresses.map((tokenAddress) => ({
-        address: OFFCHAIN_ORACLE_ADDRESS,
-        abi: OffchainOracleABI.OffchainOracle.abi,
-        functionName: 'getRateToEth',
-        args: [tokenAddress, true] as const,
-      }));
-      const ethPrices: any = await publicClient.multicall({
-        contracts: tokenEthContracts,
-      });
+
+      const ethBalance = await publicClient.getBalance({ address: account });
+      const wethPrice = await oracle.getRateToUSD([WETH_ADDRESS], [18], true);
 
       const tokensWithPrice = batch.map((token: LPSugarToken, index: number) => {
-        // let ethPrice: any = 0;
-
-        // if (ethPrices[index]) {
-        //   ethPrice = ethPrices[index].result as bigint;
-        //   const formatEthPrice = formatUnits(ethPrice, 18);
-        //   console.log(token.symbol, ' => ', formatEthPrice);
-        // }
-
         return {
           address: token.token_address,
           symbol: token.symbol,
@@ -54,11 +39,22 @@ export function useToken(publicClient: PublicClient) {
           balance: formatUnits(token.account_balance, token.decimals),
           isListed: token.listed,
           usdPrice: prices[index],
-          logoUrl: `https://assets.smold.app/api/token/8453/${token.token_address}/logo-32.png`,
+          logoUrl: `https://assets.smold.app/api/token/8453/${token.token_address}/logo-128.png`,
         };
       });
 
-      allTokens = [...allTokens, ...tokensWithPrice];
+      // Add ETH to the tokens list
+      const ethToken: Token = {
+        address: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE', // Common convention for native ETH
+        symbol: 'ETH',
+        decimals: 18,
+        balance: formatUnits(ethBalance, 18),
+        isListed: true,
+        usdPrice: wethPrice[0],
+        logoUrl: `https://assets.smold.app/api/token/8453/${WETH_ADDRESS}/logo-128.png`, // Using WETH logo for ETH
+      };
+
+      allTokens = [ethToken, ...allTokens, ...tokensWithPrice];
       offset += BATCH_SIZE;
     }
 

@@ -1,5 +1,39 @@
-import base64 from '@hexagon/base64';
-import { Hex } from 'viem';
+import { bytesToBigInt, hexToBytes, type Hex } from 'viem';
+
+// ! taken from https://github.com/MasterKale/SimpleWebAuthn/blob/e02dce6f2f83d8923f3a549f84e0b7b3d44fa3da/packages/browser/src/helpers/base64URLStringToBuffer.ts
+/**
+ * Convert from a Base64URL-encoded string to an Array Buffer. Best used when converting a
+ * credential ID from a JSON string to an ArrayBuffer, like in allowCredentials or
+ * excludeCredentials
+ *
+ * Helper method to compliment `bufferToBase64URLString`
+ */
+export function base64URLStringToBuffer(base64URLString: string): ArrayBuffer {
+  // Convert from Base64URL to Base64
+  const base64 = base64URLString.replace(/-/g, '+').replace(/_/g, '/');
+  /**
+   * Pad with '=' until it's a multiple of four
+   * (4 - (85 % 4 = 1) = 3) % 4 = 3 padding
+   * (4 - (86 % 4 = 2) = 2) % 4 = 2 padding
+   * (4 - (87 % 4 = 3) = 1) % 4 = 1 padding
+   * (4 - (88 % 4 = 0) = 4) % 4 = 0 padding
+   */
+  const padLength = (4 - (base64.length % 4)) % 4;
+  const padded = base64.padEnd(base64.length + padLength, '=');
+
+  // Convert to a binary string
+  const binary = atob(padded);
+
+  // Convert binary string to buffer
+  const buffer = new ArrayBuffer(binary.length);
+  const bytes = new Uint8Array(buffer);
+
+  for (let i = 0; i < binary.length; i++) {
+    bytes[i] = binary.charCodeAt(i);
+  }
+
+  return buffer;
+}
 
 // ! taken from https://github.com/MasterKale/SimpleWebAuthn/blob/e02dce6f2f83d8923f3a549f84e0b7b3d44fa3da/packages/browser/src/helpers/bufferToBase64URLString.ts
 /**
@@ -21,47 +55,25 @@ export function bufferToBase64URLString(buffer: ArrayBuffer): string {
   return base64String.replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
 }
 
-// ! taken from https://github.com/MasterKale/SimpleWebAuthn/blob/e02dce6f2f83d8923f3a549f84e0b7b3d44fa3da/packages/browser/src/helpers/utf8StringToBuffer.ts
-/**
- * A helper method to convert an arbitrary string sent from the server to an ArrayBuffer the
- * authenticator will expect.
- */
-export function utf8StringToBuffer(value: string): ArrayBuffer {
-  return new TextEncoder().encode(value);
+export function hexToBuffer(hexString: Hex): ArrayBuffer {
+  const bytes =
+    hexString
+      .slice(2)
+      .match(/.{1,2}/g)
+      ?.map((byte) => parseInt(byte, 16)) ?? [];
+  return Uint8Array.from(bytes);
 }
 
-/**
- * Decode a base64url string into its original string
- */
-export function base64UrlToString(base64UrlString: string): string {
-  return base64.toString(base64UrlString, true);
+export function bufferToHex(buffer: ArrayBuffer): Hex {
+  return `0x${[...new Uint8Array(buffer)].map((x) => x.toString(16).padStart(2, '0')).join('')}`;
 }
 
-// Base64 strings typically have a length that is a multiple of 4 and may end with one or two = characters for padding
-function isBase64(str: string): boolean {
-  const base64Regex = /^(?:[A-Za-z0-9+\/]{4})*(?:[A-Za-z0-9+\/]{2}==|[A-Za-z0-9+\/]{3}=)?$/;
-  return base64Regex.test(str);
+export function base64URLStringToHex(base64URLString: string): Hex {
+  return bufferToHex(base64URLStringToBuffer(base64URLString));
 }
 
-export function base64URLStringToBuffer(base64URLString: string): ArrayBuffer {
-  if (!isBase64(base64URLString)) {
-    throw new Error('Invalid base64URLString');
-  }
-
-  // Convert base64url to standard base64
-  const base64String = base64URLString.replace(/-/g, '+').replace(/_/g, '/');
-
-  // Decode base64 to a string
-  const decodedString = base64.toString(base64String);
-
-  // Convert the string to an ArrayBuffer
-  const buffer = new ArrayBuffer(decodedString.length);
-  const view = new Uint8Array(buffer);
-  for (let i = 0; i < decodedString.length; i++) {
-    view[i] = decodedString.charCodeAt(i);
-  }
-
-  return buffer;
+export function hexToBase64URLString(hexString: Hex): string {
+  return bufferToBase64URLString(hexToBuffer(hexString));
 }
 
 /**
@@ -87,9 +99,18 @@ export function base64ToBytes(base64String: string): Uint8Array {
   return bytes;
 }
 
-export function getPublicKeyHex(publicKey: string): Hex {
-  const publicKeyBuffer = utf8StringToBuffer(publicKey);
-  return `0x${Array.from(new Uint8Array(publicKeyBuffer))
-    .map((byte) => byte.toString(16).padStart(2, '0'))
-    .join('')}` as Hex;
+export function parseAndNormalizeSig(sig: Hex): { r: bigint; s: bigint } {
+  const bSig = hexToBytes(sig);
+  // assert(bSig.length === 64, "signature is not 64 bytes");
+  const bR = bSig.slice(0, 32);
+  const bS = bSig.slice(32);
+
+  // Avoid malleability. Ensure low S (<= N/2 where N is the curve order)
+  const r = bytesToBigInt(bR);
+  let s = bytesToBigInt(bS);
+  const n = BigInt('0xFFFFFFFF00000000FFFFFFFFFFFFFFFFBCE6FAADA7179E84F3B9CAC2FC632551');
+  if (s > n / 2n) {
+    s = n - s;
+  }
+  return { r, s };
 }

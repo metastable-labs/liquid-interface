@@ -1,7 +1,7 @@
 import * as Passkeys from 'react-native-passkeys';
 import type { SignParameters } from 'webauthn-p256';
 
-import { base64ToBytes, bufferToBase64URLString } from '@/utils/base64';
+import { base64URLStringToBuffer, bufferToBase64URLString } from '@/utils/base64';
 
 import { CredentialRequestOptionsNotAvailableError, FailedToGetPasskeyCredentialError } from './errors';
 
@@ -35,9 +35,9 @@ export const getFn: GetFnType = async (options) => {
       id: result.id,
       type: 'public-key',
       response: {
-        authenticatorData: base64ToBytes(result.response.authenticatorData),
-        clientDataJSON: base64ToBytes(result.response.clientDataJSON),
-        signature: base64ToBytes(result.response.signature),
+        authenticatorData: base64URLStringToBuffer(result.response.authenticatorData),
+        clientDataJSON: base64URLStringToBuffer(result.response.clientDataJSON),
+        signature: base64URLStringToBuffer(result.response.signature),
       },
     };
 

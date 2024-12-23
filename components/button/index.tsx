@@ -1,4 +1,4 @@
-import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 
 import { ArrowUpIcon, DollarCoinIcon } from '@/assets/icons';
 import { adjustFontSizeForIOS } from '@/utils/helpers';
@@ -33,8 +33,8 @@ const LQDButton = ({
           disabled || loading ? styles.disabledStyle : null,
         ]}
       >
-        <Text style={styles[`${variant}Text`]}>{title}</Text>
-
+        {loading && <ActivityIndicator color="#000" />}
+        {!loading && <Text style={styles[`${variant}Text`]}>{title}</Text>}
         {icon && icons[icon](iconColor)}
       </View>
     </TouchableOpacity>
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     paddingTop: 19,
     paddingBottom: 18,
     borderRadius: 50,
-    backgroundColor: '#FFF',
+    backgroundColor: '#F1F5F9',
   },
 
   primaryText: {
@@ -71,7 +71,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 1,
     shadowRadius: 0,
     elevation: 1,
-    borderWidth: 1,
     borderColor: '#EBEBEB',
   },
 
@@ -85,6 +84,22 @@ const styles = StyleSheet.create({
     fontSize: adjustFontSizeForIOS(16, 2),
     lineHeight: 16,
     color: '#FFF',
+    fontFamily: 'QuantaGroteskProSemiBold',
+    fontWeight: '600',
+  },
+
+  lightContainer: {
+    paddingVertical: 17,
+    borderRadius: 50,
+    backgroundColor: '#FFF',
+    borderWidth: 1,
+    borderColor: '#F1F5F9',
+  },
+
+  lightText: {
+    fontSize: adjustFontSizeForIOS(16, 2),
+    lineHeight: 16,
+    color: '#1E293B',
     fontFamily: 'QuantaGroteskProSemiBold',
     fontWeight: '600',
   },

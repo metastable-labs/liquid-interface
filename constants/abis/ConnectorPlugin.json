@@ -1,1 +1,208 @@
-{"abi":[{"type":"constructor","inputs":[{"name":"_registry","type":"address","internalType":"address"}],"stateMutability":"nonpayable"},{"type":"receive","stateMutability":"payable"},{"type":"function","name":"execute","inputs":[{"name":"_connector","type":"address","internalType":"address"},{"name":"_data","type":"bytes","internalType":"bytes"}],"outputs":[{"name":"","type":"bytes","internalType":"bytes"}],"stateMutability":"payable"},{"type":"function","name":"registry","inputs":[],"outputs":[{"name":"","type":"address","internalType":"contract ConnectorRegistry"}],"stateMutability":"view"},{"type":"event","name":"ConnectorExecuted","inputs":[{"name":"connector","type":"address","indexed":true,"internalType":"address"},{"name":"caller","type":"address","indexed":true,"internalType":"address"},{"name":"data","type":"bytes","indexed":false,"internalType":"bytes"},{"name":"result","type":"bytes","indexed":false,"internalType":"bytes"}],"anonymous":false},{"type":"error","name":"ConnectorExecutionFailed","inputs":[{"name":"connector","type":"address","internalType":"address"},{"name":"data","type":"bytes","internalType":"bytes"}]},{"type":"error","name":"ConnectorNotApproved","inputs":[{"name":"connector","type":"address","internalType":"address"}]}],"bytecode":{"object":"0x60a03461007257601f6105a238819003918201601f19168301916001600160401b038311848410176100765780849260209460405283398101031261007257516001600160a01b0381169081900361007257608052604051610517908161008b8239608051818181608e01526101710152f35b5f80fd5b634e487b7160e01b5f52604160045260245ffdfe6080604090808252600480361015610021575b505050361561001f575f80fd5b005b5f3560e01c9182631cff79cd146100b6575050637b10399914610045578080610012565b346100b2575f7ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffc3601126100b2576020905173ffffffffffffffffffffffffffffffffffffffff7f0000000000000000000000000000000000000000000000000000000000000000168152f35b5f80fd5b83807ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffc3601126100b257823573ffffffffffffffffffffffffffffffffffffffff8082168083036100b25760249586359067ffffffffffffffff948583116100b257366023840112156100b25782820135948686116100b257898401938a8736920101116100b25788907fecac7cf50000000000000000000000000000000000000000000000000000000082528584830152818b60209b8c937f0000000000000000000000000000000000000000000000000000000000000000165afa9081156103c3575f9161038d575b501561035f575f809188518a8101907f6accdc130000000000000000000000000000000000000000000000000000000082528a8d82015261021c816101ea606482018c8b61049f565b336044830152037fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe08101835282610431565b519134905af1973d15610357573d986102348a6104dd565b9961024189519b8c610431565b8a523d5f8a8c013e5b156103135750506102857f25fbd8e076227fb9f0896280f3a1dc453080008fc552c7c113ab631c06c4a26f918651948786528786019161049f565b92808403878201528061029933958a6103ee565b0390a3835184019383818187019603126100b257838101519182116100b257019083603f830112156100b25782820151916102d3836104dd565b946102e083519687610431565b8386528284830101116100b25761030f92610300918386880191016103cd565b519282849384528301906103ee565b0390f35b918487610353939481519687967f8dc02213000000000000000000000000000000000000000000000000000000008852870152850152604484019161049f565b0390fd5b60609861024a565b8882858951917f46c393d1000000000000000000000000000000000000000000000000000000008352820152fd5b90508881813d83116103bc575b6103a48183610431565b810103126100b2575180151581036100b2578a6101a1565b503d61039a565b88513d5f823e3d90fd5b5f5b8381106103de5750505f910152565b81810151838201526020016103cf565b907fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe0601f60209361042a815180928187528780880191016103cd565b0116010190565b90601f7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe0910116810190811067ffffffffffffffff82111761047257604052565b7f4e487b71000000000000000000000000000000000000000000000000000000005f52604160045260245ffd5b601f82602094937fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe093818652868601375f8582860101520116010190565b67ffffffffffffffff811161047257601f017fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe0166020019056","sourceMap":"404:1730:31:-:0;;;;;;;;;;;;;-1:-1:-1;;404:1730:31;;;;-1:-1:-1;;;;;404:1730:31;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;404:1730:31;;;;;;;;1312:39;;404:1730;;;;;;;;1312:39;404:1730;;;;;;;;;;;;-1:-1:-1;404:1730:31;;;;;;-1:-1:-1;404:1730:31;;;;;-1:-1:-1;404:1730:31","linkReferences":{}},"deployedBytecode":{"object":"0x6080604090808252600480361015610021575b505050361561001f575f80fd5b005b5f3560e01c9182631cff79cd146100b6575050637b10399914610045578080610012565b346100b2575f7ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffc3601126100b2576020905173ffffffffffffffffffffffffffffffffffffffff7f0000000000000000000000000000000000000000000000000000000000000000168152f35b5f80fd5b83807ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffc3601126100b257823573ffffffffffffffffffffffffffffffffffffffff8082168083036100b25760249586359067ffffffffffffffff948583116100b257366023840112156100b25782820135948686116100b257898401938a8736920101116100b25788907fecac7cf50000000000000000000000000000000000000000000000000000000082528584830152818b60209b8c937f0000000000000000000000000000000000000000000000000000000000000000165afa9081156103c3575f9161038d575b501561035f575f809188518a8101907f6accdc130000000000000000000000000000000000000000000000000000000082528a8d82015261021c816101ea606482018c8b61049f565b336044830152037fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe08101835282610431565b519134905af1973d15610357573d986102348a6104dd565b9961024189519b8c610431565b8a523d5f8a8c013e5b156103135750506102857f25fbd8e076227fb9f0896280f3a1dc453080008fc552c7c113ab631c06c4a26f918651948786528786019161049f565b92808403878201528061029933958a6103ee565b0390a3835184019383818187019603126100b257838101519182116100b257019083603f830112156100b25782820151916102d3836104dd565b946102e083519687610431565b8386528284830101116100b25761030f92610300918386880191016103cd565b519282849384528301906103ee565b0390f35b918487610353939481519687967f8dc02213000000000000000000000000000000000000000000000000000000008852870152850152604484019161049f565b0390fd5b60609861024a565b8882858951917f46c393d1000000000000000000000000000000000000000000000000000000008352820152fd5b90508881813d83116103bc575b6103a48183610431565b810103126100b2575180151581036100b2578a6101a1565b503d61039a565b88513d5f823e3d90fd5b5f5b8381106103de5750505f910152565b81810151838201526020016103cf565b907fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe0601f60209361042a815180928187528780880191016103cd565b0116010190565b90601f7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe0910116810190811067ffffffffffffffff82111761047257604052565b7f4e487b71000000000000000000000000000000000000000000000000000000005f52604160045260245ffd5b601f82602094937fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe093818652868601375f8582860101520116010190565b67ffffffffffffffff811161047257601f017fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe0166020019056","sourceMap":"404:1730:31:-:0;;;;;;;;;;;;;-1:-1:-1;404:1730:31;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;497:43;404:1730;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1513:40;;404:1730;1513:40;;;;;;404:1730;;;;1513:8;;;;404:1730;1513:40;;;;;;;404:1730;1513:40;;;404:1730;1512:41;;1508:111;;404:1730;;;;;1745:68;;;;;;;;;;;404:1730;1745:68;404:1730;;;;;;;;:::i;:::-;1802:10;404:1730;;;;1745:68;;;;;;;;:::i;:::-;1862:48;1885:9;;1862:48;;;;404:1730;;;;;;;;;:::i;:::-;;;;;;;;:::i;:::-;;;;;;;;;;1924:8;1920:89;;404:1730;;;2024:56;404:1730;;;;;;;;;;;;:::i;:::-;;;;;;;;;1802:10;404:1730;1802:10;404:1730;;;:::i;:::-;2024:56;;;404:1730;;2098:27;;;;;;;;404:1730;;;;;2098:27;;;404:1730;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;;;;;;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;;;;;;;;;;;;:::i;:::-;;;;1920:89;404:1730;;;;;;;;1955:43;;;;;;;;404:1730;;;;;;;;;:::i;:::-;1955:43;;;404:1730;;;;;1508:111;404:1730;;;;;1576:32;;;;;;404:1730;1576:32;1513:40;;;;;;;;;;;;;;;;:::i;:::-;;;404:1730;;;;;;;;;;;;1513:40;;;;;;;;;404:1730;;;;;;;;;;;;;;;;;-1:-1:-1;;404:1730:31;;;;:::o;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;;;;;;:::o;:::-;;;;;;;;;;;;;;;;;;;;:::o;:::-;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;404:1730:31;;;;;;;;;;;:::o;:::-;;;;;;;;;;;;;:::o","linkReferences":{},"immutableReferences":{"37925":[{"start":142,"length":32},{"start":369,"length":32}]}},"methodIdentifiers":{"execute(address,bytes)":"1cff79cd","registry()":"7b103999"},"rawMetadata":"{\"compiler\":{\"version\":\"0.8.24+commit.e11b9ed9\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_registry\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"connector\",\"type\":\"address\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"ConnectorExecutionFailed\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"connector\",\"type\":\"address\"}],\"name\":\"ConnectorNotApproved\",\"type\":\"error\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"connector\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"caller\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"},{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"result\",\"type\":\"bytes\"}],\"name\":\"ConnectorExecuted\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_connector\",\"type\":\"address\"},{\"internalType\":\"bytes\",\"name\":\"_data\",\"type\":\"bytes\"}],\"name\":\"execute\",\"outputs\":[{\"internalType\":\"bytes\",\"name\":\"\",\"type\":\"bytes\"}],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"registry\",\"outputs\":[{\"internalType\":\"contract ConnectorRegistry\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"stateMutability\":\"payable\",\"type\":\"receive\"}],\"devdoc\":{\"details\":\"This plugin checks the ConnectorRegistry before forwarding calls to connectors.\",\"events\":{\"ConnectorExecuted(address,address,bytes,bytes)\":{\"params\":{\"caller\":\"The address of the original caller (smart wallet)\",\"connector\":\"The address of the executed connector\",\"data\":\"The calldata passed to the connector\",\"result\":\"The result returned by the connector\"}}},\"kind\":\"dev\",\"methods\":{\"constructor\":{\"params\":{\"_registry\":\"The address of the ConnectorRegistry contract\"}}},\"title\":\"ConnectorPlugin\",\"version\":1},\"userdoc\":{\"events\":{\"ConnectorExecuted(address,address,bytes,bytes)\":{\"notice\":\"Emitted when a connector is successfully executed\"}},\"kind\":\"user\",\"methods\":{\"constructor\":{\"notice\":\"Constructs the ConnectorPlugin with a reference to the ConnectorRegistry\"},\"registry()\":{\"notice\":\"The address of the ConnectorRegistry contract\"}},\"notice\":\"This contract serves as an intermediary between the smart wallet and connectors,         ensuring that only approved connectors are executed.\",\"version\":1}},\"settings\":{\"compilationTarget\":{\"src/ConnectorPlugin.sol\":\"ConnectorPlugin\"},\"evmVersion\":\"cancun\",\"libraries\":{},\"metadata\":{\"appendCBOR\":false,\"bytecodeHash\":\"none\"},\"optimizer\":{\"enabled\":true,\"runs\":1000000},\"remappings\":[\":@aerodrome/contracts/=lib/contracts/\",\":@coinbase/smart-wallet/=lib/smart-wallet/\",\":@opengsn/=lib/contracts/lib/gsn/packages/\",\":@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/\",\":@uniswap/v3-core/=lib/contracts/lib/v3-core/\",\":FreshCryptoLib/=lib/smart-wallet/lib/webauthn-sol/lib/FreshCryptoLib/solidity/src/\",\":account-abstraction/=lib/smart-wallet/lib/account-abstraction/contracts/\",\":contracts/=lib/contracts/contracts/\",\":ds-test/=lib/contracts/lib/ds-test/src/\",\":erc4626-tests/=lib/openzeppelin-contracts/lib/erc4626-tests/\",\":forge-std/=lib/forge-std/src/\",\":gsn/=lib/contracts/lib/\",\":halmos-cheatcodes/=lib/openzeppelin-contracts/lib/halmos-cheatcodes/src/\",\":openzeppelin-contracts/=lib/openzeppelin-contracts/\",\":p256-verifier/=lib/smart-wallet/lib/p256-verifier/\",\":safe-singleton-deployer-sol/=lib/smart-wallet/lib/safe-singleton-deployer-sol/\",\":smart-wallet/=lib/smart-wallet/\",\":solady/=lib/smart-wallet/lib/solady/src/\",\":utils/=lib/contracts/test/utils/\",\":v3-core/=lib/contracts/lib/v3-core/\",\":webauthn-sol/=lib/smart-wallet/lib/webauthn-sol/src/\"],\"viaIR\":true},\"sources\":{\"lib/openzeppelin-contracts/contracts/access/Ownable.sol\":{\"keccak256\":\"0xff6d0bb2e285473e5311d9d3caacb525ae3538a80758c10649a4d61029b017bb\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://8ed324d3920bb545059d66ab97d43e43ee85fd3bd52e03e401f020afb0b120f6\",\"dweb:/ipfs/QmfEckWLmZkDDcoWrkEvMWhms66xwTLff9DDhegYpvHo1a\"]},\"lib/openzeppelin-contracts/contracts/utils/Context.sol\":{\"keccak256\":\"0x493033a8d1b176a037b2cc6a04dad01a5c157722049bbecf632ca876224dd4b2\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://6a708e8a5bdb1011c2c381c9a5cfd8a9a956d7d0a9dc1bd8bcdaf52f76ef2f12\",\"dweb:/ipfs/Qmax9WHBnVsZP46ZxEMNRQpLQnrdE4dK8LehML1Py8FowF\"]},\"src/ConnectorPlugin.sol\":{\"keccak256\":\"0xf8d96a1d4fdfbedb59793df1513e0a8d4782ad05c74ce0995b3890041dbbc17a\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://0c34043f6651a78d43336af2493725f84f47aa9c8a2daa3a27b59445f2132503\",\"dweb:/ipfs/QmWkx5D5i4WvgJD5iK2Jr4ie14mgon7BCgJ645SnfYz4Qo\"]},\"src/ConnectorRegistry.sol\":{\"keccak256\":\"0x2753145dd83f65905b0e0ca3b86d92eb6177cfd1c7e4da4c2666e394754de527\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://76f779bca8cd724de60175a9efad3206036472f873d22cf6c826240e0c92079b\",\"dweb:/ipfs/QmVQqsRQrtfNiLnk9Sw3tN6BBHDXYzr1EEZCbdzZjFXqGj\"]},\"src/interface/IConnector.sol\":{\"keccak256\":\"0xc66c3e22372dddaba5666bfb79f5c0901e9adaf17caa7dbaf27b13cf4e96db04\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://0bce2177be791674864c3fa9be62ef9fdd1f7c4f6b0e165ad3219bea3c5d6973\",\"dweb:/ipfs/QmQAKRY4eZKhrT39nHKT1W8UxyLBGwvzVXq9oW9ZoXXN1a\"]}},\"version\":1}","metadata":{"compiler":{"version":"0.8.24+commit.e11b9ed9"},"language":"Solidity","output":{"abi":[{"inputs":[{"internalType":"address","name":"_registry","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"address","name":"connector","type":"address"},{"internalType":"bytes","name":"data","type":"bytes"}],"type":"error","name":"ConnectorExecutionFailed"},{"inputs":[{"internalType":"address","name":"connector","type":"address"}],"type":"error","name":"ConnectorNotApproved"},{"inputs":[{"internalType":"address","name":"connector","type":"address","indexed":true},{"internalType":"address","name":"caller","type":"address","indexed":true},{"internalType":"bytes","name":"data","type":"bytes","indexed":false},{"internalType":"bytes","name":"result","type":"bytes","indexed":false}],"type":"event","name":"ConnectorExecuted","anonymous":false},{"inputs":[{"internalType":"address","name":"_connector","type":"address"},{"internalType":"bytes","name":"_data","type":"bytes"}],"stateMutability":"payable","type":"function","name":"execute","outputs":[{"internalType":"bytes","name":"","type":"bytes"}]},{"inputs":[],"stateMutability":"view","type":"function","name":"registry","outputs":[{"internalType":"contract ConnectorRegistry","name":"","type":"address"}]},{"inputs":[],"stateMutability":"payable","type":"receive"}],"devdoc":{"kind":"dev","methods":{"constructor":{"params":{"_registry":"The address of the ConnectorRegistry contract"}}},"version":1},"userdoc":{"kind":"user","methods":{"constructor":{"notice":"Constructs the ConnectorPlugin with a reference to the ConnectorRegistry"},"registry()":{"notice":"The address of the ConnectorRegistry contract"}},"version":1}},"settings":{"remappings":["@aerodrome/contracts/=lib/contracts/","@coinbase/smart-wallet/=lib/smart-wallet/","@opengsn/=lib/contracts/lib/gsn/packages/","@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/","@uniswap/v3-core/=lib/contracts/lib/v3-core/","FreshCryptoLib/=lib/smart-wallet/lib/webauthn-sol/lib/FreshCryptoLib/solidity/src/","account-abstraction/=lib/smart-wallet/lib/account-abstraction/contracts/","contracts/=lib/contracts/contracts/","ds-test/=lib/contracts/lib/ds-test/src/","erc4626-tests/=lib/openzeppelin-contracts/lib/erc4626-tests/","forge-std/=lib/forge-std/src/","gsn/=lib/contracts/lib/","halmos-cheatcodes/=lib/openzeppelin-contracts/lib/halmos-cheatcodes/src/","openzeppelin-contracts/=lib/openzeppelin-contracts/","p256-verifier/=lib/smart-wallet/lib/p256-verifier/","safe-singleton-deployer-sol/=lib/smart-wallet/lib/safe-singleton-deployer-sol/","smart-wallet/=lib/smart-wallet/","solady/=lib/smart-wallet/lib/solady/src/","utils/=lib/contracts/test/utils/","v3-core/=lib/contracts/lib/v3-core/","webauthn-sol/=lib/smart-wallet/lib/webauthn-sol/src/"],"optimizer":{"enabled":true,"runs":1000000},"metadata":{"bytecodeHash":"none","appendCBOR":false},"compilationTarget":{"src/ConnectorPlugin.sol":"ConnectorPlugin"},"evmVersion":"cancun","libraries":{},"viaIR":true},"sources":{"lib/openzeppelin-contracts/contracts/access/Ownable.sol":{"keccak256":"0xff6d0bb2e285473e5311d9d3caacb525ae3538a80758c10649a4d61029b017bb","urls":["bzz-raw://8ed324d3920bb545059d66ab97d43e43ee85fd3bd52e03e401f020afb0b120f6","dweb:/ipfs/QmfEckWLmZkDDcoWrkEvMWhms66xwTLff9DDhegYpvHo1a"],"license":"MIT"},"lib/openzeppelin-contracts/contracts/utils/Context.sol":{"keccak256":"0x493033a8d1b176a037b2cc6a04dad01a5c157722049bbecf632ca876224dd4b2","urls":["bzz-raw://6a708e8a5bdb1011c2c381c9a5cfd8a9a956d7d0a9dc1bd8bcdaf52f76ef2f12","dweb:/ipfs/Qmax9WHBnVsZP46ZxEMNRQpLQnrdE4dK8LehML1Py8FowF"],"license":"MIT"},"src/ConnectorPlugin.sol":{"keccak256":"0xf8d96a1d4fdfbedb59793df1513e0a8d4782ad05c74ce0995b3890041dbbc17a","urls":["bzz-raw://0c34043f6651a78d43336af2493725f84f47aa9c8a2daa3a27b59445f2132503","dweb:/ipfs/QmWkx5D5i4WvgJD5iK2Jr4ie14mgon7BCgJ645SnfYz4Qo"],"license":"MIT"},"src/ConnectorRegistry.sol":{"keccak256":"0x2753145dd83f65905b0e0ca3b86d92eb6177cfd1c7e4da4c2666e394754de527","urls":["bzz-raw://76f779bca8cd724de60175a9efad3206036472f873d22cf6c826240e0c92079b","dweb:/ipfs/QmVQqsRQrtfNiLnk9Sw3tN6BBHDXYzr1EEZCbdzZjFXqGj"],"license":"MIT"},"src/interface/IConnector.sol":{"keccak256":"0xc66c3e22372dddaba5666bfb79f5c0901e9adaf17caa7dbaf27b13cf4e96db04","urls":["bzz-raw://0bce2177be791674864c3fa9be62ef9fdd1f7c4f6b0e165ad3219bea3c5d6973","dweb:/ipfs/QmQAKRY4eZKhrT39nHKT1W8UxyLBGwvzVXq9oW9ZoXXN1a"],"license":"MIT"}},"version":1},"id":31}
+{
+  "abi": [
+    {
+      "type": "constructor",
+      "inputs": [{ "name": "_registry", "type": "address", "internalType": "address" }],
+      "stateMutability": "nonpayable"
+    },
+    { "type": "receive", "stateMutability": "payable" },
+    {
+      "type": "function",
+      "name": "execute",
+      "inputs": [
+        { "name": "_connector", "type": "address", "internalType": "address" },
+        { "name": "_data", "type": "bytes", "internalType": "bytes" }
+      ],
+      "outputs": [{ "name": "", "type": "bytes", "internalType": "bytes" }],
+      "stateMutability": "payable"
+    },
+    {
+      "type": "function",
+      "name": "registry",
+      "inputs": [],
+      "outputs": [{ "name": "", "type": "address", "internalType": "contract ConnectorRegistry" }],
+      "stateMutability": "view"
+    },
+    {
+      "type": "event",
+      "name": "ConnectorExecuted",
+      "inputs": [
+        { "name": "connector", "type": "address", "indexed": true, "internalType": "address" },
+        { "name": "caller", "type": "address", "indexed": true, "internalType": "address" },
+        { "name": "data", "type": "bytes", "indexed": false, "internalType": "bytes" },
+        { "name": "result", "type": "bytes", "indexed": false, "internalType": "bytes" }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "error",
+      "name": "ConnectorExecutionFailed",
+      "inputs": [
+        { "name": "connector", "type": "address", "internalType": "address" },
+        { "name": "data", "type": "bytes", "internalType": "bytes" }
+      ]
+    },
+    { "type": "error", "name": "ConnectorNotApproved", "inputs": [{ "name": "connector", "type": "address", "internalType": "address" }] }
+  ],
+  "bytecode": {
+    "object": "0x60a03461007257601f6105a238819003918201601f19168301916001600160401b038311848410176100765780849260209460405283398101031261007257516001600160a01b0381169081900361007257608052604051610517908161008b8239608051818181608e01526101710152f35b5f80fd5b634e487b7160e01b5f52604160045260245ffdfe6080604090808252600480361015610021575b505050361561001f575f80fd5b005b5f3560e01c9182631cff79cd146100b6575050637b10399914610045578080610012565b346100b2575f7ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffc3601126100b2576020905173ffffffffffffffffffffffffffffffffffffffff7f0000000000000000000000000000000000000000000000000000000000000000168152f35b5f80fd5b83807ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffc3601126100b257823573ffffffffffffffffffffffffffffffffffffffff8082168083036100b25760249586359067ffffffffffffffff948583116100b257366023840112156100b25782820135948686116100b257898401938a8736920101116100b25788907fecac7cf50000000000000000000000000000000000000000000000000000000082528584830152818b60209b8c937f0000000000000000000000000000000000000000000000000000000000000000165afa9081156103c3575f9161038d575b501561035f575f809188518a8101907f6accdc130000000000000000000000000000000000000000000000000000000082528a8d82015261021c816101ea606482018c8b61049f565b336044830152037fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe08101835282610431565b519134905af1973d15610357573d986102348a6104dd565b9961024189519b8c610431565b8a523d5f8a8c013e5b156103135750506102857f25fbd8e076227fb9f0896280f3a1dc453080008fc552c7c113ab631c06c4a26f918651948786528786019161049f565b92808403878201528061029933958a6103ee565b0390a3835184019383818187019603126100b257838101519182116100b257019083603f830112156100b25782820151916102d3836104dd565b946102e083519687610431565b8386528284830101116100b25761030f92610300918386880191016103cd565b519282849384528301906103ee565b0390f35b918487610353939481519687967f8dc02213000000000000000000000000000000000000000000000000000000008852870152850152604484019161049f565b0390fd5b60609861024a565b8882858951917f46c393d1000000000000000000000000000000000000000000000000000000008352820152fd5b90508881813d83116103bc575b6103a48183610431565b810103126100b2575180151581036100b2578a6101a1565b503d61039a565b88513d5f823e3d90fd5b5f5b8381106103de5750505f910152565b81810151838201526020016103cf565b907fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe0601f60209361042a815180928187528780880191016103cd565b0116010190565b90601f7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe0910116810190811067ffffffffffffffff82111761047257604052565b7f4e487b71000000000000000000000000000000000000000000000000000000005f52604160045260245ffd5b601f82602094937fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe093818652868601375f8582860101520116010190565b67ffffffffffffffff811161047257601f017fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe0166020019056",
+    "sourceMap": "404:1730:31:-:0;;;;;;;;;;;;;-1:-1:-1;;404:1730:31;;;;-1:-1:-1;;;;;404:1730:31;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;404:1730:31;;;;;;;;1312:39;;404:1730;;;;;;;;1312:39;404:1730;;;;;;;;;;;;-1:-1:-1;404:1730:31;;;;;;-1:-1:-1;404:1730:31;;;;;-1:-1:-1;404:1730:31",
+    "linkReferences": {}
+  },
+  "deployedBytecode": {
+    "object": "0x6080604090808252600480361015610021575b505050361561001f575f80fd5b005b5f3560e01c9182631cff79cd146100b6575050637b10399914610045578080610012565b346100b2575f7ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffc3601126100b2576020905173ffffffffffffffffffffffffffffffffffffffff7f0000000000000000000000000000000000000000000000000000000000000000168152f35b5f80fd5b83807ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffc3601126100b257823573ffffffffffffffffffffffffffffffffffffffff8082168083036100b25760249586359067ffffffffffffffff948583116100b257366023840112156100b25782820135948686116100b257898401938a8736920101116100b25788907fecac7cf50000000000000000000000000000000000000000000000000000000082528584830152818b60209b8c937f0000000000000000000000000000000000000000000000000000000000000000165afa9081156103c3575f9161038d575b501561035f575f809188518a8101907f6accdc130000000000000000000000000000000000000000000000000000000082528a8d82015261021c816101ea606482018c8b61049f565b336044830152037fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe08101835282610431565b519134905af1973d15610357573d986102348a6104dd565b9961024189519b8c610431565b8a523d5f8a8c013e5b156103135750506102857f25fbd8e076227fb9f0896280f3a1dc453080008fc552c7c113ab631c06c4a26f918651948786528786019161049f565b92808403878201528061029933958a6103ee565b0390a3835184019383818187019603126100b257838101519182116100b257019083603f830112156100b25782820151916102d3836104dd565b946102e083519687610431565b8386528284830101116100b25761030f92610300918386880191016103cd565b519282849384528301906103ee565b0390f35b918487610353939481519687967f8dc02213000000000000000000000000000000000000000000000000000000008852870152850152604484019161049f565b0390fd5b60609861024a565b8882858951917f46c393d1000000000000000000000000000000000000000000000000000000008352820152fd5b90508881813d83116103bc575b6103a48183610431565b810103126100b2575180151581036100b2578a6101a1565b503d61039a565b88513d5f823e3d90fd5b5f5b8381106103de5750505f910152565b81810151838201526020016103cf565b907fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe0601f60209361042a815180928187528780880191016103cd565b0116010190565b90601f7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe0910116810190811067ffffffffffffffff82111761047257604052565b7f4e487b71000000000000000000000000000000000000000000000000000000005f52604160045260245ffd5b601f82602094937fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe093818652868601375f8582860101520116010190565b67ffffffffffffffff811161047257601f017fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe0166020019056",
+    "sourceMap": "404:1730:31:-:0;;;;;;;;;;;;;-1:-1:-1;404:1730:31;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;497:43;404:1730;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1513:40;;404:1730;1513:40;;;;;;404:1730;;;;1513:8;;;;404:1730;1513:40;;;;;;;404:1730;1513:40;;;404:1730;1512:41;;1508:111;;404:1730;;;;;1745:68;;;;;;;;;;;404:1730;1745:68;404:1730;;;;;;;;:::i;:::-;1802:10;404:1730;;;;1745:68;;;;;;;;:::i;:::-;1862:48;1885:9;;1862:48;;;;404:1730;;;;;;;;;:::i;:::-;;;;;;;;:::i;:::-;;;;;;;;;;1924:8;1920:89;;404:1730;;;2024:56;404:1730;;;;;;;;;;;;:::i;:::-;;;;;;;;;1802:10;404:1730;1802:10;404:1730;;;:::i;:::-;2024:56;;;404:1730;;2098:27;;;;;;;;404:1730;;;;;2098:27;;;404:1730;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;;;;;;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;;;;;;;;;;;;:::i;:::-;;;;1920:89;404:1730;;;;;;;;1955:43;;;;;;;;404:1730;;;;;;;;;:::i;:::-;1955:43;;;404:1730;;;;;1508:111;404:1730;;;;;1576:32;;;;;;404:1730;1576:32;1513:40;;;;;;;;;;;;;;;;:::i;:::-;;;404:1730;;;;;;;;;;;;1513:40;;;;;;;;;404:1730;;;;;;;;;;;;;;;;;-1:-1:-1;;404:1730:31;;;;:::o;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;;;;;;:::o;:::-;;;;;;;;;;;;;;;;;;;;:::o;:::-;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;404:1730:31;;;;;;;;;;;:::o;:::-;;;;;;;;;;;;;:::o",
+    "linkReferences": {},
+    "immutableReferences": {
+      "37925": [
+        { "start": 142, "length": 32 },
+        { "start": 369, "length": 32 }
+      ]
+    }
+  },
+  "methodIdentifiers": { "execute(address,bytes)": "1cff79cd", "registry()": "7b103999" },
+  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.24+commit.e11b9ed9\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_registry\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"connector\",\"type\":\"address\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"ConnectorExecutionFailed\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"connector\",\"type\":\"address\"}],\"name\":\"ConnectorNotApproved\",\"type\":\"error\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"connector\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"caller\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"},{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"result\",\"type\":\"bytes\"}],\"name\":\"ConnectorExecuted\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_connector\",\"type\":\"address\"},{\"internalType\":\"bytes\",\"name\":\"_data\",\"type\":\"bytes\"}],\"name\":\"execute\",\"outputs\":[{\"internalType\":\"bytes\",\"name\":\"\",\"type\":\"bytes\"}],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"registry\",\"outputs\":[{\"internalType\":\"contract ConnectorRegistry\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"stateMutability\":\"payable\",\"type\":\"receive\"}],\"devdoc\":{\"details\":\"This plugin checks the ConnectorRegistry before forwarding calls to connectors.\",\"events\":{\"ConnectorExecuted(address,address,bytes,bytes)\":{\"params\":{\"caller\":\"The address of the original caller (smart wallet)\",\"connector\":\"The address of the executed connector\",\"data\":\"The calldata passed to the connector\",\"result\":\"The result returned by the connector\"}}},\"kind\":\"dev\",\"methods\":{\"constructor\":{\"params\":{\"_registry\":\"The address of the ConnectorRegistry contract\"}}},\"title\":\"ConnectorPlugin\",\"version\":1},\"userdoc\":{\"events\":{\"ConnectorExecuted(address,address,bytes,bytes)\":{\"notice\":\"Emitted when a connector is successfully executed\"}},\"kind\":\"user\",\"methods\":{\"constructor\":{\"notice\":\"Constructs the ConnectorPlugin with a reference to the ConnectorRegistry\"},\"registry()\":{\"notice\":\"The address of the ConnectorRegistry contract\"}},\"notice\":\"This contract serves as an intermediary between the smart wallet and connectors,         ensuring that only approved connectors are executed.\",\"version\":1}},\"settings\":{\"compilationTarget\":{\"src/ConnectorPlugin.sol\":\"ConnectorPlugin\"},\"evmVersion\":\"cancun\",\"libraries\":{},\"metadata\":{\"appendCBOR\":false,\"bytecodeHash\":\"none\"},\"optimizer\":{\"enabled\":true,\"runs\":1000000},\"remappings\":[\":@aerodrome/contracts/=lib/contracts/\",\":@coinbase/smart-wallet/=lib/smart-wallet/\",\":@opengsn/=lib/contracts/lib/gsn/packages/\",\":@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/\",\":@uniswap/v3-core/=lib/contracts/lib/v3-core/\",\":FreshCryptoLib/=lib/smart-wallet/lib/webauthn-sol/lib/FreshCryptoLib/solidity/src/\",\":account-abstraction/=lib/smart-wallet/lib/account-abstraction/contracts/\",\":contracts/=lib/contracts/contracts/\",\":ds-test/=lib/contracts/lib/ds-test/src/\",\":erc4626-tests/=lib/openzeppelin-contracts/lib/erc4626-tests/\",\":forge-std/=lib/forge-std/src/\",\":gsn/=lib/contracts/lib/\",\":halmos-cheatcodes/=lib/openzeppelin-contracts/lib/halmos-cheatcodes/src/\",\":openzeppelin-contracts/=lib/openzeppelin-contracts/\",\":p256-verifier/=lib/smart-wallet/lib/p256-verifier/\",\":safe-singleton-deployer-sol/=lib/smart-wallet/lib/safe-singleton-deployer-sol/\",\":smart-wallet/=lib/smart-wallet/\",\":solady/=lib/smart-wallet/lib/solady/src/\",\":utils/=lib/contracts/test/utils/\",\":v3-core/=lib/contracts/lib/v3-core/\",\":webauthn-sol/=lib/smart-wallet/lib/webauthn-sol/src/\"],\"viaIR\":true},\"sources\":{\"lib/openzeppelin-contracts/contracts/access/Ownable.sol\":{\"keccak256\":\"0xff6d0bb2e285473e5311d9d3caacb525ae3538a80758c10649a4d61029b017bb\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://8ed324d3920bb545059d66ab97d43e43ee85fd3bd52e03e401f020afb0b120f6\",\"dweb:/ipfs/QmfEckWLmZkDDcoWrkEvMWhms66xwTLff9DDhegYpvHo1a\"]},\"lib/openzeppelin-contracts/contracts/utils/Context.sol\":{\"keccak256\":\"0x493033a8d1b176a037b2cc6a04dad01a5c157722049bbecf632ca876224dd4b2\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://6a708e8a5bdb1011c2c381c9a5cfd8a9a956d7d0a9dc1bd8bcdaf52f76ef2f12\",\"dweb:/ipfs/Qmax9WHBnVsZP46ZxEMNRQpLQnrdE4dK8LehML1Py8FowF\"]},\"src/ConnectorPlugin.sol\":{\"keccak256\":\"0xf8d96a1d4fdfbedb59793df1513e0a8d4782ad05c74ce0995b3890041dbbc17a\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://0c34043f6651a78d43336af2493725f84f47aa9c8a2daa3a27b59445f2132503\",\"dweb:/ipfs/QmWkx5D5i4WvgJD5iK2Jr4ie14mgon7BCgJ645SnfYz4Qo\"]},\"src/ConnectorRegistry.sol\":{\"keccak256\":\"0x2753145dd83f65905b0e0ca3b86d92eb6177cfd1c7e4da4c2666e394754de527\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://76f779bca8cd724de60175a9efad3206036472f873d22cf6c826240e0c92079b\",\"dweb:/ipfs/QmVQqsRQrtfNiLnk9Sw3tN6BBHDXYzr1EEZCbdzZjFXqGj\"]},\"src/interface/IConnector.sol\":{\"keccak256\":\"0xc66c3e22372dddaba5666bfb79f5c0901e9adaf17caa7dbaf27b13cf4e96db04\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://0bce2177be791674864c3fa9be62ef9fdd1f7c4f6b0e165ad3219bea3c5d6973\",\"dweb:/ipfs/QmQAKRY4eZKhrT39nHKT1W8UxyLBGwvzVXq9oW9ZoXXN1a\"]}},\"version\":1}",
+  "metadata": {
+    "compiler": { "version": "0.8.24+commit.e11b9ed9" },
+    "language": "Solidity",
+    "output": {
+      "abi": [
+        {
+          "inputs": [{ "internalType": "address", "name": "_registry", "type": "address" }],
+          "stateMutability": "nonpayable",
+          "type": "constructor"
+        },
+        {
+          "inputs": [
+            { "internalType": "address", "name": "connector", "type": "address" },
+            { "internalType": "bytes", "name": "data", "type": "bytes" }
+          ],
+          "type": "error",
+          "name": "ConnectorExecutionFailed"
+        },
+        {
+          "inputs": [{ "internalType": "address", "name": "connector", "type": "address" }],
+          "type": "error",
+          "name": "ConnectorNotApproved"
+        },
+        {
+          "inputs": [
+            { "internalType": "address", "name": "connector", "type": "address", "indexed": true },
+            { "internalType": "address", "name": "caller", "type": "address", "indexed": true },
+            { "internalType": "bytes", "name": "data", "type": "bytes", "indexed": false },
+            { "internalType": "bytes", "name": "result", "type": "bytes", "indexed": false }
+          ],
+          "type": "event",
+          "name": "ConnectorExecuted",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            { "internalType": "address", "name": "_connector", "type": "address" },
+            { "internalType": "bytes", "name": "_data", "type": "bytes" }
+          ],
+          "stateMutability": "payable",
+          "type": "function",
+          "name": "execute",
+          "outputs": [{ "internalType": "bytes", "name": "", "type": "bytes" }]
+        },
+        {
+          "inputs": [],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "registry",
+          "outputs": [{ "internalType": "contract ConnectorRegistry", "name": "", "type": "address" }]
+        },
+        { "inputs": [], "stateMutability": "payable", "type": "receive" }
+      ],
+      "devdoc": {
+        "kind": "dev",
+        "methods": { "constructor": { "params": { "_registry": "The address of the ConnectorRegistry contract" } } },
+        "version": 1
+      },
+      "userdoc": {
+        "kind": "user",
+        "methods": {
+          "constructor": { "notice": "Constructs the ConnectorPlugin with a reference to the ConnectorRegistry" },
+          "registry()": { "notice": "The address of the ConnectorRegistry contract" }
+        },
+        "version": 1
+      }
+    },
+    "settings": {
+      "remappings": [
+        "@aerodrome/contracts/=lib/contracts/",
+        "@coinbase/smart-wallet/=lib/smart-wallet/",
+        "@opengsn/=lib/contracts/lib/gsn/packages/",
+        "@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/",
+        "@uniswap/v3-core/=lib/contracts/lib/v3-core/",
+        "FreshCryptoLib/=lib/smart-wallet/lib/webauthn-sol/lib/FreshCryptoLib/solidity/src/",
+        "account-abstraction/=lib/smart-wallet/lib/account-abstraction/contracts/",
+        "contracts/=lib/contracts/contracts/",
+        "ds-test/=lib/contracts/lib/ds-test/src/",
+        "erc4626-tests/=lib/openzeppelin-contracts/lib/erc4626-tests/",
+        "forge-std/=lib/forge-std/src/",
+        "gsn/=lib/contracts/lib/",
+        "halmos-cheatcodes/=lib/openzeppelin-contracts/lib/halmos-cheatcodes/src/",
+        "openzeppelin-contracts/=lib/openzeppelin-contracts/",
+        "p256-verifier/=lib/smart-wallet/lib/p256-verifier/",
+        "safe-singleton-deployer-sol/=lib/smart-wallet/lib/safe-singleton-deployer-sol/",
+        "smart-wallet/=lib/smart-wallet/",
+        "solady/=lib/smart-wallet/lib/solady/src/",
+        "utils/=lib/contracts/test/utils/",
+        "v3-core/=lib/contracts/lib/v3-core/",
+        "webauthn-sol/=lib/smart-wallet/lib/webauthn-sol/src/"
+      ],
+      "optimizer": { "enabled": true, "runs": 1000000 },
+      "metadata": { "bytecodeHash": "none", "appendCBOR": false },
+      "compilationTarget": { "src/ConnectorPlugin.sol": "ConnectorPlugin" },
+      "evmVersion": "cancun",
+      "libraries": {},
+      "viaIR": true
+    },
+    "sources": {
+      "lib/openzeppelin-contracts/contracts/access/Ownable.sol": {
+        "keccak256": "0xff6d0bb2e285473e5311d9d3caacb525ae3538a80758c10649a4d61029b017bb",
+        "urls": [
+          "bzz-raw://8ed324d3920bb545059d66ab97d43e43ee85fd3bd52e03e401f020afb0b120f6",
+          "dweb:/ipfs/QmfEckWLmZkDDcoWrkEvMWhms66xwTLff9DDhegYpvHo1a"
+        ],
+        "license": "MIT"
+      },
+      "lib/openzeppelin-contracts/contracts/utils/Context.sol": {
+        "keccak256": "0x493033a8d1b176a037b2cc6a04dad01a5c157722049bbecf632ca876224dd4b2",
+        "urls": [
+          "bzz-raw://6a708e8a5bdb1011c2c381c9a5cfd8a9a956d7d0a9dc1bd8bcdaf52f76ef2f12",
+          "dweb:/ipfs/Qmax9WHBnVsZP46ZxEMNRQpLQnrdE4dK8LehML1Py8FowF"
+        ],
+        "license": "MIT"
+      },
+      "src/ConnectorPlugin.sol": {
+        "keccak256": "0xf8d96a1d4fdfbedb59793df1513e0a8d4782ad05c74ce0995b3890041dbbc17a",
+        "urls": [
+          "bzz-raw://0c34043f6651a78d43336af2493725f84f47aa9c8a2daa3a27b59445f2132503",
+          "dweb:/ipfs/QmWkx5D5i4WvgJD5iK2Jr4ie14mgon7BCgJ645SnfYz4Qo"
+        ],
+        "license": "MIT"
+      },
+      "src/ConnectorRegistry.sol": {
+        "keccak256": "0x2753145dd83f65905b0e0ca3b86d92eb6177cfd1c7e4da4c2666e394754de527",
+        "urls": [
+          "bzz-raw://76f779bca8cd724de60175a9efad3206036472f873d22cf6c826240e0c92079b",
+          "dweb:/ipfs/QmVQqsRQrtfNiLnk9Sw3tN6BBHDXYzr1EEZCbdzZjFXqGj"
+        ],
+        "license": "MIT"
+      },
+      "src/interface/IConnector.sol": {
+        "keccak256": "0xc66c3e22372dddaba5666bfb79f5c0901e9adaf17caa7dbaf27b13cf4e96db04",
+        "urls": [
+          "bzz-raw://0bce2177be791674864c3fa9be62ef9fdd1f7c4f6b0e165ad3219bea3c5d6973",
+          "dweb:/ipfs/QmQAKRY4eZKhrT39nHKT1W8UxyLBGwvzVXq9oW9ZoXXN1a"
+        ],
+        "license": "MIT"
+      }
+    },
+    "version": 1
+  },
+  "id": 31
+}

@@ -6,9 +6,13 @@ interface ILQDInput<T extends FieldValues> {
   name: Path<T>;
   rules?: Omit<RegisterOptions<T>, 'setValueAs' | 'disabled' | 'valueAsNumber' | 'valueAsDate'>;
   label?: string;
+  isTextarea?: boolean;
+  numberOfLines?: number;
   placeholder?: string;
-  variant?: 'primary' | 'secondary' | 'search';
+  variant?: 'primary' | 'secondary' | 'search' | 'close' | 'wallet';
+  iconPosition?: 'left' | 'right';
   inputProps?: TextInputProps;
+  iconAction?: () => void;
 }
 
 export type { ILQDInput };

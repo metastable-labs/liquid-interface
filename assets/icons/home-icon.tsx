@@ -1,14 +1,10 @@
 import Svg, { Path } from 'react-native-svg';
 
-const HomeIcon = ({ fill = '#020617', height = 24, width = 25 }: IconProps) => (
-  <Svg width={width} height={height} fill="none">
-    <Path fill={fill} d="M12.75 18v-3 3Z" />
+const HomeIcon = ({ fill = '#0C0507', height = 24, width = 25 }: IconProps) => (
+  <Svg width={width} height={height} viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
     <Path
-      stroke={fill}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={1.5}
-      d="M12.75 18v-3M10.82 2.82 3.89 8.37c-.78.62-1.28 1.93-1.11 2.91l1.33 7.96c.24 1.42 1.6 2.57 3.04 2.57h11.2c1.43 0 2.8-1.16 3.04-2.57l1.33-7.96c.16-.98-.34-2.29-1.11-2.91l-6.93-5.54c-1.07-.86-2.8-.86-3.86-.01Z"
+      d="M21.33 8.01002L14.78 2.77002C13.5 1.75002 11.5 1.74002 10.23 2.76002L3.67996 8.01002C2.73996 8.76002 2.16996 10.26 2.36996 11.44L3.62996 18.98C3.91996 20.67 5.48996 22 7.19996 22H17.8C19.49 22 21.09 20.64 21.38 18.97L22.64 11.43C22.82 10.26 22.25 8.76002 21.33 8.01002ZM13.25 18C13.25 18.41 12.91 18.75 12.5 18.75C12.09 18.75 11.75 18.41 11.75 18V15C11.75 14.59 12.09 14.25 12.5 14.25C12.91 14.25 13.25 14.59 13.25 15V18Z"
+      fill={fill}
     />
   </Svg>
 );

@@ -1,4 +1,4 @@
-import { Address as EthereumAddress } from 'viem';
+import { Address as EthereumAddress, Hex } from 'viem';
 import { ToCoinbaseSmartAccountReturnType } from 'viem/account-abstraction';
 import {
   PublicKeyCredentialCreationOptionsJSON,
@@ -24,11 +24,11 @@ export type PasskeyRegistrationResult = {
 };
 
 export enum PoolType {
-  v2 = 'v2',
-  hot = 'hot',
-  trending = 'trending',
-  gainers = 'gainers',
-  search = 'search',
+  v2 = '',
+  hot = '/hot',
+  trending = '/trending',
+  gainers = '/gainers',
+  search = '/search',
 }
 
 export type SmartAccount = ToCoinbaseSmartAccountReturnType;
@@ -37,12 +37,13 @@ export type SmartAccount = ToCoinbaseSmartAccountReturnType;
  * Info about the smart account that is persisted to secure store, used to re-initialize the smart account
  */
 export type SmartAccountPersistedInfo = {
-  publicKey: string;
-  registrationResponse: PasskeyRegistrationResult;
+  publicKey: Hex;
+  credentialID: string;
 };
 
 export type VerifyRegistration = {
   username: string;
+  pubKey: Hex | string;
   id: string;
   rawId: string;
   response: {
@@ -51,4 +52,33 @@ export type VerifyRegistration = {
   };
   type: string;
   authenticatorAttachment: string;
+};
+
+export type VerifyAuthResponse = {
+  id: string;
+  rawId: string;
+  response: {
+    authenticatorData: string;
+    clientDataJSON: string;
+    signature: string;
+    userHandle: string;
+  };
+  type: string;
+  authenticatorAttachment: string;
+};
+
+export type AuthVerificationResult = {
+  data: {
+    publicKey: string;
+    userAddress: string;
+    username: string;
+    verified: boolean;
+  };
+};
+
+export type RegistrationVerificationResult = {
+  data: {
+    publicKey: string;
+    verified: boolean;
+  };
 };

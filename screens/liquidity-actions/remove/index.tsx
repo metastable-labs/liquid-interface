@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import { View, Text, ScrollView, Image } from 'react-native';
 
-import { LQDButton } from '@/components';
-import { adjustFontSizeForIOS } from '@/utils/helpers';
+import { LQDButton, LQDPoolImages, LQDTokenImage } from '@/components';
+import { adjustFontSizeForIOS, formatSymbol } from '@/utils/helpers';
 import { styles } from './styles';
 import PercentageSetter from './percentage-setter';
+import useSystemFunctions from '@/hooks/useSystemFunctions';
+import { TokenItem } from '@/store/account/types';
 
 const ICON_PLACEHOLDER = 'https://res.cloudinary.com/dxnd4k222/image/upload/v1717871583/Avatar_1.0_npmw4c.png';
 
@@ -17,38 +19,65 @@ const dummy = {
 };
 
 const RemoveLiquidity = () => {
+  const { poolsState, accountState } = useSystemFunctions();
+
   const [percentage, setPercentage] = useState(25);
+  const [tokenA, setTokenA] = useState<TokenItem>();
+  const [tokenB, setTokenB] = useState<TokenItem>();
+
+  const { selectedPool } = poolsState;
+  const { tokens } = accountState;
+
+  const tokenAIconUrl = selectedPool?.token0?.logoUrl;
+  const tokenBIconUrl = selectedPool?.token1?.logoUrl;
+  const symbol = formatSymbol(selectedPool?.symbol || '', true);
+
   const onSubmit = () => {
     console.log('Submitting liquidity request');
   };
 
   const depositions = [
     {
-      iconURL: dummy.primaryIconURL,
-      title: dummy.primaryTitle,
-      value: 3_600,
+      iconURL: tokenA?.logoUrl,
+      title: tokenA?.symbol,
+      value: 0,
     },
     {
-      iconURL: dummy.secondaryIconURL,
-      title: dummy.secondaryTitle,
-      value: 1,
+      iconURL: tokenB?.logoUrl,
+      title: tokenB?.symbol,
+      value: 0,
     },
   ];
 
   const receive = [
     {
-      iconURL: dummy.primaryIconURL,
-      title: dummy.primaryTitle,
-      primaryValue: 600,
-      secondaryValue: 601,
+      iconURL: tokenA?.logoUrl,
+      title: tokenA?.symbol,
+      nativeValue: 0,
+      usdValue: 0,
     },
     {
-      iconURL: dummy.secondaryIconURL,
-      title: dummy.secondaryTitle,
-      primaryValue: 0.4,
-      secondaryValue: 601,
+      iconURL: tokenB?.logoUrl,
+      title: tokenB?.symbol,
+      nativeValue: 0,
+      usdValue: 0,
     },
   ];
+
+  useEffect(
+    function initializeTokenData() {
+      if (!tokens.data || !selectedPool) return;
+
+      const tokenAData = tokens.data.find((token) => token.address === selectedPool.token0.address);
+      const tokenBData = tokens.data.find((token) => token.address === selectedPool.token1.address);
+
+      if (!tokenAData || !tokenBData) return;
+
+      setTokenA({ ...tokenAData });
+      setTokenB({ ...tokenBData });
+    },
+    [tokens, selectedPool]
+  );
 
   return (
     <ScrollView style={styles.root} contentContainerStyle={styles.contentStyle}>
@@ -59,17 +88,9 @@ const RemoveLiquidity = () => {
         </View>
 
         <View style={styles.pairContainer}>
-          <View style={styles.iconContainer}>
-            {[dummy?.primaryIconURL, dummy?.secondaryIconURL]?.map((iconURL, index) => (
-              <View key={index} style={[styles.icon, index === 0 && { position: 'relative', zIndex: 1 }]}>
-                <Image source={{ uri: iconURL || ICON_PLACEHOLDER }} style={{ width: 29.5, height: 29.5 }} />
-              </View>
-            ))}
-          </View>
+          <LQDPoolImages tokenAIconURL={tokenAIconUrl} tokenBIconURL={tokenBIconUrl} />
 
-          <Text style={styles.pairText}>
-            {dummy?.condition.charAt(0)}AMM - {dummy?.primaryTitle} / {dummy?.secondaryTitle}
-          </Text>
+          <Text style={styles.pairText}>{symbol}</Text>
         </View>
 
         <View style={styles.percentageSetterContainer}>
@@ -79,9 +100,7 @@ const RemoveLiquidity = () => {
             {depositions.map(({ iconURL, title, value }, index) => (
               <View style={styles.spacedContainer} key={index}>
                 <View style={styles.depositionLeft}>
-                  <View style={styles.secondaryIcon}>
-                    <Image source={{ uri: iconURL || ICON_PLACEHOLDER }} style={{ width: 18, height: 18 }} />
-                  </View>
+                  <LQDTokenImage iconURL={iconURL} />
 
                   <Text style={styles.coinTitle}>{title}</Text>
                 </View>
@@ -100,18 +119,16 @@ const RemoveLiquidity = () => {
         <View style={styles.receiveContainer}>
           <Text style={styles.receiveTitle}>You’ll receive at least:</Text>
 
-          {receive.map(({ iconURL, primaryValue, secondaryValue, title }, index) => (
+          {receive.map(({ iconURL, nativeValue, usdValue, title }, index) => (
             <View style={styles.spacedContainer} key={index}>
               <View style={styles.depositionLeft}>
-                <View style={styles.secondaryIcon}>
-                  <Image source={{ uri: iconURL || ICON_PLACEHOLDER }} style={{ width: 18, height: 18 }} />
-                </View>
+                <LQDTokenImage iconURL={iconURL} />
 
                 <Text style={[styles.coinTitle, { fontSize: adjustFontSizeForIOS(16, 2), lineHeight: 19.2 }]}>{title}</Text>
               </View>
 
               <Text style={styles.receivePrimaryValue}>
-                {primaryValue.toLocaleString()} {title} <Text style={styles.receiveSecondaryValue}>${secondaryValue.toLocaleString()}</Text>
+                {nativeValue.toLocaleString()} {title} <Text style={styles.receiveSecondaryValue}>${usdValue.toLocaleString()}</Text>
               </Text>
             </View>
           ))}
