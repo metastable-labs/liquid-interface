@@ -16,8 +16,6 @@ const LQDOnboardingStep = ({
 }: ILQDOnboardingStep) => {
   return (
     <View style={[styles.container, containerStyle]}>
-      {/* <Text style={styles.subtitle}>{subtitle}</Text> */}
-
       <Image source={image} style={[styles.image, imageStyle]} resizeMode="contain" />
 
       <Image source={firstArc} style={[{ position: 'absolute', zIndex: -1 }, firstArcStyle]} resizeMode="contain" />
@@ -40,14 +38,14 @@ const styles = StyleSheet.create({
 
   title: {
     fontFamily: 'QuantaGroteskProBold',
-    fontSize: adjustFontSizeForIOS(40, 5),
+    fontSize: adjustFontSizeForIOS(36, 5),
     fontWeight: '700',
-    lineHeight: 50,
+    lineHeight: 40.32,
     letterSpacing: -0.96,
     paddingHorizontal: 15,
     color: '#0F172A',
     position: 'absolute',
-    bottom: '17%',
+    bottom: '22%',
     textAlign: 'center',
   },
 
@@ -61,7 +59,7 @@ const styles = StyleSheet.create({
 
   image: {
     position: 'absolute',
-    top: '30%',
+    top: '27%',
     height: 317,
     width: 210,
     right: 0,

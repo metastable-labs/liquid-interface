@@ -4,8 +4,8 @@ import { LQDOnboardingStep } from '@/components/onboarding';
 
 const Step2 = () => {
   const image = require('../../assets/images/onboarding2.png');
-  const arc = require('../../assets/images/onboardingStep2Arc.png');
-  const arc1 = require('../../assets/images/onboardingStep2Arc1.png');
+  const arc = require('../../assets/images/onboardingStep1Arc.png');
+  const arc1 = require('../../assets/images/onboardingStep1Arc1.png');
 
   return (
     <LQDOnboardingStep
@@ -26,14 +26,14 @@ export default Step2;
 
 const styles = StyleSheet.create({
   firstArc: {
-    height: 352,
-    left: -68,
-    top: 144,
+    height: 320,
+    left: -57,
+    top: 250,
   },
 
   secondArc: {
     height: 301,
-    right: -87,
-    bottom: 137,
+    right: -66,
+    bottom: 155,
   },
 });

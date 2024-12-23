@@ -44,19 +44,6 @@ const LQDOnboardingIndicator = ({ currentStep, isPaused, timer, totalSteps, fini
 
   return (
     <View style={styles.container}>
-      {/* <View style={styles.subContainer}>
-        <View style={styles.logoContainer}>
-          <Image source={require('../../../assets/images/logo.png')} style={styles.logo} />
-          <Text style={styles.logoText}>Welcome to Liquid</Text>
-        </View>
-
-        <View style={styles.actionContainer}>
-          <TouchableOpacity style={styles.action} onPress={togglePause}>
-            <Image source={actions[+isPaused]} style={styles.actionIcon} />
-          </TouchableOpacity>
-        </View>
-      </View> */}
-
       <View style={styles.subContainer}>
         {Array.from({ length: totalSteps }).map((_, index) => (
           <View key={index} style={styles.indicator}>
