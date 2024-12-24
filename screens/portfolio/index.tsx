@@ -1,15 +1,19 @@
-import { StyleSheet, Text, View } from 'react-native';
-import React, { useState } from 'react';
-import { LQDActionCard, LQDBottomSheet, LQDButton, LQDFlatlist, LQDScrollView, LQDSlider, LQDStrategyCard } from '@/components';
-import { adjustFontSizeForIOS } from '@/utils/helpers';
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { LQDActionCard, LQDBottomSheet, LQDButton, LQDScrollView, LQDSlider, LQDStrategyCard } from '@/components';
+import { adjustFontSizeForIOS, formatAmount } from '@/utils/helpers';
 import { addMoney, strategyies } from '../discover/dummy';
 import useSystemFunctions from '@/hooks/useSystemFunctions';
 import AssetItem from './asset-item';
+import { useToken } from '@/hooks/useToken';
+import { publicClient } from '@/init/client';
+import { PublicClient } from 'viem';
 
 const Portfolio = () => {
+  const { fetchTokens, tokens, loadingTokens } = useToken(publicClient as PublicClient);
   const [showModal, setShowModal] = useState(false);
   const [selectedAction, setSelectedAction] = useState('');
-  const { router, dispatch } = useSystemFunctions();
+  const { router, smartAccountState } = useSystemFunctions();
 
   const openModal = () => {
     setShowModal((prev) => !prev);
@@ -38,6 +42,21 @@ const Portfolio = () => {
     }, 200);
   };
 
+  const assets = tokens?.map?.((token) => ({
+    title: token.symbol,
+    subTitle: `${formatAmount(token.balance, 4)} ${token.symbol}`,
+    icon: token.logoUrl,
+  }));
+
+  const fetchAllData = () => {
+    if (!smartAccountState.address) return;
+    fetchTokens(2, 0);
+  };
+
+  useEffect(() => {
+    fetchAllData();
+  }, [smartAccountState.address]);
+
   return (
     <>
       <View style={styles.topWrapper}>
@@ -59,7 +78,7 @@ const Portfolio = () => {
         </View>
       </View>
 
-      <LQDScrollView refreshing={false} onRefresh={() => {}} style={styles.container}>
+      <LQDScrollView refreshing={false} onRefresh={fetchAllData} style={styles.container}>
         <LQDSlider
           items={[
             {
@@ -78,20 +97,19 @@ const Portfolio = () => {
         <View style={styles.allAsset}>
           <Text style={styles.position}>All Asset</Text>
           <View style={styles.strategyContainerStyle}>
-            {[
-              {
-                title: 'USD Coin',
-                icon: '',
-                subTitle: '0 ETH',
-              },
-              {
-                title: 'Ethereum',
-                icon: '',
-                subTitle: '0 ETH',
-              },
-            ].map((asset, index) => (
-              <AssetItem key={index} title={asset.title} subTitle={asset.subTitle} icon={''} />
-            ))}
+            {!loadingTokens && assets.map((asset, index) => <AssetItem key={index} {...asset} />)}
+
+            {!loadingTokens && !assets.length && (
+              <View style={styles.assetContainer}>
+                <Text style={styles.noPosition}>You have no assets</Text>
+              </View>
+            )}
+
+            {loadingTokens && (
+              <View style={styles.assetContainer}>
+                <ActivityIndicator color="#000" />
+              </View>
+            )}
           </View>
         </View>
 
@@ -191,4 +209,10 @@ const styles = StyleSheet.create({
   topWrapper: { paddingHorizontal: 16, backgroundColor: '#fff', paddingBottom: 15 },
   allAsset: { paddingHorizontal: 16, marginBottom: 20 },
   allPositions: { paddingHorizontal: 16, paddingBottom: 60 },
+
+  assetContainer: {
+    paddingVertical: 20,
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+  },
 });

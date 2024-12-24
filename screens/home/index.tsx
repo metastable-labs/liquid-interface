@@ -1,3 +1,4 @@
+import React from 'react';
 import { StyleSheet, Platform, StatusBar as RNStatusBar, Pressable, FlatList } from 'react-native';
 
 import useSystemFunctions from '@/hooks/useSystemFunctions';

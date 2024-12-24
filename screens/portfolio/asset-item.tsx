@@ -7,7 +7,7 @@ const AssetItem = ({ title, subTitle, icon }: IAssetItem) => {
   return (
     <View style={styles.container}>
       <View style={styles.leftContainer}>
-        <LQDImage height={24} width={24} />
+        <LQDImage src={icon} height={24} width={24} />
         <View style={styles.detailContainer}>
           <Text style={styles.title}>{title}</Text>
           <Text style={styles.subTitle}>{subTitle}</Text>
