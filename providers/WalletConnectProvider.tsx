@@ -4,7 +4,7 @@ import { PublicClient, WalletClient, createPublicClient, createWalletClient, cus
 import { base, mainnet } from 'viem/chains';
 import { useToastActions } from '@/store/toast/actions';
 import { UsdcAbi } from '@/constants/abis';
-import { removeCommasFromNumber } from '@/utils/helpers';
+import { ETH_USDC_ADDRESS, USDC_ADDRESS } from '@/constants/addresses';
 
 interface WalletConnectContextType {
   isConnected: boolean;
@@ -123,12 +123,11 @@ export const WalletConnectProvider = ({ children }: PropsWithChildren) => {
       }
       const [account] = await walletClient.getAddresses();
 
-      const usdcContractAddress = '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48';
       const transferAmount = BigInt(Math.floor(parseFloat(amount) * 10 ** 6));
 
       const { request } = await publicClient.simulateContract({
         account,
-        address: usdcContractAddress as `0x${string}`,
+        address: ETH_USDC_ADDRESS,
         abi: UsdcAbi.UsdcAbi.abi,
         functionName: 'transfer',
         args: [recipient, transferAmount],
@@ -149,7 +148,7 @@ export const WalletConnectProvider = ({ children }: PropsWithChildren) => {
       const errorMessage = error.message || error.toString();
       const errorDetails = errorMessage.match(/Details: (.*)/);
       const msg = errorDetails ? errorDetails[1] : errorMessage;
-
+      console.log('error', error);
       if (msg.includes('User cancelled the request')) {
         showToast({
           title: 'Transaction cancelled!',
@@ -198,6 +197,7 @@ export const WalletConnectProvider = ({ children }: PropsWithChildren) => {
 
   useEffect(() => {
     if (isConnected && walletClient && publicClient) {
+      // switchToBaseNetwork();
     }
   }, [isConnected, walletClient, publicClient]);
 
